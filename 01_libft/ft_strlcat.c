@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 08:33:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/14 09:02:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/15 08:52:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 will set a \0 in last one. If size is less or equal to the size of dest, then
 will return the necesary space needed to proceed with that secure.
 */
-size_t	ft_size(const char *str)
+static size_t	ft_size(const char *str)
 {
 	size_t	i;
 
