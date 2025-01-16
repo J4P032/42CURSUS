@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 11:38:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:32:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,13 @@
 #include <unistd.h>
 #include "../libft.h"
 
-int		options_draw();
-int		main_memcpy ();
-
+int	options_draw();
+int	main_memcpy();
+int	main_strchr();		
 
 int main()
 {
     char	press = '\0';
-	
-	
 	while (1)
 	{
 		options_draw();
@@ -68,10 +66,11 @@ int	options_draw()
 	printf("%5s\n", "(3). Test ft_memmove.c");
 	printf("\n%5s", "Presione letra de opcion o 'y' mas <enter> para salir : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
+	return (0);
 }
 
 /*ft_strchr*/
-int main_strchr ()
+int main_strchr()
 {
 	system ("clear");
 	char	s[100];
@@ -85,25 +84,24 @@ int main_strchr ()
 	char	*solucion_orig;
 	solucion_ft = ft_strchr(s,c);
 	solucion_orig = strchr(s,c);
-	printf("\nSolucion_ft   :", solucion_ft);
-	printf("\nSolucion_orig :", solucion_orig);
+	printf("\nSolucion_ft   :%s", solucion_ft);
+	printf("\nSolucion_orig :%s", solucion_orig);
 	printf("\n");
 	printf("Quiere probar de nuevo? (y / n)");
 	press = scanf("%c", &press);
 	if ((press == 'y') || (press == 'Y'))
-		main_strch();
-	else
-		return (0);
+		main_strchr();
+	return (0);
 }
 
 /*ft_memcpy*/
 int main_memcpy ()
 {
-	unsigned char *source1 = NULL;
-	unsigned char *source2 = NULL;
-	unsigned char *dest1 = NULL;
-	unsigned char *dest2 = NULL;
-	int num = 0;
+	//unsigned char *source1 = NULL;
+	//unsigned char *source2 = NULL;
+	//unsigned char *dest1 = NULL;
+	//unsigned char *dest2 = NULL;
+	//int num = 0;
 	printf("\nfuncion memcpy\n");
 	/*
 	ft_memcpy(dest1, source1, num);

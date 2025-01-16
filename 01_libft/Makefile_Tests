@@ -2,20 +2,20 @@
 C		= cc
 CFLAGS	= -Wall -Wextra -Werror
 NAME	= libft.out
-SRCS = $(wildcard *.c) TEST/libft_test.c
+SRCS 	= $(wildcard *.c) TEST/libft_test.c
 OBJS	= ${SRCS:.c=.o}
 RM		= rm -f
 
-#regla principal
-all: ${NAME}
+#regla principal. limpia automaticamente los .o al hacer el ejecutable
+all: clean ${NAME}
+
+#regla genera el ejecutable a partir de los .o
+${NAME}: ${OBJS}
+	${C} ${CFLAGS} -I. ${OBJS} -o ${NAME}
 
 #regla genera los .o
-%.o: %.c libft.h	
-	${C} ${CFLAGS} $< -o $@
-
-#regla genera el ejecutable
-${NAME}: ${OBJS}
-	ar -rc $@ ${OBJS}
+%.o: %.c	
+	${C} ${CFLAGS} -I. -c $< -o $@
 
 #regla para limpiar los .o
 clean:
