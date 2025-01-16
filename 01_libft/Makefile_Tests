@@ -6,12 +6,13 @@ SRCS 	= $(wildcard *.c) TEST/libft_test.c
 OBJS	= ${SRCS:.c=.o}
 RM		= rm -f
 
-#regla principal. limpia automaticamente los .o al hacer el ejecutable
-all: clean ${NAME}
+#regla principal.
+all: ${NAME}
 
-#regla genera el ejecutable a partir de los .o
+#regla genera el ejecutable a partir de los .o .La segunda linea limpia los .o 
 ${NAME}: ${OBJS}
 	${C} ${CFLAGS} -I. ${OBJS} -o ${NAME}
+	${RM} ${OBJS}
 
 #regla genera los .o
 %.o: %.c	

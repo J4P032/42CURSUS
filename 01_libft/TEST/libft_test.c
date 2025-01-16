@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 12:32:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:15:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,10 @@ int main_strchr()
 	char	press;
 	printf("Introduzca cadena en la que buscar : \n");
 	scanf("%99s", s);
+	getchar();
 	printf("\nIntroduzca el caracter a buscar : \n");
 	scanf("%c", &c);
+	getchar();
 	char	*solucion_ft;
 	char	*solucion_orig;
 	solucion_ft = ft_strchr(s,c);
@@ -87,8 +89,9 @@ int main_strchr()
 	printf("\nSolucion_ft   :%s", solucion_ft);
 	printf("\nSolucion_orig :%s", solucion_orig);
 	printf("\n");
-	printf("Quiere probar de nuevo? (y / n)");
-	press = scanf("%c", &press);
+	printf("Quiere probar de nuevo? (y / n) : ");
+	press = getchar();
+	while (getchar() != '\n'); //necesario para quitar el enter (\n) al pulsar el getchar
 	if ((press == 'y') || (press == 'Y'))
 		main_strchr();
 	return (0);
