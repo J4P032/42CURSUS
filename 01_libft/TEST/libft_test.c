@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 13:15:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:52:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,27 +73,117 @@ int	options_draw()
 int main_strchr()
 {
 	system ("clear");
-	char	s[100];
+	char	*s = (char *)malloc(100 * sizeof(char));
 	char	c;
 	char	press;
-	printf("Introduzca cadena en la que buscar : \n");
-	scanf("%99s", s);
-	getchar();
+	printf("1. Opciones de NULL");
+	printf("\n2. Opciones validas");
+	printf("\nCual elige? : ");
+	press = getchar();
+	while (getchar() != '\n'); //necesario para quitar el enter (\n) al pulsar el getchar
+	if (press == '1')
+	{
+		system ("clear");
+		s = NULL;
+	}
+	else
+	{
+		system ("clear");
+		printf("String = %s", s); //
+		printf("\nIntroduzca cadena en la que buscar : \n");
+		scanf("%99s", s);
+		getchar(); //libera buffer
+	}
+	while(1)
+	{
+		printf("String = %s", s); //
+		system("clear");
+		printf("\n1. char ESPECIAL");
+		printf("\n2. char valido");
+		printf("\nCual elige? : ");
+		press = getchar();
+		while (getchar() != '\n');
+		if (press == '1')
+		{
+			while (1)
+			{
+				system ("clear");
+				printf("String = %s", s); //
+				printf("\n1. char = \\0");
+				printf("\n2. char = \\n");
+				printf("\n\nOpcion ? : ");
+				press = getchar();
+				while (getchar() != '\n');
+				switch (press)
+				{
+					case '1':
+						c = '\0';
+						break;
+					case '2':
+						c = '\n';
+						break;	
+					default:
+						continue;
+				}
+				break; //sale con opcion valida
+			}
+		}
+		else
+			break;
+	}
 	printf("\nIntroduzca el caracter a buscar : \n");
 	scanf("%c", &c);
 	getchar();
 	char	*solucion_ft;
 	char	*solucion_orig;
-	solucion_ft = ft_strchr(s,c);
-	solucion_orig = strchr(s,c);
+	
+	//condiciones NULL
+	if (s == NULL)
+	{
+		
+		while (1)
+		{
+			system ("clear");
+			printf("String = %s", s); //
+			printf("\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
+			printf("\n1. ft_strchr");
+			printf("\n2. strchr original");
+			printf("\n\nopcion? : ");
+			press = getchar();
+			while (getchar() != '\n');
+			switch (press)
+			{
+				case '1': 
+					solucion_ft = ft_strchr(s,c);
+					break;
+				case '2':
+					solucion_orig = strchr(s,c);
+					break;
+				default:
+					continue;
+			}
+			break;
+		}
+	}
+	
+	//condiciones Normales
+	else
+	{
+		solucion_ft = ft_strchr(s,c);
+		solucion_orig = strchr(s,c);
+	}
 	printf("\nSolucion_ft   :%s", solucion_ft);
 	printf("\nSolucion_orig :%s", solucion_orig);
 	printf("\n");
 	printf("Quiere probar de nuevo? (y / n) : ");
 	press = getchar();
-	while (getchar() != '\n'); //necesario para quitar el enter (\n) al pulsar el getchar
+	while (getchar() != '\n'); 
 	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s);
 		main_strchr();
+	}
+	free (s);
 	return (0);
 }
 
