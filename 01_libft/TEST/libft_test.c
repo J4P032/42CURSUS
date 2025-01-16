@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 15:04:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:24:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,19 @@ int	options_draw()
 ////////////////////////////////////////////////////////////
 int main_strchr()
 {
-	system ("clear");
 	char	*s = (char *)malloc(100 * sizeof(char));
-	char	c = '\a'; //init para pasar la reasignacion fuera de chars ESPECIALES
+	char	c;
+	int		offset;
 	char	press;
+	
+	//Sub menu principal
+	system ("clear");
 	printf("1. Opciones de NULL");
 	printf("\n2. Opciones validas");
 	printf("\nCual elige? : ");
 	press = getchar();
 	while (getchar() != '\n'); //necesario para quitar el enter (\n) al pulsar el getchar
+	
 	if (press == '1')
 	{
 		system ("clear");
@@ -97,54 +101,19 @@ int main_strchr()
 		printf("String = %s", s); //
 		printf("\nIntroduzca cadena en la que buscar : \n");
 		scanf("%99s", s);
-		getchar(); //libera buffer
+		getchar(); //libera buffer del enter = \n
 	}
-	while(1)
-	{
-		printf("String = %s", s); //
-		system("clear");
-		printf("\n1. char ESPECIAL");
-		printf("\n2. char valido");
-		printf("\nCual elige? : ");
-		press = getchar();
-		while (getchar() != '\n');
-		if (press == '1')
-		{
-			while (1)
-			{
-				system ("clear");
-				printf("String = %s", s); //
-				printf("\n1. char = \\0");
-				printf("\n2. char = \\n");
-				printf("\n3. char = \\b");
-				printf("\n\nOpcion ? : ");
-				press = getchar();
-				while (getchar() != '\n');
-				switch (press)
-				{
-					case '1':
-						c = '\0';
-						break;
-					case '2':
-						c = '\n';
-						break;	
-					case '3':
-						c = '\b';
-						break;
-					default:
-						continue;
-				}
-				break; //sale con opcion valida
-			}
-		}
-		break;
-	}
-	if (c == '\a')
-	{
-		printf("\nIntroduzca el caracter a buscar : \n");
-		scanf("%c", &c);
-		getchar();
-	}
+	
+	//Menu para elegir char
+	system ("clear");
+	printf("String = %s", s); //
+	printf("\nOffset para chars como \\0 u Overflow: ");
+	scanf("%d", &offset);
+	getchar();
+	printf("\nIntroduzca el caracter a buscar : \n");
+	scanf("%c", &c);
+	getchar();
+		
 	char	*solucion_ft;
 	char	*solucion_orig;
 	
@@ -156,19 +125,24 @@ int main_strchr()
 		{
 			system ("clear");
 			printf("String = %s", s); //
+			if ((c < 33) || (c > 126)) //no print
+				printf("\nchar(num) = %d", c); //char en int
+			else
+				printf("\nchar = %c", c);
 			printf("\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
-			printf("\n1. ft_strchr");
+			printf("\n\n1. ft_strchr");
 			printf("\n2. strchr original");
 			printf("\n\nopcion? : ");
+		
 			press = getchar();
 			while (getchar() != '\n');
 			switch (press)
 			{
 				case '1': 
-					solucion_ft = ft_strchr(s,c);
+					solucion_ft = ft_strchr(s,c + offset);
 					break;
 				case '2':
-					solucion_orig = strchr(s,c);
+					solucion_orig = strchr(s,c + offset);
 					break;
 				default:
 					continue;
@@ -180,9 +154,17 @@ int main_strchr()
 	//condiciones Normales
 	else
 	{
-		solucion_ft = ft_strchr(s,c);
-		solucion_orig = strchr(s,c);
+		solucion_ft = ft_strchr(s,c + offset); //+offset por que si no es convertida y no vale la prueba
+		solucion_orig = strchr(s,c + offset);
 	}
+	
+	//SOLUCION
+	system ("clear");
+	printf("String = %s", s); //
+	if ((c < 33) || (c > 126)) //no print
+		printf("\nchar(num) = %d", c); //char en int
+	else
+		printf("\nchar = %c", c);
 	printf("\nSolucion_ft   :%s", solucion_ft);
 	printf("\nSolucion_orig :%s", solucion_orig);
 	printf("\n");
