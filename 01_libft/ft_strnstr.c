@@ -43,9 +43,7 @@ static int	ft_findstr(const char *s1, const char *s2, size_t l)
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
 	int		found_position;
-	size_t	i;
-
-	i = 0;
+	
 	if (little[0] == '\0')
 		return ((char *)big);
 	found_position = ft_findstr(big, little, len);
