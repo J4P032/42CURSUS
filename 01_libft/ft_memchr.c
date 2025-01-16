@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 18:43:12 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 19:28:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 23:54:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*ft_memchr(const void *s, int c, size_t n)
 	size_t			i;
 
 	s_aux = (unsigned char *)s;
-	c_aux = (char)c; //cuidado ver si falla y poner unsigned char
+	c_aux = (char)c;
 	i = 0;
 	while (i < n)
 	{

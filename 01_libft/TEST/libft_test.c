@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 21:18:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 23:45:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 int		options_draw();
 char	options_null_valid();
 char	*fill_string(char *s);
+int		fill_num_bytes(char *s);
 char	fill_char(char *s, int *offset);
 char	fill_crash_menu();
 
-//int	main_memcpy();
 int	main_strchr(int opcion);
-//int	main_memchr();
+int	main_memchr();
 	
 //EL MAIN GENERAL
 int main()
@@ -41,7 +41,7 @@ int main()
 		switch (press)
 		{
 			case '0':
-				//main_memchr();
+				main_memchr();
 				break;
 			case '1':
 				main_strchr(1);
@@ -110,16 +110,28 @@ char *fill_string(char *s)
 	return (s);
 }
 
+//MENU PARA NUM DE BYTES A RECORRER
+int	fill_num_bytes(char *s)
+{
+	int	num_bytes;
+	system ("clear");
+	printf("String = %s", s);
+	printf("\nIntroduzca num de bytes a buscar : \n");
+	scanf("%d", &num_bytes);
+	getchar();
+	return (num_bytes);
+}
+
 //MENU INTRODUCIR CHARS
 char fill_char(char *s, int *offset)
 {
 	char c;
 	system ("clear");
 	printf("String = %s", s);
-	printf("\nOffset para chars como \\0 u Overflow: ");
+	printf("\nOffset para chars como \\0(-49) u Overflow: ");
 	scanf("%d", offset);
 	getchar();
-	printf("\nIntroduzca el caracter a buscar : \n");
+	printf("\nIntroduzca el caracter a buscar. \\0 = '1' - 49 : \n");
 	scanf("%c", &c);
 	getchar();
 	return (c);
@@ -147,10 +159,11 @@ char	output_solution(char *ft, char *orig)
 	while (getchar() != '\n');
 	return (c); 
 }
+
 ////////////////////////////////////////////////////////////
 /*ft_memchr*////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-/*
+
 int	main_memchr()
 {
 	char	*s = (char *)malloc(100 * sizeof(char));
@@ -160,45 +173,79 @@ int	main_memchr()
 	int		num_bytes;
 
 	//Sub menu principal
-	
-	system ("clear");
-	printf("1. Opciones de NULL");
-	printf("\n2. Opciones validas");
-	printf("\nCual elige? : ");
-	
-
-	options_null_valid();
-	press = getchar();
-	while (getchar() != '\n');
-
+	press = options_null_valid();
+		
 	if (press == '1')
-	{
-		system ("clear");
 		s = NULL;
+	else
+		s = fill_string(s);
+			
+	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
+	num_bytes = fill_num_bytes(s);
+		
+	//Menu para elegir char
+	c = fill_char(s, &offset);
+		
+	char	*solucion_ft;
+	char	*solucion_orig;
+	
+	//condiciones NULL
+	if (s == NULL)
+	{
+		while (1)
+		{
+			system ("clear");
+			printf("String = %s", s);
+			printf("bytes = %d", num_bytes);
+			if ((c < 33) || (c > 126))
+				printf("\nchar(num) = %d", c);
+			else
+				printf("\nchar = %c", c);
+			press = fill_crash_menu();
+			
+			switch (press)
+			{
+				case '1': 
+					solucion_ft = ft_memchr(s, c + offset, num_bytes);
+					break;
+				case '2':
+					solucion_orig = memchr(s, c + offset, num_bytes);
+					break;
+				default:
+					continue;
+			}
+			break;
+		}
 	}
+
+//condiciones Normales
 	else
 	{
-		system ("clear");
-		printf("String = %s", s);
-		printf("\nIntroduzca cadena en la que buscar : \n");
-		scanf("%99s", s);
-		getchar();
+		solucion_ft = ft_memchr(s, c + offset, num_bytes);
+		solucion_orig = memchr(s, c + offset, num_bytes);
 	}
 
-	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
-
+	//SOLUCION
 	system ("clear");
 	printf("String = %s", s);
-	printf("\nIntroduzca num de bytes a buscar : \n");
-	scanf("%d", &num_bytes);
-	getchar();
-
-
+	if ((c < 33) || (c > 126))
+		printf("\nchar(num) = %d", c);
+	else
+		printf("\nchar = %c", c);
+	
+	press = output_solution(solucion_ft, solucion_orig);
+	
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s);
+		main_memchr();
+		return (0);
+	}
 	free (s);
 	return (0);
 }
 
-*/
+
 
 
 ////////////////////////////////////////////////////////////
