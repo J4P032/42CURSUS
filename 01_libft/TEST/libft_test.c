@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 00:43:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:38:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,43 @@
 #include <sys/ioctl.h>
 #include <string.h>
 #include <unistd.h>
+#include "../libft.h"
 
+int		options_draw();
+int		main_memcpy ();
 
-
-
-int main_memcpy ();
 
 int main()
 {
     char	press = '\0';
-	struct winsize w;
+	
+	
+	while (1)
+	{
+		options_draw();
+		press = getchar();
+		while (getchar() != '\n');
 
+		switch (press)
+		{
+			case '1':
+				main_strchr();
+				break;
+			case 'Y':
+			case 'y':
+				return (0);
+			default:
+				printf("Opcion no valida. Ingrese una tecla valida\n");
+				break;
+		}
+	}
+	return (0);
+}
+
+int	options_draw()
+{
 	system("clear");	
+	struct winsize w;
 
 	//obtiene el tamanyo de la ventana
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1)
@@ -37,26 +62,38 @@ int main()
 
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
-	printf("%5s\n", "(a). Test ft_atoi.c");
-	printf("%5s\n", "(b). Test ft_memcpy.c");
-	printf("%5s\n", "(c). Test ft_memmove.c");
-	printf("\n%5s\n", "Presione letra de opcion o 'y' mas <enter> para salir");
+	printf("%5s\n", "(0). Test ft_atoi.c");
+	printf("%5s\n", "(1). Test ft_strchr.c");
+	printf("%5s\n", "(2). Test ft_memcpy.c");
+	printf("%5s\n", "(3). Test ft_memmove.c");
+	printf("\n%5s", "Presione letra de opcion o 'y' mas <enter> para salir : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
-	
-	press = getchar();
-	while (getchar() != '\n');
-	
-	switch (press)
-	{
-	case 'b':
-		main_memcpy();
-		break;
-	
-	default:
-		break;
-	}
+}
 
-	return (0);
+/*ft_strchr*/
+int main_strchr ()
+{
+	system ("clear");
+	char	s[100];
+	char	c;
+	char	press;
+	printf("Introduzca cadena en la que buscar : \n");
+	scanf("%99s", s);
+	printf("\nIntroduzca el caracter a buscar : \n");
+	scanf("%c", &c);
+	char	*solucion_ft;
+	char	*solucion_orig;
+	solucion_ft = ft_strchr(s,c);
+	solucion_orig = strchr(s,c);
+	printf("\nSolucion_ft   :", solucion_ft);
+	printf("\nSolucion_orig :", solucion_orig);
+	printf("\n");
+	printf("Quiere probar de nuevo? (y / n)");
+	press = scanf("%c", &press);
+	if ((press == 'y') || (press == 'Y'))
+		main_strch();
+	else
+		return (0);
 }
 
 /*ft_memcpy*/
@@ -75,5 +112,6 @@ int main_memcpy ()
 	printf("\nori: %s", dest2);
 	printf("\nfinal de programa");
 	*/
+	while (getchar() != 10);
 	return (0);
 }
