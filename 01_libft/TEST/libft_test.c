@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 17:24:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:38:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 int	options_draw();
 int	main_memcpy();
-int	main_strchr();		
+int	main_strchr(int opcion);
+	
 
 int main()
 {
@@ -33,10 +34,13 @@ int main()
 		switch (press)
 		{
 			case '1':
-				main_strchr();
+				main_strchr(1);
 				break;
-			case 'Y':
-			case 'y':
+			case '2':
+				main_strchr(2);
+				break;
+			case 'X':
+			case 'x':
 				return (0);
 			default:
 				printf("Opcion no valida. Ingrese una tecla valida\n");
@@ -60,22 +64,20 @@ int	options_draw()
 
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
-	printf("%5s\n", "(0). Test ft_atoi.c");
+	printf("%5s\n", "(). Test ft_atoi.c");
 	printf("%5s\n", "(1). Test ft_strchr.c");
-	printf("%5s\n", "(2). Test ft_memcpy.c");
-	printf("%5s\n", "(3). Test ft_memmove.c");
-	printf("\n%5s", "Presione letra de opcion o 'y' mas <enter> para salir : ");
+	printf("%5s\n", "(2). Test ft_strrchr.c");
+	printf("%5s\n", "(). Test ft_memcpy.c");
+	printf("%5s\n", "(). Test ft_memmove.c");
+	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
 }
 
-
-
-
 ////////////////////////////////////////////////////////////
-/*ft_strchr*////////////////////////////////////////////////
+/*ft_strchr ft_strrchr*/////////////////////////////////////
 ////////////////////////////////////////////////////////////
-int main_strchr()
+int main_strchr(int opcion)
 {
 	char	*s = (char *)malloc(100 * sizeof(char));
 	char	c;
@@ -139,10 +141,16 @@ int main_strchr()
 			switch (press)
 			{
 				case '1': 
-					solucion_ft = ft_strchr(s,c + offset);
+					if (opcion == 1)
+						solucion_ft = ft_strchr(s,c + offset);
+					else if (opcion == 2)
+						solucion_ft = ft_strrchr(s,c + offset);
 					break;
 				case '2':
-					solucion_orig = strchr(s,c + offset);
+					if (opcion == 1)
+						solucion_orig = strchr(s,c + offset);
+					else if (opcion == 2)
+						solucion_orig = strrchr(s,c + offset);
 					break;
 				default:
 					continue;
@@ -154,8 +162,16 @@ int main_strchr()
 	//condiciones Normales
 	else
 	{
-		solucion_ft = ft_strchr(s,c + offset); //+offset por que si no es convertida y no vale la prueba
-		solucion_orig = strchr(s,c + offset);
+		if (opcion == 1)
+		{	
+			solucion_ft = ft_strchr(s,c + offset); //+offset por que si no es convertida y no vale la prueba
+			solucion_orig = strchr(s,c + offset);
+		}
+		if (opcion == 2)
+		{
+			solucion_ft = ft_strrchr(s,c + offset);
+			solucion_orig = strrchr(s,c + offset);
+		}
 	}
 	
 	//SOLUCION
@@ -174,7 +190,10 @@ int main_strchr()
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
-		main_strchr();
+		if (opcion == 1)
+			main_strchr(1);
+		else if (opcion == 2)
+			main_strchr(2);
 	}
 	free (s);
 	return (0);
