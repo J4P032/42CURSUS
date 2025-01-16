@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 18:38:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 21:18:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,18 @@
 #include <unistd.h>
 #include "../libft.h"
 
-int	options_draw();
-int	main_memcpy();
-int	main_strchr(int opcion);
-	
+//PROTOTIPOS
+int		options_draw();
+char	options_null_valid();
+char	*fill_string(char *s);
+char	fill_char(char *s, int *offset);
+char	fill_crash_menu();
 
+//int	main_memcpy();
+int	main_strchr(int opcion);
+//int	main_memchr();
+	
+//EL MAIN GENERAL
 int main()
 {
     char	press = '\0';
@@ -33,6 +40,9 @@ int main()
 
 		switch (press)
 		{
+			case '0':
+				//main_memchr();
+				break;
 			case '1':
 				main_strchr(1);
 				break;
@@ -50,6 +60,11 @@ int main()
 	return (0);
 }
 
+///////////////////////////////////////////////////
+// MENUS INPUT ////////////////////////////////////
+///////////////////////////////////////////////////
+
+//MENU DE OPCIONES GENERAL
 int	options_draw()
 {
 	system("clear");	
@@ -64,34 +79,98 @@ int	options_draw()
 
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
-	printf("%5s\n", "(). Test ft_atoi.c");
+	printf("%5s\n", "(0). Test ft_memchr.c");
 	printf("%5s\n", "(1). Test ft_strchr.c");
 	printf("%5s\n", "(2). Test ft_strrchr.c");
-	printf("%5s\n", "(). Test ft_memcpy.c");
-	printf("%5s\n", "(). Test ft_memmove.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
 }
 
+//MENU DE OPCIONES NULL Y VALIDAS
+char options_null_valid()
+{
+	system ("clear");
+	printf("1. Opciones de NULL");
+	printf("\n2. Opciones validas");
+	printf("\nCual elige? : ");
+	char c = getchar();
+	while (getchar() != '\n'); //necesario para quitar el enter (\n) al pulsar el getchar
+	return (c);
+}
+
+//MENU INTRODUCIR STRINGS
+char *fill_string(char *s)
+{
+	system ("clear");
+	printf("String = %s", s);
+	printf("\nIntroduzca cadena en la que buscar : \n");
+	scanf("%99s", s);
+	getchar(); //libera buffer del enter = \n
+	return (s);
+}
+
+//MENU INTRODUCIR CHARS
+char fill_char(char *s, int *offset)
+{
+	char c;
+	system ("clear");
+	printf("String = %s", s);
+	printf("\nOffset para chars como \\0 u Overflow: ");
+	scanf("%d", offset);
+	getchar();
+	printf("\nIntroduzca el caracter a buscar : \n");
+	scanf("%c", &c);
+	getchar();
+	return (c);
+}
+
+//MENU PARA CRASHEOS
+char	fill_crash_menu()
+{
+	printf("\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
+	printf("\n\n1. ft_");
+	printf("\n2. original");
+	printf("\n\nopcion? : ");
+	char c = getchar();
+	while (getchar() != '\n');
+	return (c);
+}
+
+//MENU PARA SOLUCION
+char	output_solution(char *ft, char *orig)
+{
+	printf("\nSolucion_ft   :%s", ft);
+	printf("\nSolucion_orig :%s", orig);
+	printf("\n\nQuiere probar de nuevo? (y / n) : ");
+	char c = getchar();
+	while (getchar() != '\n');
+	return (c); 
+}
 ////////////////////////////////////////////////////////////
-/*ft_strchr ft_strrchr*/////////////////////////////////////
+/*ft_memchr*////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-int main_strchr(int opcion)
+/*
+int	main_memchr()
 {
 	char	*s = (char *)malloc(100 * sizeof(char));
 	char	c;
 	int		offset;
 	char	press;
-	
+	int		num_bytes;
+
 	//Sub menu principal
+	
 	system ("clear");
 	printf("1. Opciones de NULL");
 	printf("\n2. Opciones validas");
 	printf("\nCual elige? : ");
-	press = getchar();
-	while (getchar() != '\n'); //necesario para quitar el enter (\n) al pulsar el getchar
 	
+
+	options_null_valid();
+	press = getchar();
+	while (getchar() != '\n');
+
 	if (press == '1')
 	{
 		system ("clear");
@@ -100,21 +179,48 @@ int main_strchr(int opcion)
 	else
 	{
 		system ("clear");
-		printf("String = %s", s); //
+		printf("String = %s", s);
 		printf("\nIntroduzca cadena en la que buscar : \n");
 		scanf("%99s", s);
-		getchar(); //libera buffer del enter = \n
+		getchar();
 	}
+
+	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
+
+	system ("clear");
+	printf("String = %s", s);
+	printf("\nIntroduzca num de bytes a buscar : \n");
+	scanf("%d", &num_bytes);
+	getchar();
+
+
+	free (s);
+	return (0);
+}
+
+*/
+
+
+////////////////////////////////////////////////////////////
+/*ft_strchr ft_strrchr*/////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_strchr(int opcion)
+{
+	char	*s = (char *)calloc(100, sizeof(char));
+	char	c;
+	int		offset = 0;
+	char	press;
+	
+	//Sub menu principal
+	press = options_null_valid();
+		
+	if (press == '1')
+		s = NULL;
+	else
+		s = fill_string(s);
 	
 	//Menu para elegir char
-	system ("clear");
-	printf("String = %s", s); //
-	printf("\nOffset para chars como \\0 u Overflow: ");
-	scanf("%d", &offset);
-	getchar();
-	printf("\nIntroduzca el caracter a buscar : \n");
-	scanf("%c", &c);
-	getchar();
+	c = fill_char(s, &offset);
 		
 	char	*solucion_ft;
 	char	*solucion_orig;
@@ -131,13 +237,8 @@ int main_strchr(int opcion)
 				printf("\nchar(num) = %d", c); //char en int
 			else
 				printf("\nchar = %c", c);
-			printf("\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
-			printf("\n\n1. ft_strchr");
-			printf("\n2. strchr original");
-			printf("\n\nopcion? : ");
-		
-			press = getchar();
-			while (getchar() != '\n');
+			press = fill_crash_menu();
+			
 			switch (press)
 			{
 				case '1': 
@@ -181,12 +282,9 @@ int main_strchr(int opcion)
 		printf("\nchar(num) = %d", c); //char en int
 	else
 		printf("\nchar = %c", c);
-	printf("\nSolucion_ft   :%s", solucion_ft);
-	printf("\nSolucion_orig :%s", solucion_orig);
-	printf("\n");
-	printf("Quiere probar de nuevo? (y / n) : ");
-	press = getchar();
-	while (getchar() != '\n'); 
+	
+	press = output_solution(solucion_ft, solucion_orig);
+	
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
@@ -194,32 +292,11 @@ int main_strchr(int opcion)
 			main_strchr(1);
 		else if (opcion == 2)
 			main_strchr(2);
+		return (0); //si no puede ir al otro free y liberar de nuevo. NO SE COMO. Supongo que por recursividad
 	}
 	free (s);
+	s = NULL; //proteccion frente a doble free
 	return (0);
 }
 
 
-
-
-////////////////////////////////////////////////////////////
-/*ft_memcpy*////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-int main_memcpy ()
-{
-	//unsigned char *source1 = NULL;
-	//unsigned char *source2 = NULL;
-	//unsigned char *dest1 = NULL;
-	//unsigned char *dest2 = NULL;
-	//int num = 0;
-	printf("\nfuncion memcpy\n");
-	/*
-	ft_memcpy(dest1, source1, num);
-	memcpy(dest2, source2, num);
-	printf("ft_: %s", dest1);
-	printf("\nori: %s", dest2);
-	printf("\nfinal de programa");
-	*/
-	while (getchar() != 10);
-	return (0);
-}
