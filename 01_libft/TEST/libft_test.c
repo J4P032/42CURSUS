@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 14:52:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:04:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,17 @@ int	options_draw()
 	return (0);
 }
 
-/*ft_strchr*/
+
+
+
+////////////////////////////////////////////////////////////
+/*ft_strchr*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 int main_strchr()
 {
 	system ("clear");
 	char	*s = (char *)malloc(100 * sizeof(char));
-	char	c;
+	char	c = '\a'; //init para pasar la reasignacion fuera de chars ESPECIALES
 	char	press;
 	printf("1. Opciones de NULL");
 	printf("\n2. Opciones validas");
@@ -111,6 +116,7 @@ int main_strchr()
 				printf("String = %s", s); //
 				printf("\n1. char = \\0");
 				printf("\n2. char = \\n");
+				printf("\n3. char = \\b");
 				printf("\n\nOpcion ? : ");
 				press = getchar();
 				while (getchar() != '\n');
@@ -122,18 +128,23 @@ int main_strchr()
 					case '2':
 						c = '\n';
 						break;	
+					case '3':
+						c = '\b';
+						break;
 					default:
 						continue;
 				}
 				break; //sale con opcion valida
 			}
 		}
-		else
-			break;
+		break;
 	}
-	printf("\nIntroduzca el caracter a buscar : \n");
-	scanf("%c", &c);
-	getchar();
+	if (c == '\a')
+	{
+		printf("\nIntroduzca el caracter a buscar : \n");
+		scanf("%c", &c);
+		getchar();
+	}
 	char	*solucion_ft;
 	char	*solucion_orig;
 	
@@ -187,7 +198,12 @@ int main_strchr()
 	return (0);
 }
 
-/*ft_memcpy*/
+
+
+
+////////////////////////////////////////////////////////////
+/*ft_memcpy*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 int main_memcpy ()
 {
 	//unsigned char *source1 = NULL;
