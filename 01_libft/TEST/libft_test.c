@@ -6,16 +6,20 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 01:26:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:23:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <sys/ioctl.h>
+#include <stdlib.h> //tambien system("clear"), malloc...
+#include <sys/ioctl.h> //para ioctl. obtener tamanyo de un terminal pantalla.
 #include <string.h>
 #include <unistd.h>
 #include "../libft.h"
+//este define imprimira un # para que se vean los \0 en los while write que ponga
+//y el continue hara que la i que itera sea i++ volviendo al inicio del while aunque
+//tenga mas lineas debajo del while.
+#define NULOS(ptr) if (*(ptr) == '\0') { write(1, "#", 1); continue;}
 
 //PROTOTIPOS
 int		options_draw();
@@ -23,12 +27,16 @@ char	options_null_valid();
 void 	fill_null(char *s1, char *s2);
 char	*fill_string(char *s);
 int		fill_num_bytes(char *s);
+int		fill_num_sizet();
 char	fill_char(char *s, int *offset);
 char	fill_crash_menu();
 char	output_solution(char *ft, char *orig);
 char	output_solution_int(int *ft, int *orig);
+void	output_solucion_ptr(void *ft, void *orig, size_t length);
+char	repetimos_volvemos();
 
 
+int	main_calloc();
 int	main_memchr();
 int	main_memcmp();
 int	main_strchr(int opcion);
@@ -46,15 +54,18 @@ int main()
 		switch (press)
 		{
 			case '0':
-				main_memchr();
+				main_calloc();
 				break;
 			case '1':
-				main_memcmp();
+				main_memchr();
 				break;
 			case '2':
-				main_strchr(1);
+				main_memcmp();
 				break;
 			case '3':
+				main_strchr(1);
+				break;
+			case '4':
 				main_strchr(2);
 				break;
 			case 'X':
@@ -86,10 +97,11 @@ int	options_draw()
 
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
-	printf("%5s\n", "(0). Test ft_memchr.c");
-	printf("%5s\n", "(1). Test ft_memcmp.c");
-	printf("%5s\n", "(2). Test ft_strchr.c");
-	printf("%5s\n", "(3). Test ft_strrchr.c");
+	printf("%5s\n", "(0). Test ft_calloc.c");
+	printf("%5s\n", "(1). Test ft_memchr.c");
+	printf("%5s\n", "(2). Test ft_memcmp.c");
+	printf("%5s\n", "(3). Test ft_strchr.c");
+	printf("%5s\n", "(4). Test ft_strrchr.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -158,6 +170,16 @@ int	fill_num_bytes(char *s)
 	return (num_bytes);
 }
 
+//MENU PARA INTRODUCIR UN NUM size_t
+int	fill_num_sizet()
+{
+	size_t	num;
+	printf("\nIntroduzca num : \n");
+	scanf("%zu", &num);
+	getchar();
+	return (num);
+}
+
 //MENU INTRODUCIR CHARS
 char fill_char(char *s, int *offset)
 {
@@ -207,6 +229,97 @@ char	output_solution_int(int *ft, int *orig)
 	return (c); 
 }
 
+//MENU MOSTRAR INTERIOR DE PUNTEROS CHAR O INT CON WRITE
+void	output_solucion_ptr(void *ft, void *orig, size_t length)
+{
+	size_t	i = 0;
+	
+	char	*ft_aux = (char *)ft;
+	char	*orig_aux = (char *)orig;
+	write(1, "\nSolucion_ft : ", 15);
+	while (i < length)
+	{
+		//NULOS(&ft_aux[i]); //imprime # en vez de \0 y vuelve a inicio de while con i++. En #define
+		if (ft_aux[i] == '\0')
+		{
+			write (1, "@", 1);
+			i++;
+		}
+		else
+			write(1, &ft_aux[i++], 1);
+	}
+	i = 0;
+	write(1, "\nSolucion_orig : ", 17);
+	while (i < length)
+	{
+		//NULOS(&orig_aux[i]);
+		if (orig_aux[i] == '\0')
+		{
+			write (1, "@", 1);
+			i++;
+		}
+		else
+			write(1, &orig_aux[i++], 1);
+	}
+}	
+
+//MENU REPETIR
+char	repetimos_volvemos()
+{
+	write(1, "\n\nQuiere probar de nuevo? (y / n) : ", 36);
+	char c = getchar();
+	while (getchar() != '\n');
+	return (c);
+}
+
+////////////////////////////////////////////////////////////
+/*ft_calloc*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_calloc()
+{
+	//void *ft_calloc(size_t nmemb, size_t size)
+	size_t	nmemb;
+	size_t	size;
+	char	press;
+
+	system ("clear");
+	nmemb = fill_num_sizet();
+	size = fill_num_sizet();
+	
+	//asigna en funciones
+	char	*ft_ptr_char = (char *)ft_calloc(nmemb, size);
+	if (!ft_ptr_char)
+		return (-1);
+	char	*ptr_char = (char *)calloc(nmemb, size);
+	if (!ptr_char)
+		return (-1);
+	int		*ft_ptr_int = (int *)ft_calloc(nmemb, size);
+	if (!ft_ptr_int)
+		return (-1);
+	int		*ptr_int = (int *)calloc(nmemb, size);
+	if (!ptr_int)
+		return (-1);	
+	//solucion
+	system ("clear");
+	output_solucion_ptr(ft_ptr_char, ptr_char, (nmemb * size));
+	output_solucion_ptr(ft_ptr_int, ptr_int, (nmemb * size));
+	press = repetimos_volvemos();
+
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (ft_ptr_char);
+		free (ft_ptr_int);
+		free (ptr_char);
+		free (ptr_int);
+		main_calloc();
+		return (0);
+	}
+	free (ft_ptr_char);
+	free (ft_ptr_int);
+	free (ptr_char);
+	free (ptr_int);
+	return (0);
+}
 
 ////////////////////////////////////////////////////////////
 /*ft_memchr*////////////////////////////////////////////////
@@ -281,8 +394,9 @@ int	main_memchr()
 		printf("\nchar = %c", c);
 	printf("\nbytes = %d", num_bytes);
 	
-	press = output_solution(solucion_ft, solucion_orig);
-	
+	output_solucion_ptr(solucion_ft, solucion_orig, num_bytes);
+	press = repetimos_volvemos();
+
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
@@ -359,7 +473,9 @@ int	main_memcmp()
 	printf("\nString2 = %s", s2);
 	printf("\nbytes = %d", num_bytes);
 	
-	press = output_solution_int(&solucion_ft, &solucion_orig);
+	//press = output_solution_int(&solucion_ft, &solucion_orig);
+	output_solucion_ptr(&solucion_ft, &solucion_orig, num_bytes);
+	press = repetimos_volvemos();
 	
 	if ((press == 'y') || (press == 'Y'))
 	{
@@ -456,7 +572,9 @@ int main_strchr(int opcion)
 	else
 		printf("\nchar = %c", c);
 	
-	press = output_solution(solucion_ft, solucion_orig);
+	//press = output_solution(solucion_ft, solucion_orig);
+	output_solucion_ptr(solucion_ft, solucion_orig, strlen(s));
+	press = repetimos_volvemos();
 	
 	if ((press == 'y') || (press == 'Y'))
 	{
