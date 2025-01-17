@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 16:41:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:37:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ char	repetimos_volvemos();
 int	main_calloc();
 int	main_memchr();
 int	main_memcmp();
+int main_strdup();
 int	main_strchr(int opcion);
 	
 //EL MAIN GENERAL
@@ -60,9 +61,12 @@ int main()
 				main_memcmp();
 				break;
 			case '3':
-				main_strchr(1);
+				main_strdup();
 				break;
 			case '4':
+				main_strchr(1);
+				break;
+			case '5':
 				main_strchr(2);
 				break;
 			case 'X':
@@ -82,7 +86,7 @@ int main()
 // MENUS INPUT ////////////////////////////////////
 ///////////////////////////////////////////////////
 
-//PRINT CON WRITE
+//PRINT CON WRITE detectando \0 con #.
 void	ft_print(char *str, size_t l)
 {
 	size_t i = 0;
@@ -98,13 +102,6 @@ void	ft_print(char *str, size_t l)
 			write(1, &str[i++], 1);
 	}
 }
-
-
-
-
-
-
-
 
 //MENU DE OPCIONES GENERAL
 int	options_draw()
@@ -124,8 +121,9 @@ int	options_draw()
 	printf("%5s\n", "(0). Test ft_calloc.c");
 	printf("%5s\n", "(1). Test ft_memchr.c");
 	printf("%5s\n", "(2). Test ft_memcmp.c");
-	printf("%5s\n", "(3). Test ft_strchr.c");
-	printf("%5s\n", "(4). Test ft_strrchr.c");
+	printf("%5s\n", "(3). Test ft_strdup.c");
+	printf("%5s\n", "(4). Test ft_strchr.c");
+	printf("%5s\n", "(5). Test ft_strrchr.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -484,6 +482,79 @@ int	main_memcmp()
 	return (0);
 }
 
+
+////////////////////////////////////////////////////////////
+/*ft_strdup*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_strdup()
+{
+	//char	*ft_strdup(const char *s)
+	char	*s = (char *)calloc(100, sizeof(char));
+	char	press;
+
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+		s = NULL;
+	else
+		s = fill_string(s);
+	
+	char	*solucion_ft;
+	char	*solucion_orig;
+
+	//condiciones NULL
+	if (s == NULL)
+	{
+		while (1)
+		{
+			system ("clear");
+			printf("String = %s", s); 
+			press = fill_crash_menu();
+			switch (press)
+			{
+				case '1': 
+					solucion_ft = ft_strdup(s);
+					break;
+				case '2':
+					solucion_orig = strdup(s);
+					break;
+				default:
+					continue;
+			}
+			break;
+		}
+	}
+
+	//condiciones Normales
+	else
+	{
+		solucion_ft = ft_strdup(s);
+		solucion_orig = strdup(s);
+	}
+	
+	//SOLUCION
+	system ("clear");
+	printf("String = %s", s);
+	
+	press = output_solution(solucion_ft, solucion_orig);
+	
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s);
+		free (solucion_ft);
+		free (solucion_orig);
+		main_strdup();
+		return (0);
+	}
+	free (s);
+	free (solucion_ft);
+	free (solucion_orig);
+	s = NULL;
+	solucion_ft = NULL;
+	solucion_orig = NULL;
+	return (0);
+}
 
 ////////////////////////////////////////////////////////////
 /*ft_strchr ft_strrchr*/////////////////////////////////////
