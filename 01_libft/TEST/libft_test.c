@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 23:45:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/17 01:26:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,18 @@
 //PROTOTIPOS
 int		options_draw();
 char	options_null_valid();
+void 	fill_null(char *s1, char *s2);
 char	*fill_string(char *s);
 int		fill_num_bytes(char *s);
 char	fill_char(char *s, int *offset);
 char	fill_crash_menu();
+char	output_solution(char *ft, char *orig);
+char	output_solution_int(int *ft, int *orig);
 
-int	main_strchr(int opcion);
+
 int	main_memchr();
+int	main_memcmp();
+int	main_strchr(int opcion);
 	
 //EL MAIN GENERAL
 int main()
@@ -44,9 +49,12 @@ int main()
 				main_memchr();
 				break;
 			case '1':
-				main_strchr(1);
+				main_memcmp();
 				break;
 			case '2':
+				main_strchr(1);
+				break;
+			case '3':
 				main_strchr(2);
 				break;
 			case 'X':
@@ -63,7 +71,6 @@ int main()
 ///////////////////////////////////////////////////
 // MENUS INPUT ////////////////////////////////////
 ///////////////////////////////////////////////////
-
 //MENU DE OPCIONES GENERAL
 int	options_draw()
 {
@@ -80,8 +87,9 @@ int	options_draw()
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
 	printf("%5s\n", "(0). Test ft_memchr.c");
-	printf("%5s\n", "(1). Test ft_strchr.c");
-	printf("%5s\n", "(2). Test ft_strrchr.c");
+	printf("%5s\n", "(1). Test ft_memcmp.c");
+	printf("%5s\n", "(2). Test ft_strchr.c");
+	printf("%5s\n", "(3). Test ft_strrchr.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -99,7 +107,35 @@ char options_null_valid()
 	return (c);
 }
 
-//MENU INTRODUCIR STRINGS
+//MENU ASIGNAR NULLS VARIOS STRINGS
+void fill_null(char *s1, char *s2)
+{
+	system ("clear");
+	printf("1. S1 NULL S2 normal");
+	printf("\n2. S1 normal S2 NULL");
+	printf("\n3. S1 NULL S2 NULL");
+	printf("\n\nCual elige? : ");
+	char c = getchar();
+	while (getchar() != '\n');
+	switch (c){
+		case '1':
+			s1 = NULL;
+			s2 = fill_string(s2);
+			break;
+		case '2':
+			s1 = fill_string(s1);
+			s2 = NULL;
+			break;
+		case '3':
+			s1 = NULL;
+			s2 = NULL;
+			break;
+		default:
+			break;
+	}
+}
+
+//MENU INTRODUCIR STRING
 char *fill_string(char *s)
 {
 	system ("clear");
@@ -149,7 +185,7 @@ char	fill_crash_menu()
 	return (c);
 }
 
-//MENU PARA SOLUCION
+//MENU PARA SOLUCION PUNTEROS
 char	output_solution(char *ft, char *orig)
 {
 	printf("\nSolucion_ft   :%s", ft);
@@ -160,13 +196,24 @@ char	output_solution(char *ft, char *orig)
 	return (c); 
 }
 
+//MENU SOLUCION INTS
+char	output_solution_int(int *ft, int *orig)
+{
+	printf("\nSolucion_ft   :%d", *ft);
+	printf("\nSolucion_orig :%d", *orig);
+	printf("\n\nQuiere probar de nuevo? (y / n) : ");
+	char c = getchar();
+	while (getchar() != '\n');
+	return (c); 
+}
+
+
 ////////////////////////////////////////////////////////////
 /*ft_memchr*////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
 int	main_memchr()
 {
-	char	*s = (char *)malloc(100 * sizeof(char));
+	char	*s = (char *)calloc(100, sizeof(char));
 	char	c;
 	int		offset;
 	char	press;
@@ -196,7 +243,7 @@ int	main_memchr()
 		{
 			system ("clear");
 			printf("String = %s", s);
-			printf("bytes = %d", num_bytes);
+			printf("\nbytes = %d", num_bytes);
 			if ((c < 33) || (c > 126))
 				printf("\nchar(num) = %d", c);
 			else
@@ -232,6 +279,7 @@ int	main_memchr()
 		printf("\nchar(num) = %d", c);
 	else
 		printf("\nchar = %c", c);
+	printf("\nbytes = %d", num_bytes);
 	
 	press = output_solution(solucion_ft, solucion_orig);
 	
@@ -246,6 +294,84 @@ int	main_memchr()
 }
 
 
+////////////////////////////////////////////////////////////
+/*ft_memcmp*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int	main_memcmp()
+{
+	char	*s1 = (char *)calloc(100, sizeof(char));
+	char	*s2 = (char *)calloc(100, sizeof(char));
+	char	press;
+	int		num_bytes;
+
+	//Sub menu principal
+	press = options_null_valid();
+		
+	if (press == '1')
+		fill_null(s1, s2);
+	else
+	{
+		s1 = fill_string(s1);
+		s2 = fill_string(s2);
+	}
+
+	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
+	num_bytes = fill_num_bytes(s1);
+		
+	int	solucion_ft;
+	int	solucion_orig;
+	
+	//condiciones NULL
+	if ((s1 == NULL) || (s2 == NULL))
+	{
+		while (1)
+		{
+			system ("clear");
+			printf("String1 = %s", s1);
+			printf("\nString2 = %s", s2);
+			printf("\nbytes = %d", num_bytes);
+			press = fill_crash_menu();
+			switch (press)
+			{
+				case '1': 
+					solucion_ft = ft_memcmp(s1, s2, num_bytes);
+					break;
+				case '2':
+					solucion_orig = memcmp(s1, s2, num_bytes);
+					break;
+				default:
+					continue;
+			}
+			break;
+		}
+	}
+
+//condiciones Normales
+	else
+	{
+		solucion_ft = ft_memcmp(s1, s2, num_bytes);
+		solucion_orig = memcmp(s1, s2, num_bytes);
+	}
+
+	//SOLUCION
+	system ("clear");
+	printf("String1 = %s", s1);
+	printf("\nString2 = %s", s2);
+	printf("\nbytes = %d", num_bytes);
+	
+	press = output_solution_int(&solucion_ft, &solucion_orig);
+	
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s1);
+		free (s2);
+		main_memcmp();
+		return (0);
+	}
+	free (s1);
+	free (s2);
+	return (0);
+}
 
 
 ////////////////////////////////////////////////////////////
