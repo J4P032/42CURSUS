@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 17:37:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/17 20:49:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 //PROTOTIPOS
 void	ft_print(char *str, size_t l);
+void	ft_printf(char *str);
 int		options_draw();
 char	options_null_valid();
 void 	fill_null(char *s1, char *s2);
@@ -38,6 +39,7 @@ int	main_memchr();
 int	main_memcmp();
 int main_strdup();
 int	main_strchr(int opcion);
+int	main_substr();
 	
 //EL MAIN GENERAL
 int main()
@@ -68,6 +70,9 @@ int main()
 				break;
 			case '5':
 				main_strchr(2);
+				break;
+			case '6':
+				main_substr();
 				break;
 			case 'X':
 			case 'x':
@@ -103,6 +108,15 @@ void	ft_print(char *str, size_t l)
 	}
 }
 
+//PRINT CON WRITE como printf para respetar el orden de los write en mains
+void	ft_printf(char *str)
+{
+	size_t	i  = 0;
+	while (str[i])
+		write(1, &str[i++], 1);
+}
+
+
 //MENU DE OPCIONES GENERAL
 int	options_draw()
 {
@@ -124,6 +138,7 @@ int	options_draw()
 	printf("%5s\n", "(3). Test ft_strdup.c");
 	printf("%5s\n", "(4). Test ft_strchr.c");
 	printf("%5s\n", "(5). Test ft_strrchr.c");
+	printf("%5s\n", "(6). Test ft_substr.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -288,7 +303,9 @@ int main_calloc()
 	char	press;
 
 	system ("clear");
+	printf("\nNumero de elementos");
 	nmemb = fill_num_sizet();
+	printf("\nNumero de Bytes");
 	size = fill_num_sizet();
 	
 	//asigna en funciones
@@ -419,7 +436,9 @@ int	main_memcmp()
 		fill_null(s1, s2);
 	else
 	{
+		printf("\nS1");
 		s1 = fill_string(s1);
+		printf("\nS2");
 		s2 = fill_string(s2);
 	}
 
@@ -654,4 +673,57 @@ int main_strchr(int opcion)
 	return (0);
 }
 
+////////////////////////////////////////////////////////////
+/*ft_substr*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int	main_substr()
+{
+	//char	*ft_substr(char const *s, unsigned int start, size_t len)
+	char			*s = (char *)calloc(100, sizeof(char));
+	if (!s)
+		return (1);
+	unsigned int	num_start;
+	size_t			num_len;
+	char			press;
+	
+	//Sub menu principal
+	press = options_null_valid();
+		
+	if (press == '1')
+		s = NULL;
+	else
+		s = fill_string(s);
+	
+	char	*solucion_ft;
+	
+	//ingreso start y len
+	system("clear");
+	printf("String: %s", s);
+	printf("\nStart:");
+	num_start = (unsigned int)fill_num_sizet();
+	printf("\nLen:");
+	num_len = fill_num_sizet();
 
+	//SOLUCION
+	system ("clear");
+	printf("String = %s", s);
+	printf("\nStart: %u", num_start);
+	printf("\nLen: %zu", num_len);
+	
+	solucion_ft = ft_substr(s, num_start, num_len);
+	printf("\n\nCopia: %s", solucion_ft);
+	fflush(stdout); //para que write no este antes que el printf por el buffer
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s);
+		free (solucion_ft);
+		main_substr();
+		return (0); //si no puede ir al otro free y liberar de nuevo. NO SE COMO. Supongo que por recursividad
+	}
+	free (s);
+	free (solucion_ft);
+	s = NULL;
+	solucion_ft = NULL;
+	return (0);
+}
