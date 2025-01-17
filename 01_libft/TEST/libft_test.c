@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 20:49:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/17 21:26:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include "../libft.h"
 
-//PROTOTIPOS
+//PROTOTIPOS funciones print
 void	ft_print(char *str, size_t l);
 void	ft_printf(char *str);
 int		options_draw();
@@ -33,7 +33,8 @@ char	output_solution_int(int *ft, int *orig);
 void	output_solucion_ptr(void *ft, void *orig, size_t length);
 char	repetimos_volvemos();
 
-
+//MAIN SECUNDARIAS prototipos
+int	main_atoi();
 int	main_calloc();
 int	main_memchr();
 int	main_memcmp();
@@ -54,24 +55,27 @@ int main()
 		switch (press)
 		{
 			case '0':
-				main_calloc();
+				main_atoi();
 				break;
 			case '1':
-				main_memchr();
+				main_calloc();
 				break;
 			case '2':
-				main_memcmp();
+				main_memchr();
 				break;
 			case '3':
-				main_strdup();
+				main_memcmp();
 				break;
 			case '4':
-				main_strchr(1);
+				main_strdup();
 				break;
 			case '5':
-				main_strchr(2);
+				main_strchr(1);
 				break;
 			case '6':
+				main_strchr(2);
+				break;
+			case '7':
 				main_substr();
 				break;
 			case 'X':
@@ -84,7 +88,6 @@ int main()
 	}
 	return (0);
 }
-
 
 
 ///////////////////////////////////////////////////
@@ -132,13 +135,14 @@ int	options_draw()
 
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
-	printf("%5s\n", "(0). Test ft_calloc.c");
-	printf("%5s\n", "(1). Test ft_memchr.c");
-	printf("%5s\n", "(2). Test ft_memcmp.c");
-	printf("%5s\n", "(3). Test ft_strdup.c");
-	printf("%5s\n", "(4). Test ft_strchr.c");
-	printf("%5s\n", "(5). Test ft_strrchr.c");
-	printf("%5s\n", "(6). Test ft_substr.c");
+	printf("%5s\n", "(0). Test ft_atoi.c");
+	printf("%5s\n", "(1). Test ft_calloc.c");
+	printf("%5s\n", "(2). Test ft_memchr.c");
+	printf("%5s\n", "(3). Test ft_memcmp.c");
+	printf("%5s\n", "(4). Test ft_strdup.c");
+	printf("%5s\n", "(5). Test ft_strchr.c");
+	printf("%5s\n", "(6). Test ft_strrchr.c");
+	printf("%5s\n", "(7). Test ft_substr.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -290,6 +294,44 @@ char	repetimos_volvemos()
 	char c = getchar();
 	while (getchar() != '\n');
 	return (c);
+}
+
+////////////////////////////////////////////////////////////
+/*ft_atoi*//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int	main_atoi()
+{
+	char	*s = (char *)calloc(50, sizeof(char));
+	char	press;
+
+	//Sub menu principal
+	press = options_null_valid();
+		
+	if (press == '1')
+		s = NULL;
+	else
+		s = fill_string(s);
+
+	//Solucion
+	int	solucion_ft = ft_atoi(s);
+	int solucion_orig = atoi(s);
+	
+	system("clear");
+	printf("String: %s", s);
+	printf("\n\nft_atoi: %d", solucion_ft);
+	printf("\natoi: %d", solucion_orig);
+	fflush(stdout); // limpia buffer para write de repetimos
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s);
+		s = NULL;
+		main_atoi();
+		return (0);
+	}
+	free (s);
+	s = NULL;
+	return (0);
 }
 
 ////////////////////////////////////////////////////////////
