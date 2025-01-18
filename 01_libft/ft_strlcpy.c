@@ -6,12 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 20:13:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 20:36:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/18 11:23:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <unistd.h> ////
 
 /*copy the src string to dst and returns length of src*/
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
