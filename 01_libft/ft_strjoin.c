@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:17:41 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/18 14:05:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:51:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	i;
 	char	*dest;
 
-	if (!s1 || !s2)
+	if (!s1 && !s2)
 		return (NULL);
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
