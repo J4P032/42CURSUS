@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/18 14:29:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/18 22:41:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ int	main_atoi();
 int	main_calloc();
 int	main_memchr();
 int	main_memcmp();
+int main_memset();
 int main_strdup();
 int	main_strchr(int opcion);
 int	main_strjoin();
+int main_strtrim();
 int	main_substr();
 
 //EL MAIN GENERAL
@@ -67,19 +69,26 @@ int main()
 			case '3':
 				main_memcmp();
 				break;
+
 			case '4':
-				main_strdup();
+				main_memset();
 				break;
 			case '5':
-				main_strchr(1);
+				main_strdup();
 				break;
 			case '6':
-				main_strjoin();
+				main_strchr(1);
 				break;
 			case '7':
-				main_strchr(2);
+				main_strjoin();
 				break;
 			case '8':
+				main_strchr(2);
+				break;
+			case '9':
+				main_strtrim();
+				break;
+			case 'a':
 				main_substr();
 				break;
 			case 'X':
@@ -142,12 +151,13 @@ int	options_draw()
 	printf("%5s\n", "(1). Test ft_calloc.c");
 	printf("%5s\n", "(2). Test ft_memchr.c");
 	printf("%5s\n", "(3). Test ft_memcmp.c");
-	printf("%5s\n", "(4). Test ft_strdup.c");
-	printf("%5s\n", "(5). Test ft_strchr.c");
-
-	printf("%5s\n", "(6). Test ft_strjoin.c");
-	printf("%5s\n", "(7). Test ft_strrchr.c");
-	printf("%5s\n", "(8). Test ft_substr.c");
+	printf("%5s\n", "(4). Test ft_memset.c");
+	printf("%5s\n", "(5). Test ft_strdup.c");
+	printf("%5s\n", "(6). Test ft_strchr.c");
+	printf("%5s\n", "(7). Test ft_strjoin.c");
+	printf("%5s\n", "(8). Test ft_strrchr.c");
+	printf("%5s\n", "(9). Test ft_strtrim.c");
+	printf("%5s\n", "(a). Test ft_substr.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -197,11 +207,8 @@ void fill_null(char *s1, char *s2)
 char *fill_string(char *s)
 {
 	system ("clear");
-	//write(1, "String = ", 9);
-	//ft_print(s, strlen(s));
-	//write(1, "\nIntroduzca cadena en la que buscar : \n", 39);
 	printf("String = %s", s);
-	printf("\nIntroduzca cadena en la que buscar : \n");
+	printf("\nIntroduzca cadena: \n");
 	scanf("%99s", s);
 	getchar(); //libera buffer del enter = \n
 	return (s);
@@ -213,7 +220,7 @@ int	fill_num_bytes(char *s)
 	int	num_bytes;
 	system ("clear");
 	printf("String = %s", s);
-	printf("\nIntroduzca num de bytes a buscar : \n");
+	printf("\nIntroduzca num de bytes : \n");
 	scanf("%d", &num_bytes);
 	getchar();
 	return (num_bytes);
@@ -550,6 +557,92 @@ int	main_memcmp()
 	return (0);
 }
 
+////////////////////////////////////////////////////////////
+/*ft_memset*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_memset()
+{
+//void	*ft_memset(void *s, int c, size_t n)
+
+	char	*s1 = (char *)calloc(50, sizeof(char));
+	char	press;
+	char	c;
+	size_t	number;
+	int		offset;
+
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+		s1 = NULL;
+	else
+	{
+		printf("\nS1");
+		s1 = fill_string(s1);
+	}
+
+	//MENU PARA ELEGIR el CHAR A BUSCAR
+
+	c = fill_char(s1, &offset);
+
+	//MENU PARA ELEGIR NUMERO A INTRODUCIR
+	printf("\n numero de bytes: ");
+	number = fill_num_bytes(s1);
+
+
+	char	*solucion_ft = NULL;
+	char	*solucion_orig = NULL;
+
+
+	//condiciones NULL
+	if (s1 == NULL)
+	{
+		while (1)
+		{
+			system ("clear");
+			printf("String1 = %s", s1);
+			printf("\nCharacter: %c", c);
+			printf("\nbytes = %zu", number);
+			press = fill_crash_menu();
+			switch (press)
+			{
+				case '1':
+					solucion_ft = ft_memset(s1, (int)c, number);
+					break;
+				case '2':
+					solucion_orig = memset(s1, (int)c, number);
+					break;
+				default:
+					continue;
+			}
+			break;
+		}
+	}
+	//condiciones Normales
+	else
+	{
+		solucion_ft = ft_memset(s1, (int)c, number);
+		solucion_orig = memset(s1, (int)c, number);
+	}
+	//SOLUCION
+	system ("clear");
+	printf("String1 = %s", s1);
+	printf("\ncharacter = %c", c);
+	printf("\nbytes = %zu", number);
+	printf("\n\n Solucion_ft : %s", solucion_ft);
+	printf("\n\n Solucion_orig : %s", solucion_orig);
+	fflush(stdout);
+	press = repetimos_volvemos();
+
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s1);
+		main_memset();
+		return (0);
+	}
+	free (s1);
+	return (0);
+}
 
 ////////////////////////////////////////////////////////////
 /*ft_strdup*////////////////////////////////////////////////
@@ -724,6 +817,9 @@ int main_strchr(int opcion)
 }
 
 
+////////////////////////////////////////////////////////////
+/*ft_strjoin*///////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 int main_strjoin()
 {
 	//char	*ft_strjoin(char const *s1, char const *s2)
@@ -768,6 +864,65 @@ int main_strjoin()
 		s2 = NULL;
 		solucion_ft = NULL;
 		main_strjoin();
+		return (0);
+	}
+	free (s1);
+	free (s2);
+	free (solucion_ft);
+	s1 = NULL;
+	s2 = NULL;
+	solucion_ft = NULL;
+	return (0);
+}
+
+
+////////////////////////////////////////////////////////////
+/*ft_strtrim*///////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_strtrim()
+{
+	char			*s1 = (char *)calloc(50, sizeof(char));
+	char			*s2 = (char *)calloc(50, sizeof(char));
+	char			press;
+
+	if (!s1 || !s2)
+		return (1);
+
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+		fill_null(s1, s2);
+	else
+	{
+		system("clear");
+		printf("s1: ");
+		s1 = fill_string(s1);
+		printf("\nset: ");
+		s2 = fill_string(s2);
+	}
+
+	char	*solucion_ft = NULL;
+
+	//SOLUCION
+	system ("clear");
+	printf("String1 = %s", s1);
+	printf("\nSET = %s", s2);
+
+	solucion_ft = ft_strtrim(s1, s2);
+
+	printf("\n\nTrim: %s", solucion_ft);
+	fflush(stdout);
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s1);
+		free (s2);
+		free (solucion_ft);
+		s1 = NULL;
+		s2 = NULL;
+		solucion_ft = NULL;
+		main_strtrim();
 		return (0);
 	}
 	free (s1);
