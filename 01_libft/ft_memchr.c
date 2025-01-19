@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 18:43:12 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 23:54:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:54:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 /*search for first byte with char c in first n bytes of s*/
 /*if not found -> NULL*/

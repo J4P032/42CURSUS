@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:05:22 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 10:53:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:57:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 static int	ft_findstr(const char *s1, const char *s2, size_t l)
 {

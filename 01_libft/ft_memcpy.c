@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 13:32:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/15 21:17:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:55:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 /*copy n bytes from src memory to mem area dest. They must not overlap*/
 void	*ft_memcpy(void *dest, const void *src, size_t n)

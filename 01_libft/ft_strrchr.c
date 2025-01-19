@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:42:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/16 19:26:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:57:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 /*Finds char c inside of string s*/
 /*if found -> returns pointer to LAST found in s*/

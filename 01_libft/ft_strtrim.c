@@ -6,11 +6,10 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:22:54 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/18 21:40:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:57:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
 
 /*delete chars in 's1' that are in 'set' until it finds a char not in 'set'*/

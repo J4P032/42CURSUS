@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 09:41:07 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/14 09:59:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:57:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 /*Checks if both strings are equal. If they do, it returns a 0, if not it
 returns the difference between s1 and s2 in unsigned char ascii code numbers.

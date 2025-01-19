@@ -6,12 +6,10 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 18:29:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 21:01:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:57:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
 #include "libft.h"
 
 /*returns a substring from 's' starting from 'start' and max length of 'len'*/

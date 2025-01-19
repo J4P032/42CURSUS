@@ -6,12 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:17:41 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/18 16:51:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:56:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 /*Joins both s1 first and s2 in a new string with memory allocation*/
 /*if Mem alloc is not success then return NULL*/

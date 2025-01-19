@@ -6,11 +6,10 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 16:57:12 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 17:44:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:56:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "libft.h"
 
 /*copies a string to another area of memory (need malloc)*/

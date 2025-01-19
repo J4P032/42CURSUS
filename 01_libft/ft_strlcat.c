@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 08:33:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/15 08:52:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:56:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
-/*if size src + size dest > size given only will copy the chars that fit and 
+/*if size src + size dest > size given only will copy the chars that fit and
 will set a \0 in last one. If size is less or equal to the size of dest, then
 will return the necesary space needed to proceed with that secure.
 */

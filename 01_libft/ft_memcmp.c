@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:00:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/17 01:59:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:55:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 /*compare both memory & up to n bytes*/
 /*return 0 if are equal || rest s1 - s2 in first different byte*/

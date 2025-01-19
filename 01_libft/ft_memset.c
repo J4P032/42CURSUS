@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 09:15:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/15 10:20:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:55:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 /*fills 1st n bytes of memory pointed by s with constant byte c*/
 void	*ft_memset(void *s, int c, size_t n)

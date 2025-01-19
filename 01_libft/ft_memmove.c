@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 15:48:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/15 21:20:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/19 09:55:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 /*copy data from src to dest through n bytes but garanties good copy of all*/
 void	*ft_memmove(void *dest, const void *src, size_t n)
