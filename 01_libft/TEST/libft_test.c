@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/18 22:41:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:23:13 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/ioctl.h> //para ioctl. obtener tamanyo de un terminal pantalla.
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 #include "../libft.h"
 
 //PROTOTIPOS funciones print
@@ -22,7 +23,7 @@ void	ft_print(char *str, size_t l);
 void	ft_printf(char *str);
 int		options_draw();
 char	options_null_valid();
-void 	fill_null(char *s1, char *s2);
+char 	fill_null();
 char	*fill_string(char *s);
 int		fill_num_bytes(char *s);
 int		fill_num_sizet();
@@ -38,12 +39,15 @@ int	main_atoi();
 int	main_calloc();
 int	main_memchr();
 int	main_memcmp();
+int	main_memcpy();
+int	main_memmove();
 int main_memset();
 int main_strdup();
 int	main_strchr(int opcion);
 int	main_strjoin();
 int main_strtrim();
 int	main_substr();
+int main_uplow(int (*f)(int), int (*g)(int));
 
 //EL MAIN GENERAL
 int main()
@@ -69,27 +73,38 @@ int main()
 			case '3':
 				main_memcmp();
 				break;
-
 			case '4':
-				main_memset();
+				main_memcpy();
 				break;
 			case '5':
-				main_strdup();
+				main_memmove();
 				break;
 			case '6':
-				main_strchr(1);
+				main_memset();
 				break;
 			case '7':
-				main_strjoin();
+				main_strdup();
 				break;
 			case '8':
-				main_strchr(2);
+				main_strchr(1);
 				break;
 			case '9':
-				main_strtrim();
+				main_strjoin();
 				break;
 			case 'a':
+				main_strchr(2);
+				break;
+			case 'b':
+				main_strtrim();
+				break;
+			case 'c':
 				main_substr();
+				break;
+			case 'd':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'e':
+				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
 			case 'x':
@@ -151,13 +166,17 @@ int	options_draw()
 	printf("%5s\n", "(1). Test ft_calloc.c");
 	printf("%5s\n", "(2). Test ft_memchr.c");
 	printf("%5s\n", "(3). Test ft_memcmp.c");
-	printf("%5s\n", "(4). Test ft_memset.c");
-	printf("%5s\n", "(5). Test ft_strdup.c");
-	printf("%5s\n", "(6). Test ft_strchr.c");
-	printf("%5s\n", "(7). Test ft_strjoin.c");
-	printf("%5s\n", "(8). Test ft_strrchr.c");
-	printf("%5s\n", "(9). Test ft_strtrim.c");
-	printf("%5s\n", "(a). Test ft_substr.c");
+	printf("%5s\n", "(4). Test ft_memcpy.c");
+	printf("%5s\n", "(5). Test ft_memmove.c");
+	printf("%5s\n", "(6). Test ft_memset.c");
+	printf("%5s\n", "(7). Test ft_strdup.c");
+	printf("%5s\n", "(8). Test ft_strchr.c");
+	printf("%5s\n", "(9). Test ft_strjoin.c");
+	printf("%5s\n", "(a). Test ft_strrchr.c");
+	printf("%5s\n", "(b). Test ft_strtrim.c");
+	printf("%5s\n", "(c). Test ft_substr.c");
+	printf("%5s\n", "(d). Test ft_tolower.c");
+	printf("%5s\n", "(e). Test ft_toupper.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -176,7 +195,7 @@ char options_null_valid()
 }
 
 //MENU ASIGNAR NULLS VARIOS STRINGS
-void fill_null(char *s1, char *s2)
+char fill_null()
 {
 	system ("clear");
 	printf("1. S1 NULL S2 normal");
@@ -185,22 +204,7 @@ void fill_null(char *s1, char *s2)
 	printf("\n\nCual elige? : ");
 	char c = getchar();
 	while (getchar() != '\n');
-	switch (c){
-		case '1':
-			s1 = NULL;
-			s2 = fill_string(s2);
-			break;
-		case '2':
-			s1 = fill_string(s1);
-			s2 = NULL;
-			break;
-		case '3':
-			s1 = NULL;
-			s2 = NULL;
-			break;
-		default:
-			break;
-	}
+	return (c);
 }
 
 //MENU INTRODUCIR STRING
@@ -489,7 +493,24 @@ int	main_memcmp()
 	press = options_null_valid();
 
 	if (press == '1')
-		fill_null(s1, s2);
+	{
+		press = fill_null();
+		switch (press)
+		{
+			case '1':
+				s2 = (char *)calloc(100, sizeof(char));
+				s2 = fill_string(s2);
+				break;
+			case '2':
+				s1 = (char *)calloc(100, sizeof(char));
+				s1 = fill_string(s1);
+				break;
+			case '3':
+				break;
+			default:
+				break;
+		}
+	}
 	else
 	{
 		printf("\nS1");
@@ -556,6 +577,277 @@ int	main_memcmp()
 	free (s2);
 	return (0);
 }
+
+
+////////////////////////////////////////////////////////////
+/*ft_memcpy*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_memcpy()
+{
+	//char	*s1 = (char *)calloc(100, sizeof(char));
+	//char	*s2 = (char *)calloc(100, sizeof(char));
+	char *s1 = NULL;
+	char *s2 = NULL;
+	char	press;
+	int		num_bytes;
+
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+	{
+	 	press = fill_null();
+		switch (press){
+		case '1':
+			s2 = (char *)calloc(100, sizeof(char));
+			s2 = fill_string(s2);
+			break;
+		case '2':
+			s1 = (char *)calloc(100, sizeof(char));
+			s1 = fill_string(s1);
+			break;
+		case '3':
+			break;
+		default:
+			break;
+	}
+	}
+	else
+	{
+		s1 = (char *)calloc(100, sizeof(char));
+		s2 = (char *)calloc(100, sizeof(char));
+		printf("\nS1");
+		s1 = fill_string(s1);
+		printf("\nS2");
+		s2 = fill_string(s2);
+	}
+
+	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
+	num_bytes = fill_num_bytes(s1);
+
+	//condiciones NULL
+	if ((s1 == NULL) || (s2 == NULL))
+	{
+		while (1)
+		{
+			system ("clear");
+			printf("String1 = %s", s1);
+			printf("\nString2 = %s", s2);
+			printf("\nbytes = %d", num_bytes);
+			press = fill_crash_menu();
+			switch (press)
+			{
+				case '1':
+					ft_memcpy(s1, s2, num_bytes);
+					break;
+				case '2':
+					memcpy(s1, s2, num_bytes);
+					break;
+				default:
+					continue;
+			}
+			break;
+		}
+	}
+
+	//condiciones Normales
+	else
+	{
+		ft_memcpy(s1, s2, num_bytes);
+		memcpy(s1, s2, num_bytes);
+	}
+
+	//SOLUCION
+	system ("clear");
+	printf("String1 = %s", s1);
+	printf("\nString2 = %s", s2);
+	printf("\nbytes = %d", num_bytes);
+	fflush(stdout);
+
+	press = repetimos_volvemos();
+
+	if ((press == 'y') || (press == 'Y'))
+	{
+		if (s1)
+			free (s1);
+		if (s2)
+			free (s2);
+		main_memcpy();
+		return (0);
+	}
+	if (s1)
+		free (s1);
+	if (s2)
+		free (s2);
+	return (0);
+}
+
+////////////////////////////////////////////////////////////
+/*ft_memmove*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_memmove()
+{
+	char *s1 = NULL;
+	char *s2 = NULL;
+	char *s3 = (char *)calloc(100, sizeof(char));
+	char *aux1 = (char *)calloc(100, sizeof(char));
+	char	press;
+	int		num_bytes;
+	int		offset;
+
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+	{
+	 	press = fill_null();
+		switch (press){
+		case '1':
+			s2 = (char *)calloc(100, sizeof(char));
+			s2 = fill_string(s2);
+			break;
+		case '2':
+			s1 = (char *)calloc(100, sizeof(char));
+			s1 = fill_string(s1);
+			break;
+		case '3':
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		s1 = (char *)calloc(100, sizeof(char));
+		s2 = (char *)calloc(100, sizeof(char));
+		printf("\nS1");
+		s1 = fill_string(s1);
+		printf("\nS2");
+		s2 = fill_string(s2);
+	}
+
+	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
+	num_bytes = fill_num_bytes(s1);
+	printf("\nIntroduzca offset : \n");
+	scanf("%d", &offset);
+	getchar(); ////////////////////
+
+
+	//condiciones NULL
+	if ((s1 == NULL) || (s2 == NULL))
+	{
+		while (1)
+		{
+			system ("clear");
+			printf("String1 = %s", s1);
+			printf("\nString2 = %s", s2);
+			printf("\nbytes = %d", num_bytes);
+			printf("\noffset = %d", offset);
+
+			system("clear");
+			printf("\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
+			printf("\n\n1. ft_memmove(s1, s2, bytes)");
+			printf("\n2. memmove(s1, s2, bytes)");
+			printf("\n\n3. ft_memmove(s1, s1 + offset, bytes)");
+			printf("\n4. memmove(s1, s1 + offset, bytes)");
+			printf("\n\n5. ft_memmove(s1 + offset, s1, bytes)");
+			printf("\n\n6. memmove(s1 + offset, s1, bytes)");
+			printf("\n\nopcion? : ");
+			char press = getchar();
+			while (getchar() != '\n');
+
+			switch (press)
+			{
+				case '1':
+					s3 = ft_memmove(s1, s2, num_bytes);
+					break;
+				case '2':
+					s3 = memmove(s1, s2, num_bytes);
+					break;
+				case '3':
+					s3 = ft_memmove(s1, s1 + offset , num_bytes);
+					break;
+				case '4':
+					s3 = memmove(s1, s1 + offset , num_bytes);
+					break;
+				case '5':
+					s3 = ft_memmove(s1 + offset, s1, num_bytes);
+					break;
+				case '6':
+					s3 = memmove(s1 + offset, s1, num_bytes);
+					break;
+				default:
+					continue;
+			}
+			printf("\nSolucion: %s", s3);
+			break;
+		}
+	}
+
+	//condiciones Normales SOLUCION
+
+	else
+	{
+		aux1 = strcpy(aux1, s1);
+
+		system ("clear");
+		printf("String1 = %s", s1);
+		printf("\nString2 = %s", s2);
+		printf("\nbytes = %d", num_bytes);
+		printf("\noffset = %d", offset);
+
+		s3 = ft_memmove(aux1, s2, num_bytes);
+		printf("\n\nft_memmove(s1, s2, bytes): %s", s3);
+		aux1 = strcpy(aux1, s1);
+		s3 = memmove(aux1, s2, num_bytes);
+		printf("\n___memmove(s1, s2, bytes): %s", s3);
+
+		aux1 = strcpy(aux1, s1);
+		s3 = ft_memmove(aux1, aux1 + offset, num_bytes);
+		printf("\n\nft_memmove(s1, s1 + offset, bytes): %s", s3);
+		aux1 = strcpy(aux1, s1);
+		s3 = memmove(aux1, aux1 + offset, num_bytes);
+		printf("\n___memmove(s1, s1 + offset, bytes): %s", s3);
+
+		aux1 = strcpy(aux1, s1);
+		s3 = ft_memmove(aux1 + offset, aux1, num_bytes);
+		printf("\n\nft_memmove(s1 + offset, s1, bytes): %s", s3);
+		aux1 = strcpy(aux1, s1);
+		s3 = memmove(aux1 + offset, aux1, num_bytes);
+		printf("\n___memmove(s1 + offset, s1, bytes): %s", s3);
+	}
+
+
+	fflush(stdout);
+
+	press = repetimos_volvemos();
+
+	if ((press == 'y') || (press == 'Y'))
+	{
+		if (s1) free (s1);
+		if (s2) free (s2);
+		if (s3) free (s3);
+		if (aux1) free (aux1);
+		s1 = NULL;
+		s2 = NULL;
+		s3 = NULL;
+		aux1 = NULL;
+		main_memmove();
+		return (0);
+	}
+	if (s1) free (s1);
+	if (s2) free (s2);
+	if (s3) free (s3);
+	if (aux1) free (aux1);
+	s1 = NULL;
+	s2 = NULL;
+	s3 = NULL;
+	aux1 = NULL;
+	return (0);
+}
+
+
+
 
 ////////////////////////////////////////////////////////////
 /*ft_memset*////////////////////////////////////////////////
@@ -833,7 +1125,24 @@ int main_strjoin()
 	press = options_null_valid();
 
 	if (press == '1')
-		fill_null(s1, s2);
+	{
+		press = fill_null();
+		switch (press)
+		{
+			case '1':
+				s2 = (char *)calloc(100, sizeof(char));
+				s2 = fill_string(s2);
+				break;
+			case '2':
+				s1 = (char *)calloc(100, sizeof(char));
+				s1 = fill_string(s1);
+				break;
+			case '3':
+				break;
+			default:
+				break;
+		}
+	}
 	else
 	{
 		system("clear");
@@ -892,7 +1201,25 @@ int main_strtrim()
 	press = options_null_valid();
 
 	if (press == '1')
-		fill_null(s1, s2);
+	{
+		press = fill_null();
+		switch (press)
+		{
+			case '1':
+				s2 = (char *)calloc(100, sizeof(char));
+				s2 = fill_string(s2);
+				break;
+			case '2':
+				s1 = (char *)calloc(100, sizeof(char));
+				s1 = fill_string(s1);
+				break;
+			case '3':
+				break;
+			default:
+				break;
+		}
+	}
+
 	else
 	{
 		system("clear");
@@ -987,5 +1314,47 @@ int	main_substr()
 	free (solucion_ft);
 	s = NULL;
 	solucion_ft = NULL;
+	return (0);
+}
+
+
+////////////////////////////////////////////////////////////
+/*ft_tolower, ft_toupper*///////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_uplow(int (*f)(int), int (*g)(int))
+{
+	//int	ft_toupper(int c)
+	char	press;
+	char	c1;
+	char	c2;
+	char	c_orig;
+	int		offset = 0;
+
+	//MENU PARA ELEGIR CARACTER
+	system ("clear");
+	printf("\nOffset para chars como \\0(-49) u Overflow: ");
+	scanf("%d", &offset);
+	getchar();
+	printf("\nIntroduzca el caracter a buscar. \\0 = '1' - 49 : \n");
+	scanf("%c", &c1);
+	getchar();
+
+	c1= c1 + offset;
+	c_orig = c1;
+	c2 = c1;
+
+	c1 = f(c1);
+	c2 = g(c2);
+
+	//SOLUCION
+	system ("clear");
+	printf("Char = %c", c_orig);
+	printf("\nft_: %c", c1);
+	printf("\norig: %c", c2);
+	fflush(stdout);
+
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+		main_uplow(f, g);
 	return (0);
 }
