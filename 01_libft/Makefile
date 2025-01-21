@@ -1,4 +1,4 @@
-C		= cc
+CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 NAME	= libft.a
 SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
@@ -8,17 +8,33 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 	ft_strnstr.c ft_strrchr.c ft_substr.c ft_tolower.c ft_toupper.c \
 	ft_strtrim.c ft_putchar_fd.c ft_split.c ft_itoa.c ft_strmapi.c \
 	ft_putnbr_fd.c ft_putendl_fd.c ft_putstr_fd.c ft_striteri.c
-
+SRCS_BONUS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c \
+	ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c \
+	ft_lstdelone_bonus.c ft_lstclear_bonus.c
 OBJS	= ${SRCS:.c=.o}
-RM		= rm -f
+OBJS_BONUS = ${SRCS_BONUS:.c=.o}
+RM		= rm -rf
+
 all: ${NAME}
+
 %.o: %.c libft.h
-	${C} ${CFLAGS} -c $< -o $@
+	${CC} ${CFLAGS} -c $< -o $@
+
 ${NAME}: ${OBJS}
 	ar -rc $@ ${OBJS}
+
+bonus: .bonus
+
+.bonus: ${OBJS} ${OBJS_BONUS}
+	ar -rc ${NAME} ${OBJS} ${OBJS_BONUS}
+	touch .bonus
+
 clean:
-	${RM} ${OBJS}
+	${RM} ${OBJS} ${OBJS_BONUS} .bonus
+
 fclean:	clean
 	${RM} ${NAME}
+
 re:	fclean all
-.PHONY:	all clean fclean re
+
+.PHONY:	all clean fclean re bonus

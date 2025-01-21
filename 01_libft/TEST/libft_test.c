@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/20 19:23:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:00:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -689,7 +689,7 @@ int main_memmove()
 {
 	char *s1 = NULL;
 	char *s2 = NULL;
-	char *s3 = (char *)calloc(100, sizeof(char));
+	char *s3 = NULL;// (char *)calloc(100, sizeof(char));
 	char *aux1 = (char *)calloc(100, sizeof(char));
 	char	press;
 	int		num_bytes;
@@ -826,7 +826,7 @@ int main_memmove()
 	{
 		if (s1) free (s1);
 		if (s2) free (s2);
-		if (s3) free (s3);
+		//if (s3) free (s3);
 		if (aux1) free (aux1);
 		s1 = NULL;
 		s2 = NULL;
@@ -837,7 +837,7 @@ int main_memmove()
 	}
 	if (s1) free (s1);
 	if (s2) free (s2);
-	if (s3) free (s3);
+	//if (s3) free (s3);
 	if (aux1) free (aux1);
 	s1 = NULL;
 	s2 = NULL;
