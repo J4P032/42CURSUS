@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/15 13:32:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/21 09:35:49 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/01/21 10:32:48 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/01/21 10:44:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-/*copy n bytes from src memory to mem area dest. They must not overlap*/
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+t_list	*ft_lstnew(void *content)
 {
-	size_t			i;
-	unsigned char	*aux_dest;
-	unsigned char	*aux_src;
+	t_list	*lnew;
 
-	if (n == 0)
-		return (dest);
-	if ((!dest && !src))
+	lnew = (t_list *)malloc(sizeof(t_list));
+	if (!lnew)
 		return (NULL);
-	aux_dest = (unsigned char *)dest;
-	aux_src = (unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		*(aux_dest + i) = *(aux_src + i);
-		i++;
-	}
-	return (dest);
+	lnew->content = content;
+	lnew->next = NULL;
+	return (lnew);
 }
