@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:00:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/19 09:55:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/22 18:10:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*compare both memory & up to n bytes*/
 /*return 0 if are equal || rest s1 - s2 in first different byte*/
-/*n = 0 -> return 0 || s1 = NULL and S2 = NULL -> return 0*/
+/*n = 0 -> return 0  */
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
 	size_t			i;
@@ -24,7 +24,7 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 
 	i = 0;
 	found = 0;
-	if (((!s1) && (!s2)) || (n == 0))
+	if (n == 0)
 		return (0);
 	s1_aux = (unsigned char *)s1;
 	s2_aux = (unsigned char *)s2;
