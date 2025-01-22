@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 15:48:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/22 20:42:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:09:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	unsigned char	*aux_dest;
 	unsigned char	*aux_src;
 
-	//if (!dest && !src)
-	//	return (NULL);
 	aux_dest = (unsigned char *)dest;
 	aux_src = (unsigned char *)src;
 	i = 0;
