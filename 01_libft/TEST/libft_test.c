@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/21 14:00:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/22 22:35:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int		options_draw();
 char	options_null_valid();
 char 	fill_null();
 char	*fill_string(char *s);
+int		fill_integer();
 int		fill_num_bytes(char *s);
 int		fill_num_sizet();
 char	fill_char(char *s, int *offset);
@@ -34,9 +35,12 @@ char	output_solution_int(int *ft, int *orig);
 void	output_solucion_ptr(void *ft, void *orig, size_t length);
 char	repetimos_volvemos();
 
+void 	ft_reset_copy(char *dest, char *orig);
+
 //MAIN SECUNDARIAS prototipos
 int	main_atoi();
 int	main_calloc();
+int	main_itoa();
 int	main_memchr();
 int	main_memcmp();
 int	main_memcpy();
@@ -49,7 +53,9 @@ int main_strtrim();
 int	main_substr();
 int main_uplow(int (*f)(int), int (*g)(int));
 
-//EL MAIN GENERAL
+////////////////////////////
+//EL MAIN GENERAL///////////
+////////////////////////////
 int main()
 {
     char	press = '\0';
@@ -68,42 +74,45 @@ int main()
 				main_calloc();
 				break;
 			case '2':
-				main_memchr();
+				main_itoa();
 				break;
 			case '3':
-				main_memcmp();
+				main_memchr();
 				break;
 			case '4':
-				main_memcpy();
+				main_memcmp();
 				break;
 			case '5':
-				main_memmove();
+				main_memcpy();
 				break;
 			case '6':
-				main_memset();
+				main_memmove();
 				break;
 			case '7':
-				main_strdup();
+				main_memset();
 				break;
 			case '8':
-				main_strchr(1);
+				main_strdup();
 				break;
 			case '9':
-				main_strjoin();
+				main_strchr(1);
 				break;
 			case 'a':
-				main_strchr(2);
+				main_strjoin();
 				break;
 			case 'b':
-				main_strtrim();
+				main_strchr(2);
 				break;
 			case 'c':
-				main_substr();
+				main_strtrim();
 				break;
 			case 'd':
-				main_uplow(ft_tolower, tolower);
+				main_substr();
 				break;
 			case 'e':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'f':
 				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
@@ -147,7 +156,10 @@ void	ft_printf(char *str)
 		write(1, &str[i++], 1);
 }
 
-//MENU DE OPCIONES GENERAL
+//************************//
+//MENU DE OPCIONES GENERAL//
+//************************//
+
 int	options_draw()
 {
 	system("clear");
@@ -162,21 +174,23 @@ int	options_draw()
 
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
-	printf("%5s\n", "(0). Test ft_atoi.c");
-	printf("%5s\n", "(1). Test ft_calloc.c");
-	printf("%5s\n", "(2). Test ft_memchr.c");
-	printf("%5s\n", "(3). Test ft_memcmp.c");
-	printf("%5s\n", "(4). Test ft_memcpy.c");
-	printf("%5s\n", "(5). Test ft_memmove.c");
-	printf("%5s\n", "(6). Test ft_memset.c");
-	printf("%5s\n", "(7). Test ft_strdup.c");
-	printf("%5s\n", "(8). Test ft_strchr.c");
-	printf("%5s\n", "(9). Test ft_strjoin.c");
-	printf("%5s\n", "(a). Test ft_strrchr.c");
-	printf("%5s\n", "(b). Test ft_strtrim.c");
-	printf("%5s\n", "(c). Test ft_substr.c");
-	printf("%5s\n", "(d). Test ft_tolower.c");
-	printf("%5s\n", "(e). Test ft_toupper.c");
+	printf("%5s\n", "(0). ft_atoi.c");
+	printf("%5s\n", "(1). ft_calloc.c");
+	printf("%5s\n", "(2). ft_itoa.c");
+
+	printf("%5s\n", "(3). ft_memchr.c");
+	printf("%5s\n", "(4). ft_memcmp.c");
+	printf("%5s\n", "(5). ft_memcpy.c");
+	printf("%5s\n", "(6). ft_memmove.c");
+	printf("%5s\n", "(7). ft_memset.c");
+	printf("%5s\n", "(8). ft_strdup.c");
+	printf("%5s\n", "(9). ft_strchr.c");
+	printf("%5s\n", "(a). ft_strjoin.c");
+	printf("%5s\n", "(b). ft_strrchr.c");
+	printf("%5s\n", "(c). ft_strtrim.c");
+	printf("%5s\n", "(d). ft_substr.c");
+	printf("%5s\n", "(e). ft_tolower.c");
+	printf("%5s\n", "(f). ft_toupper.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -216,6 +230,17 @@ char *fill_string(char *s)
 	scanf("%99s", s);
 	getchar(); //libera buffer del enter = \n
 	return (s);
+}
+
+//MENU PARA ELEGIR UN ENTERO
+int	fill_integer()
+{
+	int	num;
+	system ("clear");
+	printf("\nIntroduzca el numero : \n");
+	scanf("%d", &num);
+	getchar();
+	return (num);
 }
 
 //MENU PARA NUM DE BYTES A RECORRER
@@ -259,6 +284,7 @@ char fill_char(char *s, int *offset)
 char	fill_crash_menu()
 {
 	printf("\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
+	printf("\nNOTA!! en caso de no crash solo fijarse en solucion de la probada y comparar de nuevo con la otra");
 	printf("\n\n1. ft_");
 	printf("\n2. original");
 	printf("\n\nopcion? : ");
@@ -312,25 +338,71 @@ char	repetimos_volvemos()
 	return (c);
 }
 
+//###################################
+//FUNCION RESETEAR COPIAR ***********
+//###################################
+void ft_reset_copy(char *dest, char *orig)
+{
+	bzero(dest, 100);
+	strcpy(dest, orig);
+}
+
+
 ////////////////////////////////////////////////////////////
 /*ft_atoi*//////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 int	main_atoi()
 {
-	char	*s = (char *)calloc(50, sizeof(char));
+	char	*s = NULL;
 	char	press;
+	int solucion_ft = 0;
+	int solucion_orig = 0;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Convierte de un string a un numero entero\n");
+	printf("para continuar presione ENTER\n");
+	getchar();
 
 	//Sub menu principal
 	press = options_null_valid();
 
-	if (press == '1')
-		s = NULL;
-	else
+	if (press == '2')
+	{
+		s = (char *)calloc(50, sizeof(char));
 		s = fill_string(s);
+	}
 
-	//Solucion
-	int	solucion_ft = ft_atoi(s);
-	int solucion_orig = atoi(s);
+	//condicion NULL
+	if (!s)
+	{
+		while (1)
+		{
+			system ("clear");
+			printf("String1 = %s", s);
+			press = fill_crash_menu();
+			switch (press)
+			{
+				case '1':
+					solucion_ft = ft_atoi(s);
+					break;
+				case '2':
+					solucion_orig = atoi(s);
+					break;
+				default:
+					continue;
+			}
+			break;
+		}
+	}
+
+
+	//Solucion normal
+	else
+	{
+		solucion_ft = ft_atoi(s);
+		solucion_orig = atoi(s);
+	}
 
 	system("clear");
 	printf("String: %s", s);
@@ -360,6 +432,13 @@ int main_calloc()
 	size_t	nmemb;
 	size_t	size;
 	char	press;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Asigna memoria a peticion del numero de elementos y bytes e inicializa a cero\n");
+	printf("para continuar presione ENTER\n");
+	getchar();
+
 
 	system ("clear");
 	printf("\nNumero de elementos");
@@ -394,6 +473,40 @@ int main_calloc()
 
 
 ////////////////////////////////////////////////////////////
+/*ft_itoa*//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int	main_itoa()
+{
+	//char	*ft_itoa(int n)
+	char	press;
+	int		num;
+	char	*solucion_ft = NULL;
+
+	//MENU PARA ELEGIR EL NUM
+	num = fill_integer();
+
+	//SOLUCION
+
+	system ("clear");
+	printf("\nNumero = %d", num);
+
+	solucion_ft = ft_itoa(num);
+
+	printf("\n\nft_itoa(%d): %s", num, solucion_ft);
+
+	fflush(stdout);
+	press = repetimos_volvemos();
+
+	if ((press == 'y') || (press == 'Y'))
+	{
+		main_itoa();
+		return (0);
+	}
+	return (0);
+}
+
+
+////////////////////////////////////////////////////////////
 /*ft_memchr*////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 int	main_memchr()
@@ -403,6 +516,13 @@ int	main_memchr()
 	int		offset;
 	char	press;
 	int		num_bytes;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Busca el primer byte en donde este el caracter en los primeros n bytes \n");
+	printf("Si no lo encuentra devuelve un NULL\n");
+	printf("para continuar presione ENTER\n");
+	getchar();
 
 	//Sub menu principal
 	press = options_null_valid();
@@ -484,14 +604,23 @@ int	main_memchr()
 ////////////////////////////////////////////////////////////
 int	main_memcmp()
 {
-	char	*s1 = (char *)calloc(100, sizeof(char));
-	char	*s2 = (char *)calloc(100, sizeof(char));
+	char	*s1 = NULL;
+	char	*s2 = NULL;
 	char	press;
 	int		num_bytes;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Compara dos posiciones de memoria hasta los n bytes\n");
+	printf("Devuelve 0 si son iguales o la diferencia en ascii en el\n");
+	printf("primer byte que sea diferente. Con n = 0 devuelve 0\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
 
 	//Sub menu principal
 	press = options_null_valid();
 
+	//CASOS NULL
 	if (press == '1')
 	{
 		press = fill_null();
@@ -511,11 +640,14 @@ int	main_memcmp()
 				break;
 		}
 	}
+	//CASOS NORMALES
 	else
 	{
 		printf("\nS1");
+		s1 = (char *)calloc(100, sizeof(char));
 		s1 = fill_string(s1);
 		printf("\nS2");
+		s2 = (char *)calloc(100, sizeof(char));
 		s2 = fill_string(s2);
 	}
 
@@ -584,12 +716,20 @@ int	main_memcmp()
 ////////////////////////////////////////////////////////////
 int main_memcpy()
 {
-	//char	*s1 = (char *)calloc(100, sizeof(char));
-	//char	*s2 = (char *)calloc(100, sizeof(char));
 	char *s1 = NULL;
 	char *s2 = NULL;
+	char *s_ft = (char *)malloc(100);
+	char *s_or = (char *)malloc(100);
 	char	press;
 	int		num_bytes;
+
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Copia n bytes de la memoria origen a la destino.\n");
+	printf("No deben solaparse\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
 
 	//Sub menu principal
 	press = options_null_valid();
@@ -610,7 +750,7 @@ int main_memcpy()
 			break;
 		default:
 			break;
-	}
+		}
 	}
 	else
 	{
@@ -638,10 +778,12 @@ int main_memcpy()
 			switch (press)
 			{
 				case '1':
-					ft_memcpy(s1, s2, num_bytes);
+					strcpy(s_ft, s1);
+					ft_memcpy(s_ft, s2, num_bytes);
 					break;
 				case '2':
-					memcpy(s1, s2, num_bytes);
+					strcpy(s_or, s1);
+					memcpy(s_or, s2, num_bytes);
 					break;
 				default:
 					continue;
@@ -650,11 +792,14 @@ int main_memcpy()
 		}
 	}
 
+
 	//condiciones Normales
 	else
 	{
-		ft_memcpy(s1, s2, num_bytes);
-		memcpy(s1, s2, num_bytes);
+		strcpy(s_ft, s1);
+		ft_memcpy(s_ft, s2, num_bytes);
+		strcpy(s_or, s1);
+		memcpy(s_or, s2, num_bytes);
 	}
 
 	//SOLUCION
@@ -662,6 +807,9 @@ int main_memcpy()
 	printf("String1 = %s", s1);
 	printf("\nString2 = %s", s2);
 	printf("\nbytes = %d", num_bytes);
+	printf("\n\nSolucion_ft: %s", s_ft);
+	printf("\nSolucion_orig: %s", s_or);
+
 	fflush(stdout);
 
 	press = repetimos_volvemos();
@@ -672,15 +820,32 @@ int main_memcpy()
 			free (s1);
 		if (s2)
 			free (s2);
+		if (s_ft)
+			free (s_ft);
+		if (s_or)
+			free (s_or);
+		s1 = NULL;
+		s2 = NULL;
+		s_ft = NULL;
+		s_or = NULL;
 		main_memcpy();
 		return (0);
 	}
-	if (s1)
-		free (s1);
-	if (s2)
-		free (s2);
+		if (s1)
+			free (s1);
+		if (s2)
+			free (s2);
+		if (s_ft)
+			free (s_ft);
+		if (s_or)
+			free (s_or);
+		s1 = NULL;
+		s2 = NULL;
+		s_ft = NULL;
+		s_or = NULL;
 	return (0);
 }
+
 
 ////////////////////////////////////////////////////////////
 /*ft_memmove*////////////////////////////////////////////////
@@ -689,11 +854,17 @@ int main_memmove()
 {
 	char *s1 = NULL;
 	char *s2 = NULL;
-	char *s3 = NULL;// (char *)calloc(100, sizeof(char));
-	char *aux1 = (char *)calloc(100, sizeof(char));
+	char *s_ft = (char *)calloc(100, sizeof(char));
+	char *s_or = (char *)calloc(100, sizeof(char));
 	char	press;
 	int		num_bytes;
 	int		offset;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Copia datos del origen al destino en n bytes pero garantiza una buena copia\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
 
 	//Sub menu principal
 	press = options_null_valid();
@@ -730,7 +901,7 @@ int main_memmove()
 	num_bytes = fill_num_bytes(s1);
 	printf("\nIntroduzca offset : \n");
 	scanf("%d", &offset);
-	getchar(); ////////////////////
+	getchar();
 
 
 	//condiciones NULL
@@ -744,14 +915,13 @@ int main_memmove()
 			printf("\nbytes = %d", num_bytes);
 			printf("\noffset = %d", offset);
 
-			system("clear");
-			printf("\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
+			printf("\n\nEl programa puede crashear. Elija la funcion a aplicar y luego repita con la otra para comparar");
 			printf("\n\n1. ft_memmove(s1, s2, bytes)");
 			printf("\n2. memmove(s1, s2, bytes)");
 			printf("\n\n3. ft_memmove(s1, s1 + offset, bytes)");
 			printf("\n4. memmove(s1, s1 + offset, bytes)");
 			printf("\n\n5. ft_memmove(s1 + offset, s1, bytes)");
-			printf("\n\n6. memmove(s1 + offset, s1, bytes)");
+			printf("\n6. memmove(s1 + offset, s1, bytes)");
 			printf("\n\nopcion? : ");
 			char press = getchar();
 			while (getchar() != '\n');
@@ -759,27 +929,34 @@ int main_memmove()
 			switch (press)
 			{
 				case '1':
-					s3 = ft_memmove(s1, s2, num_bytes);
+					strcpy(s_ft, s1);
+					ft_memmove(s_ft, s2, num_bytes);
 					break;
 				case '2':
-					s3 = memmove(s1, s2, num_bytes);
+					strcpy(s_or, s1);
+					memmove(s_or, s2, num_bytes);
 					break;
 				case '3':
-					s3 = ft_memmove(s1, s1 + offset , num_bytes);
+					strcpy(s_ft, s1);
+					ft_memmove(s_ft, s_ft + offset , num_bytes);
 					break;
 				case '4':
-					s3 = memmove(s1, s1 + offset , num_bytes);
+					strcpy(s_or, s1);
+					memmove(s_or, s_or + offset , num_bytes);
 					break;
 				case '5':
-					s3 = ft_memmove(s1 + offset, s1, num_bytes);
+					strcpy(s_ft, s1);
+					ft_memmove(s_ft + offset, s_ft, num_bytes);
 					break;
 				case '6':
-					s3 = memmove(s1 + offset, s1, num_bytes);
+					strcpy(s_or, s1);
+					memmove(s_or + offset, s_or, num_bytes);
 					break;
 				default:
 					continue;
 			}
-			printf("\nSolucion: %s", s3);
+			printf("\nSolucion_ft: %s", s_ft);
+			printf("\nSolucion_or: %s", s_or);
 			break;
 		}
 	}
@@ -788,7 +965,8 @@ int main_memmove()
 
 	else
 	{
-		aux1 = strcpy(aux1, s1);
+		strcpy(s_ft, s1);
+		strcpy(s_or, s1);
 
 		system ("clear");
 		printf("String1 = %s", s1);
@@ -796,25 +974,24 @@ int main_memmove()
 		printf("\nbytes = %d", num_bytes);
 		printf("\noffset = %d", offset);
 
-		s3 = ft_memmove(aux1, s2, num_bytes);
-		printf("\n\nft_memmove(s1, s2, bytes): %s", s3);
-		aux1 = strcpy(aux1, s1);
-		s3 = memmove(aux1, s2, num_bytes);
-		printf("\n___memmove(s1, s2, bytes): %s", s3);
+		ft_memmove(s_ft, s2, num_bytes);
+		printf("\n\nft_memmove(s1, s2, bytes): %s", s_ft);
+		memmove(s_or, s2, num_bytes);
+		printf("\n___memmove(s1, s2, bytes): %s", s_or);
 
-		aux1 = strcpy(aux1, s1);
-		s3 = ft_memmove(aux1, aux1 + offset, num_bytes);
-		printf("\n\nft_memmove(s1, s1 + offset, bytes): %s", s3);
-		aux1 = strcpy(aux1, s1);
-		s3 = memmove(aux1, aux1 + offset, num_bytes);
-		printf("\n___memmove(s1, s1 + offset, bytes): %s", s3);
+		ft_reset_copy(s_ft, s1);
+		ft_memmove(s_ft, s_ft + offset, num_bytes);
+		printf("\n\nft_memmove(s1, s1 + offset, bytes): %s", s_ft);
+		ft_reset_copy(s_or, s1);
+		memmove(s_or, s_or + offset, num_bytes);
+		printf("\n___memmove(s1, s1 + offset, bytes): %s", s_or);
 
-		aux1 = strcpy(aux1, s1);
-		s3 = ft_memmove(aux1 + offset, aux1, num_bytes);
-		printf("\n\nft_memmove(s1 + offset, s1, bytes): %s", s3);
-		aux1 = strcpy(aux1, s1);
-		s3 = memmove(aux1 + offset, aux1, num_bytes);
-		printf("\n___memmove(s1 + offset, s1, bytes): %s", s3);
+		ft_reset_copy(s_ft, s1);
+		ft_memmove(s_ft + offset, s_ft, num_bytes);
+		printf("\n\nft_memmove(s1 + offset, s1, bytes): %s", s_ft);
+		ft_reset_copy(s_or, s1);
+		memmove(s_or + offset, s_or, num_bytes);
+		printf("\n___memmove(s1 + offset, s1, bytes): %s", s_or);
 	}
 
 
@@ -826,27 +1003,25 @@ int main_memmove()
 	{
 		if (s1) free (s1);
 		if (s2) free (s2);
-		//if (s3) free (s3);
-		if (aux1) free (aux1);
+		if (s_or) free (s_or);
+		if (s_ft) free (s_ft);
 		s1 = NULL;
 		s2 = NULL;
-		s3 = NULL;
-		aux1 = NULL;
+		s_ft = NULL;
+		s_or = NULL;
 		main_memmove();
 		return (0);
 	}
 	if (s1) free (s1);
 	if (s2) free (s2);
-	//if (s3) free (s3);
-	if (aux1) free (aux1);
+	if (s_or) free (s_or);
+	if (s_ft) free (s_ft);
 	s1 = NULL;
 	s2 = NULL;
-	s3 = NULL;
-	aux1 = NULL;
+	s_ft = NULL;
+	s_or = NULL;
 	return (0);
 }
-
-
 
 
 ////////////////////////////////////////////////////////////
@@ -856,18 +1031,25 @@ int main_memset()
 {
 //void	*ft_memset(void *s, int c, size_t n)
 
-	char	*s1 = (char *)calloc(50, sizeof(char));
+	char	*s1 = NULL;
+	char	*s3 = (char *)malloc(50);
 	char	press;
 	char	c;
 	size_t	number;
 	int		offset;
 
+/*fills 1st 'n' bytes of memory pointed by 's' with constant byte 'c'*/
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Rellena los primeros n bytes de memoria del string con el character elegido\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+
 	//Sub menu principal
 	press = options_null_valid();
 
-	if (press == '1')
-		s1 = NULL;
-	else
+	if (press == '2')
 	{
 		printf("\nS1");
 		s1 = fill_string(s1);
@@ -928,11 +1110,21 @@ int main_memset()
 
 	if ((press == 'y') || (press == 'Y'))
 	{
-		free (s1);
+		if (s1)
+			free (s1);
+		if (s3)
+			free (s3);
+		s1 = NULL;
+		s3 = NULL;
 		main_memset();
 		return (0);
 	}
-	free (s1);
+	if (s1)
+		free (s1);
+	if (s3)
+		free (s3);
+	s1 = NULL;
+	s3 = NULL;
 	return (0);
 }
 
