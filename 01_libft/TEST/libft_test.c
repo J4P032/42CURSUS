@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/23 23:41:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 00:15:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -576,6 +576,7 @@ int	main_memchr()
 	char	c;
 	int		offset;
 	char	press;
+	size_t	longitud;
 	int		num_bytes;
 	char	*s_ft = (char *)calloc(100,sizeof(char));
 	char	*s_or = (char *)calloc(100,sizeof(char));
@@ -596,8 +597,12 @@ int	main_memchr()
 	{	
 		s = (char *)calloc(100, sizeof(char));
 		s = fill_string(s);
-		strcpy(s_ft, s);
-		strcpy(s_or, s);
+		longitud = strlen(s);
+		
+		//INTRODUCIR CARACTERES NULOS EN EL STRING
+		intro_charnulls(s);
+		memcpy(s_ft, s, longitud + 1);
+		memcpy(s_or, s, longitud + 1);
 	}
 	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
 	num_bytes = fill_num_bytes(s);
@@ -613,10 +618,10 @@ int	main_memchr()
 			system ("clear");
 			printf("String = %s", s);
 			printf("\nbytes = %d", num_bytes);
-			if ((c < 33) || (c > 126))
-				printf("\nchar(num) = %d", c);
+			if ((c+offset < 33) || (c+offset > 126))
+				printf("\nchar(num) = %d", c + offset);
 			else
-				printf("\nchar = %c", c);
+				printf("\nchar = %c", c + offset);
 			press = fill_crash_menu();
 
 			switch (press)
@@ -643,11 +648,11 @@ int	main_memchr()
 
 	//SOLUCION
 	system ("clear");
-	printf("String = %s", s);
-	if ((c < 33) || (c > 126))
-		printf("\nchar(num) = %d", c);
+	ft_print(s, longitud + 1);
+	if ((c + offset < 33) || (c + offset > 126))
+		printf("\nchar(num) = %d", c + offset);
 	else
-		printf("\nchar = %c", c);
+		printf("\nchar = %c", c + offset);
 	printf("\nbytes = %d", num_bytes);
 
 	printf("\n\nDireccion de solucion_ft__: %p\n", aux1);
@@ -1445,18 +1450,35 @@ int	main_split()
 ////////////////////////////////////////////////////////////
 int main_strdup()
 {
-	//char	*ft_strdup(const char *s)
-	char	*s = (char *)calloc(100, sizeof(char));
+	
+	char	*s = NULL;
+	char	*s_ft = (char *)calloc(100, sizeof(char));
+	char	*s_or = (char *)calloc(100, sizeof(char));
 	char	press;
+	size_t	longitud;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("copia un string en otra area de memoria. A NULL will return NULL\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+
 
 	//Sub menu principal
 	press = options_null_valid();
 
-	if (press == '1')
-		s = NULL;
-	else
+	if (press == '2')
+	{
+		s = (char *)calloc(100, sizeof(char));
 		s = fill_string(s);
-
+		longitud = strlen(s);
+		//INTRODUCIR CARACTERES NULOS EN EL STRING
+		intro_charnulls(s);
+	
+		memcpy(s_ft, s, longitud + 1);
+		memcpy(s_or, s, longitud + 1);
+	}
+	
 	char	*solucion_ft = NULL;
 	char	*solucion_orig = NULL;
 
@@ -1471,10 +1493,10 @@ int main_strdup()
 			switch (press)
 			{
 				case '1':
-					solucion_ft = ft_strdup(s);
+					solucion_ft = ft_strdup(s_ft);
 					break;
 				case '2':
-					solucion_orig = strdup(s);
+					solucion_orig = strdup(s_or);
 					break;
 				default:
 					continue;
@@ -1486,30 +1508,44 @@ int main_strdup()
 	//condiciones Normales
 	else
 	{
-		solucion_ft = ft_strdup(s);
-		solucion_orig = strdup(s);
+		solucion_ft = ft_strdup(s_ft);
+		solucion_orig = strdup(s_or);
 	}
 
 	//SOLUCION
 	system ("clear");
-	printf("String = %s", s);
+	ft_print(s, longitud + 1);
 
-	press = output_solution(solucion_ft, solucion_orig);
+	printf("\nSolucion_Ft: ");
+	fflush(stdout);
+	ft_print(solucion_ft, longitud);
+	printf("\nSolucion_Orig: ");
+	fflush(stdout);
+	ft_print(solucion_orig, longitud);
+
+	printf("\nDireccion de memoria de ft__: %p", solucion_ft);
+	printf("\nDireccion de memoria de orig: %p", solucion_orig);
+	fflush(stdout);
+	
+	press = repetimos_volvemos();
 
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
-		free (solucion_ft);
-		free (solucion_orig);
+		free (s_ft);
+		free (s_or);
+		s = NULL;
+		s_ft = NULL;
+		s_or = NULL;
 		main_strdup();
 		return (0);
 	}
 	free (s);
-	free (solucion_ft);
-	free (solucion_orig);
+	free (s_ft);
+	free (s_or);
 	s = NULL;
-	solucion_ft = NULL;
-	solucion_orig = NULL;
+	s_ft = NULL;
+	s_or = NULL;
 	return (0);
 }
 
@@ -1556,8 +1592,8 @@ int main_strchr(int opcion)
 	//INTRODUCIR CARACTERES NULOS EN EL STRING
 	intro_charnulls(s);
 	
-	strcpy(s_ft, s);
-	strcpy(s_or, s);
+	memcpy(s_ft, s, longitud + 1);
+	memcpy(s_or, s, longitud + 1);
 
 	
 	//Menu para elegir char
