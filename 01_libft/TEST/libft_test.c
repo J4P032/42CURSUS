@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/23 19:14:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/23 23:41:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		fill_num_bytes(char *s);
 int		fill_num_sizet();
 char	fill_char(int *offset);
 char	fill_crash_menu();
+void	intro_charnulls(char *s);
 char	output_solution(char *ft, char *orig);
 char	output_solution_int(int *ft, int *orig);
 void	output_solucion_ptr(void *ft, void *orig, size_t length);
@@ -154,7 +155,7 @@ void	ft_print(char *str, size_t l)
 	{
 		if (str[i] == '\0')
 		{
-			write(1, "#.", 2);
+			write(1, "#", 1);
 			i++;
 		}
 		else
@@ -241,13 +242,45 @@ char fill_null()
 	return (c);
 }
 
+//METER \0 EN MEDIO DE UN STRING
+void intro_charnulls(char *s)
+{
+	size_t index = 0;
+	size_t longitud = strlen(s);
+	repetir:
+	system ("clear");
+	
+	
+	printf("String = ");
+	fflush(stdout);
+	ft_print(s, longitud + 1);
+	
+	printf("\nQuiere meter nulos en el string?: (s / n)");
+	char c = getchar();
+	while (getchar() != '\n');
+	if ((c == 's') || (c == 'S'))
+	{
+		printf("\nIntroduzca indice de 0 a %zu : ", longitud - 1);
+		scanf("%zu", &index);
+		while (getchar() != '\n');
+		s[index] = '\0';
+		printf("\nQuiere meter mas? (s / n)");
+		char c = getchar();
+		while (getchar() != '\n');
+		if ((c == 's') || (c == 'S'))
+			goto repetir;
+	}
+	else
+		system ("clear");	
+}
+
 //MENU INTRODUCIR STRING
 char *fill_string(char *s)
 {
 	system ("clear");
 	printf("String = %s", s);
 	printf("\nIntroduzca cadena: \n");
-	scanf("%99s", s);
+	scanf("%99[^\n]", s); // [^\n]indica que lea todos los caracteres hasta que pulse el espacio 
 	getchar(); //libera buffer del enter = \n
 	return (s);
 }
@@ -1243,7 +1276,7 @@ int main_fd()
 			}
 			dup2(fd_forzado, fd);
 			printf("String = %s", s);
-			printf("\nCharacter pasado: %c", c + offset);
+			printf("\nCharacter : %c", c + offset);
 			printf("\nEl descriptor fd abierto es : %d", fd_forzado);
 			printf("\nEl fd ha cambiado al : %d", fd);
 			printf("\nEl Numero pasado es: %d", number);
@@ -1276,7 +1309,6 @@ int main_fd()
 	else
 	{
 		system ("clear");
-		printf("\ncharacter mandado = %c\n", c + offset);
 		//fd = open ("solucion.txt", O_CREAT | O_WRONLY, 0644); //permisos: 0(octal)6=4+2->lee y escribe...(propietario)4(grupo)4(otros). //cada numero significa 0=sinpermiso 1=ejecutar 2=escribir 4=leer 
 		int fd_forzado = open("/dev/tty", O_WRONLY);
 		if (fd_forzado == -1)
@@ -1288,7 +1320,7 @@ int main_fd()
 		dup2(fd_forzado, fd);
 	
 		printf("String = %s", s);
-		printf("\nCharacter pasado: %c", c + offset);
+		printf("\nCharacter pasado por fd: %c", c + offset);
 		printf("\nEl descriptor fd abierto es : %d", fd_forzado);
 		printf("\nEl fd ha cambiado al : %d", fd);
 		printf("\nEl Numero pasado es: %d", number);
@@ -1333,11 +1365,78 @@ int main_fd()
 ////////////////////////////////////////////////////////////
 int	main_split()
 {
+	char *s1 = NULL;
+	char	**solucion = NULL;
+	char	press;
+	char	c;
+	int		offset = 0;
+	size_t	i = 0;
 
+	
+	//INSTRUCCIONES
+	system("clear");
+	printf("separa un string en un array de strings a partir de un caracter separador definido\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '2')
+	{
+	 	s1 = (char *)calloc(100, sizeof(char));
+		printf("\nString");
+		s1 = fill_string(s1);
+	}
+
+	//MENU PARA ELEGIR Caracter Separador
+	c = fill_char(&offset);
+
+	//condiciones NULL
+	system ("clear");
+	printf("String1 = %s", s1);
+	printf("\nSeparador = %c", c + offset);
+	
+	if (s1 == NULL)
+	{
+		printf("\nVa a salir la solución pero el programa puede crashear");
+		printf("\nPresiona la tecla ENTER para continuar");
+		getchar();
+		solucion = ft_split(s1, c);
+	}
+	//condiciones Normales
+	else
+		solucion = ft_split(s1, c);
+	
+	//SOLUCION
+	system ("clear");
+	printf("String1 = %s", s1);
+	printf("\nSeparador = %c", c + offset);
+	printf("\n\nSolucion_ft: \n");
+	while (solucion[i])
+	{
+		printf("solucion[%zu] : %s\n", i, solucion[i]);
+		i++;
+	}
+
+	fflush(stdout);
+
+	press = repetimos_volvemos();
+
+	if ((press == 'y') || (press == 'Y'))
+	{
+		if (solucion)
+			free (solucion);
+		solucion = NULL;
+		main_split();
+	
+		return (0);
+	}
+	if (solucion)
+		free (solucion);
+	solucion = NULL;	
 	return (0);
 }
-
-
 
 
 
@@ -1420,19 +1519,47 @@ int main_strdup()
 ////////////////////////////////////////////////////////////
 int main_strchr(int opcion)
 {
-	char	*s = (char *)calloc(100, sizeof(char));
+	char	*s = NULL; 
 	char	c;
 	int		offset = 0;
 	char	press;
+	char	*s_ft = (char *)calloc(100, sizeof(char));
+	char	*s_or = (char *)calloc(100, sizeof(char));
+	int		longitud = 0;
+	
+	//INSTRUCCIONES
+	system("clear");
+	if (opcion == 1)
+	{
+		printf("Encuentra un caracter c dentro de un string. Si lo encuentra devuelve posicion del primero encontrado\n");
+		printf("Si no devolverá un NULL, Si es el \\0 devolvera el primer terminador\n");
+	}
+	else
+	{
+		printf("Encuentra un caracter c dentro de un string. Pero este devuelve la ultima posición de dicho char\n");
+		printf("Si no devolverá un NULL, Si es el \\0 devolvera el primer terminador\n");
+	}	
+		printf("\nPara continuar presione ENTER\n");
+		getchar();
+
 
 	//Sub menu principal
 	press = options_null_valid();
 
-	if (press == '1')
-		s = NULL;
-	else
+	if (press == '2')
+	{
+		s = (char *)calloc(100, sizeof(char));
 		s = fill_string(s);
+		longitud = strlen(s);
+	}
+	
+	//INTRODUCIR CARACTERES NULOS EN EL STRING
+	intro_charnulls(s);
+	
+	strcpy(s_ft, s);
+	strcpy(s_or, s);
 
+	
 	//Menu para elegir char
 	c = fill_char(&offset);
 
@@ -1446,26 +1573,26 @@ int main_strchr(int opcion)
 		while (1)
 		{
 			system ("clear");
-			printf("String = %s", s); //
-			if ((c < 33) || (c > 126)) //no print
-				printf("\nchar(num) = %d", c); //char en int
+			printf("String = %s", s);
+			if ((c+offset < 33) || (c+offset > 126)) //no print
+				printf("\nchar(num) = %d", c + offset); //char en int
 			else
-				printf("\nchar = %c", c);
+				printf("\nchar = %c", c + offset);
 			press = fill_crash_menu();
 
 			switch (press)
 			{
 				case '1':
 					if (opcion == 1)
-						solucion_ft = ft_strchr(s,c + offset);
+						solucion_ft = ft_strchr(s_ft,c + offset);
 					else if (opcion == 2)
-						solucion_ft = ft_strrchr(s,c + offset);
+						solucion_ft = ft_strrchr(s_ft,c + offset);
 					break;
 				case '2':
 					if (opcion == 1)
-						solucion_orig = strchr(s,c + offset);
+						solucion_orig = strchr(s_ft,c + offset);
 					else if (opcion == 2)
-						solucion_orig = strrchr(s,c + offset);
+						solucion_orig = strrchr(s_ft,c + offset);
 					break;
 				default:
 					continue;
@@ -1479,29 +1606,35 @@ int main_strchr(int opcion)
 	{
 		if (opcion == 1)
 		{
-			solucion_ft = ft_strchr(s,c + offset); //+offset por que si no es convertida y no vale la prueba
-			solucion_orig = strchr(s,c + offset);
+			solucion_ft = ft_strchr(s_ft,c + offset); //+offset por que si no es convertida y no vale la prueba
+			solucion_orig = strchr(s_or,c + offset);
 		}
 		if (opcion == 2)
 		{
-			solucion_ft = ft_strrchr(s,c + offset);
-			solucion_orig = strrchr(s,c + offset);
+			solucion_ft = ft_strrchr(s_ft,c + offset);
+			solucion_orig = strrchr(s_or,c + offset);
 		}
 	}
 
 	//SOLUCION
 	system ("clear");
-	printf("String = %s", s); //
-	if ((c < 33) || (c > 126)) //no print
-		printf("\nchar(num) = %d", c); //char en int
+	ft_print(s, longitud + 1);
+	if ((c+offset < 33) || (c+offset > 126)) //no print
+		printf("\nchar(num) = %d", c + offset); //char en int
 	else
-		printf("\nchar = %c", c);
+		printf("\nchar = %c", c + offset);
 
 	press = output_solution(solucion_ft, solucion_orig);
+	
 
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
+		free(s_or);
+		free(s_ft);
+		s = NULL; //proteccion frente a doble free
+		s_or = NULL;
+		s_ft = NULL;
 		if (opcion == 1)
 			main_strchr(1);
 		else if (opcion == 2)
@@ -1509,7 +1642,11 @@ int main_strchr(int opcion)
 		return (0); //si no puede ir al otro free y liberar de nuevo. NO SE COMO. Supongo que por recursividad
 	}
 	free (s);
+	free(s_or);
+	free(s_ft);
 	s = NULL; //proteccion frente a doble free
+	s_or = NULL;
+	s_ft = NULL;
 	return (0);
 }
 
