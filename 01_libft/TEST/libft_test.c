@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/23 15:28:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/23 19:04:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ void 	ft_reset_copy(char *dest, char *orig);
 int	main_atoi();
 int	main_calloc();
 int	main_itoa();
+int main_listas();
 int	main_memchr();
 int	main_memcmp();
 int	main_memcpy();
 int	main_memmove();
 int main_memset();
-int main_putchar_fd();
+int main_fd();
+int main_split();
 int main_strdup();
 int	main_strchr(int opcion);
 int	main_strjoin();
@@ -78,46 +80,53 @@ int main()
 			case '2':
 				main_itoa();
 				break;
+			
 			case '3':
-				main_memchr();
+				main_listas();
 				break;
 			case '4':
-				main_memcmp();
+				main_memchr();
 				break;
 			case '5':
-				main_memcpy();
+				main_memcmp();
 				break;
 			case '6':
-				main_memmove();
+				main_memcpy();
 				break;
 			case '7':
-				main_memset();
+				main_memmove();
 				break;
 			case '8':
-				main_putchar_fd();
+				main_memset();
 				break;
 			case '9':
-				main_strdup();
+				main_fd();
 				break;
 			case 'a':
-				main_strchr(1);
-				break;
+				main_split();
+				break;	
 			case 'b':
-				main_strjoin();
+				main_strdup();
 				break;
 			case 'c':
-				main_strchr(2);
+				main_strchr(1);
 				break;
 			case 'd':
-				main_strtrim();
+				main_strjoin();
 				break;
 			case 'e':
-				main_substr();
+				main_strchr(2);
 				break;
 			case 'f':
-				main_uplow(ft_tolower, tolower);
+				main_strtrim();
 				break;
 			case 'g':
+				main_substr();
+				break;
+			case 'h':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'i':
 				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
@@ -181,20 +190,27 @@ int	options_draw()
 	printf("%5s\n", "(0). ft_atoi.c");
 	printf("%5s\n", "(1). ft_calloc.c");
 	printf("%5s\n", "(2). ft_itoa.c");
-	printf("%5s\n", "(3). ft_memchr.c");
-	printf("%5s\n", "(4). ft_memcmp.c");
-	printf("%5s\n", "(5). ft_memcpy.c");
-	printf("%5s\n", "(6). ft_memmove.c");
-	printf("%5s\n", "(7). ft_memset.c");
-	printf("%5s\n", "(8). ft_putchar_fd.c");
-	printf("%5s\n", "(9). ft_strdup.c");
-	printf("%5s\n", "(a). ft_strchr.c");
-	printf("%5s\n", "(b). ft_strjoin.c");
-	printf("%5s\n", "(c). ft_strrchr.c");
-	printf("%5s\n", "(d). ft_strtrim.c");
-	printf("%5s\n", "(e). ft_substr.c");
-	printf("%5s\n", "(f). ft_tolower.c");
-	printf("%5s\n", "(g). ft_toupper.c");
+	
+	printf("%5s\n", "(3). ++ft_listas.c");
+	
+	printf("%5s\n", "(4). ft_memchr.c");
+	printf("%5s\n", "(5). ft_memcmp.c");
+	printf("%5s\n", "(6). ft_memcpy.c");
+	printf("%5s\n", "(7). ft_memmove.c");
+	printf("%5s\n", "(8). ft_memset.c");
+	
+	printf("%5s\n", "(9). ++ft_PUTS_fd.c");
+
+	printf("%5s\n", "(a). ft_split.c");
+	
+	printf("%5s\n", "(b). ft_strdup.c");
+	printf("%5s\n", "(c). ft_strchr.c");
+	printf("%5s\n", "(d). ft_strjoin.c");
+	printf("%5s\n", "(e). ft_strrchr.c");
+	printf("%5s\n", "(f). ft_strtrim.c");
+	printf("%5s\n", "(g). ft_substr.c");
+	printf("%5s\n", "(h). ft_tolower.c");
+	printf("%5s\n", "(i). ft_toupper.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -371,7 +387,7 @@ int	main_atoi()
 
 	if (press == '2')
 	{
-		s = (char *)calloc(50, sizeof(char));
+		s = (char *)calloc(100, sizeof(char));
 		s = fill_string(s);
 	}
 
@@ -479,7 +495,6 @@ int main_calloc()
 ////////////////////////////////////////////////////////////
 int	main_itoa()
 {
-	//char	*ft_itoa(int n)
 	char	press;
 	int		num;
 	char	*solucion_ft = NULL;
@@ -509,15 +524,30 @@ int	main_itoa()
 
 
 ////////////////////////////////////////////////////////////
+/*ft_listas*////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int	main_listas()
+{
+
+	return (0);	
+}
+
+
+
+////////////////////////////////////////////////////////////
 /*ft_memchr*////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 int	main_memchr()
 {
-	char	*s = (char *)calloc(100, sizeof(char));
+	char	*s = NULL;
 	char	c;
 	int		offset;
 	char	press;
 	int		num_bytes;
+	char	*s_ft = (char *)calloc(100,sizeof(char));
+	char	*s_or = (char *)calloc(100,sizeof(char));
+	char	*aux1 = NULL;
+	char 	*aux2 = NULL;
 
 	//INSTRUCCIONES
 	system("clear");
@@ -529,19 +559,18 @@ int	main_memchr()
 	//Sub menu principal
 	press = options_null_valid();
 
-	if (press == '1')
-		s = NULL;
-	else
+	if (press == '2')
+	{	
+		s = (char *)calloc(100, sizeof(char));
 		s = fill_string(s);
-
+		strcpy(s_ft, s);
+		strcpy(s_or, s);
+	}
 	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
 	num_bytes = fill_num_bytes(s);
 
 	//Menu para elegir char
 	c = fill_char(&offset);
-
-	char	*solucion_ft = NULL;
-	char	*solucion_orig = NULL;
 
 	//condiciones NULL
 	if (s == NULL)
@@ -560,10 +589,10 @@ int	main_memchr()
 			switch (press)
 			{
 				case '1':
-					solucion_ft = ft_memchr(s, c + offset, num_bytes);
+					aux1 = ft_memchr(s_ft, c + offset, num_bytes);
 					break;
 				case '2':
-					solucion_orig = memchr(s, c + offset, num_bytes);
+					aux2 = memchr(s_or, c + offset, num_bytes);
 					break;
 				default:
 					continue;
@@ -575,8 +604,8 @@ int	main_memchr()
 //condiciones Normales
 	else
 	{
-		solucion_ft = ft_memchr(s, c + offset, num_bytes);
-		solucion_orig = memchr(s, c + offset, num_bytes);
+		aux1 = ft_memchr(s_ft, c + offset, num_bytes);
+		aux2 = memchr(s_or, c + offset, num_bytes);
 	}
 
 	//SOLUCION
@@ -588,15 +617,22 @@ int	main_memchr()
 		printf("\nchar = %c", c);
 	printf("\nbytes = %d", num_bytes);
 
-	press = output_solution(solucion_ft, solucion_orig);
+	printf("\n\nDireccion de solucion_ft__: %p\n", aux1);
+	printf("Direccion de solucion_orig: %p\n", aux2);
+	
+	press = output_solution(aux1, aux2);
 
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
+		free (s_ft);
+		free (s_or);
 		main_memchr();
 		return (0);
 	}
 	free (s);
+	free(s_ft);
+	free(s_or);
 	return (0);
 }
 
@@ -812,6 +848,10 @@ int main_memcpy()
 	printf("\n\nSolucion_ft: %s", s_ft);
 	printf("\nSolucion_orig: %s", s_or);
 
+	printf("\n\nDireccion de solucion_ft__: %p\n", s_ft);
+	printf("Direccion de solucion_orig: %p\n", s_or);
+
+
 	fflush(stdout);
 
 	press = repetimos_volvemos();
@@ -850,7 +890,7 @@ int main_memcpy()
 
 
 ////////////////////////////////////////////////////////////
-/*ft_memmove*////////////////////////////////////////////////
+/*ft_memmove*///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 int main_memmove()
 {
@@ -981,6 +1021,9 @@ int main_memmove()
 		memmove(s_or, s2, num_bytes);
 		printf("\n___memmove(s1, s2, bytes): %s", s_or);
 
+		printf("\nDireccion de solucion_ft__: %p\n", s_ft);
+		printf("Direccion de solucion_orig: %p\n", s_or);
+
 		ft_reset_copy(s_ft, s1);
 		ft_memmove(s_ft, s_ft + offset, num_bytes);
 		printf("\n\nft_memmove(s1, s1 + offset, bytes): %s", s_ft);
@@ -988,12 +1031,18 @@ int main_memmove()
 		memmove(s_or, s_or + offset, num_bytes);
 		printf("\n___memmove(s1, s1 + offset, bytes): %s", s_or);
 
+		printf("\nDireccion de solucion_ft__: %p\n", s_ft);
+		printf("Direccion de solucion_orig: %p\n", s_or);
+
 		ft_reset_copy(s_ft, s1);
 		ft_memmove(s_ft + offset, s_ft, num_bytes);
 		printf("\n\nft_memmove(s1 + offset, s1, bytes): %s", s_ft);
 		ft_reset_copy(s_or, s1);
 		memmove(s_or + offset, s_or, num_bytes);
 		printf("\n___memmove(s1 + offset, s1, bytes): %s", s_or);
+
+		printf("\nDireccion de solucion_ft__: %p\n", s_ft);
+		printf("Direccion de solucion_orig: %p\n", s_or);
 	}
 
 
@@ -1032,7 +1081,7 @@ int main_memmove()
 int main_memset()
 {
 
-	char	*s1 = (char *)calloc(100, sizeof(char));
+	char	*s1 = NULL;
 	char	*s_ft = (char *)calloc(100,sizeof(char));
 	char	*s_or = (char *)calloc(100,sizeof(char));
 	char	press;
@@ -1052,6 +1101,7 @@ int main_memset()
 	if (press == '2')
 	{
 		printf("\nS1");
+		s1 = (char *)calloc(100, sizeof(char));
 		s1 = fill_string(s1);
 	}
 
@@ -1134,21 +1184,38 @@ int main_memset()
 
 
 ////////////////////////////////////////////////////////////
-/*ft_putchar_fd*////////////////////////////////////////////
+/*ft_fd*////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-int main_putchar_fd()
+int main_fd()
 {
 
+	char	*s = NULL;
 	char	press;
 	char	c;
 	int		offset;
 	int		fd;
+	int		number;
 
 	//INSTRUCCIONES
 	system("clear");
-	printf("Manda por el file descriptor el caracter c que elijamos\n");
+	printf("ft_putchar_fd: Manda por el file descriptor el caracter c que elijamos con  write\n");
+	printf("ft_putendl_fd: Escribe con write el string mandado y le añade un salto de linea al final por el fd\n");
+	printf("ft_putnbr_fd: Escribe el numero en enteros con write por el fd mandado\n");
+	printf("ft_str_fd: Escribe con write el string mandado y lo suelta por el fd elegido\n");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
+
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '2')
+	{
+		printf("\ns");
+		{
+			s = (char *)calloc(100, sizeof(char));
+			s = fill_string(s);
+		}
+	}
 
 	//MENU PARA ELEGIR el CHAR A BUSCAR
 	c = fill_char(&offset);
@@ -1157,40 +1224,119 @@ int main_putchar_fd()
 	printf("\nFile Descriptor (FD)");
 	fd = fill_integer();
 
-	//SOLUCION
-	system ("clear");
-	printf("\ncharacter mandado = %c\n", c + offset);
-	
-	//fd = open ("solucion.txt", O_CREAT | O_WRONLY, 0644); //permisos: 0(octal)6=4+2->lee y escribe...(propietario)4(grupo)4(otros). //cada numero significa 0=sinpermiso 1=ejecutar 2=escribir 4=leer 
-	int fd_forzado = open("/dev/tty", O_WRONLY);
-	if (fd_forzado == -1)
+	//MENU PARA ELEGIR NUMERO A INTRODUCIR
+	printf("\nNumero para ser pasado a ft_putnbr_fd");
+	number = fill_integer();
+
+	//condiciones NULL
+	if (s == NULL)
 	{
-		perror("\nError al generar el fd");
-		return (1);
+		while (1)
+		{
+			system ("clear");
+			
+			int fd_forzado = open("/dev/tty", O_WRONLY);
+			if (fd_forzado == -1)
+			{
+				perror("\nError al generar el fd");
+				return (1);
+			}
+			dup2(fd_forzado, fd);
+			printf("String = %s", s);
+			printf("\nCharacter pasado: %c", c + offset);
+			printf("\nEl descriptor fd abierto es : %d", fd_forzado);
+			printf("\nEl fd ha cambiado al : %d", fd);
+			printf("\nEl Numero pasado es: %d", number);
+			fflush(stdout);
+			
+			write(1, "\n\nft_putchar_fd : ", 18);
+			ft_putchar_fd(c + offset, fd);
+			
+			write(1, "\nft_putnbr_fd : ", 16);
+			ft_putnbr_fd(number, fd);
+			
+			printf("\nPresione ENTER para continuar (puede crashear)");
+			getchar();
+			fflush(stdout);
+			write(1, "\nft_putendl_fd : ", 17);
+			ft_putendl_fd(s, fd);
+			
+			
+			printf("\nPresione ENTER para continuar (puede crashear)");
+			getchar();
+			fflush(stdout);
+			write(1, "\nft_putstr_fd : ", 16);
+			ft_putstr_fd(s, fd);
+					
+			close(fd_forzado);
+			break;
+		}
+	}
+	//condiciones Normales
+	else
+	{
+		system ("clear");
+		printf("\ncharacter mandado = %c\n", c + offset);
+		//fd = open ("solucion.txt", O_CREAT | O_WRONLY, 0644); //permisos: 0(octal)6=4+2->lee y escribe...(propietario)4(grupo)4(otros). //cada numero significa 0=sinpermiso 1=ejecutar 2=escribir 4=leer 
+		int fd_forzado = open("/dev/tty", O_WRONLY);
+		if (fd_forzado == -1)
+		{
+			perror("\nError al generar el fd");
+			return (1);
+		}
+		//cambia el generado por el fd elegido
+		dup2(fd_forzado, fd);
+	
+		printf("String = %s", s);
+		printf("\nCharacter pasado: %c", c + offset);
+		printf("\nEl descriptor fd abierto es : %d", fd_forzado);
+		printf("\nEl fd ha cambiado al : %d", fd);
+		printf("\nEl Numero pasado es: %d", number);
+		fflush(stdout);
+			
+		write(1, "\n\nft_putchar_fd : ", 18);
+		ft_putchar_fd(c + offset, fd);
+		
+		write(1, "\nft_putnbr_fd : ", 16);
+		ft_putnbr_fd(number, fd);
+			
+		write(1, "\nft_putendl_fd : ", 17);
+		ft_putendl_fd(s, fd);
+			
+		write(1, "\nft_putstr_fd : ", 16);
+		ft_putstr_fd(s, fd);
+					
+		close(fd_forzado);
 	}
 	
-	//cambia el generado por el fd elegido
-	dup2(fd_forzado, fd);
-	
-	printf("\nEl descriptor fd abierto es : %d", fd_forzado);
-	printf("\nEl fd ha cambiado al : %d\n", fd);
 	fflush(stdout);
-	write(1, "solucion : ", 11);
-	ft_putchar_fd(c + offset, fd);
-	close(fd_forzado);
-	
-	/* write (1, "solucion : ", 11);
-	ft_putchar_fd(c + offset, fd); */
-	fflush(stdout);
+
 	press = repetimos_volvemos();
 
 	if ((press == 'y') || (press == 'Y'))
 	{
-		main_putchar_fd();
+		if (s)
+			free(s);
+		s = NULL;
+		main_fd();
 		return (0);
 	}
+	if (s)
+		free(s);
+	s = NULL;
 	return (0);
 }
+
+
+////////////////////////////////////////////////////////////
+/*ft_split*/////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int	main_split()
+{
+
+	return (0);
+}
+
 
 
 
