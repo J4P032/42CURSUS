@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 00:15:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 00:51:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1692,13 +1692,19 @@ int main_strchr(int opcion)
 ////////////////////////////////////////////////////////////
 int main_strjoin()
 {
-	//char	*ft_strjoin(char const *s1, char const *s2)
-	char			*s1 = (char *)calloc(50, sizeof(char));
-	char			*s2 = (char *)calloc(50, sizeof(char));
-	if (!s1 || !s2)
-		return (1);
-	char			press;
+	char	*s1 = NULL;
+	char	*s2 = NULL;
+	size_t	lon1;
+	size_t	lon2;
+	
+	char	press;
 
+	//INSTRUCCIONES
+	system("clear");
+	printf("\nJunta dos strings en uno en una nueva direccion de memoria");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+	
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -1710,10 +1716,12 @@ int main_strjoin()
 			case '1':
 				s2 = (char *)calloc(100, sizeof(char));
 				s2 = fill_string(s2);
+				lon2 = strlen(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
 				s1 = fill_string(s1);
+				lon1 = strlen(s1);
 				break;
 			case '3':
 				break;
@@ -1725,22 +1733,35 @@ int main_strjoin()
 	{
 		system("clear");
 		printf("s1: ");
+		s1 = (char *)calloc(100, sizeof(char));
 		s1 = fill_string(s1);
+		lon1 = strlen(s1);
+		intro_charnulls(s1);
+						
 		printf("\ns2: ");
+		s2 = (char *)calloc(100, sizeof(char));
 		s2 = fill_string(s2);
+		lon2 = strlen(s2);
+		intro_charnulls(s2);
 	}
 
-	char	*solucion_ft = NULL;
+	char	*solucion_ft = (char *)calloc(lon1 + lon2, sizeof(char));
 
 	//SOLUCION
 	system ("clear");
-	printf("String1 = %s", s1);
-	printf("\nString2 = %s", s2);
+	printf("String1 = ");
+	fflush(stdout);
+	ft_print(s1, lon1 + 1);
+	printf("\nString2 = ");
+	fflush(stdout);
+	ft_print(s2, lon2 + 1);	
 
 	solucion_ft = ft_strjoin(s1, s2);
 
-	printf("\n\nJoin: %s", solucion_ft);
+	printf("\n\nJoin: ");
 	fflush(stdout);
+	ft_print(solucion_ft, lon1 + lon2 + 1);
+	
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
