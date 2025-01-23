@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/22 22:35:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:28:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h> //tambien system("clear"), malloc...
 #include <sys/ioctl.h> //para ioctl. obtener tamanyo de un terminal pantalla.
 #include <string.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <ctype.h>
 #include "../libft.h"
@@ -28,7 +29,7 @@ char	*fill_string(char *s);
 int		fill_integer();
 int		fill_num_bytes(char *s);
 int		fill_num_sizet();
-char	fill_char(char *s, int *offset);
+char	fill_char(int *offset);
 char	fill_crash_menu();
 char	output_solution(char *ft, char *orig);
 char	output_solution_int(int *ft, int *orig);
@@ -46,6 +47,7 @@ int	main_memcmp();
 int	main_memcpy();
 int	main_memmove();
 int main_memset();
+int main_putchar_fd();
 int main_strdup();
 int	main_strchr(int opcion);
 int	main_strjoin();
@@ -92,27 +94,30 @@ int main()
 				main_memset();
 				break;
 			case '8':
-				main_strdup();
+				main_putchar_fd();
 				break;
 			case '9':
-				main_strchr(1);
+				main_strdup();
 				break;
 			case 'a':
-				main_strjoin();
+				main_strchr(1);
 				break;
 			case 'b':
-				main_strchr(2);
+				main_strjoin();
 				break;
 			case 'c':
-				main_strtrim();
+				main_strchr(2);
 				break;
 			case 'd':
-				main_substr();
+				main_strtrim();
 				break;
 			case 'e':
-				main_uplow(ft_tolower, tolower);
+				main_substr();
 				break;
 			case 'f':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'g':
 				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
@@ -159,7 +164,6 @@ void	ft_printf(char *str)
 //************************//
 //MENU DE OPCIONES GENERAL//
 //************************//
-
 int	options_draw()
 {
 	system("clear");
@@ -177,20 +181,20 @@ int	options_draw()
 	printf("%5s\n", "(0). ft_atoi.c");
 	printf("%5s\n", "(1). ft_calloc.c");
 	printf("%5s\n", "(2). ft_itoa.c");
-
 	printf("%5s\n", "(3). ft_memchr.c");
 	printf("%5s\n", "(4). ft_memcmp.c");
 	printf("%5s\n", "(5). ft_memcpy.c");
 	printf("%5s\n", "(6). ft_memmove.c");
 	printf("%5s\n", "(7). ft_memset.c");
-	printf("%5s\n", "(8). ft_strdup.c");
-	printf("%5s\n", "(9). ft_strchr.c");
-	printf("%5s\n", "(a). ft_strjoin.c");
-	printf("%5s\n", "(b). ft_strrchr.c");
-	printf("%5s\n", "(c). ft_strtrim.c");
-	printf("%5s\n", "(d). ft_substr.c");
-	printf("%5s\n", "(e). ft_tolower.c");
-	printf("%5s\n", "(f). ft_toupper.c");
+	printf("%5s\n", "(8). ft_putchar_fd.c");
+	printf("%5s\n", "(9). ft_strdup.c");
+	printf("%5s\n", "(a). ft_strchr.c");
+	printf("%5s\n", "(b). ft_strjoin.c");
+	printf("%5s\n", "(c). ft_strrchr.c");
+	printf("%5s\n", "(d). ft_strtrim.c");
+	printf("%5s\n", "(e). ft_substr.c");
+	printf("%5s\n", "(f). ft_tolower.c");
+	printf("%5s\n", "(g). ft_toupper.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -236,7 +240,6 @@ char *fill_string(char *s)
 int	fill_integer()
 {
 	int	num;
-	system ("clear");
 	printf("\nIntroduzca el numero : \n");
 	scanf("%d", &num);
 	getchar();
@@ -248,7 +251,7 @@ int	fill_num_bytes(char *s)
 {
 	int	num_bytes;
 	system ("clear");
-	printf("String = %s", s);
+	printf("\nString = %s", s);
 	printf("\nIntroduzca num de bytes : \n");
 	scanf("%d", &num_bytes);
 	getchar();
@@ -266,16 +269,15 @@ int	fill_num_sizet()
 }
 
 //MENU INTRODUCIR CHARS
-char fill_char(char *s, int *offset)
+char fill_char(int *offset)
 {
 	char c;
 	system ("clear");
-	printf("String = %s", s);
+	printf("Introduzca el caracter. Puede alterarlo con el Offset \\0 = '1' - 49(offset) : ");
+	scanf("%c", &c);
+	getchar();
 	printf("\nOffset para chars como \\0(-49) u Overflow: ");
 	scanf("%d", offset);
-	getchar();
-	printf("\nIntroduzca el caracter a buscar. \\0 = '1' - 49 : \n");
-	scanf("%c", &c);
 	getchar();
 	return (c);
 }
@@ -536,7 +538,7 @@ int	main_memchr()
 	num_bytes = fill_num_bytes(s);
 
 	//Menu para elegir char
-	c = fill_char(s, &offset);
+	c = fill_char(&offset);
 
 	char	*solucion_ft = NULL;
 	char	*solucion_orig = NULL;
@@ -1029,16 +1031,14 @@ int main_memmove()
 ////////////////////////////////////////////////////////////
 int main_memset()
 {
-//void	*ft_memset(void *s, int c, size_t n)
 
-	char	*s1 = NULL;
-	char	*s3 = (char *)malloc(50);
+	char	*s1 = (char *)calloc(100, sizeof(char));
+	char	*s_ft = (char *)calloc(100,sizeof(char));
+	char	*s_or = (char *)calloc(100,sizeof(char));
 	char	press;
 	char	c;
 	size_t	number;
 	int		offset;
-
-/*fills 1st 'n' bytes of memory pointed by 's' with constant byte 'c'*/
 
 	//INSTRUCCIONES
 	system("clear");
@@ -1057,16 +1057,10 @@ int main_memset()
 
 	//MENU PARA ELEGIR el CHAR A BUSCAR
 
-	c = fill_char(s1, &offset);
+	c = fill_char(&offset);
 
 	//MENU PARA ELEGIR NUMERO A INTRODUCIR
-	printf("\n numero de bytes: ");
 	number = fill_num_bytes(s1);
-
-
-	char	*solucion_ft = NULL;
-	char	*solucion_orig = NULL;
-
 
 	//condiciones NULL
 	if (s1 == NULL)
@@ -1078,13 +1072,15 @@ int main_memset()
 			printf("\nCharacter: %c", c);
 			printf("\nbytes = %zu", number);
 			press = fill_crash_menu();
+			strcpy(s_ft, s1);
+			strcpy(s_or, s1);
 			switch (press)
 			{
 				case '1':
-					solucion_ft = ft_memset(s1, (int)c, number);
+					ft_memset(s_ft, (int)c + offset, number);
 					break;
 				case '2':
-					solucion_orig = memset(s1, (int)c, number);
+					memset(s_or, (int)c + offset, number);
 					break;
 				default:
 					continue;
@@ -1095,16 +1091,18 @@ int main_memset()
 	//condiciones Normales
 	else
 	{
-		solucion_ft = ft_memset(s1, (int)c, number);
-		solucion_orig = memset(s1, (int)c, number);
+		strcpy(s_ft, s1);
+		ft_memset(s_ft, (int)c + offset, number);
+		strcpy(s_or,s1);
+		memset(s_or, (int)c + offset, number);
 	}
 	//SOLUCION
 	system ("clear");
 	printf("String1 = %s", s1);
-	printf("\ncharacter = %c", c);
+	printf("\ncharacter = %c", c + offset);
 	printf("\nbytes = %zu", number);
-	printf("\n\n Solucion_ft : %s", solucion_ft);
-	printf("\n\n Solucion_orig : %s", solucion_orig);
+	printf("\n\n Solucion_ft : %s", s_ft);
+	printf("\n\n Solucion_orig : %s", s_or);
 	fflush(stdout);
 	press = repetimos_volvemos();
 
@@ -1112,21 +1110,90 @@ int main_memset()
 	{
 		if (s1)
 			free (s1);
-		if (s3)
-			free (s3);
+		if (s_ft)
+			free (s_ft);
+		if (s_or)
+			free (s_or);
 		s1 = NULL;
-		s3 = NULL;
+		s_ft = NULL;
+		s_or  = NULL;
 		main_memset();
 		return (0);
 	}
 	if (s1)
 		free (s1);
-	if (s3)
-		free (s3);
+	if (s_ft)
+		free (s_ft);
+	if (s_or)
+		free (s_or);
 	s1 = NULL;
-	s3 = NULL;
+	s_ft = NULL;
+	s_or  = NULL;
 	return (0);
 }
+
+
+////////////////////////////////////////////////////////////
+/*ft_putchar_fd*////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_putchar_fd()
+{
+
+	char	press;
+	char	c;
+	int		offset;
+	int		fd;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Manda por el file descriptor el caracter c que elijamos\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+
+	//MENU PARA ELEGIR el CHAR A BUSCAR
+	c = fill_char(&offset);
+
+	//MENU PARA ELEGIR EL FD FILE DESCRIPTOR
+	printf("\nFile Descriptor (FD)");
+	fd = fill_integer();
+
+	//SOLUCION
+	system ("clear");
+	printf("\ncharacter mandado = %c\n", c + offset);
+	
+	//fd = open ("solucion.txt", O_CREAT | O_WRONLY, 0644); //permisos: 0(octal)6=4+2->lee y escribe...(propietario)4(grupo)4(otros). //cada numero significa 0=sinpermiso 1=ejecutar 2=escribir 4=leer 
+	int fd_forzado = open("/dev/tty", O_WRONLY);
+	if (fd_forzado == -1)
+	{
+		perror("\nError al generar el fd");
+		return (1);
+	}
+	
+	//cambia el generado por el fd elegido
+	dup2(fd_forzado, fd);
+	
+	printf("\nEl descriptor fd abierto es : %d", fd_forzado);
+	printf("\nEl fd ha cambiado al : %d\n", fd);
+	fflush(stdout);
+	write(1, "solucion : ", 11);
+	ft_putchar_fd(c + offset, fd);
+	close(fd_forzado);
+	
+	/* write (1, "solucion : ", 11);
+	ft_putchar_fd(c + offset, fd); */
+	fflush(stdout);
+	press = repetimos_volvemos();
+
+	if ((press == 'y') || (press == 'Y'))
+	{
+		main_putchar_fd();
+		return (0);
+	}
+	return (0);
+}
+
+
+
 
 ////////////////////////////////////////////////////////////
 /*ft_strdup*////////////////////////////////////////////////
@@ -1221,7 +1288,7 @@ int main_strchr(int opcion)
 		s = fill_string(s);
 
 	//Menu para elegir char
-	c = fill_char(s, &offset);
+	c = fill_char(&offset);
 
 	char	*solucion_ft = NULL;
 	char	*solucion_orig = NULL;
