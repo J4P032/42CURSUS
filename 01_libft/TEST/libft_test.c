@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 20:30:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 21:23:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,8 @@ int	options_draw()
 	printf("%*s%s\n", s_titulo, "", titulo);
 	printf("%5s\n", "(*)nota: imita funciones de C standard");
 	printf("%5s\n", "(M)nota: Reserva memoria dentro de la funcion. Danger!");
-	printf("%5s\n\n", "(0). ft_atoi");
+	printf("%5s\n", "");
+	printf("%5s\n", "(0). ft_atoi");
 	printf("%5s\n", "(1). ft_calloc (M*)");
 	printf("%5s\n", "(2). ft_itoa (M)");
 	
@@ -1776,7 +1777,7 @@ int	main_striteri()
 
 	//INSTRUCCIONES
 	system("clear");
-	printf("\nPasa el string creado por la funcion que elijamos");
+	printf("Pasa el string creado por la funcion que elijamos");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
 	
@@ -1815,9 +1816,9 @@ int	main_striteri()
 	printf("\nft_striteri sugiente char en ascii : %s", solucion);
 	ft_reset_copy(solucion, s);
 	
-	ft_striteri(solucion, ft_strnext);
-	printf("\nft_striteri inserta espacio : %s", solucion);
-	ft_reset_copy(solucion, s);
+	ft_striteri(solucion, ft_strinsertspace);
+	printf("\nft_striteri inserta un * en los chars impares : %s", solucion);
+	
 	
 	fflush(stdout);
 	press = repetimos_volvemos();
@@ -2634,33 +2635,36 @@ int main_uplow(int (*f)(int), int (*g)(int))
 
 void ft_strupper(unsigned int index, char *c)
 {
+	(void)index; //para no usar index y eludir el -wall -wextra -werror
 	if (*c >= 'a' && *c <= 'z')
-		*c = *c - index;
+		*c = *c - 32;
 }
 
 void ft_strlower(unsigned int index, char *c)
 {
+	(void)index;
 	if (*c >= 'A' && *c <= 'Z')
-		*c = *c + index;
+		*c = *c + 32;
 }
 
 void ft_struptolowtoup(unsigned int index, char *c)
 {
+	(void)index;
 	if (*c >= 'A' && *c <= 'Z')
-		*c = *c + index;
-	if (*c >= 'a' && *c <= 'z')
-		*c = *c - index;	
+		*c = *c + 32;
+	else if (*c >= 'a' && *c <= 'z')
+		*c = *c - 32;	
 }
 
 void ft_strnext(unsigned int index, char *c)
 {
+	(void)index;
 	if (ft_isprint(*c))
-		*c = *c + index;
+		*c = *c + 1;
 }
 
 void ft_strinsertspace(unsigned int index, char *c)
 {
-	index = 0;
-	if (ft_isprint(*c))
-		write(1, " ", index);
+	if (index % 2 != 0)
+		*c = '*';
 }
