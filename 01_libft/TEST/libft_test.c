@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 18:52:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:57:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,11 +205,11 @@ int	options_draw()
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
 	printf("%5s\n", "(*)nota: imita funciones de C standard");
-	printf("%5s\n", "(0). ft_atoi.c");
-	printf("%5s\n", "(1). ft_calloc.c(*)");
-	printf("%5s\n", "(2). ft_itoa.c");
+	printf("%5s\n", "(0). ft_atoi");
+	printf("%5s\n", "(1). ft_calloc(M*)");
+	printf("%5s\n", "(2). ft_itoa(M)");
 	
-	printf("%5s\n", "(3). ++ft_listas.c");
+	printf("%5s\n", "(3). ++ft_listas (M->lstnew)");
 	
 	printf("%5s\n", "(4). ft_memchr(*)");
 	printf("%5s\n", "(5). ft_memcmp(*)");

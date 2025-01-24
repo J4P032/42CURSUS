@@ -6,3 +6,4 @@ TEST/libft_test.c
 Makefile_Tests
 ft_split.c (quitado main comentado abajo y quitado include stdio.h)
 ft_itoa.c (quitado main comentado abajo)
+ft_putnbr_fd (quitado main comentado abajo)

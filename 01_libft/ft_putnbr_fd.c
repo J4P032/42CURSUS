@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 20:11:39 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/20 20:31:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:58:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,3 @@ void	ft_putnbr_fd(int n, int fd)
 	ext_num = aux + '0';
 	write(fd, &ext_num, 1);
 }
-/*
-#include <limits.h>
-#include <unistd.h>
-
-int	main(void)
-{
-	ft_putnbr(-0);
-	write(1, "\n", 1);
-	ft_putnbr(0);
-	write(1, "\n", 1);
-	ft_putnbr(INT_MAX);
-	write(1, "\n", 1);
-	ft_putnbr(INT_MIN);
-	write(1, "\n", 1);
-	ft_putnbr(-123456789);
-	write(1, "\n", 1);
-	ft_putnbr(-10000);
-	write(1, "\n", 1);
-	ft_putnbr(-02);
-	return (0);
-}*/
