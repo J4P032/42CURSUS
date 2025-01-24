@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 13:54:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:00:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2460,19 +2460,23 @@ int	main_substr()
 	printf("\nStart: %u", num_start);
 	printf("\nLen: %zu", num_len);
 
-	s_ft = ft_substr(s, num_start, num_len);
-	printf("\n\nsub-String: %s", s_ft);
+	char *solucion = NULL;
+
+	solucion = ft_substr(s, num_start, num_len);
+	printf("\n\nsub-String: %s", solucion);
 	fflush(stdout); //para que write no este antes que el printf por el buffer
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
 		free (s_ft);
+		free (solucion);
 		main_substr();
 		return (0); //si no puede ir al otro free y liberar de nuevo. NO SE COMO. Supongo que por recursividad
 	}
 	free (s);
 	free (s_ft);
+	free (solucion);
 	s = NULL;
 	s_ft = NULL;
 	return (0);
