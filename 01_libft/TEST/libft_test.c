@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 18:35:01 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:52:08 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -554,6 +554,7 @@ int	main_itoa()
 	char	*solucion_ft = NULL;
 
 	//MENU PARA ELEGIR EL NUM
+	system("clear");
 	num = fill_integer();
 
 	//SOLUCION
@@ -570,9 +571,13 @@ int	main_itoa()
 
 	if ((press == 'y') || (press == 'Y'))
 	{
+		free(solucion_ft);
+		solucion_ft = NULL;
 		main_itoa();
 		return (0);
 	}
+	free(solucion_ft);
+	solucion_ft = NULL;
 	return (0);
 }
 
