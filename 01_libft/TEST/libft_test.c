@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 12:12:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:38:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2279,12 +2279,17 @@ int main_strnstr()
 ////////////////////////////////////////////////////////////
 int main_strtrim()
 {
-	char			*s1 = (char *)calloc(50, sizeof(char));
-	char			*s2 = (char *)calloc(50, sizeof(char));
-	char			press;
+	char	*s1 = NULL;
+	char	*s2 = NULL;
+	char	press;
 
-	if (!s1 || !s2)
-		return (1);
+	char	*s_ft = (char *)calloc(100, sizeof(char));
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Elimina del String los caracteres que esten en SET por izda y derecha pero se detiene cuando no está en SET\n");
+	printf("Para continuar presione ENTER\n");
+	getchar();
 
 	//Sub menu principal
 	press = options_null_valid();
@@ -2312,41 +2317,41 @@ int main_strtrim()
 	else
 	{
 		system("clear");
-		printf("s1: ");
+		printf("String a Trimar: ");
+		s1 = (char *)calloc(100, sizeof(char));
 		s1 = fill_string(s1);
-		printf("\nset: ");
+		printf("\nSet: ");
+		s2 = (char *)calloc(100, sizeof(char));
 		s2 = fill_string(s2);
 	}
-
-	char	*solucion_ft = NULL;
 
 	//SOLUCION
 	system ("clear");
 	printf("String1 = %s", s1);
 	printf("\nSET = %s", s2);
 
-	solucion_ft = ft_strtrim(s1, s2);
-
-	printf("\n\nTrim: %s", solucion_ft);
+	s_ft = ft_strtrim(s1, s2);
+	
+	printf("\n\nTrimado: %s", s_ft);
 	fflush(stdout);
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s1);
 		free (s2);
-		free (solucion_ft);
+		free (s_ft);
 		s1 = NULL;
 		s2 = NULL;
-		solucion_ft = NULL;
+		s_ft = NULL;
 		main_strtrim();
 		return (0);
 	}
 	free (s1);
 	free (s2);
-	free (solucion_ft);
+	free (s_ft);
 	s1 = NULL;
 	s2 = NULL;
-	solucion_ft = NULL;
+	s_ft = NULL;
 	return (0);
 }
 
