@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 16:24:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:58:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1787,8 +1787,7 @@ int main_strjoin()
 		intro_charnulls(s2);
 	}
 
-	char	*solucion_ft = (char *)calloc(lon1 + lon2, sizeof(char));
-	if (!solucion_ft) exit(1);
+	char	*solucion_ft = NULL;
 
 	//SOLUCION
 	system ("clear");
