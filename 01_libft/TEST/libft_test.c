@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 18:12:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:28:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1453,7 +1453,9 @@ int	main_split()
 	if ((press == 'y') || (press == 'Y'))
 	{
 		i = 0;
-		while (solucion)
+		free(s1);
+		s1 = NULL;
+		while (solucion[i])
 		{
 			free(solucion[i]);
 			solucion[i] = NULL;
@@ -1467,7 +1469,9 @@ int	main_split()
 		return (0);
 	}
 	i = 0;
-	while (solucion)
+	free(s1);
+	s1 = NULL;
+	while (solucion[i])
 	{
 		free(solucion[i]);
 		solucion[i] = NULL;
