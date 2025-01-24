@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 18:57:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 19:03:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,31 +205,32 @@ int	options_draw()
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
 	printf("%5s\n", "(*)nota: imita funciones de C standard");
+	printf("%5s\n", "(M)nota: Reserva memoria dentro de la funcion. Danger!");
 	printf("%5s\n", "(0). ft_atoi");
-	printf("%5s\n", "(1). ft_calloc(M*)");
-	printf("%5s\n", "(2). ft_itoa(M)");
+	printf("%5s\n", "(1). ft_calloc (M*)");
+	printf("%5s\n", "(2). ft_itoa (M)");
 	
 	printf("%5s\n", "(3). ++ft_listas (M->lstnew)");
 	
-	printf("%5s\n", "(4). ft_memchr(*)");
-	printf("%5s\n", "(5). ft_memcmp(*)");
-	printf("%5s\n", "(6). ft_memcpy(*)");
-	printf("%5s\n", "(7). ft_memmove(*)");
-	printf("%5s\n", "(8). ft_memset(*)");
+	printf("%5s\n", "(4). ft_memchr (*)");
+	printf("%5s\n", "(5). ft_memcmp (*)");
+	printf("%5s\n", "(6). ft_memcpy (*)");
+	printf("%5s\n", "(7). ft_memmove (*)");
+	printf("%5s\n", "(8). ft_memset (*)");
 	printf("%5s\n", "(9). ++ft_PUTS_fd");
-	printf("%5s\n", "(a). ft_split");
-	printf("%5s\n", "(b). ft_strdup(*)");
-	printf("%5s\n", "(c). ft_strchr(*)");
-	printf("%5s\n", "(d). ft_strjoin");
-	printf("%5s\n", "(e). ft_strlcat(*)");
-	printf("%5s\n", "(f). ft_strlcpy(*)");
-	printf("%5s\n", "(g). ft_strncmp(*)");
-	printf("%5s\n", "(h). ft_strnstr(*)");
-	printf("%5s\n", "(i). ft_strrchr(*)");
-	printf("%5s\n", "(j). ft_strtrim");
-	printf("%5s\n", "(k). ft_substr");
-	printf("%5s\n", "(l). ft_tolower(*)");
-	printf("%5s\n", "(m). ft_toupper(*)");
+	printf("%5s\n", "(a). ft_split (M)");
+	printf("%5s\n", "(b). ft_strdup (M*)");
+	printf("%5s\n", "(c). ft_strchr (*)");
+	printf("%5s\n", "(d). ft_strjoin (M)");
+	printf("%5s\n", "(e). ft_strlcat (*)");
+	printf("%5s\n", "(f). ft_strlcpy (*)");
+	printf("%5s\n", "(g). ft_strncmp (*)");
+	printf("%5s\n", "(h). ft_strnstr (*)");
+	printf("%5s\n", "(i). ft_strrchr (*)");
+	printf("%5s\n", "(j). ft_strtrim (M)");
+	printf("%5s\n", "(k). ft_substr (M)");
+	printf("%5s\n", "(l). ft_tolower (*)");
+	printf("%5s\n", "(m). ft_toupper (*)");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
