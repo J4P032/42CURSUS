@@ -4,3 +4,4 @@ ft_putendl_fd.c
 ft_putstr_fd.c
 TEST/libft_test.c
 Makefile_Tests
+ft_split.c (quitado main comentado abajo)

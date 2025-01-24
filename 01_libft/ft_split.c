@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 09:46:58 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/19 15:01:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:16:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,27 +90,3 @@ char	**ft_split(char const *s, char c)
 	}
 	return (split);
 }
-/*
-#include <stdio.h>
-
-int main(int argc, char **argv)
-{
-	if (argc != 2)
-		return 1;
-
-	size_t i;
-
-	i = 0;
-	char **palabras = ft_split(argv[1], '-');
-	while (palabras[i])
-		printf("\n%s", palabras[i++]);
-	i = 0;
-	while (palabras[i])
-	{
-		free(palabras[i]);
-		i++;
-	}
-	free(palabras);
-	return 0;
-}
-*/
