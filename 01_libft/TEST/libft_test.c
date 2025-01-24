@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 17:58:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:12:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,6 +367,9 @@ char	output_solution(char *ft, char *orig)
 {
 	printf("\nSolucion_ft   :%s", ft);
 	printf("\nSolucion_orig :%s", orig);
+	printf("\n\nDireccion de memoria de solucion_ft: %p", ft);	
+	printf("\nDireccion de memoria de solucion_or: %p", orig);
+	
 	printf("\n\nQuiere probar de nuevo? (y / n) : ");
 	char c = getchar();
 	while (getchar() != '\n');
@@ -1569,18 +1572,26 @@ int main_strdup()
 		free (s);
 		free (s_ft);
 		free (s_or);
+		free (solucion_ft);
+		free (solucion_orig);
 		s = NULL;
 		s_ft = NULL;
 		s_or = NULL;
+		solucion_ft = NULL;
+		solucion_orig = NULL;
 		main_strdup();
 		return (0);
 	}
 	free (s);
 	free (s_ft);
 	free (s_or);
+	free (solucion_ft);
+	free (solucion_orig);
 	s = NULL;
 	s_ft = NULL;
 	s_or = NULL;
+	solucion_ft = NULL;
+	solucion_orig = NULL;
 	return (0);
 }
 
@@ -1699,8 +1710,8 @@ int main_strchr(int opcion)
 		printf("\nchar = %c", c + offset);
 
 	press = output_solution(solucion_ft, solucion_orig);
-	
 
+	
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
