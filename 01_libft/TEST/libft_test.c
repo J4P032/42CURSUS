@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 13:18:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:54:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2330,7 +2330,7 @@ int main_strtrim()
 	char	*s1 = NULL;
 	char	*s2 = NULL;
 	char	press;
-
+	
 	char	*s_ft = (char *)calloc(100, sizeof(char));
 	if (!s_ft) exit(1);
 
@@ -2383,9 +2383,11 @@ int main_strtrim()
 	printf("String1 = %s", s1);
 	printf("\nSET = %s", s2);
 
-	s_ft = ft_strtrim(s1, s2);
+	char *solucion = NULL;
 	
-	printf("\n\nTrimado: %s", s_ft);
+	solucion = ft_strtrim(s1, s2);
+	
+	printf("\n\nTrimado: %s", solucion);
 	fflush(stdout);
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
@@ -2393,17 +2395,21 @@ int main_strtrim()
 		free (s1);
 		free (s2);
 		free (s_ft);
+		free (solucion);
 		s1 = NULL;
 		s2 = NULL;
 		s_ft = NULL;
+		solucion = NULL;
 		main_strtrim();
 		return (0);
 	}
 	free (s1);
 	free (s2);
 	free (s_ft);
+	free (solucion);
 	s1 = NULL;
 	s2 = NULL;
+	solucion = NULL;
 	s_ft = NULL;
 	return (0);
 }
