@@ -7,3 +7,5 @@ Makefile_Tests
 ft_split.c (quitado main comentado abajo y quitado include stdio.h)
 ft_itoa.c (quitado main comentado abajo)
 ft_putnbr_fd (quitado main comentado abajo)
+ft_striteri.c (modificado el size_t i a unsigned int i por que es el parametro de la funcion f)
+ft_strmapi (modificado el size_t i a unsigned int por ser el parametro de la funcion f)

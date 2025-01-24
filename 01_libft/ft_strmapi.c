@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:27:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/20 08:58:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 20:31:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*s_aux;
-	size_t	s_len;
-	size_t	i;
+	char			*s_aux;
+	size_t			s_len;
+	unsigned int	i;
 
 	i = 0;
 	if (!s || !f)

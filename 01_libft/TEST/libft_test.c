@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 19:03:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 20:30:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ char	output_solution_int(int *ft, int *orig);
 void	output_solucion_ptr(void *ft, void *orig, size_t length);
 char	repetimos_volvemos();
 
+//PROTOTIPOS FUNCIONES STRITERI
+void ft_strupper(unsigned int index, char *c);
+void ft_strlower(unsigned int index, char *c);
+void ft_struptolowtoup(unsigned int index, char *c);
+void ft_strnext(unsigned int index, char *c);
+void ft_strinsertspace(unsigned int index, char *c);
+
 void 	ft_reset_copy(char *dest, char *orig);
 
 //MAIN SECUNDARIAS prototipos
@@ -54,6 +61,7 @@ int main_fd();
 int main_split();
 int main_strdup();
 int	main_strchr(int opcion);
+int	main_striteri();
 int	main_strjoin();
 int main_strlcat();
 int main_strlcpy();
@@ -117,33 +125,36 @@ int main()
 				main_strchr(1);
 				break;
 			case 'd':
-				main_strjoin();
+				main_striteri();
 				break;
 			case 'e':
-				main_strlcat();
+				main_strjoin();
 				break;
 			case 'f':
-				main_strlcpy();
+				main_strlcat();
 				break;
 			case 'g':
-				main_strncmp();
+				main_strlcpy();
 				break;
 			case 'h':
-				main_strnstr();
+				main_strncmp();
 				break;
 			case 'i':
-				main_strchr(2);
+				main_strnstr();
 				break;
 			case 'j':
-				main_strtrim();
+				main_strchr(2);
 				break;
 			case 'k':
-				main_substr();
+				main_strtrim();
 				break;
 			case 'l':
-				main_uplow(ft_tolower, tolower);
+				main_substr();
 				break;
 			case 'm':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'n':
 				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
@@ -206,7 +217,7 @@ int	options_draw()
 	printf("%*s%s\n", s_titulo, "", titulo);
 	printf("%5s\n", "(*)nota: imita funciones de C standard");
 	printf("%5s\n", "(M)nota: Reserva memoria dentro de la funcion. Danger!");
-	printf("%5s\n", "(0). ft_atoi");
+	printf("%5s\n\n", "(0). ft_atoi");
 	printf("%5s\n", "(1). ft_calloc (M*)");
 	printf("%5s\n", "(2). ft_itoa (M)");
 	
@@ -221,16 +232,20 @@ int	options_draw()
 	printf("%5s\n", "(a). ft_split (M)");
 	printf("%5s\n", "(b). ft_strdup (M*)");
 	printf("%5s\n", "(c). ft_strchr (*)");
-	printf("%5s\n", "(d). ft_strjoin (M)");
-	printf("%5s\n", "(e). ft_strlcat (*)");
-	printf("%5s\n", "(f). ft_strlcpy (*)");
-	printf("%5s\n", "(g). ft_strncmp (*)");
-	printf("%5s\n", "(h). ft_strnstr (*)");
-	printf("%5s\n", "(i). ft_strrchr (*)");
-	printf("%5s\n", "(j). ft_strtrim (M)");
-	printf("%5s\n", "(k). ft_substr (M)");
-	printf("%5s\n", "(l). ft_tolower (*)");
-	printf("%5s\n", "(m). ft_toupper (*)");
+	
+	printf("%5s\n", "(d). ft_striteri");
+	
+	
+	printf("%5s\n", "(e). ft_strjoin (M)");
+	printf("%5s\n", "(f). ft_strlcat (*)");
+	printf("%5s\n", "(g). ft_strlcpy (*)");
+	printf("%5s\n", "(h). ft_strncmp (*)");
+	printf("%5s\n", "(i). ft_strnstr (*)");
+	printf("%5s\n", "(j). ft_strrchr (*)");
+	printf("%5s\n", "(k). ft_strtrim (M)");
+	printf("%5s\n", "(l). ft_substr (M)");
+	printf("%5s\n", "(m). ft_tolower (*)");
+	printf("%5s\n", "(n). ft_toupper (*)");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -1751,6 +1766,81 @@ int main_strchr(int opcion)
 
 
 ////////////////////////////////////////////////////////////
+/*ft_striteri*//////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int	main_striteri()
+{
+	//void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+	char	*s = NULL;
+	char	press;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("\nPasa el string creado por la funcion que elijamos");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+	
+	//Sub menu principal
+	press = options_null_valid();
+
+	//Opciones normales
+	if (press == '2')
+	{
+		system("clear");
+		s = (char *)calloc(100, sizeof(char));
+		if (!s) exit(1);
+		s = fill_string(s);
+	}
+	char	*solucion = (char *)calloc(100, sizeof(char));
+	strcpy(solucion, s);
+
+	//MENU ELECCION FUNCION
+	
+	system ("clear");
+	printf("String: %s",s);
+	
+	ft_striteri(solucion, ft_strupper);
+	printf("\n\nft_striteri Mayusculas todo : %s", solucion);
+	ft_reset_copy(solucion, s);
+	
+	ft_striteri(solucion, ft_strlower);
+	printf("\nft_striteri Minusculas todo : %s", solucion);
+	ft_reset_copy(solucion, s);
+	
+	ft_striteri(solucion, ft_struptolowtoup);
+	printf("\nft_striteri alterna May-Min : %s", solucion);
+	ft_reset_copy(solucion, s);
+	
+	ft_striteri(solucion, ft_strnext);
+	printf("\nft_striteri sugiente char en ascii : %s", solucion);
+	ft_reset_copy(solucion, s);
+	
+	ft_striteri(solucion, ft_strnext);
+	printf("\nft_striteri inserta espacio : %s", solucion);
+	ft_reset_copy(solucion, s);
+	
+	fflush(stdout);
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s);
+		free (solucion);
+		s = NULL;
+		solucion = NULL;
+		main_striteri();
+		return (0);
+	}
+	free (s);
+	free (solucion);
+	s = NULL;
+	solucion = NULL;
+		
+	return (0);
+}
+
+
+
+////////////////////////////////////////////////////////////
 /*ft_strjoin*///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 int main_strjoin()
@@ -2534,4 +2624,43 @@ int main_uplow(int (*f)(int), int (*g)(int))
 	if ((press == 'y') || (press == 'Y'))
 		main_uplow(f, g);
 	return (0);
+}
+
+
+////////////////////////////////////////////////////////////
+/*FUNCIONES PARA STRITERI*//////////////////////////////////
+////////////////////////////////////////////////////////////
+
+
+void ft_strupper(unsigned int index, char *c)
+{
+	if (*c >= 'a' && *c <= 'z')
+		*c = *c - index;
+}
+
+void ft_strlower(unsigned int index, char *c)
+{
+	if (*c >= 'A' && *c <= 'Z')
+		*c = *c + index;
+}
+
+void ft_struptolowtoup(unsigned int index, char *c)
+{
+	if (*c >= 'A' && *c <= 'Z')
+		*c = *c + index;
+	if (*c >= 'a' && *c <= 'z')
+		*c = *c - index;	
+}
+
+void ft_strnext(unsigned int index, char *c)
+{
+	if (ft_isprint(*c))
+		*c = *c + index;
+}
+
+void ft_strinsertspace(unsigned int index, char *c)
+{
+	index = 0;
+	if (ft_isprint(*c))
+		write(1, " ", index);
 }
