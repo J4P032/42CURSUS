@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 14:00:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:24:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1836,8 +1836,7 @@ int main_strlcat()
 	char	*s2 = NULL;
 	size_t	size = 0;
 			
-	size_t	lon1 = 0;
-	size_t	lon2 = 0;
+	//size_t	lon1 = 0;
 	
 	char	press;
 
@@ -1860,13 +1859,12 @@ int main_strlcat()
 				s2 = (char *)calloc(100, sizeof(char));
 				if (!s2) exit(1);
 				s2 = fill_string(s2);
-				lon2 = strlen(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
 				if (!s1) exit(1);
 				s1 = fill_string(s1);
-				lon1 = strlen(s1);
+				//lon1 = strlen(s1);
 				break;
 			case '3':
 				break;
@@ -1881,13 +1879,12 @@ int main_strlcat()
 		s1 = (char *)calloc(100, sizeof(char));
 		if (!s1) exit(1);
 		s1 = fill_string(s1);
-		lon1 = strlen(s1);
+		//lon1 = strlen(s1);
 								
 		printf("\norigen: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
 		s2 = fill_string(s2);
-		lon2 = strlen(s2);
 	}
 
 
@@ -1895,9 +1892,9 @@ int main_strlcat()
 	printf("longitud: ");
 	size = (int)fill_integer();
 		
-	char	*s_ft = (char *)calloc(lon1, sizeof(char));
+	char	*s_ft = (char *)calloc(100, sizeof(char));
 	if (!s_ft) exit(1);
-	char	*s_or = (char *)calloc(lon1, sizeof(char));
+	char	*s_or = (char *)calloc(100, sizeof(char));
 	if (!s_or) exit(1);
 
 	strcpy(s_ft, s1);
@@ -1906,26 +1903,17 @@ int main_strlcat()
 	size_t solucion_ft = 0;
 	size_t solucion_or = 0;
 
-
 	//SOLUCION
 	system ("clear");
-	printf("Destino = ");
-	fflush(stdout);
-	ft_print(s1, lon1 + 1);
-	printf("\nOrigen = ");
-	fflush(stdout);
-	ft_print(s2, lon2 + 1);	
+	printf("Destino = %s", s1);
+	printf("\nOrigen = %s", s2);
 	printf("\nLongitud : %zu", size);
 
 	solucion_ft = ft_strlcat(s_ft, s2, size);
 	solucion_or = strlcat(s_or, s2, size);
 
-	printf("\n\nft_strlcat: ");
-	fflush(stdout);
-	ft_print(s_ft, lon1 + lon2 + 1);
-	printf("\n___strlcat: ");
-	fflush(stdout);
-	ft_print(s_or, lon1 + lon2 + 1);
+	printf("\n\nft_strlcat: %s",s_ft);
+	printf("\n___strlcat: %s", s_or);
 	printf("\nsolucion_ft: %zu", solucion_ft);
 	printf("\nsolucion_or: %zu", solucion_or);
 	
