@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 12:38:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:18:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1408,6 +1408,7 @@ int	main_split()
 	if (press == '2')
 	{
 	 	s1 = (char *)calloc(100, sizeof(char));
+		if (!s1) exit(1);
 		printf("\nString");
 		s1 = fill_string(s1);
 	}
@@ -1448,12 +1449,26 @@ int	main_split()
 
 	if ((press == 'y') || (press == 'Y'))
 	{
+		i = 0;
+		while (solucion)
+		{
+			free(solucion[i]);
+			solucion[i] = NULL;
+			i++;
+		}
 		if (solucion)
 			free (solucion);
 		solucion = NULL;
 		main_split();
 	
 		return (0);
+	}
+	i = 0;
+	while (solucion)
+	{
+		free(solucion[i]);
+		solucion[i] = NULL;
+		i++;
 	}
 	if (solucion)
 		free (solucion);
@@ -1470,7 +1485,9 @@ int main_strdup()
 	
 	char	*s = NULL;
 	char	*s_ft = (char *)calloc(100, sizeof(char));
+	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(100, sizeof(char));
+	if (!s_or) exit(1);
 	char	press;
 	size_t	longitud;
 
@@ -1487,6 +1504,7 @@ int main_strdup()
 	if (press == '2')
 	{
 		s = (char *)calloc(100, sizeof(char));
+		if (!s) exit(1);
 		s = fill_string(s);
 		longitud = strlen(s);
 		//INTRODUCIR CARACTERES NULOS EN EL STRING
@@ -1577,7 +1595,9 @@ int main_strchr(int opcion)
 	int		offset = 0;
 	char	press;
 	char	*s_ft = (char *)calloc(100, sizeof(char));
+	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(100, sizeof(char));
+	if (!s_or) exit(1);
 	int		longitud = 0;
 	
 	//INSTRUCCIONES
@@ -1602,6 +1622,7 @@ int main_strchr(int opcion)
 	if (press == '2')
 	{
 		s = (char *)calloc(100, sizeof(char));
+		if (!s) exit(1);
 		s = fill_string(s);
 		longitud = strlen(s);
 	}
@@ -1732,11 +1753,13 @@ int main_strjoin()
 		{
 			case '1':
 				s2 = (char *)calloc(100, sizeof(char));
+				if (!s2) exit(1);
 				s2 = fill_string(s2);
 				lon2 = strlen(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
+				if (!s1) exit(1);
 				s1 = fill_string(s1);
 				lon1 = strlen(s1);
 				break;
@@ -1751,18 +1774,21 @@ int main_strjoin()
 		system("clear");
 		printf("s1: ");
 		s1 = (char *)calloc(100, sizeof(char));
+		if (!s1) exit(1);
 		s1 = fill_string(s1);
 		lon1 = strlen(s1);
 		intro_charnulls(s1);
 						
 		printf("\ns2: ");
 		s2 = (char *)calloc(100, sizeof(char));
+		if (!s2) exit(1);
 		s2 = fill_string(s2);
 		lon2 = strlen(s2);
 		intro_charnulls(s2);
 	}
 
 	char	*solucion_ft = (char *)calloc(lon1 + lon2, sizeof(char));
+	if (!solucion_ft) exit(1);
 
 	//SOLUCION
 	system ("clear");
@@ -1832,11 +1858,13 @@ int main_strlcat()
 		{
 			case '1':
 				s2 = (char *)calloc(100, sizeof(char));
+				if (!s2) exit(1);
 				s2 = fill_string(s2);
 				lon2 = strlen(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
+				if (!s1) exit(1);
 				s1 = fill_string(s1);
 				lon1 = strlen(s1);
 				break;
@@ -1851,11 +1879,13 @@ int main_strlcat()
 		system("clear");
 		printf("destino: ");
 		s1 = (char *)calloc(100, sizeof(char));
+		if (!s1) exit(1);
 		s1 = fill_string(s1);
 		lon1 = strlen(s1);
 								
 		printf("\norigen: ");
 		s2 = (char *)calloc(100, sizeof(char));
+		if (!s2) exit(1);
 		s2 = fill_string(s2);
 		lon2 = strlen(s2);
 	}
@@ -1866,7 +1896,9 @@ int main_strlcat()
 	size = (int)fill_integer();
 		
 	char	*s_ft = (char *)calloc(lon1, sizeof(char));
+	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(lon1, sizeof(char));
+	if (!s_or) exit(1);
 
 	strcpy(s_ft, s1);
 	strcpy(s_or, s1);
@@ -1942,8 +1974,10 @@ int main_strlcpy()
 	size_t	lon1 = 0;
 	size_t	lon2 = 0;
 	char	*s_ft = (char *)calloc(100, sizeof(char));
+	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(100, sizeof(char));
-	
+	if (!s_or) exit(1);	
+
 	char	press;
 
 
@@ -1963,11 +1997,13 @@ int main_strlcpy()
 		{
 			case '1':
 				s2 = (char *)calloc(100, sizeof(char));
+				if (!s2) exit(1);
 				s2 = fill_string(s2);
 				lon2 = strlen(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
+				if (!s1) exit(1);
 				s1 = fill_string(s1);
 				lon1 = strlen(s1);
 				break;
@@ -1982,11 +2018,13 @@ int main_strlcpy()
 		system("clear");
 		printf("Destino: ");
 		s1 = (char *)calloc(100, sizeof(char));
+		if (!s1) exit(1);
 		s1 = fill_string(s1);
 		lon1 = strlen(s1);
 							
 		printf("\nOrigen: ");
 		s2 = (char *)calloc(100, sizeof(char));
+		if (!s2) exit(1);
 		s2 = fill_string(s2);
 		lon2 = strlen(s2);
 	}
@@ -2082,10 +2120,12 @@ int main_strncmp()
 		{
 			case '1':
 				s2 = (char *)calloc(100, sizeof(char));
+				if (!s2) exit(1);
 				s2 = fill_string(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
+				if (!s1) exit(1);
 				s1 = fill_string(s1);
 				break;
 			case '3':
@@ -2099,10 +2139,12 @@ int main_strncmp()
 		system("clear");
 		printf("String1: ");
 		s1 = (char *)calloc(100, sizeof(char));
+		if (!s1) exit(1);
 		s1 = fill_string(s1);
 								
 		printf("\nString2: ");
 		s2 = (char *)calloc(100, sizeof(char));
+		if (!s2) exit(1);
 		s2 = fill_string(s2);
 	}
 
@@ -2164,7 +2206,9 @@ int main_strnstr()
 	size_t	lon1 = 0;
 	size_t	lon2 = 0;
 	char	*s_ft = (char *)calloc(100, sizeof(char));
+	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(100, sizeof(char));
+	if (!s_or) exit(1);
 	
 	size_t	size = 0;
 			
@@ -2187,12 +2231,14 @@ int main_strnstr()
 		{
 			case '1':
 				s2 = (char *)calloc(100, sizeof(char));
+				if (!s2) exit(1);
 				s2 = fill_string(s2);
 				lon2 = strlen(s2);
 				intro_charnulls(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
+				if (!s1) exit(1);
 				s1 = fill_string(s1);
 				lon1 = strlen(s1);
 				memcpy(s_ft, s1, lon1 + 1);
@@ -2209,6 +2255,7 @@ int main_strnstr()
 		system("clear");
 		printf("Big: ");
 		s1 = (char *)calloc(100, sizeof(char));
+		if (!s1) exit(1);
 		s1 = fill_string(s1);
 		lon1 = strlen(s1);
 		memcpy(s_ft, s1, lon1 + 1);
@@ -2216,6 +2263,7 @@ int main_strnstr()
 								
 		printf("\nLittle: ");
 		s2 = (char *)calloc(100, sizeof(char));
+		if (!s2) exit(1);
 		s2 = fill_string(s2);
 		lon2 = strlen(s2);
 		intro_charnulls(s2);
@@ -2284,6 +2332,7 @@ int main_strtrim()
 	char	press;
 
 	char	*s_ft = (char *)calloc(100, sizeof(char));
+	if (!s_ft) exit(1);
 
 	//INSTRUCCIONES
 	system("clear");
@@ -2301,10 +2350,12 @@ int main_strtrim()
 		{
 			case '1':
 				s2 = (char *)calloc(100, sizeof(char));
+				if (!s2) exit(1);
 				s2 = fill_string(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
+				if (!s1) exit(1);
 				s1 = fill_string(s1);
 				break;
 			case '3':
@@ -2319,9 +2370,11 @@ int main_strtrim()
 		system("clear");
 		printf("String a Trimar: ");
 		s1 = (char *)calloc(100, sizeof(char));
+		if (!s1) exit(1);
 		s1 = fill_string(s1);
 		printf("\nSet: ");
 		s2 = (char *)calloc(100, sizeof(char));
+		if (!s2) exit(1);
 		s2 = fill_string(s2);
 	}
 
@@ -2362,22 +2415,30 @@ int main_strtrim()
 int	main_substr()
 {
 	//char	*ft_substr(char const *s, unsigned int start, size_t len)
-	char			*s = (char *)calloc(100, sizeof(char));
-	if (!s)
-		return (1);
+	char			*s = NULL;
+	char			*s_ft = (char *)calloc(100, sizeof(char));
+	if (!s_ft) exit(1);
 	unsigned int	num_start;
 	size_t			num_len;
 	char			press;
 
+/*returns a substring from 's' starting from 'start' and max length of 'len'*/
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Devuelve un sub-string de otro mas grande a partir del indice start hasta una longitud determinada\n");
+	printf("Para continuar presione ENTER\n");
+	getchar();
+
 	//Sub menu principal
 	press = options_null_valid();
 
-	if (press == '1')
-		s = NULL;
-	else
+	if (press == '2')
+	{
+		s = (char *)calloc(100, sizeof(char));
+		if (!s) exit(1);
 		s = fill_string(s);
-
-	char	*solucion_ft = NULL;
+	}
 
 	//ingreso start y len
 	system("clear");
@@ -2393,21 +2454,21 @@ int	main_substr()
 	printf("\nStart: %u", num_start);
 	printf("\nLen: %zu", num_len);
 
-	solucion_ft = ft_substr(s, num_start, num_len);
-	printf("\n\nCopia: %s", solucion_ft);
+	s_ft = ft_substr(s, num_start, num_len);
+	printf("\n\nsub-String: %s", s_ft);
 	fflush(stdout); //para que write no este antes que el printf por el buffer
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
-		free (solucion_ft);
+		free (s_ft);
 		main_substr();
 		return (0); //si no puede ir al otro free y liberar de nuevo. NO SE COMO. Supongo que por recursividad
 	}
 	free (s);
-	free (solucion_ft);
+	free (s_ft);
 	s = NULL;
-	solucion_ft = NULL;
+	s_ft = NULL;
 	return (0);
 }
 
