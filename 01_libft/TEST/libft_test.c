@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 10:48:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:12:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <bsd/string.h>
 #include "../libft.h"
 
 //PROTOTIPOS funciones print
@@ -57,6 +58,7 @@ int	main_strjoin();
 int main_strlcat();
 int main_strlcpy();
 int	main_strncmp();
+int main_strnstr();
 int main_strtrim();
 int	main_substr();
 int main_uplow(int (*f)(int), int (*g)(int));
@@ -127,18 +129,21 @@ int main()
 				main_strncmp();
 				break;
 			case 'h':
-				main_strchr(2);
+				main_strnstr();
 				break;
 			case 'i':
-				main_strtrim();
+				main_strchr(2);
 				break;
 			case 'j':
-				main_substr();
+				main_strtrim();
 				break;
 			case 'k':
-				main_uplow(ft_tolower, tolower);
+				main_substr();
 				break;
 			case 'l':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'm':
 				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
@@ -219,11 +224,12 @@ int	options_draw()
 	printf("%5s\n", "(e). ft_strlcat(*)");
 	printf("%5s\n", "(f). ft_strlcpy(*)");
 	printf("%5s\n", "(g). ft_strncmp(*)");
-	printf("%5s\n", "(h). ft_strrchr(*)");
-	printf("%5s\n", "(i). ft_strtrim");
-	printf("%5s\n", "(j). ft_substr");
-	printf("%5s\n", "(k). ft_tolower(*)");
-	printf("%5s\n", "(l). ft_toupper(*)");
+	printf("%5s\n", "(h). ft_strnstr(*)");
+	printf("%5s\n", "(i). ft_strrchr(*)");
+	printf("%5s\n", "(j). ft_strtrim");
+	printf("%5s\n", "(k). ft_substr");
+	printf("%5s\n", "(l). ft_tolower(*)");
+	printf("%5s\n", "(m). ft_toupper(*)");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -2053,8 +2059,6 @@ int main_strlcpy()
 ////////////////////////////////////////////////////////////
 int main_strncmp()
 {
-
-	// int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	char	*s1 = NULL;
 	char	*s2 = NULL;
 	size_t	size = 0;
@@ -2149,9 +2153,125 @@ int main_strncmp()
 }
 
 
+////////////////////////////////////////////////////////////
+/*ft_strnstr*///////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_strnstr()
+{
+	char	*s1 = NULL;
+	char	*s2 = NULL;
+
+	size_t	lon1 = 0;
+	size_t	lon2 = 0;
+	char	*s_ft = (char *)calloc(100, sizeof(char));
+	char	*s_or = (char *)calloc(100, sizeof(char));
+	
+	size_t	size = 0;
+			
+	char	press;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Busca la cadena little en big hasta la longitud deseada Si lo encuentra devuelve la posicion a la primera coincidencia\n");
+	printf(". Si little es una cadena vacia devuelve big. Si no devuelve NULL\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+	
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+	{
+		press = fill_null();
+		switch (press)
+		{
+			case '1':
+				s2 = (char *)calloc(100, sizeof(char));
+				s2 = fill_string(s2);
+				lon2 = strlen(s2);
+				intro_charnulls(s2);
+				break;
+			case '2':
+				s1 = (char *)calloc(100, sizeof(char));
+				s1 = fill_string(s1);
+				lon1 = strlen(s1);
+				memcpy(s_ft, s1, lon1 + 1);
+				memcpy(s_or, s1, lon1 + 1);
+				break;
+			case '3':
+				break;
+			default:
+				break;
+		}
+	}
+	else
+	{
+		system("clear");
+		printf("Big: ");
+		s1 = (char *)calloc(100, sizeof(char));
+		s1 = fill_string(s1);
+		lon1 = strlen(s1);
+		memcpy(s_ft, s1, lon1 + 1);
+		memcpy(s_or, s1, lon1 + 1);
+								
+		printf("\nLittle: ");
+		s2 = (char *)calloc(100, sizeof(char));
+		s2 = fill_string(s2);
+		lon2 = strlen(s2);
+		intro_charnulls(s2);
+	}
 
 
+	//MENU PARA ELEGIR NUMERO A INTRODUCIR
+	printf("Longitud a buscar: ");
+	size = (int)fill_integer();
+	
+	//SOLUCION
+	system ("clear");
+	printf("Big = %s", s1);
+	printf("\nLittle = ");
+	fflush(stdout);
+	ft_print(s2,lon2 + 1);
+	printf("\nLongitud : %zu", size);
 
+	char	*solucion_ft = NULL;
+	char	*solucion_or = NULL;
+	
+	solucion_ft = ft_strnstr(s_ft, s2, size);
+	solucion_or = strnstr(s_or, s2, size);
+
+	printf("\n\nft_strnstr: %s", solucion_ft);
+	printf("\n___strncmp: %s", solucion_or);
+
+	printf("\nDireccion Destino ft_: %p", solucion_ft);
+	printf("\nDireccion Destino ori: %p", solucion_or);	
+	
+	fflush(stdout);
+		
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s1);
+		free (s2);
+		free (s_ft);
+		free (s_or);
+		s1 = NULL;
+		s2 = NULL;
+		s_ft = NULL;
+		s_or = NULL;
+		main_strnstr();
+		return (0);
+	}
+	free (s1);
+	free (s2);
+	free (s_ft);
+	free (s_or);
+	s1 = NULL;
+	s2 = NULL;
+	s_ft = NULL;
+	s_or = NULL;
+	return (0);
+}
 
 
 ////////////////////////////////////////////////////////////

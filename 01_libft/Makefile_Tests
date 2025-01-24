@@ -1,6 +1,7 @@
 #ejecutar con make -f Makefile_Tests bonus || SRCS 	= $(wildcard *.c)
 C		= cc
 CFLAGS	= -Wall -Wextra -Werror -g3
+LDFLAGS = -lbsd
 NAME	= libft.out
 SRCS 	= ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 	ft_isascii.c ft_isdigit.c ft_isprint.c ft_memchr.c ft_memcmp.c \
@@ -20,7 +21,7 @@ all: ${NAME}
 
 #regla genera el ejecutable a partir de los .o .La segunda linea limpia los .o
 ${NAME}: ${OBJS}
-	${C} ${CFLAGS} -I. ${OBJS} -o ${NAME}
+	${C} ${CFLAGS} -I. ${OBJS} -o ${NAME} ${LDFLAGS}
 	${RM} ${OBJS} ${OBJS_BONUS}
 
 #regla genera los .o
