@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 00:51:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 02:05:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int main_split();
 int main_strdup();
 int	main_strchr(int opcion);
 int	main_strjoin();
+int main_strlcat();
 int main_strtrim();
 int	main_substr();
 int main_uplow(int (*f)(int), int (*g)(int));
@@ -116,18 +117,21 @@ int main()
 				main_strjoin();
 				break;
 			case 'e':
-				main_strchr(2);
+				main_strlcat();
 				break;
 			case 'f':
-				main_strtrim();
+				main_strchr(2);
 				break;
 			case 'g':
-				main_substr();
+				main_strtrim();
 				break;
 			case 'h':
-				main_uplow(ft_tolower, tolower);
+				main_substr();
 				break;
 			case 'i':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'j':
 				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
@@ -199,19 +203,17 @@ int	options_draw()
 	printf("%5s\n", "(6). ft_memcpy.c");
 	printf("%5s\n", "(7). ft_memmove.c");
 	printf("%5s\n", "(8). ft_memset.c");
-	
 	printf("%5s\n", "(9). ++ft_PUTS_fd.c");
-
 	printf("%5s\n", "(a). ft_split.c");
-	
 	printf("%5s\n", "(b). ft_strdup.c");
 	printf("%5s\n", "(c). ft_strchr.c");
 	printf("%5s\n", "(d). ft_strjoin.c");
-	printf("%5s\n", "(e). ft_strrchr.c");
-	printf("%5s\n", "(f). ft_strtrim.c");
-	printf("%5s\n", "(g). ft_substr.c");
-	printf("%5s\n", "(h). ft_tolower.c");
-	printf("%5s\n", "(i). ft_toupper.c");
+	printf("%5s\n", "(e). ft_strlcat.c");
+	printf("%5s\n", "(f). ft_strrchr.c");
+	printf("%5s\n", "(g). ft_strtrim.c");
+	printf("%5s\n", "(h). ft_substr.c");
+	printf("%5s\n", "(i). ft_tolower.c");
+	printf("%5s\n", "(j). ft_toupper.c");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -1782,6 +1784,133 @@ int main_strjoin()
 	solucion_ft = NULL;
 	return (0);
 }
+
+
+////////////////////////////////////////////////////////////
+/*ft_strlcat*///////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_strlcat()
+{
+	char	*s1 = NULL;
+	char	*s2 = NULL;
+	size_t	size = 0;
+			
+	size_t	lon1 = 0;
+	size_t	lon2 = 0;
+	
+	char	press;
+
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("\nConcatena el string s2 detras de s1 hasta un tamaño marcado y que incluye el terminador \\0");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+	
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+	{
+		press = fill_null();
+		switch (press)
+		{
+			case '1':
+				s2 = (char *)calloc(100, sizeof(char));
+				s2 = fill_string(s2);
+				lon2 = strlen(s2);
+				break;
+			case '2':
+				s1 = (char *)calloc(100, sizeof(char));
+				s1 = fill_string(s1);
+				lon1 = strlen(s1);
+				break;
+			case '3':
+				break;
+			default:
+				break;
+		}
+	}
+	else
+	{
+		system("clear");
+		printf("s1: ");
+		s1 = (char *)calloc(100, sizeof(char));
+		s1 = fill_string(s1);
+		lon1 = strlen(s1);
+		intro_charnulls(s1);
+						
+		printf("\ns2: ");
+		s2 = (char *)calloc(100, sizeof(char));
+		s2 = fill_string(s2);
+		lon2 = strlen(s2);
+		intro_charnulls(s2);
+	}
+
+
+	//MENU PARA ELEGIR NUMERO A INTRODUCIR
+	printf("longitud: ");
+	size = (int)fill_integer();
+		
+	char	*s_ft = (char *)calloc(lon1, sizeof(char));
+	char	*s_or = (char *)calloc(lon1, sizeof(char));
+
+	strcpy(s_ft, s1);
+	strcpy(s_or, s1);
+
+	size_t solucion_ft = 0;
+	size_t solucion_or = 0;
+
+
+	//SOLUCION
+	system ("clear");
+	printf("String1 = ");
+	fflush(stdout);
+	ft_print(s1, lon1 + 1);
+	printf("\nString2 = ");
+	fflush(stdout);
+	ft_print(s2, lon2 + 1);	
+	printf("\nLongitud : %zu", size);
+
+	solucion_ft = ft_strlcat(s_ft, s2, size);
+	solucion_or = strlcat(s_or, s2, size);
+
+	printf("\n\nft_strlcat: ");
+	fflush(stdout);
+	ft_print(s_ft, lon1 + lon2 + 1);
+	printf("\nstrlcat: ");
+	fflush(stdout);
+	ft_print(s_or, lon1 + lon2 + 1);
+	printf("\nsolucion_ft: %zu", solucion_ft);
+	printf("\nsolucion_or: %zu", solucion_or);
+	fflush(stdout);
+		
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s1);
+		free (s2);
+		free (s_ft);
+		free (s_or);
+		s1 = NULL;
+		s2 = NULL;
+		s_or = NULL;
+		s_ft = NULL;
+		main_strlcat();
+		return (0);
+	}
+	free (s1);
+	free (s2);
+	free (s_ft);
+	free (s_or);
+	s1 = NULL;
+	s2 = NULL;
+	s_or = NULL;
+	s_ft = NULL;
+	return (0);
+}
+
+
 
 
 ////////////////////////////////////////////////////////////
