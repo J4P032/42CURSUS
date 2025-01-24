@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 02:05:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 10:48:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int main_strdup();
 int	main_strchr(int opcion);
 int	main_strjoin();
 int main_strlcat();
+int main_strlcpy();
+int	main_strncmp();
 int main_strtrim();
 int	main_substr();
 int main_uplow(int (*f)(int), int (*g)(int));
@@ -82,7 +84,6 @@ int main()
 			case '2':
 				main_itoa();
 				break;
-			
 			case '3':
 				main_listas();
 				break;
@@ -120,18 +121,24 @@ int main()
 				main_strlcat();
 				break;
 			case 'f':
-				main_strchr(2);
+				main_strlcpy();
 				break;
 			case 'g':
-				main_strtrim();
+				main_strncmp();
 				break;
 			case 'h':
-				main_substr();
+				main_strchr(2);
 				break;
 			case 'i':
-				main_uplow(ft_tolower, tolower);
+				main_strtrim();
 				break;
 			case 'j':
+				main_substr();
+				break;
+			case 'k':
+				main_uplow(ft_tolower, tolower);
+				break;
+			case 'l':
 				main_uplow(ft_toupper, toupper);
 				break;
 			case 'X':
@@ -192,28 +199,31 @@ int	options_draw()
 
 	//impresion
 	printf("%*s%s\n", s_titulo, "", titulo);
+	printf("%5s\n", "(*)nota: imita funciones de C standard");
 	printf("%5s\n", "(0). ft_atoi.c");
-	printf("%5s\n", "(1). ft_calloc.c");
+	printf("%5s\n", "(1). ft_calloc.c(*)");
 	printf("%5s\n", "(2). ft_itoa.c");
 	
 	printf("%5s\n", "(3). ++ft_listas.c");
 	
-	printf("%5s\n", "(4). ft_memchr.c");
-	printf("%5s\n", "(5). ft_memcmp.c");
-	printf("%5s\n", "(6). ft_memcpy.c");
-	printf("%5s\n", "(7). ft_memmove.c");
-	printf("%5s\n", "(8). ft_memset.c");
-	printf("%5s\n", "(9). ++ft_PUTS_fd.c");
-	printf("%5s\n", "(a). ft_split.c");
-	printf("%5s\n", "(b). ft_strdup.c");
-	printf("%5s\n", "(c). ft_strchr.c");
-	printf("%5s\n", "(d). ft_strjoin.c");
-	printf("%5s\n", "(e). ft_strlcat.c");
-	printf("%5s\n", "(f). ft_strrchr.c");
-	printf("%5s\n", "(g). ft_strtrim.c");
-	printf("%5s\n", "(h). ft_substr.c");
-	printf("%5s\n", "(i). ft_tolower.c");
-	printf("%5s\n", "(j). ft_toupper.c");
+	printf("%5s\n", "(4). ft_memchr(*)");
+	printf("%5s\n", "(5). ft_memcmp(*)");
+	printf("%5s\n", "(6). ft_memcpy(*)");
+	printf("%5s\n", "(7). ft_memmove(*)");
+	printf("%5s\n", "(8). ft_memset(*)");
+	printf("%5s\n", "(9). ++ft_PUTS_fd");
+	printf("%5s\n", "(a). ft_split");
+	printf("%5s\n", "(b). ft_strdup(*)");
+	printf("%5s\n", "(c). ft_strchr(*)");
+	printf("%5s\n", "(d). ft_strjoin");
+	printf("%5s\n", "(e). ft_strlcat(*)");
+	printf("%5s\n", "(f). ft_strlcpy(*)");
+	printf("%5s\n", "(g). ft_strncmp(*)");
+	printf("%5s\n", "(h). ft_strrchr(*)");
+	printf("%5s\n", "(i). ft_strtrim");
+	printf("%5s\n", "(j). ft_substr");
+	printf("%5s\n", "(k). ft_tolower(*)");
+	printf("%5s\n", "(l). ft_toupper(*)");
 	printf("\n%5s", "Presione letra de opcion o 'x' para salir. (Presionar <Enter>) : ");
 	//while ((press = getchar()) != 10); // 10 es el enter.
 	return (0);
@@ -1446,7 +1456,6 @@ int	main_split()
 }
 
 
-
 ////////////////////////////////////////////////////////////
 /*ft_strdup*////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -1803,7 +1812,7 @@ int main_strlcat()
 
 	//INSTRUCCIONES
 	system("clear");
-	printf("\nConcatena el string s2 detras de s1 hasta un tamaño marcado y que incluye el terminador \\0");
+	printf("Concatena el string s2 detras de s1 hasta un tamaño marcado y que incluye el terminador \\0");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
 	
@@ -1834,17 +1843,15 @@ int main_strlcat()
 	else
 	{
 		system("clear");
-		printf("s1: ");
+		printf("destino: ");
 		s1 = (char *)calloc(100, sizeof(char));
 		s1 = fill_string(s1);
 		lon1 = strlen(s1);
-		intro_charnulls(s1);
-						
-		printf("\ns2: ");
+								
+		printf("\norigen: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		s2 = fill_string(s2);
 		lon2 = strlen(s2);
-		intro_charnulls(s2);
 	}
 
 
@@ -1864,10 +1871,10 @@ int main_strlcat()
 
 	//SOLUCION
 	system ("clear");
-	printf("String1 = ");
+	printf("Destino = ");
 	fflush(stdout);
 	ft_print(s1, lon1 + 1);
-	printf("\nString2 = ");
+	printf("\nOrigen = ");
 	fflush(stdout);
 	ft_print(s2, lon2 + 1);	
 	printf("\nLongitud : %zu", size);
@@ -1878,11 +1885,16 @@ int main_strlcat()
 	printf("\n\nft_strlcat: ");
 	fflush(stdout);
 	ft_print(s_ft, lon1 + lon2 + 1);
-	printf("\nstrlcat: ");
+	printf("\n___strlcat: ");
 	fflush(stdout);
 	ft_print(s_or, lon1 + lon2 + 1);
 	printf("\nsolucion_ft: %zu", solucion_ft);
 	printf("\nsolucion_or: %zu", solucion_or);
+	
+	printf("\n\nDireccion _____Origen: %p", s2);
+	printf("\nDireccion Destino ft_: %p", s_ft);
+	printf("\nDireccion Destino Ori: %p", s_or);
+	
 	fflush(stdout);
 		
 	press = repetimos_volvemos();
@@ -1909,6 +1921,235 @@ int main_strlcat()
 	s_ft = NULL;
 	return (0);
 }
+
+
+////////////////////////////////////////////////////////////
+/*ft_strlcpy*///////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_strlcpy()
+{
+	
+	char	*s1 = NULL;
+	char	*s2 = NULL;
+	size_t	size = 0;
+			
+	size_t	lon1 = 0;
+	size_t	lon2 = 0;
+	char	*s_ft = (char *)calloc(100, sizeof(char));
+	char	*s_or = (char *)calloc(100, sizeof(char));
+	
+	char	press;
+
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Copia el string hasta el tamanyo seleccionado y devuelve la longitud de el string origen");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+	
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+	{
+		press = fill_null();
+		switch (press)
+		{
+			case '1':
+				s2 = (char *)calloc(100, sizeof(char));
+				s2 = fill_string(s2);
+				lon2 = strlen(s2);
+				break;
+			case '2':
+				s1 = (char *)calloc(100, sizeof(char));
+				s1 = fill_string(s1);
+				lon1 = strlen(s1);
+				break;
+			case '3':
+				break;
+			default:
+				break;
+		}
+	}
+	else
+	{
+		system("clear");
+		printf("Destino: ");
+		s1 = (char *)calloc(100, sizeof(char));
+		s1 = fill_string(s1);
+		lon1 = strlen(s1);
+							
+		printf("\nOrigen: ");
+		s2 = (char *)calloc(100, sizeof(char));
+		s2 = fill_string(s2);
+		lon2 = strlen(s2);
+	}
+
+
+	//MENU PARA ELEGIR NUMERO A INTRODUCIR
+	printf("Longitud: ");
+	size = (int)fill_integer();
+		
+	strcpy(s_ft, s1);
+	strcpy(s_or, s1);
+
+	size_t solucion_ft = 0;
+	size_t solucion_or = 0;
+
+
+	//SOLUCION
+	system ("clear");
+	printf("Destino = ");
+	fflush(stdout);
+	ft_print(s1, lon1 + 1);
+	printf("\nOrigen = ");
+	fflush(stdout);
+	ft_print(s2, lon2 + 1);	
+	printf("\nLongitud : %zu", size);
+
+	solucion_ft = ft_strlcpy(s_ft, s2, size);
+	solucion_or = strlcpy(s_or, s2, size);
+
+	printf("\n\nft_strlcpy: %s", s_ft);
+	printf("\n___strlcpy: %s", s_or);
+	
+	printf("\nsolucion_ft: %zu", solucion_ft);
+	printf("\nsolucion_or: %zu", solucion_or);
+	
+	printf("\n\nDireccion _____Origen: %p", s2);
+	printf("\nDireccion Destino ft_: %p", s_ft);
+	printf("\nDireccion Destino ori: %p", s_or);
+	
+	fflush(stdout);
+		
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s1);
+		free (s2);
+		free (s_ft);
+		free (s_or);
+		s1 = NULL;
+		s2 = NULL;
+		s_or = NULL;
+		s_ft = NULL;
+		main_strlcpy();
+		return (0);
+	}
+	free (s1);
+	free (s2);
+	free (s_ft);
+	free (s_or);
+	s1 = NULL;
+	s2 = NULL;
+	s_or = NULL;
+	s_ft = NULL;
+	return (0);
+}
+
+
+////////////////////////////////////////////////////////////
+/*ft_strncmp*///////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+int main_strncmp()
+{
+
+	// int	ft_strncmp(const char *s1, const char *s2, size_t n)
+	char	*s1 = NULL;
+	char	*s2 = NULL;
+	size_t	size = 0;
+			
+	char	press;
+
+	//INSTRUCCIONES
+	system("clear");
+	printf("Compara los dos strings pasados y devuelve su diferencia. Si son iguales, devuelve un cero\n");
+	printf("Si no lo son devuelve la resta entre el primer caracter no igual s1 - s2\n");
+	printf("\nPara continuar presione ENTER\n");
+	getchar();
+	
+	//Sub menu principal
+	press = options_null_valid();
+
+	if (press == '1')
+	{
+		press = fill_null();
+		switch (press)
+		{
+			case '1':
+				s2 = (char *)calloc(100, sizeof(char));
+				s2 = fill_string(s2);
+				break;
+			case '2':
+				s1 = (char *)calloc(100, sizeof(char));
+				s1 = fill_string(s1);
+				break;
+			case '3':
+				break;
+			default:
+				break;
+		}
+	}
+	else
+	{
+		system("clear");
+		printf("String1: ");
+		s1 = (char *)calloc(100, sizeof(char));
+		s1 = fill_string(s1);
+								
+		printf("\nString2: ");
+		s2 = (char *)calloc(100, sizeof(char));
+		s2 = fill_string(s2);
+	}
+
+
+	//MENU PARA ELEGIR NUMERO A INTRODUCIR
+	printf("Longitud a buscar: ");
+	size = (int)fill_integer();
+	
+	int solucion_ft = 0;
+	int solucion_or = 0;
+
+	//SOLUCION
+	system ("clear");
+	printf("String1 = %s", s1);
+	printf("\nString2 = %s", s2);
+	printf("\nLongitud : %zu", size);
+
+	solucion_ft = ft_strncmp(s1, s2, size);
+	solucion_or = strncmp(s1, s2, size);
+
+	printf("\n\nft_strncmp: %d", solucion_ft);
+	printf("\n___strncmp: %d", solucion_or);
+
+	if (solucion_or == 0)
+		printf("\nLas dos cadenas son iguales hasta el char %zu", size);
+	else if (solucion_or < 0)
+		printf("\nLa cadena \"%s\" es mas grande que la cadena \"%s\" hasta el char %zu", s2, s1, size);
+	else if (solucion_or > 0)
+		printf("\nLa cadena \"%s\" es mas pequeña que la cadena \"%s\" hasta el char %zu", s2, s1, size);
+		
+	fflush(stdout);
+		
+	press = repetimos_volvemos();
+	if ((press == 'y') || (press == 'Y'))
+	{
+		free (s1);
+		free (s2);
+		s1 = NULL;
+		s2 = NULL;
+		main_strncmp();
+		return (0);
+	}
+	free (s1);
+	free (s2);
+	s1 = NULL;
+	s2 = NULL;
+	return (0);
+}
+
+
+
 
 
 
