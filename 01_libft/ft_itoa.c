@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 16:07:48 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/19 20:12:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:40:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,3 @@ char	*ft_itoa(int n)
 	compose_number(&number[negative], aux, divisor, num_digits);
 	return (number);
 }
-/*
-#include <stdio.h>
-
-int	main(int argc, char **argv)
-{
-	if (argc != 2)
-		return (1);
-
-	char	*numtxt;
-	numtxt = ft_itoa(atoi(argv[1]));
-	printf("\nnumtxt: %s", numtxt);
-	return (0);
-}
-*/

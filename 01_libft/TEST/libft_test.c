@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 18:28:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:35:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1211,7 +1211,11 @@ int main_memset()
 	printf("\ncharacter = %c", c + offset);
 	printf("\nbytes = %zu", number);
 	printf("\n\n Solucion_ft : %s", s_ft);
-	printf("\n\n Solucion_orig : %s", s_or);
+	printf("\n\n Solucion_or : %s", s_or);
+	
+	printf("\n\nDireccion de memoria de solucion_ft: %p", s_ft);
+	printf("\nDireccion de memoria de solucion_ft: %p", s_or);
+	
 	fflush(stdout);
 	press = repetimos_volvemos();
 
