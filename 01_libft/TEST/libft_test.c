@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/25 20:06:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/25 20:20:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -618,7 +618,7 @@ int	main_itoa()
 ////////////////////////////////////////////////////////////
 int	main_listas()
 {
-	char	press;
+	char	press = '\0';
 	t_list	*test = NULL;
 	t_list	*aux = NULL;
 	char	*contenido = NULL;
@@ -631,8 +631,7 @@ int	main_listas()
 	{
 		system("clear");
 		printf("%5s", "LISTAS:");
-		printf("%5s\n", "NOTA: el caracter ? es el final en un componer normal de la lista a no ser que se ingrese otro nodo al final");
-		printf("%5s", "\n");
+		printf("%5s", "\nNOTA: el caracter ? es el final en un componer normal de la lista a no ser que se ingrese otro nodo al final");
 		printf("%5s", "\n");
 		printf("%5s\n", "(1). Componer lista con nuevos nodos(M))");
 		printf("%5s\n", "(2). Agregar nodo al FINAL de la lista");
@@ -651,6 +650,8 @@ int	main_listas()
 		
 		printf("Lista Test: ");
 		print_list(test, &final);
+		if (press == '4')
+			printf("\nEl Ultimo nodo de la lista es : %c", *(char *)aux->content);
 		
 		printf("%5s", "\n");
 		printf("%5s", "\nQue OPCION quiere? ");
@@ -661,7 +662,6 @@ int	main_listas()
 		switch (press)
 		{
 			case '1':
-				aux = lstpenultimo(test);
 				contenido = (char *)calloc(1, sizeof(char)); //al hacer un calloc cada vez...
 				*contenido = c; //...contenido está en una direccion de memoria diferente y la modificacion de c no le altera.
 				aux = ft_lstnew(contenido); //si pasara &c en vez de contenido, todos los ->content de la lista se irían cambiando al nuevo valor de 'c'
@@ -669,12 +669,21 @@ int	main_listas()
 				c++;
 				break;
 			case '2':
-				aux = ft_lstlast(test);
 				contenido = (char *)calloc(1, sizeof(char));
 				*contenido = c;
 				aux = ft_lstnew(contenido);
 				ft_lstadd_back(&test, aux);
 				c++;
+				break;
+			case '3':
+				contenido = (char *)calloc(1, sizeof(char));
+				*contenido = c;
+				aux = ft_lstnew(contenido);
+				ft_lstadd_front(&test, aux);
+				c++;
+				break;
+			case '4':
+				aux = ft_lstlast(test);
 				break;
 			
 			
