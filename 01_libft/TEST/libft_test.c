@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/24 21:50:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/25 12:20:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -613,6 +613,25 @@ int	main_itoa()
 ////////////////////////////////////////////////////////////
 int	main_listas()
 {
+	//MENU DE LISTAS
+	system("clear");
+	printf("%5s", "LISTAS:");
+	printf("%5s", "\n");
+	printf("%5s\n", "(0). Crear nuevo nodo");
+	printf("%5s\n", "(1). Agregar nodo al FINAL de la lista");
+	printf("%5s\n", "(2). Agregar nodo al PRINCIPIO de la lista");
+	printf("%5s", "\n");
+	printf("%5s\n", "(3). Devolver el ULTIMO nodo de la lista");
+	printf("%5s\n", "(4). CUANTOS nodos tiene la lista");
+	printf("%5s", "\n");
+	printf("%5s\n", "(5). ELIMINA todos los nodos de la lista a partir del elegido");
+	
+	
+
+
+
+
+
 
 	return (0);	
 }
