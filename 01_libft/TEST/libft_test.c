@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/25 12:20:01 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/25 17:53:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ char ft2_strlower(unsigned int index, char c);
 char ft2_struptolowtoup(unsigned int index, char c);
 char ft2_strnext(unsigned int index, char c);
 char ft2_strinsertspace(unsigned int index, char c);
+
+//PROTOTIPOS DE FUNCIONES DE LISTAS
+void	print_list(void *list);
+t_list	*lstpenultimo(t_list *lst);
+void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final);
+
 
 void 	ft_reset_copy(char *dest, char *orig);
 
@@ -613,27 +619,78 @@ int	main_itoa()
 ////////////////////////////////////////////////////////////
 int	main_listas()
 {
+	char	press;
+	t_list	*test = NULL;
+	t_list	*aux = NULL;
+	char	*contenido = NULL;
+	char	c = 'A';
+	char	final = '\0';
+	
+	
 	//MENU DE LISTAS
-	system("clear");
-	printf("%5s", "LISTAS:");
-	printf("%5s", "\n");
-	printf("%5s\n", "(0). Crear nuevo nodo");
-	printf("%5s\n", "(1). Agregar nodo al FINAL de la lista");
-	printf("%5s\n", "(2). Agregar nodo al PRINCIPIO de la lista");
-	printf("%5s", "\n");
-	printf("%5s\n", "(3). Devolver el ULTIMO nodo de la lista");
-	printf("%5s\n", "(4). CUANTOS nodos tiene la lista");
-	printf("%5s", "\n");
-	printf("%5s\n", "(5). ELIMINA todos los nodos de la lista a partir del elegido");
+	while (1)
+	{
+		system("clear");
+		printf("%5s", "LISTAS:");
+		printf("%5s", "\n");
+		printf("%5s\n", "(0). Crear nuevo nodo (M)");
+		printf("%5s\n", "(1). Agregar nodo al FINAL de la lista (M))");
+		printf("%5s\n", "(2). Agregar nodo al PRINCIPIO de la lista");
+		printf("%5s", "\n");
+		printf("%5s\n", "(3). Devolver el ULTIMO nodo de la lista");
+		printf("%5s\n", "(4). CUANTOS nodos tiene la lista");
+		printf("%5s", "\n");
+		printf("%5s\n", "(5). ELIMINA todos los nodos de la lista a partir del elegido");
+		printf("%5s\n", "(6). ELIMINA UN nodo de la lista. Cuidado!!!");
+		printf("%5s", "\n");
+		printf("%5s\n", "(7). Aplica funcion sobre el contenido de todos los nodos a partir del dado");
+		printf("%5s\n", "(8). Aplica funcion sobre contido de todos los nodos a partir del dado y devuelve la copia (M)");
+		printf("%5s", "\n");
+		printf("%5s", "\n");
+		
+		printf("Lista Test: ");
+		ft_lstiter(test, print_list);
+		printf("%5s", "\n");
+		printf("%5s", "\nQue OPCION quiere? ");
+
+		
+		press = getchar();
+		while (getchar() != '\n');
+		switch (press)
+		{
+			case '1':
+				aux = lstpenultimo(test);
+				
+				
+				contenido = (char *)calloc(1, sizeof(char)); //al hacer un calloc cada vez...
+				*contenido = c; //...contenido está en una direccion de memoria diferente y la modificacion de c no le altera.
+				aux = ft_lstnew(contenido); //si pasara &c en vez de contenido, todos los ->content de la lista se irían cambiando al nuevo valor de 'c'
+				ft_lstadd_before_zero(&test, aux, &final);
+				//ft_lstadd_back(&test,aux);
+				c++;
+				
+				
+				break;
+			default:
+				break;
+		}
+		/* 
+		if ((press == 'Y') || (press == 'y'))
+			break ; */
+	}
 	
 	
 
+	fflush(stdout);
+	press = repetimos_volvemos();
 
-
-
-
-
-	return (0);	
+	if ((press == 'y') || (press == 'Y'))
+	{
+		main_listas();
+		return (0);
+	}
+	
+	return (0);
 }
 
 
@@ -2751,7 +2808,6 @@ char ft2_strupper(unsigned int index, char c)
 	return (c);
 }
 
-
 void ft_strlower(unsigned int index, char *c)
 {
 	(void)index;
@@ -2766,7 +2822,6 @@ char ft2_strlower(unsigned int index, char c)
 		c = c + 32;
 	return (c);
 }
-
 
 void ft_struptolowtoup(unsigned int index, char *c)
 {
@@ -2786,7 +2841,6 @@ char ft2_struptolowtoup(unsigned int index, char c)
 		c = c - 32;
 	return (c);	
 }
-
 
 void ft_strnext(unsigned int index, char *c)
 {
@@ -2814,4 +2868,59 @@ char ft2_strinsertspace(unsigned int index, char c)
 	if (index % 2 != 0)
 		c = '*';
 	return (c);
+}
+
+////////////////////////////////////////////////////////////
+/*FUNCIONES PARA LISTAS*////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+void print_list(void *content)
+{
+	if (content)
+	{
+		char *str = (char *)content;
+		fflush(stdout);
+		write(1, str, 1);
+		if (*str != '\0')
+			write(1, "-", 1);
+	}
+}
+
+t_list	*lstpenultimo(t_list *lst)
+{
+	t_list *aux = NULL;
+	
+	if ((!lst) || (!lst->next)) //debe haber dos nodos minimo
+		return (NULL);
+	char *str = lst->content;
+	while (*str != '\0')
+	{
+		aux = lst;
+		lst = aux->next;
+		str = lst->content; 
+	}
+	return (aux);
+}
+
+void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final)
+{
+	t_list	*aux = NULL;
+	t_list	*aux_last = NULL;
+		
+	if (!new)
+		return ;
+	if (!*lst)
+	{
+		(void)aux_last;
+		*lst = new;
+		aux = ft_lstnew(final); //creamos el nodo final con \0
+		ft_lstadd_back(lst, aux); //añadimos el nodo final al final de la lista
+	}
+	else
+	{
+		aux = lstpenultimo(*lst);
+		aux_last = aux->next;
+		aux->next = new;
+		new->next = aux_last;
+	}
 }
