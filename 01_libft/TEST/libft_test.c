@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/25 18:34:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/25 20:06:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -631,26 +631,27 @@ int	main_listas()
 	{
 		system("clear");
 		printf("%5s", "LISTAS:");
+		printf("%5s\n", "NOTA: el caracter ? es el final en un componer normal de la lista a no ser que se ingrese otro nodo al final");
 		printf("%5s", "\n");
-		printf("%5s\n", "(0). Crear nuevo nodo (M)");
-		printf("%5s\n", "(1). Agregar nodo al FINAL de la lista (M))");
-		printf("%5s\n", "(2). Agregar nodo al PRINCIPIO de la lista");
 		printf("%5s", "\n");
-		printf("%5s\n", "(3). Devolver el ULTIMO nodo de la lista");
-		printf("%5s\n", "(4). CUANTOS nodos tiene la lista");
+		printf("%5s\n", "(1). Componer lista con nuevos nodos(M))");
+		printf("%5s\n", "(2). Agregar nodo al FINAL de la lista");
+		printf("%5s\n", "(3). Agregar nodo al PRINCIPIO de la lista");
 		printf("%5s", "\n");
-		printf("%5s\n", "(5). ELIMINA todos los nodos de la lista a partir del elegido");
-		printf("%5s\n", "(6). ELIMINA UN nodo de la lista. Cuidado!!!");
+		printf("%5s\n", "(4). Devolver el ULTIMO nodo de la lista");
+		printf("%5s\n", "(5). CUANTOS nodos tiene la lista");
 		printf("%5s", "\n");
-		printf("%5s\n", "(7). Aplica funcion sobre el contenido de todos los nodos a partir del dado");
-		printf("%5s\n", "(8). Aplica funcion sobre contido de todos los nodos a partir del dado y devuelve la copia (M)");
+		printf("%5s\n", "(6). ELIMINA todos los nodos de la lista a partir del elegido");
+		printf("%5s\n", "(7). ELIMINA UN nodo de la lista. Cuidado!!!");
+		printf("%5s", "\n");
+		printf("%5s\n", "(8). Aplica funcion sobre el contenido de todos los nodos a partir del dado");
+		printf("%5s\n", "(9). Aplica funcion sobre contido de todos los nodos a partir del dado y devuelve la copia (M)");
 		printf("%5s", "\n");
 		printf("%5s", "\n");
 		
 		printf("Lista Test: ");
-		
 		print_list(test, &final);
-		//ft_lstiter(test, print_list);
+		
 		printf("%5s", "\n");
 		printf("%5s", "\nQue OPCION quiere? ");
 
@@ -661,17 +662,22 @@ int	main_listas()
 		{
 			case '1':
 				aux = lstpenultimo(test);
-				
-				
 				contenido = (char *)calloc(1, sizeof(char)); //al hacer un calloc cada vez...
 				*contenido = c; //...contenido está en una direccion de memoria diferente y la modificacion de c no le altera.
 				aux = ft_lstnew(contenido); //si pasara &c en vez de contenido, todos los ->content de la lista se irían cambiando al nuevo valor de 'c'
-				ft_lstadd_before_zero(&test, aux, &final);
-				//ft_lstadd_back(&test,aux);
+				ft_lstadd_before_zero(&test, aux, &final); //para no poner A-B- si es el final sino A-B-? ? es el caracter final.
 				c++;
-				
-				
 				break;
+			case '2':
+				aux = ft_lstlast(test);
+				contenido = (char *)calloc(1, sizeof(char));
+				*contenido = c;
+				aux = ft_lstnew(contenido);
+				ft_lstadd_back(&test, aux);
+				c++;
+				break;
+			
+			
 			default:
 				break;
 		}
@@ -2877,24 +2883,39 @@ char ft2_strinsertspace(unsigned int index, char c)
 
 void print_list(t_list *list, char *final)
 {
+	t_list	*aux = NULL;
 	if (!list)
 		return;
-	
+	fflush(stdout);
+	aux = ft_lstlast(list);
 	while ((list) && (list->next))
 	{
-		fflush(stdout);
-		if (*(char *)list->next->content != *final)
+		if (*(char *)(aux->content) == *final)
 		{
-			write(1, list->content, 1);
-			write(1, "-", 1);
+			if ((*(char *)list->next->content != *final) && (*(char *)list->content != *final))
+			{
+				write(1, list->content, 1);
+				write(1, "-", 1);
+			}
+			else
+			{
+				if (*(char *)list->content != *final)
+					write(1, list->content, 1);
+				write(1, "-", 1);
+				write(1, list->next->content, 1);
+				//write(1, "\n", 1);
+			}
 		}
 		else
 		{
 			write(1, list->content, 1);
-			write(1, "\n", 1);
+			write(1, "-", 1);
+			//write(1, "x", 1);
 		}		
 		list = list->next;
 	}
+	if (*(char *)list->content != *final)
+		write(1, list->content,1);
 }
 
 t_list	*lstpenultimo(t_list *lst)
@@ -2904,7 +2925,7 @@ t_list	*lstpenultimo(t_list *lst)
 	if ((!lst) || (!lst->next)) //debe haber dos nodos minimo
 		return (NULL);
 	char *str = lst->content;
-	while (*str != '?')
+	while ((*str != '?') && (lst->next))
 	{
 		aux = lst;
 		lst = aux->next;
