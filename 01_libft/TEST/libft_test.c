@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/25 17:53:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/25 18:34:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,9 @@ char ft2_strnext(unsigned int index, char c);
 char ft2_strinsertspace(unsigned int index, char c);
 
 //PROTOTIPOS DE FUNCIONES DE LISTAS
-void	print_list(void *list);
+void	print_list(t_list *list, char *final);
 t_list	*lstpenultimo(t_list *lst);
 void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final);
-
 
 void 	ft_reset_copy(char *dest, char *orig);
 
@@ -624,7 +623,7 @@ int	main_listas()
 	t_list	*aux = NULL;
 	char	*contenido = NULL;
 	char	c = 'A';
-	char	final = '\0';
+	char	final = '?';
 	
 	
 	//MENU DE LISTAS
@@ -649,7 +648,9 @@ int	main_listas()
 		printf("%5s", "\n");
 		
 		printf("Lista Test: ");
-		ft_lstiter(test, print_list);
+		
+		print_list(test, &final);
+		//ft_lstiter(test, print_list);
 		printf("%5s", "\n");
 		printf("%5s", "\nQue OPCION quiere? ");
 
@@ -2874,15 +2875,25 @@ char ft2_strinsertspace(unsigned int index, char c)
 /*FUNCIONES PARA LISTAS*////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-void print_list(void *content)
+void print_list(t_list *list, char *final)
 {
-	if (content)
+	if (!list)
+		return;
+	
+	while ((list) && (list->next))
 	{
-		char *str = (char *)content;
 		fflush(stdout);
-		write(1, str, 1);
-		if (*str != '\0')
+		if (*(char *)list->next->content != *final)
+		{
+			write(1, list->content, 1);
 			write(1, "-", 1);
+		}
+		else
+		{
+			write(1, list->content, 1);
+			write(1, "\n", 1);
+		}		
+		list = list->next;
 	}
 }
 
@@ -2893,7 +2904,7 @@ t_list	*lstpenultimo(t_list *lst)
 	if ((!lst) || (!lst->next)) //debe haber dos nodos minimo
 		return (NULL);
 	char *str = lst->content;
-	while (*str != '\0')
+	while (*str != '?')
 	{
 		aux = lst;
 		lst = aux->next;
