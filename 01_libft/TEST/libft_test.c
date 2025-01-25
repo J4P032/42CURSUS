@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/25 20:20:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:39:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ char ft2_strinsertspace(unsigned int index, char c);
 void	print_list(t_list *list, char *final);
 t_list	*lstpenultimo(t_list *lst);
 void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final);
+void	delete_content(void *content);
 
 void 	ft_reset_copy(char *dest, char *orig);
 
@@ -624,6 +625,12 @@ int	main_listas()
 	char	*contenido = NULL;
 	char	c = 'A';
 	char	final = '?';
+	char	*pfinal = NULL;
+	size_t	cuantos = 0;
+	size_t	num_nodo = 0;
+	
+	pfinal = (char *)calloc(1, sizeof(char));
+	pfinal = &final;
 	
 	
 	//MENU DE LISTAS
@@ -652,6 +659,8 @@ int	main_listas()
 		print_list(test, &final);
 		if (press == '4')
 			printf("\nEl Ultimo nodo de la lista es : %c", *(char *)aux->content);
+		if (press == '5')
+			printf("\nEl Numero de nodos es de (el ? puede no aparecer en el print) : %zu", cuantos);
 		
 		printf("%5s", "\n");
 		printf("%5s", "\nQue OPCION quiere? ");
@@ -665,8 +674,9 @@ int	main_listas()
 				contenido = (char *)calloc(1, sizeof(char)); //al hacer un calloc cada vez...
 				*contenido = c; //...contenido está en una direccion de memoria diferente y la modificacion de c no le altera.
 				aux = ft_lstnew(contenido); //si pasara &c en vez de contenido, todos los ->content de la lista se irían cambiando al nuevo valor de 'c'
-				ft_lstadd_before_zero(&test, aux, &final); //para no poner A-B- si es el final sino A-B-? ? es el caracter final.
+				ft_lstadd_before_zero(&test, aux, pfinal); //para no poner A-B- si es el final sino A-B-? ? es el caracter final.
 				c++;
+				
 				break;
 			case '2':
 				contenido = (char *)calloc(1, sizeof(char));
@@ -685,8 +695,41 @@ int	main_listas()
 			case '4':
 				aux = ft_lstlast(test);
 				break;
-			
-			
+			case '5':
+				cuantos = (size_t)ft_lstsize(test);
+				break;
+			case '6':
+				cuantos = ft_lstsize(test);
+				system("clear");
+				printf("La lista tiene %zu nodos. Elija el nodo a partir del que se eliminaran el y el resto :", cuantos);
+				scanf("%zu", &num_nodo);
+				getchar();
+				if (num_nodo > cuantos || num_nodo == 0) //nodos validos
+					break;
+				if (num_nodo == 1)
+				{
+					ft_lstclear(&test, delete_content);
+					test = NULL;
+				}
+				else
+				{
+					aux = test;
+					for (size_t i = 1; i < num_nodo - 1; ++i) //buscamos el nodo elegido
+						aux = aux->next;
+					
+					t_list *to_delete = aux->next;
+    				aux->next = NULL;  // Cortar la lista aquí
+    				ft_lstclear(&to_delete, delete_content);
+
+
+					
+					/* ft_lstclear(&aux, delete_content);
+					aux = test; */
+				}
+				break;
+			case 'X':
+			case 'x':
+				goto salida;
 			default:
 				break;
 		}
@@ -696,16 +739,19 @@ int	main_listas()
 	}
 	
 	
-
+salida:
 	fflush(stdout);
 	press = repetimos_volvemos();
 
 	if ((press == 'y') || (press == 'Y'))
 	{
+		ft_lstclear(&test, delete_content);
+		test = NULL;
 		main_listas();
 		return (0);
 	}
-	
+	ft_lstclear(&test, delete_content);
+	test = NULL;
 	return (0);
 }
 
@@ -2965,3 +3011,11 @@ void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final)
 		new->next = aux_last;
 	}
 }
+
+//void	ft_lstclear(t_list **lst, void (*del)(void*))/
+void	delete_content(void *content)
+{
+	if (content)
+		free(content);
+}
+
