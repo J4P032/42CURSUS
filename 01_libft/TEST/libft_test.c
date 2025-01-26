@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/25 22:39:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/26 02:26:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -624,14 +624,13 @@ int	main_listas()
 	t_list	*aux = NULL;
 	char	*contenido = NULL;
 	char	c = 'A';
-	char	final = '?';
+	//char	final = '?';
 	char	*pfinal = NULL;
 	size_t	cuantos = 0;
 	size_t	num_nodo = 0;
 	
-	pfinal = (char *)calloc(1, sizeof(char));
-	pfinal = &final;
-	
+	pfinal = (char *)calloc(1, sizeof(char)); //necesario para hacer no más frees de los necesarios
+	*pfinal = '?';
 	
 	//MENU DE LISTAS
 	while (1)
@@ -656,7 +655,7 @@ int	main_listas()
 		printf("%5s", "\n");
 		
 		printf("Lista Test: ");
-		print_list(test, &final);
+		print_list(test, pfinal);
 		if (press == '4')
 			printf("\nEl Ultimo nodo de la lista es : %c", *(char *)aux->content);
 		if (press == '5')
@@ -674,6 +673,8 @@ int	main_listas()
 				contenido = (char *)calloc(1, sizeof(char)); //al hacer un calloc cada vez...
 				*contenido = c; //...contenido está en una direccion de memoria diferente y la modificacion de c no le altera.
 				aux = ft_lstnew(contenido); //si pasara &c en vez de contenido, todos los ->content de la lista se irían cambiando al nuevo valor de 'c'
+				//(void) pfinal;
+				//ft_lstadd_back(&test, aux);
 				ft_lstadd_before_zero(&test, aux, pfinal); //para no poner A-B- si es el final sino A-B-? ? es el caracter final.
 				c++;
 				
@@ -3002,6 +3003,17 @@ void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final)
 		*lst = new;
 		aux = ft_lstnew(final); //creamos el nodo final con \0
 		ft_lstadd_back(lst, aux); //añadimos el nodo final al final de la lista
+		/* if (!*lst)
+			*lst = new;
+		else
+		{
+			aux2 = ft_lstlast(*lst);
+			aux2->next = new;
+		} */
+		
+	
+	
+	
 	}
 	else
 	{
