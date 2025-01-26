@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/26 02:26:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/26 03:23:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -629,8 +629,8 @@ int	main_listas()
 	size_t	cuantos = 0;
 	size_t	num_nodo = 0;
 	
-	pfinal = (char *)calloc(1, sizeof(char)); //necesario para hacer no más frees de los necesarios
-	*pfinal = '?';
+	pfinal = (char *)calloc(1, sizeof(char)); //necesario para hacer no más frees de los necesarios, dentro de la funcion que borra el contenido de ft_lstiter
+	*pfinal = '?'; //sangre me ha costado este. Si haciamos un char final = '?', y luego pfinal = &final la cagabamos ya que se perdia la memoria del calloc de pfinal.. Asi no. 
 	
 	//MENU DE LISTAS
 	while (1)
@@ -673,8 +673,6 @@ int	main_listas()
 				contenido = (char *)calloc(1, sizeof(char)); //al hacer un calloc cada vez...
 				*contenido = c; //...contenido está en una direccion de memoria diferente y la modificacion de c no le altera.
 				aux = ft_lstnew(contenido); //si pasara &c en vez de contenido, todos los ->content de la lista se irían cambiando al nuevo valor de 'c'
-				//(void) pfinal;
-				//ft_lstadd_back(&test, aux);
 				ft_lstadd_before_zero(&test, aux, pfinal); //para no poner A-B- si es el final sino A-B-? ? es el caracter final.
 				c++;
 				
@@ -715,17 +713,12 @@ int	main_listas()
 				else
 				{
 					aux = test;
-					for (size_t i = 1; i < num_nodo - 1; ++i) //buscamos el nodo elegido
+					for (size_t i = 1; i < num_nodo - 1; ++i) //buscamos el nodo elegido pero hasta el anterior para ponerle a NULL (sera el ultimo)
 						aux = aux->next;
 					
-					t_list *to_delete = aux->next;
+					t_list *a_borrar = aux->next;
     				aux->next = NULL;  // Cortar la lista aquí
-    				ft_lstclear(&to_delete, delete_content);
-
-
-					
-					/* ft_lstclear(&aux, delete_content);
-					aux = test; */
+    				ft_lstclear(&a_borrar, delete_content);
 				}
 				break;
 			case 'X':
@@ -734,9 +727,6 @@ int	main_listas()
 			default:
 				break;
 		}
-		/* 
-		if ((press == 'Y') || (press == 'y'))
-			break ; */
 	}
 	
 	
@@ -2944,6 +2934,8 @@ void print_list(t_list *list, char *final)
 		return;
 	fflush(stdout);
 	aux = ft_lstlast(list);
+	if (!aux)
+		return ;
 	while ((list) && (list->next))
 	{
 		if (*(char *)(aux->content) == *final)
@@ -2973,6 +2965,8 @@ void print_list(t_list *list, char *final)
 	if (*(char *)list->content != *final)
 		write(1, list->content,1);
 }
+
+
 
 t_list	*lstpenultimo(t_list *lst)
 {
