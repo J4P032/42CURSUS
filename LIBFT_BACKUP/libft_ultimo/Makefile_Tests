@@ -1,0 +1,33 @@
+#ejecutar con make -f Makefile_Tests bonus || SRCS 	= $(wildcard *.c)
+C		= cc
+CFLAGS	= -Wall -Wextra -Werror -g3
+LDFLAGS = -lbsd
+NAME	= libft.out
+SRCS 	= $(wildcard *.c) TEST/libft_test.c
+OBJS	= ${SRCS:.c=.o}
+RM		= rm -f
+
+#regla principal.
+all: ${NAME}
+
+#regla genera el ejecutable a partir de los .o .La segunda linea limpia los .o
+${NAME}: ${OBJS}
+	${C} ${CFLAGS} -I. ${OBJS} -o ${NAME} ${LDFLAGS}
+	${RM} ${OBJS}
+
+#regla genera los .o
+%.o: %.c
+	${C} ${CFLAGS} -I. -c $< -o $@
+
+#regla para limpiar los .o
+clean:
+	${RM} ${OBJS}
+
+#regla para limpiar los .o y el ejecutable
+fclean:	clean
+	${RM} ${NAME}
+
+#regla de rebuild
+re:	fclean all
+
+.PHONY:	all clean fclean re
