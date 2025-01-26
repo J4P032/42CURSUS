@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/26 18:49:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/26 20:28:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1825,9 +1825,11 @@ int main_strchr(int opcion)
 	if (s)
 		intro_charnulls(s);
 	
-	memcpy(s_ft, s, longitud + 1);
-	memcpy(s_or, s, longitud + 1);
-
+	if (s)
+	{
+		memcpy(s_ft, s, longitud + 1);
+		memcpy(s_or, s, longitud + 1);
+	}
 	
 	//Menu para elegir char
 	c = fill_char(&offset);
