@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/26 20:32:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/26 23:49:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	print_list(t_list *list, char *final);
 t_list	*lstpenultimo(t_list *lst);
 void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final);
 void	delete_content(void *content);
+void	list_upper_lower(void *content);
+void	*list_upper_lower2(void *content);
 
 void 	ft_reset_copy(char *dest, char *orig);
 
@@ -628,6 +630,7 @@ int	main_listas()
 	char	*pfinal = NULL;
 	size_t	cuantos = 0;
 	size_t	num_nodo = 0;
+	t_list 	*copy = NULL;
 	
 	pfinal = (char *)calloc(1, sizeof(char)); //necesario para hacer no más frees de los necesarios, dentro de la funcion que borra el contenido de ft_lstiter
 	*pfinal = '?'; //sangre me ha costado este. Si haciamos un char final = '?', y luego pfinal = &final la cagabamos ya que se perdia la memoria del calloc de pfinal.. Asi no. 
@@ -638,6 +641,7 @@ int	main_listas()
 		system("clear");
 		printf("%5s", "LISTAS:");
 		printf("%5s", "\nNOTA: el caracter ? es el final en un componer normal de la lista a no ser que se ingrese otro nodo al final");
+		printf("%5s", "\n");
 		printf("%5s", "\n");
 		printf("%5s\n", "(1). Componer lista con nuevos nodos(M))");
 		printf("%5s\n", "(2). Agregar nodo al FINAL de la lista");
@@ -652,10 +656,16 @@ int	main_listas()
 		printf("%5s\n", "(8). Aplica funcion sobre el contenido de todos los nodos a partir del dado");
 		printf("%5s\n", "(9). Aplica funcion sobre contido de todos los nodos a partir del dado y devuelve la copia (M)");
 		printf("%5s", "\n");
-		printf("%5s", "\n");
+		printf("%5s\n", "(x). Salir");
 		
-		printf("Lista Test: ");
-		print_list(test, pfinal);
+		printf("\nLista Test: ");
+		if (test)
+			print_list(test, pfinal);
+		if (copy)
+		{
+			printf("\nLista Copia: ");
+			print_list(copy, pfinal);
+		}
 		if (press == '4')
 			printf("\nEl Ultimo nodo de la lista es : %c", *(char *)aux->content);
 		if (press == '5')
@@ -721,6 +731,48 @@ int	main_listas()
     				ft_lstclear(&a_borrar, delete_content);
 				}
 				break;
+			case '7':
+				aux = test;
+				cuantos = ft_lstsize(test);
+				system("clear");
+				printf("La lista tiene %zu nodos. Elija el nodo a borrar (la lista tiene que tener un minimo de 3) :", cuantos);
+				scanf("%zu", &num_nodo);
+				getchar();
+				if (num_nodo > cuantos || num_nodo < 3) //nodos validos
+					break;
+				for (size_t i = 1; i < num_nodo - 1; ++i) //buscamos el nodo elegido pero hasta el anterior para ponerle a NULL (sera el ultimo)
+						aux = aux->next;
+				t_list *a_borrar = aux->next;
+				aux->next = a_borrar->next;
+				ft_lstdelone(a_borrar, delete_content);			
+				break;
+			case '8':	
+				aux = test;
+				cuantos = ft_lstsize(test);
+				system("clear");
+				printf("La lista tiene %zu nodos. Elija el nodo a modificar a partir de :", cuantos);
+				scanf("%zu", &num_nodo);
+				getchar();
+				if (num_nodo > cuantos || num_nodo == 0) //nodos validos
+					break;
+				for (size_t i = 1; i < num_nodo; ++i) 
+					aux = aux->next;
+				ft_lstiter(aux, list_upper_lower);
+				break;
+			case '9':
+				aux = test;
+				cuantos = ft_lstsize(test);
+				system("clear");
+				printf("La lista tiene %zu nodos. Elija el nodo a modificar a partir de :", cuantos);
+				scanf("%zu", &num_nodo);
+				getchar();
+				if (num_nodo > cuantos || num_nodo == 0) //nodos validos
+					break;
+				for (size_t i = 1; i < num_nodo; ++i) 
+					aux = aux->next;
+				copy = ft_lstmap(aux, list_upper_lower2, delete_content);
+				break;
+			
 			case 'X':
 			case 'x':
 				goto salida;
@@ -738,10 +790,20 @@ salida:
 	{
 		ft_lstclear(&test, delete_content);
 		test = NULL;
+		if (copy)
+		{
+			ft_lstclear(&copy, delete_content);
+			copy = NULL;
+		}
 		main_listas();
 		return (0);
 	}
 	ft_lstclear(&test, delete_content);
+	if (copy)
+	{
+		ft_lstclear(&copy, delete_content);
+		copy = NULL;
+	}
 	test = NULL;
 	return (0);
 }
@@ -2622,7 +2684,8 @@ int main_strnstr()
 	printf("Big = %s", s1);
 	printf("\nLittle = ");
 	fflush(stdout);
-	ft_print(s2,lon2 + 1);
+	if (s2)
+		ft_print(s2,lon2 + 1);
 	printf("\nLongitud : %zu", size);
 
 	char	*solucion_ft = NULL;
@@ -3051,4 +3114,26 @@ void	delete_content(void *content)
 	if (content)
 		free(content);
 }
+void	list_upper_lower(void *content)
+{
+	if (*(char *)content >= 'A' && *(char *)content <= 'Z')
+		*(char *)content = *(char *)content + 32;
+	else if (*(char *)content >= 'a' && *(char *)content <= 'z')
+		*(char *)content = *(char *)content - 32;
+}
 
+void	*list_upper_lower2(void *content)
+{
+	char *a = NULL;
+	
+	a = (char *)calloc(1,1);
+	if (!a)
+		return (NULL);
+	a = (char *)content;
+	
+	if (*a >= 'A' && *a <= 'Z')
+		*a = *a + 32;
+	else if (*a >= 'a' && *a <= 'z')
+		*a = *a - 32;
+	return (a);
+}
