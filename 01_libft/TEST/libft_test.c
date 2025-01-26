@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/26 03:23:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/26 16:57:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ int	options_draw()
 	printf("%5s\n", "(*)nota: imita funciones de C standard");
 	printf("%5s\n", "(M)nota: Reserva memoria dentro de la funcion. Danger!");
 	printf("%5s\n", "");
-	printf("%5s\n", "(0). ft_atoi");
+	printf("%5s\n", "(0). ft_atoi (*)");
 	printf("%5s\n", "(1). ft_calloc (M*)");
 	printf("%5s\n", "(2). ft_itoa (M)");
 	
@@ -511,7 +511,7 @@ int	main_atoi()
 	system("clear");
 	printf("String: %s", s);
 	printf("\n\nft_atoi: %d", solucion_ft);
-	printf("\natoi: %d", solucion_orig);
+	printf("\natoi___: %d", solucion_orig);
 	fflush(stdout); // limpia buffer para write de repetimos
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
@@ -747,7 +747,6 @@ salida:
 }
 
 
-
 ////////////////////////////////////////////////////////////
 /*ft_memchr*////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -808,10 +807,10 @@ int	main_memchr()
 			switch (press)
 			{
 				case '1':
-					aux1 = ft_memchr(s_ft, c + offset, num_bytes);
+					aux1 = ft_memchr(s, c + offset, num_bytes);
 					break;
 				case '2':
-					aux2 = memchr(s_or, c + offset, num_bytes);
+					aux2 = memchr(s, c + offset, num_bytes);
 					break;
 				default:
 					continue;
@@ -1019,8 +1018,13 @@ int main_memcpy()
 		s2 = fill_string(s2);
 	}
 
+	size_t longitud = strlen(s2);
+	system("clear");
+	intro_charnulls(s2);
+
 	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
 	num_bytes = fill_num_bytes(s1);
+
 
 	//condiciones NULL
 	if ((s1 == NULL) || (s2 == NULL))
@@ -1054,18 +1058,24 @@ int main_memcpy()
 	else
 	{
 		strcpy(s_ft, s1);
-		ft_memcpy(s_ft, s2, num_bytes);
+		ft_memcpy(s_ft, s2, (size_t)num_bytes);
 		strcpy(s_or, s1);
-		memcpy(s_or, s2, num_bytes);
+		memcpy(s_or, s2, (size_t)num_bytes);
 	}
 
 	//SOLUCION
 	system ("clear");
-	printf("String1 = %s", s1);
+	printf("String1 = ");
+	fflush(stdout);
+	ft_print(s2, longitud + 1);
 	printf("\nString2 = %s", s2);
 	printf("\nbytes = %d", num_bytes);
-	printf("\n\nSolucion_ft: %s", s_ft);
-	printf("\nSolucion_orig: %s", s_or);
+	printf("\n\nSolucion_ft: ");
+	fflush(stdout);
+	ft_print(s_ft, longitud + 1);
+	printf("\n\nSolucion_Or: ");
+	fflush(stdout);
+	ft_print(s_or, longitud + 1);
 
 	printf("\n\nDireccion de solucion_ft__: %p\n", s_ft);
 	printf("Direccion de solucion_orig: %p\n", s_or);
