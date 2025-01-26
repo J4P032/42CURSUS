@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 13:32:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/22 20:03:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/26 18:19:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	unsigned char	*aux_dest;
 	unsigned char	*aux_src;
 
-	if (n == 0)
+	if ((n == 0) || (dest == src))
 		return (dest);
 	aux_dest = (unsigned char *)dest;
 	aux_src = (unsigned char *)src;

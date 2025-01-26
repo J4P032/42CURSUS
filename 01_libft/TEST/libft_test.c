@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/26 16:57:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/26 18:49:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -780,7 +780,8 @@ int	main_memchr()
 		longitud = strlen(s);
 		
 		//INTRODUCIR CARACTERES NULOS EN EL STRING
-		intro_charnulls(s);
+		if (s)
+			intro_charnulls(s);
 		memcpy(s_ft, s, longitud + 1);
 		memcpy(s_or, s, longitud + 1);
 	}
@@ -978,6 +979,7 @@ int main_memcpy()
 	char *s_or = (char *)malloc(100);
 	char	press;
 	int		num_bytes;
+	size_t	longitud;
 
 
 	//INSTRUCCIONES
@@ -1018,9 +1020,11 @@ int main_memcpy()
 		s2 = fill_string(s2);
 	}
 
-	size_t longitud = strlen(s2);
+	if (s2)
+		longitud = strlen(s2);
 	system("clear");
-	intro_charnulls(s2);
+	if (s2)
+		intro_charnulls(s2);
 
 	//MENU PARA ELEGIR NUM DE BYTES A BUSCAR
 	num_bytes = fill_num_bytes(s1);
@@ -1689,7 +1693,8 @@ int main_strdup()
 		s = fill_string(s);
 		longitud = strlen(s);
 		//INTRODUCIR CARACTERES NULOS EN EL STRING
-		intro_charnulls(s);
+		if (s)
+			intro_charnulls(s);
 	
 		memcpy(s_ft, s, longitud + 1);
 		memcpy(s_or, s, longitud + 1);
@@ -1817,7 +1822,8 @@ int main_strchr(int opcion)
 	}
 	
 	//INTRODUCIR CARACTERES NULOS EN EL STRING
-	intro_charnulls(s);
+	if (s)
+		intro_charnulls(s);
 	
 	memcpy(s_ft, s, longitud + 1);
 	memcpy(s_or, s, longitud + 1);
@@ -2038,15 +2044,19 @@ int main_strjoin()
 		s1 = (char *)calloc(100, sizeof(char));
 		if (!s1) exit(1);
 		s1 = fill_string(s1);
-		lon1 = strlen(s1);
-		intro_charnulls(s1);
+		if (s1)
+			lon1 = strlen(s1);
+		if (s1)
+			intro_charnulls(s1);
 						
 		printf("\ns2: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
 		s2 = fill_string(s2);
-		lon2 = strlen(s2);
-		intro_charnulls(s2);
+		if (s2)
+			lon2 = strlen(s2);
+		if (s2)
+			intro_charnulls(s2);
 	}
 
 	char	*solucion_ft = NULL;
@@ -2559,8 +2569,10 @@ int main_strnstr()
 				s2 = (char *)calloc(100, sizeof(char));
 				if (!s2) exit(1);
 				s2 = fill_string(s2);
-				lon2 = strlen(s2);
-				intro_charnulls(s2);
+				if (s2)
+					lon2 = strlen(s2);
+				if (s2)
+					intro_charnulls(s2);
 				break;
 			case '2':
 				s1 = (char *)calloc(100, sizeof(char));
@@ -2591,8 +2603,11 @@ int main_strnstr()
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
 		s2 = fill_string(s2);
-		lon2 = strlen(s2);
-		intro_charnulls(s2);
+		if (s2)
+		{
+			lon2 = strlen(s2);
+			intro_charnulls(s2);
+		}
 	}
 
 

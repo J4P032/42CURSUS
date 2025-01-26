@@ -11,3 +11,4 @@ ft_striteri.c (modificado el size_t i a unsigned int i por que es el parametro d
 ft_strmapi.c (modificado el size_t i a unsigned int por ser el parametro de la funcion f)
 ft_lstdelone_bonus.c (cambiado el comentario ya que no hace lo que decia)
 ft_memmove.c (corregido cuando son igual dest y src para que devuelva dest. Crasheaba)
+ft_memcpy.c (resuelto el problema diferent con paco y crash. era que dest = src)
