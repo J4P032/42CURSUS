@@ -1,0 +1,57 @@
+-2147483648
+2147483647
+
+
+ft_memchr (valgrind ok)					ft_memcmp (valgrind )			ft_memcpy (valgrind )							ft_memmove (valgrind )									ft_memset (valgrind )
+	s = NULL							s1 = NULL						s1 = NULL										s1 = NULL												s1 = NULL
+		char normal (j)					s2 = ABD						s2 = platano y lechuga							s2 = platano y lechuga									char j	
+			Max_int + 1 (ok)crash			Max_int		(ok)crash			Max_int		(ok)crash							Max_int (offset 0)	(ok)crash							MAX_INT		(ok)crash
+			10 			(ok)crash			10			(ok)crash			10			(ok)crash							10					(0k)crash							10			(ok)crash
+			1			(ok)crash			1			(ok)crash			1			(ok)crash							1					(ok)crash							1			(ok)crash				
+						(ok)crash			0			(ok)0				0			(ok)crash							0					(ok)crash							0			(ok)crash
+			-1			(ok)crash			-1			(ok)crash			-1			(ok)crash							-1														-1			(ok)crash
+			-10			(ok)crash			-10			(ok)crash			-10			(ok)crash							-10														-10			(ok)crash
+			Min_int - 1	(ok)crash			min_int		(ok)crash			MIN_INT		(ok)crash							MIN_INT													MIN_INT		(ok)crash
+		char \0							s1 = ABC						s1 = platano y lechuga							s1 = platano y lechuga									s1 = NULL
+			Max_int + 1	(ok)crash		s2 = NULL						s2 = NULL										s2 = NULL												char \0
+			10			(ok)crash			Max_int		(ok)crash			Max_int		(ok)crash							Max_int (offset 0)	(ok)si s1=s2 dest.else crash		MAX_INT		(ok)crash
+			1			(ok)crash			10			(ok)crash			10			(ok)crash							10					(ok)si s1=s2 dest.else crash		10			(ok)crash
+			0			(ok)crash			1			(ok)crash			1			(ok)crash							1					(ok)si s1=s2 dest.else crash		1			(ok)crash
+			-1			(ok)crash			0			(ok)0				0			(ok)s1								0					(ok)dest							0			(ok)crash
+			-10			(ok)crash			-1			(ok)crash			-1			(ok)crash							-1														-1			(ok)crash
+			Min_int - 1	(ok)crash			-10			(ok)crash			-10			(ok)crash							-10														-10			(ok)crash
+											MIN_INT		(ok)crash			MIN_INT		(ok)crash							MIN_INT													MIN_INT		(ok)crash
+	s = patata y lechuga				s1 = NULL						s1 = NULL										s1 = NULL												s1 = platano y lechuga
+		char l							s1 = NULL						s2 = NULL										s2 = NULL												char = j
+			Max_int + 1 (ok)				MAX_INT		(ok)crash			MAX_INT		(ok)crash							max_int (offset 0)	(ok)crash							max_int		crash comprobar
+			10 			(ok)				10			(ok)crash			10			(ok)crash							10					(ok)crash							10			(ok)
+			1			(ok)				1			(ok)crash			1			(ok)crash							1					(ok)crash							1			(ok)
+			0			(ok)				0			(ok)0				0			(ok)crash							0					(ok)crash							0			(ok)
+			-1			(ok)				-1			(ok)crash			-1			(ok)crash							-1														-1			crash seg comprobar
+			-10			(ok)				-10			(ok)crash			-10			(ok)crash							-10														-10
+			Min_int - 1	(ok)				MIN_INT		(ok)crash			MIN_INT		(ok)crash							MIN_INT													MIN_INT
+		char 0							s1 = ABC						s1 = A B										s1 = A B												s1 = platano y lechuga	
+			Max_int + 1 (ok)			s2 = ABD						s2 = platano y lechuga							s2 = platano y lechuga									char = \0
+			10 			(ok)				MAX_INT		(ok)-1				Max_int		(ok)crash							max_int (offset 0) segmentation probar					max_int		seg crash
+			1			(ok)				10			(ok)-1				10			(ok)platano y						10 	(offset 0)		(ok)								10			(ok)
+			0			(ok)				1			(ok)0				1			(ok)p B								1	(offset 0)		(ok)								1			(ok)
+			-1			(ok)				0			(ok)-1				0			(ok)A B								0	(offset 0)		(ok)								0			(ok)
+			-10			(ok)				-1			(ok)-1				-1			(ok?)comportamientos indef			-1					segm probar							-1			seg crash
+			Min_int - 1	(ok)				-10			(ok)-1				-10			(ok?)Comportamientos indef			max_int (offset 1)	seg
+											MIN_INT		(ok)-1				min_int		(ok?)Comportamientos indef			10		(offset 1)	(ok)
+																			Comortamiento ok con s2 nulos en medio			1		(offset 1)	(ok)
+																															0		(offset 1)	(ok)
+																															
+ft_strnstr (valgrind )																																
+	s1 = NULL
+	s2 = platano y lechuga
+			Max_int		(ok)
+			10			(ok)
+			1			(ok)
+			0			(ok)
+			-1			(ok)
+	s1 = platano y lechuga
+	s2 = NULL
+			Max_int		(segm)
+			10			(seg)
+			1 			PROBAR!!!
