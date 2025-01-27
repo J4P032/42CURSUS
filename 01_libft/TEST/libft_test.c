@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/26 23:49:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/27 10:57:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int main()
 				break;
 			case 'a':
 				main_split();
-				break;	
+				break;
 			case 'b':
 				main_strdup();
 				break;
@@ -238,9 +238,9 @@ int	options_draw()
 	printf("%5s\n", "(0). ft_atoi (*)");
 	printf("%5s\n", "(1). ft_calloc (M*)");
 	printf("%5s\n", "(2). ft_itoa (M)");
-	
+
 	printf("%5s\n", "(3). ++ft_listas (M->lstnew)");
-	
+
 	printf("%5s\n", "(4). ft_memchr (*)");
 	printf("%5s\n", "(5). ft_memcmp (*)");
 	printf("%5s\n", "(6). ft_memcpy (*)");
@@ -254,9 +254,9 @@ int	options_draw()
 	printf("%5s\n", "(e). ft_strjoin (M)");
 	printf("%5s\n", "(f). ft_strlcat (*)");
 	printf("%5s\n", "(g). ft_strlcpy (*)");
-	
+
 	printf("%5s\n", "(h). ft_strmapi(M)");
-	
+
 	printf("%5s\n", "(i). ft_strncmp (*)");
 	printf("%5s\n", "(j). ft_strnstr (*)");
 	printf("%5s\n", "(k). ft_strrchr (*)");
@@ -301,12 +301,12 @@ void intro_charnulls(char *s)
 	size_t longitud = strlen(s);
 	repetir:
 	system ("clear");
-	
-	
+
+
 	printf("String = ");
 	fflush(stdout);
 	ft_print(s, longitud + 1);
-	
+
 	printf("\nQuiere meter nulos en el string?: (s / n)");
 	char c = getchar();
 	while (getchar() != '\n');
@@ -323,7 +323,7 @@ void intro_charnulls(char *s)
 			goto repetir;
 	}
 	else
-		system ("clear");	
+		system ("clear");
 }
 
 //MENU INTRODUCIR STRING
@@ -332,7 +332,7 @@ char *fill_string(char *s)
 	system ("clear");
 	printf("String = %s", s);
 	printf("\nIntroduzca cadena: \n");
-	scanf("%99[^\n]", s); // [^\n]indica que lea todos los caracteres hasta que pulse el espacio 
+	scanf("%99[^\n]", s); // [^\n]indica que lea todos los caracteres hasta que pulse el espacio
 	getchar(); //libera buffer del enter = \n
 	return (s);
 }
@@ -401,9 +401,9 @@ char	output_solution(char *ft, char *orig)
 {
 	printf("\nSolucion_ft   :%s", ft);
 	printf("\nSolucion_orig :%s", orig);
-	printf("\n\nDireccion de memoria de solucion_ft: %p", ft);	
+	printf("\n\nDireccion de memoria de solucion_ft: %p", ft);
 	printf("\nDireccion de memoria de solucion_or: %p", orig);
-	
+
 	printf("\n\nQuiere probar de nuevo? (y / n) : ");
 	char c = getchar();
 	while (getchar() != '\n');
@@ -631,10 +631,10 @@ int	main_listas()
 	size_t	cuantos = 0;
 	size_t	num_nodo = 0;
 	t_list 	*copy = NULL;
-	
+
 	pfinal = (char *)calloc(1, sizeof(char)); //necesario para hacer no más frees de los necesarios, dentro de la funcion que borra el contenido de ft_lstiter
-	*pfinal = '?'; //sangre me ha costado este. Si haciamos un char final = '?', y luego pfinal = &final la cagabamos ya que se perdia la memoria del calloc de pfinal.. Asi no. 
-	
+	*pfinal = '?'; //sangre me ha costado este. Si haciamos un char final = '?', y luego pfinal = &final la cagabamos ya que se perdia la memoria del calloc de pfinal.. Asi no.
+
 	//MENU DE LISTAS
 	while (1)
 	{
@@ -657,7 +657,7 @@ int	main_listas()
 		printf("%5s\n", "(9). Aplica funcion sobre contido de todos los nodos a partir del dado y devuelve la copia (M)");
 		printf("%5s", "\n");
 		printf("%5s\n", "(x). Salir");
-		
+
 		printf("\nLista Test: ");
 		if (test)
 			print_list(test, pfinal);
@@ -670,11 +670,11 @@ int	main_listas()
 			printf("\nEl Ultimo nodo de la lista es : %c", *(char *)aux->content);
 		if (press == '5')
 			printf("\nEl Numero de nodos es de (el ? puede no aparecer en el print) : %zu", cuantos);
-		
+
 		printf("%5s", "\n");
 		printf("%5s", "\nQue OPCION quiere? ");
 
-		
+
 		press = getchar();
 		while (getchar() != '\n');
 		switch (press)
@@ -685,7 +685,7 @@ int	main_listas()
 				aux = ft_lstnew(contenido); //si pasara &c en vez de contenido, todos los ->content de la lista se irían cambiando al nuevo valor de 'c'
 				ft_lstadd_before_zero(&test, aux, pfinal); //para no poner A-B- si es el final sino A-B-? ? es el caracter final.
 				c++;
-				
+
 				break;
 			case '2':
 				contenido = (char *)calloc(1, sizeof(char));
@@ -725,7 +725,7 @@ int	main_listas()
 					aux = test;
 					for (size_t i = 1; i < num_nodo - 1; ++i) //buscamos el nodo elegido pero hasta el anterior para ponerle a NULL (sera el ultimo)
 						aux = aux->next;
-					
+
 					t_list *a_borrar = aux->next;
     				aux->next = NULL;  // Cortar la lista aquí
     				ft_lstclear(&a_borrar, delete_content);
@@ -738,15 +738,15 @@ int	main_listas()
 				printf("La lista tiene %zu nodos. Elija el nodo a borrar (la lista tiene que tener un minimo de 3) :", cuantos);
 				scanf("%zu", &num_nodo);
 				getchar();
-				if (num_nodo > cuantos || num_nodo < 3) //nodos validos
+				if (num_nodo > cuantos || cuantos < 3) //nodos validos
 					break;
 				for (size_t i = 1; i < num_nodo - 1; ++i) //buscamos el nodo elegido pero hasta el anterior para ponerle a NULL (sera el ultimo)
 						aux = aux->next;
 				t_list *a_borrar = aux->next;
 				aux->next = a_borrar->next;
-				ft_lstdelone(a_borrar, delete_content);			
+				ft_lstdelone(a_borrar, delete_content);
 				break;
-			case '8':	
+			case '8':
 				aux = test;
 				cuantos = ft_lstsize(test);
 				system("clear");
@@ -755,7 +755,7 @@ int	main_listas()
 				getchar();
 				if (num_nodo > cuantos || num_nodo == 0) //nodos validos
 					break;
-				for (size_t i = 1; i < num_nodo; ++i) 
+				for (size_t i = 1; i < num_nodo; ++i)
 					aux = aux->next;
 				ft_lstiter(aux, list_upper_lower);
 				break;
@@ -768,11 +768,11 @@ int	main_listas()
 				getchar();
 				if (num_nodo > cuantos || num_nodo == 0) //nodos validos
 					break;
-				for (size_t i = 1; i < num_nodo; ++i) 
+				for (size_t i = 1; i < num_nodo; ++i)
 					aux = aux->next;
 				copy = ft_lstmap(aux, list_upper_lower2, delete_content);
 				break;
-			
+
 			case 'X':
 			case 'x':
 				goto salida;
@@ -780,8 +780,8 @@ int	main_listas()
 				break;
 		}
 	}
-	
-	
+
+
 salida:
 	fflush(stdout);
 	press = repetimos_volvemos();
@@ -836,11 +836,11 @@ int	main_memchr()
 	press = options_null_valid();
 
 	if (press == '2')
-	{	
+	{
 		s = (char *)calloc(100, sizeof(char));
 		s = fill_string(s);
 		longitud = strlen(s);
-		
+
 		//INTRODUCIR CARACTERES NULOS EN EL STRING
 		if (s)
 			intro_charnulls(s);
@@ -900,7 +900,7 @@ int	main_memchr()
 
 	printf("\n\nDireccion de solucion_ft__: %p\n", aux1);
 	printf("Direccion de solucion_orig: %p\n", aux2);
-	
+
 	press = output_solution(aux1, aux2);
 
 	if ((press == 'y') || (press == 'Y'))
@@ -1448,10 +1448,10 @@ int main_memset()
 	printf("\nbytes = %zu", number);
 	printf("\n\n Solucion_ft : %s", s_ft);
 	printf("\n\n Solucion_or : %s", s_or);
-	
+
 	printf("\n\nDireccion de memoria de solucion_ft: %p", s_ft);
 	printf("\nDireccion de memoria de solucion_ft: %p", s_or);
-	
+
 	fflush(stdout);
 	press = repetimos_volvemos();
 
@@ -1533,7 +1533,7 @@ int main_fd()
 		while (1)
 		{
 			system ("clear");
-			
+
 			int fd_forzado = open("/dev/tty", O_WRONLY);
 			if (fd_forzado == -1)
 			{
@@ -1547,26 +1547,26 @@ int main_fd()
 			printf("\nEl fd ha cambiado al : %d", fd);
 			printf("\nEl Numero pasado es: %d", number);
 			fflush(stdout);
-			
+
 			write(1, "\n\nft_putchar_fd : ", 18);
 			ft_putchar_fd(c + offset, fd);
-			
+
 			write(1, "\nft_putnbr_fd : ", 16);
 			ft_putnbr_fd(number, fd);
-			
+
 			printf("\nPresione ENTER para continuar (puede crashear)");
 			getchar();
 			fflush(stdout);
 			write(1, "\nft_putendl_fd : ", 17);
 			ft_putendl_fd(s, fd);
-			
-			
+
+
 			printf("\nPresione ENTER para continuar (puede crashear)");
 			getchar();
 			fflush(stdout);
 			write(1, "\nft_putstr_fd : ", 16);
 			ft_putstr_fd(s, fd);
-					
+
 			close(fd_forzado);
 			break;
 		}
@@ -1575,7 +1575,7 @@ int main_fd()
 	else
 	{
 		system ("clear");
-		//fd = open ("solucion.txt", O_CREAT | O_WRONLY, 0644); //permisos: 0(octal)6=4+2->lee y escribe...(propietario)4(grupo)4(otros). //cada numero significa 0=sinpermiso 1=ejecutar 2=escribir 4=leer 
+		//fd = open ("solucion.txt", O_CREAT | O_WRONLY, 0644); //permisos: 0(octal)6=4+2->lee y escribe...(propietario)4(grupo)4(otros). //cada numero significa 0=sinpermiso 1=ejecutar 2=escribir 4=leer
 		int fd_forzado = open("/dev/tty", O_WRONLY);
 		if (fd_forzado == -1)
 		{
@@ -1584,29 +1584,29 @@ int main_fd()
 		}
 		//cambia el generado por el fd elegido
 		dup2(fd_forzado, fd);
-	
+
 		printf("String = %s", s);
 		printf("\nCharacter pasado por fd: %c", c + offset);
 		printf("\nEl descriptor fd abierto es : %d", fd_forzado);
 		printf("\nEl fd ha cambiado al : %d", fd);
 		printf("\nEl Numero pasado es: %d", number);
 		fflush(stdout);
-			
+
 		write(1, "\n\nft_putchar_fd : ", 18);
 		ft_putchar_fd(c + offset, fd);
-		
+
 		write(1, "\nft_putnbr_fd : ", 16);
 		ft_putnbr_fd(number, fd);
-			
+
 		write(1, "\nft_putendl_fd : ", 17);
 		ft_putendl_fd(s, fd);
-			
+
 		write(1, "\nft_putstr_fd : ", 16);
 		ft_putstr_fd(s, fd);
-					
+
 		close(fd_forzado);
 	}
-	
+
 	fflush(stdout);
 
 	press = repetimos_volvemos();
@@ -1638,7 +1638,7 @@ int	main_split()
 	int		offset = 0;
 	size_t	i = 0;
 
-	
+
 	//INSTRUCCIONES
 	system("clear");
 	printf("separa un string en un array de strings a partir de un caracter separador definido\n");
@@ -1663,7 +1663,7 @@ int	main_split()
 	system ("clear");
 	printf("String1 = %s", s1);
 	printf("\nSeparador = %c", c + offset);
-	
+
 	if (s1 == NULL)
 	{
 		printf("\nVa a salir la solución pero el programa puede crashear");
@@ -1674,7 +1674,7 @@ int	main_split()
 	//condiciones Normales
 	else
 		solucion = ft_split(s1, c);
-	
+
 	//SOLUCION
 	system ("clear");
 	printf("String1 = %s", s1);
@@ -1705,7 +1705,7 @@ int	main_split()
 			free (solucion);
 		solucion = NULL;
 		main_split();
-	
+
 		return (0);
 	}
 	i = 0;
@@ -1719,7 +1719,7 @@ int	main_split()
 	}
 	if (solucion)
 		free (solucion);
-	solucion = NULL;	
+	solucion = NULL;
 	return (0);
 }
 
@@ -1729,7 +1729,7 @@ int	main_split()
 ////////////////////////////////////////////////////////////
 int main_strdup()
 {
-	
+
 	char	*s = NULL;
 	char	*s_ft = (char *)calloc(100, sizeof(char));
 	if (!s_ft) exit(1);
@@ -1757,11 +1757,11 @@ int main_strdup()
 		//INTRODUCIR CARACTERES NULOS EN EL STRING
 		if (s)
 			intro_charnulls(s);
-	
+
 		memcpy(s_ft, s, longitud + 1);
 		memcpy(s_or, s, longitud + 1);
 	}
-	
+
 	char	*solucion_ft = NULL;
 	char	*solucion_orig = NULL;
 
@@ -1809,7 +1809,7 @@ int main_strdup()
 	printf("\nDireccion de memoria de ft__: %p", solucion_ft);
 	printf("\nDireccion de memoria de orig: %p", solucion_orig);
 	fflush(stdout);
-	
+
 	press = repetimos_volvemos();
 
 	if ((press == 'y') || (press == 'Y'))
@@ -1846,7 +1846,7 @@ int main_strdup()
 ////////////////////////////////////////////////////////////
 int main_strchr(int opcion)
 {
-	char	*s = NULL; 
+	char	*s = NULL;
 	char	c;
 	int		offset = 0;
 	char	press;
@@ -1855,7 +1855,7 @@ int main_strchr(int opcion)
 	char	*s_or = (char *)calloc(100, sizeof(char));
 	if (!s_or) exit(1);
 	int		longitud = 0;
-	
+
 	//INSTRUCCIONES
 	system("clear");
 	if (opcion == 1)
@@ -1867,7 +1867,7 @@ int main_strchr(int opcion)
 	{
 		printf("Encuentra un caracter c dentro de un string. Pero este devuelve la ultima posición de dicho char\n");
 		printf("Si no devolverá un NULL, Si es el \\0 devolvera el primer terminador\n");
-	}	
+	}
 		printf("\nPara continuar presione ENTER\n");
 		getchar();
 
@@ -1882,17 +1882,17 @@ int main_strchr(int opcion)
 		s = fill_string(s);
 		longitud = strlen(s);
 	}
-	
+
 	//INTRODUCIR CARACTERES NULOS EN EL STRING
 	if (s)
 		intro_charnulls(s);
-	
+
 	if (s)
 	{
 		memcpy(s_ft, s, longitud + 1);
 		memcpy(s_or, s, longitud + 1);
 	}
-	
+
 	//Menu para elegir char
 	c = fill_char(&offset);
 
@@ -1959,7 +1959,7 @@ int main_strchr(int opcion)
 
 	press = output_solution(solucion_ft, solucion_orig);
 
-	
+
 	if ((press == 'y') || (press == 'Y'))
 	{
 		free (s);
@@ -1997,7 +1997,7 @@ int	main_striteri()
 	printf("Pasa el string creado por la funcion que elijamos");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
-	
+
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -2013,30 +2013,30 @@ int	main_striteri()
 	strcpy(solucion, s);
 
 	//MENU ELECCION FUNCION
-	
+
 	system ("clear");
 	printf("String: %s",s);
-	
+
 	ft_striteri(solucion, ft_strupper);
 	printf("\n\nft_striteri Mayusculas todo : %s", solucion);
 	ft_reset_copy(solucion, s);
-	
+
 	ft_striteri(solucion, ft_strlower);
 	printf("\nft_striteri Minusculas todo : %s", solucion);
 	ft_reset_copy(solucion, s);
-	
+
 	ft_striteri(solucion, ft_struptolowtoup);
 	printf("\nft_striteri alterna May-Min : %s", solucion);
 	ft_reset_copy(solucion, s);
-	
+
 	ft_striteri(solucion, ft_strnext);
 	printf("\nft_striteri sugiente char en ascii : %s", solucion);
 	ft_reset_copy(solucion, s);
-	
+
 	ft_striteri(solucion, ft_strinsertspace);
 	printf("\nft_striteri inserta un * en los chars impares : %s", solucion);
-	
-	
+
+
 	fflush(stdout);
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
@@ -2052,7 +2052,7 @@ int	main_striteri()
 	free (solucion);
 	s = NULL;
 	solucion = NULL;
-		
+
 	return (0);
 }
 
@@ -2064,9 +2064,9 @@ int main_strjoin()
 {
 	char	*s1 = NULL;
 	char	*s2 = NULL;
-	size_t	lon1;
-	size_t	lon2;
-	
+	size_t	lon1 = 0;
+	size_t	lon2 = 0;
+
 	char	press;
 
 	//INSTRUCCIONES
@@ -2074,7 +2074,7 @@ int main_strjoin()
 	printf("\nJunta dos strings en uno en una nueva direccion de memoria");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
-	
+
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -2112,7 +2112,7 @@ int main_strjoin()
 			lon1 = strlen(s1);
 		if (s1)
 			intro_charnulls(s1);
-						
+
 		printf("\ns2: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
@@ -2132,14 +2132,14 @@ int main_strjoin()
 	ft_print(s1, lon1 + 1);
 	printf("\nString2 = ");
 	fflush(stdout);
-	ft_print(s2, lon2 + 1);	
+	ft_print(s2, lon2 + 1);
 
 	solucion_ft = ft_strjoin(s1, s2);
 
 	printf("\n\nJoin: ");
 	fflush(stdout);
 	ft_print(solucion_ft, lon1 + lon2 + 1);
-	
+
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
@@ -2170,9 +2170,9 @@ int main_strlcat()
 	char	*s1 = NULL;
 	char	*s2 = NULL;
 	size_t	size = 0;
-			
+
 	//size_t	lon1 = 0;
-	
+
 	char	press;
 
 
@@ -2181,7 +2181,7 @@ int main_strlcat()
 	printf("Concatena el string s2 detras de s1 hasta un tamaño marcado y que incluye el terminador \\0");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
-	
+
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -2215,7 +2215,7 @@ int main_strlcat()
 		if (!s1) exit(1);
 		s1 = fill_string(s1);
 		//lon1 = strlen(s1);
-								
+
 		printf("\norigen: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
@@ -2226,7 +2226,7 @@ int main_strlcat()
 	//MENU PARA ELEGIR NUMERO A INTRODUCIR
 	printf("longitud: ");
 	size = (int)fill_integer();
-		
+
 	char	*s_ft = (char *)calloc(100, sizeof(char));
 	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(100, sizeof(char));
@@ -2251,13 +2251,13 @@ int main_strlcat()
 	printf("\n___strlcat: %s", s_or);
 	printf("\nsolucion_ft: %zu", solucion_ft);
 	printf("\nsolucion_or: %zu", solucion_or);
-	
+
 	printf("\n\nDireccion _____Origen: %p", s2);
 	printf("\nDireccion Destino ft_: %p", s_ft);
 	printf("\nDireccion Destino Ori: %p", s_or);
-	
+
 	fflush(stdout);
-		
+
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
@@ -2289,17 +2289,17 @@ int main_strlcat()
 ////////////////////////////////////////////////////////////
 int main_strlcpy()
 {
-	
+
 	char	*s1 = NULL;
 	char	*s2 = NULL;
 	size_t	size = 0;
-			
+
 	size_t	lon1 = 0;
 	size_t	lon2 = 0;
 	char	*s_ft = (char *)calloc(100, sizeof(char));
 	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(100, sizeof(char));
-	if (!s_or) exit(1);	
+	if (!s_or) exit(1);
 
 	char	press;
 
@@ -2309,7 +2309,7 @@ int main_strlcpy()
 	printf("Copia el string hasta el tamanyo seleccionado y devuelve la longitud de el string origen");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
-	
+
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -2344,7 +2344,7 @@ int main_strlcpy()
 		if (!s1) exit(1);
 		s1 = fill_string(s1);
 		lon1 = strlen(s1);
-							
+
 		printf("\nOrigen: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
@@ -2356,7 +2356,7 @@ int main_strlcpy()
 	//MENU PARA ELEGIR NUMERO A INTRODUCIR
 	printf("Longitud: ");
 	size = (int)fill_integer();
-		
+
 	strcpy(s_ft, s1);
 	strcpy(s_or, s1);
 
@@ -2371,7 +2371,7 @@ int main_strlcpy()
 	ft_print(s1, lon1 + 1);
 	printf("\nOrigen = ");
 	fflush(stdout);
-	ft_print(s2, lon2 + 1);	
+	ft_print(s2, lon2 + 1);
 	printf("\nLongitud : %zu", size);
 
 	solucion_ft = ft_strlcpy(s_ft, s2, size);
@@ -2379,16 +2379,16 @@ int main_strlcpy()
 
 	printf("\n\nft_strlcpy: %s", s_ft);
 	printf("\n___strlcpy: %s", s_or);
-	
+
 	printf("\nsolucion_ft: %zu", solucion_ft);
 	printf("\nsolucion_or: %zu", solucion_or);
-	
+
 	printf("\n\nDireccion _____Origen: %p", s2);
 	printf("\nDireccion Destino ft_: %p", s_ft);
 	printf("\nDireccion Destino ori: %p", s_or);
-	
+
 	fflush(stdout);
-		
+
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
@@ -2428,7 +2428,7 @@ int main_strmapi()
 	printf("Pasa el string creado por la funcion que elijamos pasando una copia");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
-	
+
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -2441,23 +2441,23 @@ int main_strmapi()
 		s = fill_string(s);
 	}
 	char	*solucion = NULL;
-	
+
 
 	//MENU ELECCION FUNCION
-	
+
 	system ("clear");
 	printf("String: %s",s);
-	
+
 	solucion = ft_strmapi(s, ft2_strupper);
 	printf("\n\nft_strmapi Mayusculas todo : %s", solucion);
 	free(solucion);
 	solucion = NULL;
-		
+
 	solucion = ft_strmapi(s, ft2_strlower);
 	printf("\nft_strmapi Minusculas todo : %s", solucion);
 	free(solucion);
 	solucion = NULL;
-		
+
 	solucion = ft_strmapi(s, ft2_struptolowtoup);
 	printf("\nft_strmapi alterna May-Min : %s", solucion);
 	free(solucion);
@@ -2467,11 +2467,11 @@ int main_strmapi()
 	printf("\nft_strmapi sugiente char en ascii : %s", solucion);
 	free(solucion);
 	solucion = NULL;
-	
+
 	solucion = ft_strmapi(s, ft2_strinsertspace);
 	printf("\nft_strmapi inserta un * en los chars impares : %s", solucion);
-	
-	
+
+
 	fflush(stdout);
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
@@ -2488,7 +2488,7 @@ int main_strmapi()
 	s = NULL;
 	solucion = NULL;
 	return (0);
-	
+
 }
 
 
@@ -2500,7 +2500,7 @@ int main_strncmp()
 	char	*s1 = NULL;
 	char	*s2 = NULL;
 	size_t	size = 0;
-			
+
 	char	press;
 
 	//INSTRUCCIONES
@@ -2509,7 +2509,7 @@ int main_strncmp()
 	printf("Si no lo son devuelve la resta entre el primer caracter no igual s1 - s2\n");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
-	
+
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -2541,7 +2541,7 @@ int main_strncmp()
 		s1 = (char *)calloc(100, sizeof(char));
 		if (!s1) exit(1);
 		s1 = fill_string(s1);
-								
+
 		printf("\nString2: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
@@ -2552,7 +2552,7 @@ int main_strncmp()
 	//MENU PARA ELEGIR NUMERO A INTRODUCIR
 	printf("Longitud a buscar: ");
 	size = (int)fill_integer();
-	
+
 	int solucion_ft = 0;
 	int solucion_or = 0;
 
@@ -2574,9 +2574,9 @@ int main_strncmp()
 		printf("\nLa cadena \"%s\" es mas grande que la cadena \"%s\" hasta el char %zu", s2, s1, size);
 	else if (solucion_or > 0)
 		printf("\nLa cadena \"%s\" es mas pequeña que la cadena \"%s\" hasta el char %zu", s2, s1, size);
-		
+
 	fflush(stdout);
-		
+
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
@@ -2609,9 +2609,9 @@ int main_strnstr()
 	if (!s_ft) exit(1);
 	char	*s_or = (char *)calloc(100, sizeof(char));
 	if (!s_or) exit(1);
-	
+
 	size_t	size = 0;
-			
+
 	char	press;
 
 	//INSTRUCCIONES
@@ -2620,7 +2620,7 @@ int main_strnstr()
 	printf(". Si little es una cadena vacia devuelve big. Si no devuelve NULL\n");
 	printf("\nPara continuar presione ENTER\n");
 	getchar();
-	
+
 	//Sub menu principal
 	press = options_null_valid();
 
@@ -2662,7 +2662,7 @@ int main_strnstr()
 		lon1 = strlen(s1);
 		memcpy(s_ft, s1, lon1 + 1);
 		memcpy(s_or, s1, lon1 + 1);
-								
+
 		printf("\nLittle: ");
 		s2 = (char *)calloc(100, sizeof(char));
 		if (!s2) exit(1);
@@ -2678,7 +2678,7 @@ int main_strnstr()
 	//MENU PARA ELEGIR NUMERO A INTRODUCIR
 	printf("Longitud a buscar: ");
 	size = (int)fill_integer();
-	
+
 	//SOLUCION
 	system ("clear");
 	printf("Big = %s", s1);
@@ -2690,7 +2690,7 @@ int main_strnstr()
 
 	char	*solucion_ft = NULL;
 	char	*solucion_or = NULL;
-	
+
 	solucion_ft = ft_strnstr(s_ft, s2, size);
 	solucion_or = strnstr(s_or, s2, size);
 
@@ -2698,10 +2698,10 @@ int main_strnstr()
 	printf("\n___strncmp: %s", solucion_or);
 
 	printf("\nDireccion Destino ft_: %p", solucion_ft);
-	printf("\nDireccion Destino ori: %p", solucion_or);	
-	
+	printf("\nDireccion Destino ori: %p", solucion_or);
+
 	fflush(stdout);
-		
+
 	press = repetimos_volvemos();
 	if ((press == 'y') || (press == 'Y'))
 	{
@@ -2736,7 +2736,7 @@ int main_strtrim()
 	char	*s1 = NULL;
 	char	*s2 = NULL;
 	char	press;
-	
+
 	char	*s_ft = (char *)calloc(100, sizeof(char));
 	if (!s_ft) exit(1);
 
@@ -2790,9 +2790,9 @@ int main_strtrim()
 	printf("\nSET = %s", s2);
 
 	char *solucion = NULL;
-	
+
 	solucion = ft_strtrim(s1, s2);
-	
+
 	printf("\n\nTrimado: %s", solucion);
 	fflush(stdout);
 	press = repetimos_volvemos();
@@ -2972,7 +2972,7 @@ void ft_struptolowtoup(unsigned int index, char *c)
 	if (*c >= 'A' && *c <= 'Z')
 		*c = *c + 32;
 	else if (*c >= 'a' && *c <= 'z')
-		*c = *c - 32;	
+		*c = *c - 32;
 }
 
 char ft2_struptolowtoup(unsigned int index, char c)
@@ -2982,7 +2982,7 @@ char ft2_struptolowtoup(unsigned int index, char c)
 		c = c + 32;
 	else if (c >= 'a' && c <= 'z')
 		c = c - 32;
-	return (c);	
+	return (c);
 }
 
 void ft_strnext(unsigned int index, char *c)
@@ -3049,7 +3049,7 @@ void print_list(t_list *list, char *final)
 			write(1, list->content, 1);
 			write(1, "-", 1);
 			//write(1, "x", 1);
-		}		
+		}
 		list = list->next;
 	}
 	if (*(char *)list->content != *final)
@@ -3061,7 +3061,7 @@ void print_list(t_list *list, char *final)
 t_list	*lstpenultimo(t_list *lst)
 {
 	t_list *aux = NULL;
-	
+
 	if ((!lst) || (!lst->next)) //debe haber dos nodos minimo
 		return (NULL);
 	char *str = lst->content;
@@ -3069,7 +3069,7 @@ t_list	*lstpenultimo(t_list *lst)
 	{
 		aux = lst;
 		lst = aux->next;
-		str = lst->content; 
+		str = lst->content;
 	}
 	return (aux);
 }
@@ -3078,7 +3078,7 @@ void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final)
 {
 	t_list	*aux = NULL;
 	t_list	*aux_last = NULL;
-		
+
 	if (!new)
 		return ;
 	if (!*lst)
@@ -3094,10 +3094,10 @@ void	ft_lstadd_before_zero(t_list **lst, t_list *new, char *final)
 			aux2 = ft_lstlast(*lst);
 			aux2->next = new;
 		} */
-		
-	
-	
-	
+
+
+
+
 	}
 	else
 	{
@@ -3125,12 +3125,12 @@ void	list_upper_lower(void *content)
 void	*list_upper_lower2(void *content)
 {
 	char *a = NULL;
-	
+
 	a = (char *)calloc(1,1);
 	if (!a)
 		return (NULL);
 	a = (char *)content;
-	
+
 	if (*a >= 'A' && *a <= 'Z')
 		*a = *a + 32;
 	else if (*a >= 'a' && *a <= 'z')
