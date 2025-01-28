@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/28 13:37:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/28 21:40:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	ft_malloc_free(t_list **list, char **content, int option)
 {
 	t_list	*aux;
+	size_t	i;
 
+	i = 0;
 	if (option == 1)
 	{
 		*list = (t_list *)malloc(sizeof(t_list));
@@ -57,30 +59,4 @@ t_list	*ft_listnew(t_list **lst, void *content)
 	return (lnew);
 }
 
-/* t_list	*ft_listnew(t_list **lst, void *content)
-{
-	t_list	*lnew;
-	t_list	*aux;
 
-	while (read(fd, content,BUFFER_SIZE) > 0)
-	{
-		lnew->content = content;
-		lnew->next = NULL;
-		if (!*lst)
-			*lst = lnew;
-		else
-		{
-			aux = *lst;
-			while (aux->next)
-				aux = aux->next;
-			aux->next = lnew;
-		}
-		if (strchr(*((char *)lnew->content), '\0')
-			return (lnew);
-		lnew = (t_list *)malloc(sizeof(t_list));
-		content = (t_list *)malloc(sizeof(t_list));
-		if (!lnew || !content)
-			return (NULL);
-	}
-	return (lnew);
-} */

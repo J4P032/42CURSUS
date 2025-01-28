@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/28 17:55:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/28 21:59:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 /*search for first byte with char c in first n bytes of s*/
 /*if not found -> NULL*/
-char	*ft_find_n(char *rest, const char *s, size_t n)
+int	ft_find_n(char *rest, const char *s, size_t n)
 {
 	size_t	i;
 	size_t	j;
@@ -46,44 +46,58 @@ char	*ft_find_n(char *rest, const char *s, size_t n)
 	{
 		while (i < n)
 			rest[j++] = s[++i];
-		return (rest);
+		rest[j] = '\0';  //al reutilizar sera lo que marque el final de la nueva asignacion
+		return (1);
 	}
 	else if (s[n - 1] == '\n')
 	{
 		rest[0] = '\n';
-		return (rest);
+		return (1);
 	}
 	else if (s[n - 1] != '\n')
-		return (NULL);
+		return (0);
 }
 
+char	*ft_read_fd(int fd, size_t *bytes)
+{
+	char	*aux;
+
+	aux = (char *)malloc(BUFFER_SIZE);
+	if (!aux)
+		return (NULL);
+	*bytes = read(fd, aux, BUFFER_SIZE);
+	if (*bytes == -1)
+		return (NULL);
+	return (aux);
+}
+
+/*I need to reserve memory to give the first read to content*/
 char	*get_next_line(int fd)
 {
 	t_list		*list;
-	char		*content;
 	size_t		rbytes;
+	char		*content;
 	static char	*rest;
 
+	rbytes = 1;
 	list = NULL;
-	content = NULL;
 	if (!rest)
+	{
 		rest = (char *)malloc(BUFFER_SIZE);
-	ft_malloc_free(&list, &content, 1);
-	list->content = content;
-	rbytes = read(fd, list->content, BUFFER_SIZE);
+		if (!rest)
+			return (NULL);
+	}
 	while (rbytes > 0)
 	{
-		ft_find_n(rest, list->content, rbytes);
-		if (rest)
+		content = ft_read_fd(fd, &rbytes);
+		if (ft_find_n(rest, content, rbytes))
 		{
-			funcion que haga esto por que me paso de norminette:
 			compon la lista con strjoin
-			//almacena el resto despues de \n en posicion ft_strchr + 1 en static
-			rest = ft
 			return lo compuesto por strjoin
 		}
 		else
-			ft_listnew(&list, &content);
+			ft_listnew(&list, content);
+		//rbytes = read(fd, list->content, BUFFER_SIZE);
 	}
 }
 
