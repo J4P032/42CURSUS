@@ -6,27 +6,27 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/29 12:58:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:15:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
 # endif
 
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
 
-typedef struct	s_list
+typedef struct s_list
 {
-	char 			*content;
+	char			*content;
 	int				*num_nodes;
 	struct s_list	*next;
-} 					t_list;
+}					t_list;
 
 char	*get_next_line(int fd);
 t_list	*ft_listnew(t_list **lst, char *content);
