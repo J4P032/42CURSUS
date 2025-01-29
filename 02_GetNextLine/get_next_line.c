@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/29 22:32:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/30 00:39:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,15 @@ void	process_rest(t_list *list, char **rest)
 
 	i = 0;
 	aux = (char *)malloc(BUFFER_SIZE + 1);
-	while ((*rest[i]) || (i < BUFFER_SIZE ))
+	while ((*rest)[i] || (i < BUFFER_SIZE ))
 	{
-		aux[i] = *rest[i];
+		aux[i] = (*rest)[i];
 		i++;
 	}
 	aux[i] = '\0';
 	free(*rest);
 	*rest = aux;
-	if (*rest && *rest[0] != '\0')
+	if (*rest && (*rest)[0] != '\0')
 	ft_listnew(&list, *rest);
 }
 
@@ -102,7 +102,7 @@ char	*get_next_line(int fd)
 
 	rbytes = 1;
 	list = NULL;
-	rest = NULL;
+	//rest = NULL;
 	ft_malloc_free(&list, &rest, 2);
 	while (rbytes > 0)
 	{
