@@ -6,12 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/29 18:23:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:55:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+/*0 = free content and node || 1 = malloc node  || 2 = malloc rest after \n */
 void	ft_malloc_free(t_list **list, char **content, int option)
 {
 	t_list	*aux;
@@ -22,6 +23,13 @@ void	ft_malloc_free(t_list **list, char **content, int option)
 	{
 		*list = (t_list *)malloc(sizeof(t_list));
 		if (!*list)
+			return ;
+	}
+	if (option == 2)
+	{
+		if (!*content)
+			*content = (char *)malloc(BUFFER_SIZE + 1);
+		if (!*content)
 			return ;
 	}
 	else if (option == 0)
@@ -41,7 +49,7 @@ char	*compose_string(t_list *list)
 	size_t	node;
 
 	node = 0;
-	line = (char *)malloc(*(list->num_nodes) * BUFFER_SIZE);
+	line = (char *)malloc(*(list->num_nodes) * BUFFER_SIZE + 1);
 	if (!line)
 		return (NULL);
 	while (list)

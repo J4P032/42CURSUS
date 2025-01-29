@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/29 17:48:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/29 22:32:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,25 @@ int	ft_find_n(char *rest, const char *s, size_t n)
 	return (0);
 }
 
+void	process_rest(t_list *list, char **rest)
+{
+	char	*aux;
+	size_t	i;
+
+	i = 0;
+	aux = (char *)malloc(BUFFER_SIZE + 1);
+	while ((*rest[i]) || (i < BUFFER_SIZE ))
+	{
+		aux[i] = *rest[i];
+		i++;
+	}
+	aux[i] = '\0';
+	free(*rest);
+	*rest = aux;
+	if (*rest && *rest[0] != '\0')
+	ft_listnew(&list, *rest);
+}
+
 char	*ft_read_fd(int fd, int *bytes)
 {
 	char	*aux;
@@ -64,8 +83,12 @@ char	*ft_read_fd(int fd, int *bytes)
 	if (!aux)
 		return (NULL);
 	*bytes = read(fd, aux, BUFFER_SIZE);
-	if (*bytes == -1)
+	if (*bytes <= 0)
+	{
+		free(aux);
+		aux = NULL;
 		return (NULL);
+	}
 	return (aux);
 }
 
@@ -79,21 +102,18 @@ char	*get_next_line(int fd)
 
 	rbytes = 1;
 	list = NULL;
-	if (!rest)
-	{
-		rest = (char *)malloc(BUFFER_SIZE);
-		if (!rest)
-			return (NULL);
-	}
+	rest = NULL;
+	ft_malloc_free(&list, &rest, 2);
 	while (rbytes > 0)
 	{
+		process_rest(list, &rest);
 		content = ft_read_fd(fd, &rbytes);
-		if (ft_find_n(rest, content, rbytes))
+		if (ft_find_n(rest, content, rbytes) && content)
 		{
 			ft_listnew(&list, content);
 			break ;
 		}
-		else
+		else if (content)
 			ft_listnew(&list, content);
 	}
 	return (compose_string(list));
