@@ -6,25 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/30 23:16:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 00:20:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-/*	1.Read in main from argv[1] data from terminal or file.txt*/
-/*	2.Read with BUFFER_SIZE with two possibilities: */
-/*		a.BUFFER_SIZE < size of the document*/
-/*		b.BUFFER_SIZE >= size the document */
-/*	3. if case (b): */
-/*		- Split the buffer with separator \n or EOF to return full line */
-/*	4. if case (a): */
-/*		- Store the read buffer in a node of a list */
-/*		- if \n || EOF found store the rest after in an static var	*/
-/*		- run the list up to the \n or EOF and STRJOIN all into a full STR */
-/*	5.Free the list after processing the line */
-/*	6.Start a new list for nextline addign first the static one */
-/*	Can be done with while inside GNL up to find \n or every fill of BUFFER */
 
 /*search for first byte with char c in first n bytes of s*/
 /*if not found -> NULL*/
@@ -70,8 +56,6 @@ char	*ft_read_fd(int fd, ssize_t *bytes)
 		resize[i] = aux[i];
 		i++;
 	}
-	/* if (*bytes < BUFFER_SIZE)
-		resize[i] = '\0'; */
 	free(aux);
 	return (resize);
 }
