@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/30 20:41:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:16:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,53 +28,26 @@
 
 /*search for first byte with char c in first n bytes of s*/
 /*if not found -> NULL*/
-int	ft_find_n(char *rest, const char *s, size_t n)
+int	ft_find_n(const char *s, size_t n)
 {
 	size_t	i;
-	size_t	j;
-
+	
 	i = 0;
-	j = 0;
 	while (i < n)
 	{
 		if (s[i] == '\n')
 			break ;
 		i++;
 	}
-	if (i < n - 1)
-	{
-		while (i < n)
-			rest[j++] = s[++i];
-		rest[j] = '\0';
+	if (i < n)
 		return (1);
-	}
-	else if (s[n - 1] == '\n')
-	{
-		rest[0] = '\n';
+	else if (s[i] == '\n')
 		return (1);
-	}
 	return (0);
 }
 
-void	process_rest(t_list **list, char **rest)
-{
-	char	*aux;
-	size_t	i;
 
-	i = 0;
-	aux = (char *)malloc(BUFFER_SIZE + 1);
-	while ((*rest)[i] || (i < BUFFER_SIZE))
-	{
-		aux[i] = (*rest)[i];
-		i++;
-	}
-	aux[i] = '\0';
-	free(*rest);
-	*rest = aux;
-	if (*rest && (*rest)[0] != '\0')
-		ft_listnew(list, *rest);
-}
-
+/*it reads a maximun of BUFFER_SIZE but realocate it not its size*/
 char	*ft_read_fd(int fd, ssize_t *bytes)
 {
 	char	*aux;
@@ -82,11 +55,11 @@ char	*ft_read_fd(int fd, ssize_t *bytes)
 	ssize_t	i;
 
 	i = 0;
-	aux = (char *)malloc(BUFFER_SIZE);
+	aux = (char *)ft_calloc(BUFFER_SIZE, 1);
 	if (!aux)
 		return (NULL);
 	*bytes = read(fd, aux, BUFFER_SIZE);
-	resize = (char *)malloc(*bytes + 1);
+	resize = (char *)calloc(*bytes, 1);
 	if ((*bytes <= 0) || (!resize))
 	{
 		free(aux);
@@ -97,34 +70,34 @@ char	*ft_read_fd(int fd, ssize_t *bytes)
 		resize[i] = aux[i];
 		i++;
 	}
-	if (*bytes < BUFFER_SIZE)
-		resize[i] = '\0';
+	/* if (*bytes < BUFFER_SIZE)
+		resize[i] = '\0'; */
 	free(aux);
 	return (resize);
 }
 
-/*I need to reserve memory to give the first read to content*/
+
 char	*get_next_line(int fd)
 {
-	t_list		*list;
-	ssize_t		rbytes;
-	char		*content;
-	static char	*rest;
+	static t_list	*list;
+	t_list			*last;
+	ssize_t			rbytes;
+	char			*content;
 
 	rbytes = 1;
 	list = NULL;
-	ft_malloc_free(&list, &rest, 2);
 	while (rbytes > 0)
 	{
-		process_rest(&list, &rest);
-		content = ft_read_fd(fd, &rbytes);
-		if (ft_find_n(rest, content, rbytes) && content)
+		content = ft_read_fd(fd, &rbytes); //content suelta del tamaño rbytes leido
+		if (!content)
+			return (NULL);
+		if (ft_find_n(content, rbytes))
 		{
-			ft_listnew(&list, content);
+			last = ft_listnew(&list, content, rbytes);
 			break ;
 		}
-		else if (content)
-			ft_listnew(&list, content);
+		else
+			last = ft_listnew(&list, content, rbytes);
 	}
-	return (compose_string(list));
+	return (compose_string(&list, last));
 }

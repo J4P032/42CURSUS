@@ -6,85 +6,91 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/30 00:36:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:14:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/*0 = free content and node || 1 = malloc node  || 2 = malloc rest after \n */
-void	ft_malloc_free(t_list **list, char **content, int option)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	t_list	*aux;
+	size_t			total_bytes;
+	unsigned char	*ptr;
+	size_t			i;
 
-	if (option == 1)
+	i = 0;
+	if (nmemb == 0 || size == 0)
+		return (malloc(0));
+	if (nmemb > (size_t)-1 / size)
+		return (NULL);
+	total_bytes = nmemb * size;
+	ptr = (unsigned char *)malloc(total_bytes);
+	if (!ptr)
+		return (NULL);
+	while (i < total_bytes)
 	{
-		*list = (t_list *)malloc(sizeof(t_list));
-		if (!*list)
-			return ;
+		ptr[i] = '\0';
+		i++;
 	}
-	if (option == 2)
-	{
-		if (!*content)
-			*content = (char *)malloc(BUFFER_SIZE + 1);
-		if (!*content)
-			return ;
-	}
-	else if (option == 0)
-	{
-		aux = (*list)->next;
-		free(*content);
-		(*content) = NULL;
-		free(*list);
-		*list = aux;
-	}
+	return (ptr);
 }
 
-char	*compose_string(t_list *list)
+
+void	free_list(t_list **list)
+{
+	t_list	*aux;
+	
+	aux = (*list)->next;
+	free((*list)->content);
+	(*list)->content = NULL;
+	free(*list);
+	*list = aux;
+}
+
+char	*compose_string(t_list **list, t_list *last)
 {
 	char	*line;
 	size_t	i;
 	size_t	node;
 
-	if (!list)
+	if (!*list)
 		return (NULL);
 	node = 0;
-	line = (char *)malloc(*(list->num_nodes) * BUFFER_SIZE + 1);
+	line = (char *)ft_calloc((last->total_rbytes) + 1, sizeof(t_list));
 	if (!line)
 		return (NULL);
-	while (list)
+	while (*list)
 	{
 		i = 0;
-		while ((i < BUFFER_SIZE) && (list->content[i] != '\n'))
+		while ((i < BUFFER_SIZE) && ((*list)->content[i] != '\n'))
 		{
-			line[i + (BUFFER_SIZE * node)] = list->content[i];
+			line[i + (BUFFER_SIZE * node)] = (*list)->content[i];
 			i++;
 		}
-		if (list->content[i] == '\n')
+		if ((*list)->content[i] == '\n')
 			line[i + (BUFFER_SIZE * node)] = '\n';
-		line[++i + (BUFFER_SIZE * node)] = '\0';
 		node++;
-		ft_malloc_free(&list, &(list->content), 0);
+		free_list(list);
 	}
 	return (line);
 }
 
 /*create new node, link it to exist list or will be the new list*/
 /*returns the & of head if one only node or last node & if more than one*/
-t_list	*ft_listnew(t_list **lst, char *content)
+t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes)
 {
 	t_list			*lnew;
 	t_list			*aux;
-	static int		num_nodes;
-
-	num_nodes = 0;
-	ft_malloc_free(&lnew, &content, 1);
+	static ssize_t	total_rbytes;
+	
+	lnew = ft_calloc(1, sizeof(t_list));
 	if (!lnew || !content)
 		return (NULL);
 	lnew->content = content;
-	lnew->num_nodes = &num_nodes;
+	lnew->read_bytes = rbytes;
+	lnew->total_rbytes = total_rbytes + rbytes;
 	lnew->next = NULL;
-	num_nodes++;
+	total_rbytes+= rbytes;
 	if (!*lst)
 		*lst = lnew;
 	else
