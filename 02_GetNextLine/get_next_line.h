@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/30 23:55:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 00:09:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 11
 # endif
 
 # include <fcntl.h>
