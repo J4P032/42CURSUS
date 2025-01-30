@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/29 22:31:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:41:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ char	*ft_strchr(const char *s, int c);
 void	ft_malloc_free(t_list **list, char **content, int option);
 char	*compose_string(t_list *list);
 int		ft_find_n(char *rest, const char *s, size_t n);
-void	process_rest(t_list *list, char **rest);
+void	process_rest(t_list **list, char **rest);
 
 #endif

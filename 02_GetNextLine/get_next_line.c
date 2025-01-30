@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/30 01:34:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:41:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_find_n(char *rest, const char *s, size_t n)
 	return (0);
 }
 
-void	process_rest(t_list *list, char **rest)
+void	process_rest(t_list **list, char **rest)
 {
 	char	*aux;
 	size_t	i;
@@ -72,14 +72,14 @@ void	process_rest(t_list *list, char **rest)
 	free(*rest);
 	*rest = aux;
 	if (*rest && (*rest)[0] != '\0')
-		ft_listnew(&list, *rest);
+		ft_listnew(list, *rest);
 }
 
-char	*ft_read_fd(int fd, int *bytes)
+char	*ft_read_fd(int fd, ssize_t *bytes)
 {
 	char	*aux;
 	char	*resize;
-	size_t	i;
+	ssize_t	i;
 
 	i = 0;
 	aux = (char *)malloc(BUFFER_SIZE);
@@ -93,7 +93,10 @@ char	*ft_read_fd(int fd, int *bytes)
 		return (NULL);
 	}
 	while (i < *bytes)
-		resize[i] = aux[i++];
+	{
+		resize[i] = aux[i];
+		i++;
+	}
 	if (*bytes < BUFFER_SIZE)
 		resize[i] = '\0';
 	free(aux);
@@ -104,7 +107,7 @@ char	*ft_read_fd(int fd, int *bytes)
 char	*get_next_line(int fd)
 {
 	t_list		*list;
-	int			rbytes;
+	ssize_t		rbytes;
 	char		*content;
 	static char	*rest;
 
@@ -113,7 +116,7 @@ char	*get_next_line(int fd)
 	ft_malloc_free(&list, &rest, 2);
 	while (rbytes > 0)
 	{
-		process_rest(list, &rest);
+		process_rest(&list, &rest);
 		content = ft_read_fd(fd, &rbytes);
 		if (ft_find_n(rest, content, rbytes) && content)
 		{
