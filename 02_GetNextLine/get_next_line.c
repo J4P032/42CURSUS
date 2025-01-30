@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/30 00:39:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/30 01:34:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	process_rest(t_list *list, char **rest)
 
 	i = 0;
 	aux = (char *)malloc(BUFFER_SIZE + 1);
-	while ((*rest)[i] || (i < BUFFER_SIZE ))
+	while ((*rest)[i] || (i < BUFFER_SIZE))
 	{
 		aux[i] = (*rest)[i];
 		i++;
@@ -72,24 +72,32 @@ void	process_rest(t_list *list, char **rest)
 	free(*rest);
 	*rest = aux;
 	if (*rest && (*rest)[0] != '\0')
-	ft_listnew(&list, *rest);
+		ft_listnew(&list, *rest);
 }
 
 char	*ft_read_fd(int fd, int *bytes)
 {
 	char	*aux;
+	char	*resize;
+	size_t	i;
 
+	i = 0;
 	aux = (char *)malloc(BUFFER_SIZE);
 	if (!aux)
 		return (NULL);
 	*bytes = read(fd, aux, BUFFER_SIZE);
-	if (*bytes <= 0)
+	resize = (char *)malloc(*bytes + 1);
+	if ((*bytes <= 0) || (!resize))
 	{
 		free(aux);
-		aux = NULL;
 		return (NULL);
 	}
-	return (aux);
+	while (i < *bytes)
+		resize[i] = aux[i++];
+	if (*bytes < BUFFER_SIZE)
+		resize[i] = '\0';
+	free(aux);
+	return (resize);
 }
 
 /*I need to reserve memory to give the first read to content*/
@@ -102,7 +110,6 @@ char	*get_next_line(int fd)
 
 	rbytes = 1;
 	list = NULL;
-	//rest = NULL;
 	ft_malloc_free(&list, &rest, 2);
 	while (rbytes > 0)
 	{
