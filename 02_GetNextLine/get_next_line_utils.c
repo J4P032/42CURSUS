@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 18:50:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:23:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 	j = 0;
 	i = 0;
 	l = 0;
-	if (last->content[0] == '\n')
+	if (node->content[0] == '\n')
 		l = 1; 
 	while ((i < (size_t)node->read_bytes) && (node->content[i] != '\n'))
 	{
@@ -71,10 +71,7 @@ void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 	while (i < (size_t)node->read_bytes - 1)
 		node->content[j++]	= node->content[++i];
 	node->read_bytes = node->read_bytes - (k + l);
-	//if (node->next) //AQUI ACIERTA CREO QUE CUANDO ESTA AL FINAL \N O EOF pero lo tengo que quitar si es \nalgomas
-		node->total_rbytes = node->total_rbytes - (k + l);
-	if (node->next)
-		last->total_rbytes -= (k + l);
+	last->total_rbytes -= (k + l);
 }
 
 
