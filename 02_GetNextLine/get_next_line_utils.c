@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 21:55:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 22:36:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	free_list(t_list **list, t_list **last)
 	(*list)->next = NULL;
 	free(*list);
 	*list = aux;
-	if ((*last)->total_rbytes == 0)
+	if ((*last) && (*last)->total_rbytes == 0)
 	{
 		//free((*last)->content);
 		//(*last)->content = NULL;
