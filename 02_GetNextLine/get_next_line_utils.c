@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 13:32:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:50:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,18 @@ void	free_list(t_list **list)
 }
 
 
-size_t copy_content(char *line, t_list *node, size_t i, size_t node_i)
+void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 {
 	size_t	j;
+	size_t	i;
 	size_t	k;
+	size_t	l;
 
 	j = 0;
+	i = 0;
+	l = 0;
+	if (last->content[0] == '\n')
+		l = 1; 
 	while ((i < (size_t)node->read_bytes) && (node->content[i] != '\n'))
 	{
 		line[i + (BUFFER_SIZE * node_i)] = node->content[i];
@@ -64,18 +70,21 @@ size_t copy_content(char *line, t_list *node, size_t i, size_t node_i)
 	k = i;
 	while (i < (size_t)node->read_bytes - 1)
 		node->content[j++]	= node->content[++i];
-	node->read_bytes = node->read_bytes - (k + 1);
-	node->total_rbytes = node->total_rbytes - (k + 1);
-	return (k);
+	node->read_bytes = node->read_bytes - (k + l);
+	//if (node->next) //AQUI ACIERTA CREO QUE CUANDO ESTA AL FINAL \N O EOF pero lo tengo que quitar si es \nalgomas
+		node->total_rbytes = node->total_rbytes - (k + l);
+	if (node->next)
+		last->total_rbytes -= (k + l);
 }
 
 
-char	*compose_string(t_list **list, t_list *last)
+char	*compose_string(t_list **list, t_list *last, char *aux_last)
 {
 	char	*line;
-	size_t	i;
 	size_t	node;
 
+	if (aux_last) ///pasar hackear la salida del ultimo nodo
+		return (aux_last);
 	if (!*list)
 		return (NULL);
 	node = 0;
@@ -84,10 +93,9 @@ char	*compose_string(t_list **list, t_list *last)
 		return (NULL);
 	while (*list)
 	{
-		i = 0;
-		i = copy_content(line, *list, i, node);
+		copy_content(line, *list, last, node);
 		node++;
-		if ((last->read_bytes > 1) && (*list == last))
+		if ((last->read_bytes > 0) && (*list == last))
 			break ;
 		free_list(list);
 	}

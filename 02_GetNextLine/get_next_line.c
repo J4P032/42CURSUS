@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 13:43:01 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:58:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,72 +33,6 @@ int	ft_find_n(const char *s, size_t n)
 	return (0);
 }
 
-/* char	*process_last(t_list **last)
-{
-	ssize_t	bytes_left;
-	char	*aux;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	bytes_left = (*last)->read_bytes;
-	aux =(char *)ft_calloc(bytes_left, 1);
-	if (!aux)
-		return (NULL);
-	while (i < bytes_left)
-	{
-		if ((*last)->content[i] == '\n')
-		{
-			if (i != bytes_left - 1)
-				i++;
-			j = 0;
-			while (i < bytes_left)
-				aux[j++] == (*last)->content[i++];	
-			free(((*last)->content));
-			(*last)->content = aux;
-			(*last)->read_bytes = j + 1;
-			(*last)->total_rbytes = j + 1;
-		}			
-		i++;
-	}
-	return ((*last)->content);
-} */
-	
-/* char	*process_last(t_list **last)
-{
-	ssize_t	bytes_left;
-	ssize_t	i;
-	size_t	j;
-	int		flag;
-
-	i = 0;
-	bytes_left = (*last)->read_bytes;
-	
-	if ((*last)->content[0] == '\n') 
-		flag = 1;
-	//tengo que borrar el \n y mover todos a la izquierda. Y quitarle un 
-	//tengo que lanzar el \n como string unico con dos bytes (para poner el cero)
-	
-		
-	while (i < bytes_left)
-	{
-		if ((*last)->content[i] == '\n') 
-		{
-			j = 0;
-			while (i < bytes_left - 1)
-				(*last)->content[j++] = (*last)->content[++i];	
-			(*last)->read_bytes = j + 1;
-			(*last)->total_rbytes = j + 1;
-		}			
-		i++;
-	}
-	return ((*last)->content);
-}  */
-
-
-
-
-
 
 /*it reads a maximun of BUFFER_SIZE but realocate it not its size*/
 char	*ft_read_fd(int fd, ssize_t *bytes)
@@ -112,7 +46,7 @@ char	*ft_read_fd(int fd, ssize_t *bytes)
 	if (!aux)
 		return (NULL);
 	*bytes = read(fd, aux, BUFFER_SIZE);
-	resize = (char *)calloc(*bytes, 1);
+	resize = (char *)ft_calloc(*bytes, 1);
 	if ((*bytes <= 0) || (!resize))
 	{
 		free(aux);
@@ -127,22 +61,30 @@ char	*ft_read_fd(int fd, ssize_t *bytes)
 	return (resize);
 }
 
+char	*process_last(t_list **last)
+{
+	char	*aux;
+	
+	if ((!*last))
+		return (NULL);
+	aux = NULL;
+	//if(ft_find_n((*last)->content, (*last)->read_bytes))
+	aux = compose_string(last, *last, aux); //mirar asteriscos y mierdas varias
+	return (aux);
+}
+
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list;
+	t_list	*list;
 	static t_list	*last;
 	ssize_t			rbytes;
+	char			*aux_last;
 	char			*content;
 
 	rbytes = 1;
-	//while(last)
-	if (last)
-	{
-		//process_last(&last);
-		return (compose_string(&list, last));
-	}
-	while (rbytes > 0)
+	aux_last = process_last(&last);
+	while ((rbytes > 0) && (!aux_last))
 	{
 		content = ft_read_fd(fd, &rbytes);
 		if (!content)
@@ -155,5 +97,5 @@ char	*get_next_line(int fd)
 		else
 			last = ft_listnew(&list, content, rbytes);
 	}
-	return (compose_string(&list, last));
+	return (compose_string(&list, last, aux_last));
 }
