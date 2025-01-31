@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 11:44:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 13:43:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,25 @@ int	ft_find_n(const char *s, size_t n)
 	return ((*last)->content);
 } */
 	
-char	*process_last(t_list **last)
+/* char	*process_last(t_list **last)
 {
 	ssize_t	bytes_left;
-	size_t	i;
+	ssize_t	i;
 	size_t	j;
+	int		flag;
 
 	i = 0;
 	bytes_left = (*last)->read_bytes;
+	
+	if ((*last)->content[0] == '\n') 
+		flag = 1;
+	//tengo que borrar el \n y mover todos a la izquierda. Y quitarle un 
+	//tengo que lanzar el \n como string unico con dos bytes (para poner el cero)
+	
+		
 	while (i < bytes_left)
 	{
-		if ((*last)->content[i] == '\n')
+		if ((*last)->content[i] == '\n') 
 		{
 			j = 0;
 			while (i < bytes_left - 1)
@@ -84,13 +92,8 @@ char	*process_last(t_list **last)
 		}			
 		i++;
 	}
-	/* if (j == 1)
-	{
-		(*last)->read_bytes = 0;
-		(*last)->total_rbytes = 0;
-	} */
 	return ((*last)->content);
-} 
+}  */
 
 
 
@@ -133,9 +136,10 @@ char	*get_next_line(int fd)
 	char			*content;
 
 	rbytes = 1;
-	while(last)
+	//while(last)
+	if (last)
 	{
-		process_last(&last);
+		//process_last(&last);
 		return (compose_string(&list, last));
 	}
 	while (rbytes > 0)
