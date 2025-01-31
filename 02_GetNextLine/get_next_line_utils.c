@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/30 23:14:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 11:48:45 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	free_list(t_list **list)
 	*list = aux;
 }
 
-char	*compose_string(t_list **list, t_list *last)
+/* char	*compose_string(t_list **list, t_list *last)
 {
 	char	*line;
 	size_t	i;
@@ -73,7 +73,45 @@ char	*compose_string(t_list **list, t_list *last)
 		free_list(list);
 	}
 	return (line);
+} */
+
+size_t copy_content(char *line, t_list *node, size_t i, size_t node_i)
+{
+	while ((i < BUFFER_SIZE) && (node->content[i] != '\n'))
+	{
+		line[i + (BUFFER_SIZE * node_i)] = node->content[i];
+		i++;
+	}
+	return i;
 }
+
+
+char	*compose_string(t_list **list, t_list *last)
+{
+	char	*line;
+	size_t	i;
+	size_t	node;
+
+	if (!*list)
+		return (NULL);
+	node = 0;
+	line = (char *)ft_calloc((last->total_rbytes) + 1, sizeof(char));
+	if (!line)
+		return (NULL);
+	while (*list)
+	{
+		i = 0;
+		i = copy_content(line, *list, i, node);
+		if ((*list)->content[i] == '\n')
+			line[i + (BUFFER_SIZE * node)] = '\n';
+		node++;
+		if (last->read_bytes > 1)
+			break ;
+		free_list(list);
+	}
+	return (line);
+}
+
 
 /*create new node, link it to exist list or will be the new list*/
 /*returns the & of head if one only node or last node & if more than one*/

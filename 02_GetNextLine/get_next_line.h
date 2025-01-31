@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 00:22:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 10:15:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes);
 char	*get_next_line(int fd);
 void	free_list(t_list **list);
 char	*compose_string(t_list **list, t_list *last);
+char	*process_last(t_list **last);
+size_t copy_content(char *line, t_list *node, size_t i, size_t node_i);
 
 #endif
