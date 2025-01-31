@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 18:18:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 17:08:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 20:14:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ int	main(int argc, char **argv)
 	
 	while (linea || flag)
 	{
+		linea = NULL;
 		flag = 0;
 		linea = get_next_line(fd);
 		if (linea)
 			printf("%s", linea);
+		free (linea);
 	}
 	
 	/* linea = get_next_line(fd);

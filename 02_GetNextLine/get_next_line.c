@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 18:58:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 21:42:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ char	*process_last(t_list **last)
 		return (NULL);
 	aux = NULL;
 	//if(ft_find_n((*last)->content, (*last)->read_bytes))
-	aux = compose_string(last, *last, aux); //mirar asteriscos y mierdas varias
+	aux = compose_string(last, last, aux); //mirar asteriscos y mierdas varias
 	return (aux);
 }
 
 
 char	*get_next_line(int fd)
 {
-	t_list	*list;
+	static t_list	*list;
 	static t_list	*last;
 	ssize_t			rbytes;
 	char			*aux_last;
@@ -97,5 +97,5 @@ char	*get_next_line(int fd)
 		else
 			last = ft_listnew(&list, content, rbytes);
 	}
-	return (compose_string(&list, last, aux_last));
+	return (compose_string(&list, &last, aux_last));
 }

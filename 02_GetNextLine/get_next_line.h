@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 18:41:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/01/31 21:47:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 2
+#  define BUFFER_SIZE 3
 # endif
 
 # include <fcntl.h>
@@ -34,8 +34,8 @@ void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_find_n(const char *s, size_t n);
 t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes);
 char	*get_next_line(int fd);
-void	free_list(t_list **list);
-char	*compose_string(t_list **list, t_list *last, char *aux_last);
+void	free_list(t_list **list, t_list **last);
+char	*compose_string(t_list **list, t_list **last, char *aux_last);
 char	*process_last(t_list **last);
 void	copy_content(char *line, t_list *node, t_list *last, size_t node_i);
 
