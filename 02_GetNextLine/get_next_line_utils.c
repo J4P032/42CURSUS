@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/01 01:37:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/01 03:12:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,24 @@ void	*ft_calloc(size_t nmemb, size_t size)
 
 void	free_list(t_list **list, t_list **last)
 {
+/* 	 if (!list || !*list)
+        return;
+    
+    t_list *aux = (*list)->next;
+    
+    // Limpiamos el nodo actual
+    free((*list)->content);
+    free(*list);        // Liberamos primero el nodo
+    
+    // Actualizamos los punteros
+    *list = aux;        // Movemos la lista al siguiente
+    
+    // Actualizamos last si es necesario
+    if (*last && (*last)->total_rbytes == 0)
+        *last = NULL; */
+	
+	
+	
 	t_list	*aux;
 	
 	aux = (*list)->next;
@@ -49,15 +67,7 @@ void	free_list(t_list **list, t_list **last)
 	free(*list);
 	*list = aux;
 	if ((*last) && (*last)->total_rbytes == 0)
-	{
-		//free((*last)->content);
-		//(*last)->content = NULL;
-		//(*last)->read_bytes = 0;
-		//(*last)->total_rbytes = 0;
-		//(*last)->next = NULL;
-		//free(*last);
 		*last = NULL;	
-	}
 }
 
 
@@ -137,7 +147,7 @@ t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes)
 	else
 	{
 		aux = *lst;
-		while (aux->next)
+		while (aux->next && aux->next != aux)  // Añadimos verificación de ciclo
 			aux = aux->next;
 		aux->next = lnew;
 	}

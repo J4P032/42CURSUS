@@ -6,12 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 21:42:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/01 03:05:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h> ///////////////////////////
 
 /*search for first byte with char c in first n bytes of s*/
 /*if not found -> NULL*/
