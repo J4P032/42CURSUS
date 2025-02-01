@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/31 22:36:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/01 01:37:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 {
 	size_t	j;
 	size_t	i;
+	size_t	counter;
 	
 	j = 0;
 	i = 0;
@@ -73,15 +74,19 @@ void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 		line[i + (BUFFER_SIZE * node_i)] = node->content[i];
 		i++;
 	}
+	counter = i;
 	if (node->content[i] == '\n')
-			line[i + (BUFFER_SIZE * node_i)] = '\n';
+	{
+		line[i + (BUFFER_SIZE * node_i)] = '\n';
+		counter++;
+	}
 	while (i < (size_t)node->read_bytes - 1)
 		node->content[j++]	= node->content[++i];
 	i = 0;
-	while (line[i])
-		i++;
-	node->read_bytes = node->read_bytes - i;
-	last->total_rbytes -= i;
+	/* while (line[i])
+		i++; */
+	node->read_bytes = node->read_bytes - counter;
+	last->total_rbytes -= counter;
 }
 
 
