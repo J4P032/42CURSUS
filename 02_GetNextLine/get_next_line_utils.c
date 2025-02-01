@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/01 03:12:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/01 22:13:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,10 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-
 void	free_list(t_list **list, t_list **last)
 {
-/* 	 if (!list || !*list)
-        return;
-    
-    t_list *aux = (*list)->next;
-    
-    // Limpiamos el nodo actual
-    free((*list)->content);
-    free(*list);        // Liberamos primero el nodo
-    
-    // Actualizamos los punteros
-    *list = aux;        // Movemos la lista al siguiente
-    
-    // Actualizamos last si es necesario
-    if (*last && (*last)->total_rbytes == 0)
-        *last = NULL; */
-	
-	
-	
 	t_list	*aux;
-	
+
 	aux = (*list)->next;
 	free((*list)->content);
 	(*list)->content = NULL;
@@ -67,16 +48,15 @@ void	free_list(t_list **list, t_list **last)
 	free(*list);
 	*list = aux;
 	if ((*last) && (*last)->total_rbytes == 0)
-		*last = NULL;	
+		*last = NULL;
 }
-
 
 void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 {
 	size_t	j;
 	size_t	i;
 	size_t	counter;
-	
+
 	j = 0;
 	i = 0;
 	while ((i < (size_t)node->read_bytes) && (node->content[i] != '\n'))
@@ -91,21 +71,20 @@ void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 		counter++;
 	}
 	while (i < (size_t)node->read_bytes - 1)
-		node->content[j++]	= node->content[++i];
-	i = 0;
-	/* while (line[i])
-		i++; */
+		node->content[j++] = node->content[++i];
+	i = node->read_bytes - counter;
+	while (i < (size_t)node->read_bytes)
+		node->content[i++] = '\0';
 	node->read_bytes = node->read_bytes - counter;
 	last->total_rbytes -= counter;
 }
-
 
 char	*compose_string(t_list **list, t_list **last, char *aux_last)
 {
 	char	*line;
 	size_t	node;
 
-	if (aux_last) ///pasar hackear la salida del ultimo nodo
+	if (aux_last)
 		return (aux_last);
 	if (!*list)
 		return (NULL);
@@ -115,7 +94,7 @@ char	*compose_string(t_list **list, t_list **last, char *aux_last)
 		return (NULL);
 	while (*list)
 	{
-		copy_content(line, *list, *last, node);///
+		copy_content(line, *list, *last, node);
 		node++;
 		if (((*last)->read_bytes > 0) && (*list == *last))
 			break ;
@@ -131,8 +110,8 @@ t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes)
 	t_list			*lnew;
 	t_list			*aux;
 	static ssize_t	total_rbytes;
-	
-	if (!*lst)
+
+	if ((!*lst)) //|| (*lst)->total_rbytes == 0)
 		total_rbytes = 0;
 	lnew = ft_calloc(1, sizeof(t_list));
 	if (!lnew || !content)
@@ -141,13 +120,13 @@ t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes)
 	lnew->read_bytes = rbytes;
 	lnew->total_rbytes = total_rbytes + rbytes;
 	lnew->next = NULL;
-	total_rbytes+= rbytes;
+	total_rbytes += rbytes;
 	if (!*lst)
 		*lst = lnew;
 	else
 	{
 		aux = *lst;
-		while (aux->next && aux->next != aux)  // Añadimos verificación de ciclo
+		while (aux->next && aux->next != aux)
 			aux = aux->next;
 		aux->next = lnew;
 	}
