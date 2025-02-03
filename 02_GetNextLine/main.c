@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 18:18:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/01 22:04:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/02 21:50:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	linea = NULL;
-	fd = open("TEST/dib4.txt", O_RDONLY);
+	fd = open("TEST/multiple_line_no_nl", O_RDONLY);
 	if (fd == -1)
 		write(2, "Error reading\n", 14);
 
@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 		flag = 0;
 		linea = get_next_line(fd);
 		if (linea)
-			printf("%s", linea);
+			printf("%s_", linea);
 		free (linea);
 	}
 

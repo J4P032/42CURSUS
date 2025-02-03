@@ -9,7 +9,7 @@ C_NC='\033[0m'
 clear
 
 echo -e "${C_BLUE}GNL TESTS by werodrig."
-echo -e "${C_BLUE}Filename\t1\t2\t3\t4\t5\t10\t20\t100\t1000\t10000${C_NC}"
+echo -e "${C_BLUE}Filename\t1\t2\t3\t4\t5\t10\t20\t42\t100\t1000${C_NC}"
 
 for file in *.txt; do
 

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/01 22:13:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/03 08:28:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	size_t			i;
 
 	i = 0;
+/* 	static int count; ///////////
+	count++;
+	if (count == 4)
+		return (NULL);/////// */
 	if (nmemb == 0 || size == 0)
-		return (malloc(0));
+		return (NULL);
 	if (nmemb > (size_t)-1 / size)
 		return (NULL);
 	total_bytes = nmemb * size;
@@ -34,21 +38,35 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	}
 	return (ptr);
 }
-
-void	free_list(t_list **list, t_list **last)
+/*with option 1 removes all the list in case of error*/
+/*with other 'option' it just removes the node worked*/
+void	free_list(t_list **list, int option)
 {
 	t_list	*aux;
 
-	aux = (*list)->next;
-	free((*list)->content);
-	(*list)->content = NULL;
-	(*list)->read_bytes = 0;
-	(*list)->total_rbytes = 0;
-	(*list)->next = NULL;
-	free(*list);
-	*list = aux;
-	if ((*last) && (*last)->total_rbytes == 0)
-		*last = NULL;
+	if (!*list)
+		return ;
+	if (option == 1)
+	{
+		while (*list)
+		{
+			aux = (*list)->next;
+			free((*list)->content);
+			(*list)->content = NULL;
+			(*list)->next = NULL;
+			free(*list);
+			*list = aux;
+		}
+	}
+	else
+	{
+		aux = (*list)->next;
+		free((*list)->content);
+		(*list)->content = NULL;
+		(*list)->next = NULL;
+		free(*list);
+		*list = aux;
+	}
 }
 
 void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
@@ -65,15 +83,16 @@ void	copy_content(char *line, t_list *node, t_list *last, size_t node_i)
 		i++;
 	}
 	counter = i;
-	if (node->content[i] == '\n')
+	//AQUI ESTA EL PROBLEMA SI NO \n LO SUELTA COMO LINEA Y NO PUEDE HACER ESO.
+	if ((i < (size_t)node->read_bytes) && (node->content[i] == '\n')) //si en i de salida es \n escribirlo
 	{
 		line[i + (BUFFER_SIZE * node_i)] = '\n';
 		counter++;
 	}
-	while (i < (size_t)node->read_bytes - 1)
+	while (i < (size_t)node->read_bytes - 1)  //transferencia atras adelante de resto no tratado
 		node->content[j++] = node->content[++i];
 	i = node->read_bytes - counter;
-	while (i < (size_t)node->read_bytes)
+	while (i < (size_t)node->read_bytes) //rellenado de ceros hasta el final
 		node->content[i++] = '\0';
 	node->read_bytes = node->read_bytes - counter;
 	last->total_rbytes -= counter;
@@ -83,22 +102,29 @@ char	*compose_string(t_list **list, t_list **last, char *aux_last)
 {
 	char	*line;
 	size_t	node;
+	int		kk = 0; ////
 
 	if (aux_last)
 		return (aux_last);
 	if (!*list)
 		return (NULL);
 	node = 0;
-	line = (char *)ft_calloc(((*last)->total_rbytes) + 1, sizeof(char));
+	if (findn((*last)->content, (*last)->read_bytes) >= 0)///para solo reservar el tamanyo justo
+		kk = (*last)->read_bytes - findn((*last)->content, (*last)->read_bytes);
+	//line = (char *)ft_calloc(((*last)->total_rbytes) + 1, sizeof(char));
+	line = (char *)ft_calloc(((*last)->total_rbytes - kk + 1) + 1, sizeof(char));
 	if (!line)
+	{
+		free_list(list, 1);
 		return (NULL);
+	}
 	while (*list)
 	{
 		copy_content(line, *list, *last, node);
 		node++;
 		if (((*last)->read_bytes > 0) && (*list == *last))
-			break ;
-		free_list(list, last);
+			break ; //solo limpiara el ultimo nodo last, si lo ha procesado completamente
+		free_list(list, 0);
 	}
 	return (line);
 }
@@ -111,24 +137,20 @@ t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes)
 	t_list			*aux;
 	static ssize_t	total_rbytes;
 
-	if ((!*lst)) //|| (*lst)->total_rbytes == 0)
+	if ((!*lst))
 		total_rbytes = 0;
 	lnew = ft_calloc(1, sizeof(t_list));
-	if (!lnew || !content)
-		return (NULL);
+	if (!lnew)
+		return (free_list(lst, 1), NULL);
 	lnew->content = content;
 	lnew->read_bytes = rbytes;
 	lnew->total_rbytes = total_rbytes + rbytes;
 	lnew->next = NULL;
 	total_rbytes += rbytes;
 	if (!*lst)
-		*lst = lnew;
-	else
-	{
-		aux = *lst;
-		while (aux->next && aux->next != aux)
-			aux = aux->next;
-		aux->next = lnew;
-	}
-	return (lnew);
+		return (*lst = lnew, lnew);
+	aux = *lst;
+	while (aux->next && aux->next != aux)
+		aux = aux->next;
+	return (aux->next = lnew, lnew);
 }
