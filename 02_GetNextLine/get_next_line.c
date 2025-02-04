@@ -6,41 +6,38 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/03 08:31:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/04 21:16:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "string.h"///
 
 /*search for first byte with char c in first n bytes of s*/
 /*if not found return -1 as 0 can be a valid index */
 /*if s protection needed if s=NULL (bad calloc or EOF)*/
-ssize_t	findn(const char *s, size_t n)
+ssize_t	findn(size_t n, const char *s, int option)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < n)
+	if (option == 1)
 	{
-
-		if (s && s[i] == '\n')
-			return (i);
-		i++;
-
-
-
-
-
-
-		/* if (s && s[i] == '\n')
+		if (!s)
+			return (-1);
+		while (i < n)
 		{
-			if (i == 0)
+			if (s && s[i] == '\n')
 				return (i);
-			return (i);
+			i++;
 		}
-		i++; */
+		return (-1);
 	}
-	return (-1);
+	if (!s)
+		return (0);
+	while (s[i])
+		i++;
+	return (i);
 }
 
 char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
@@ -50,7 +47,7 @@ char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
 	ssize_t	i;
 
 	i = 0;
-	aux = (char *)ft_calloc(BUFFER_SIZE + 1, 1); /////
+	aux = (char *)ft_calloc(BUFFER_SIZE, 1);
 	if (!aux)
 		return (free_list(list, 1), NULL);
 	*bytes = read(fd, aux, BUFFER_SIZE);
@@ -58,6 +55,8 @@ char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
 		return (free(aux), NULL);
 	if (*bytes < 0)
 		return (free(aux), free_list(list, 1), NULL);
+	if (*bytes == BUFFER_SIZE)
+		return (aux);
 	resize = (char *)ft_calloc(*bytes, 1);
 	if (!resize)
 		return (free(aux), free_list(list, 1), NULL);
@@ -69,14 +68,61 @@ char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
 	return (free(aux), resize);
 }
 
-char	*process_last(t_list **list, t_list **last)
+char	*str_join(char *dest, char *src, char *rest, ssize_t length)
 {
+	ssize_t	i;
+	ssize_t	src_len;
+
+	i = -1;
+	src_len = findn(0, src, 0);
+	if (!src && !rest)
+		return (NULL);
+	if (!src || !rest)
+	{
+		if (!rest)
+			return (src);
+		while (++i < length)
+			dest[i] = rest[i];
+		return (dest);
+	}
+	i = 0;
+	while (i < src_len || i < length) //concatenacion
+	{
+		if (i < src_len)
+			dest[i] = src[i];
+		if (i < length)
+			dest[i + src_len] = rest[i];
+		i++;
+	}
+	return (dest);
+}
+
+char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
+{
+	ssize_t	i;
+	size_t	j;
+	ssize_t	big_length;
+	ssize_t	rest_length;
 	char	*aux;
 
-	if ((!*last))
-		return (NULL);
-	aux = NULL;
-	aux = compose_string(list, last, aux);
+	big_length = findn(0, *big, 0);
+	rest_length = 0;
+	if ((*rbytes > 0) && (findn(*rbytes, rest, 1) >= 0)) //proteccion frente a no n aunque no se le pasara la funcion
+		rest_length = findn(*rbytes, rest, 1) + 1;
+	aux = (char *)ft_calloc(big_length + rest_length + 1, 1);
+	if (!aux)
+		return (free(rest), free(*big), free_list(list, 1), NULL);
+	aux = str_join(aux, *big, rest, rest_length);
+	if (*big)
+		free(*big);
+	i = 0;
+	j = rest_length;
+	while (i < *rbytes - rest_length)//transferencia atras adelante de resto no tratado
+		rest[i++] = rest[j++];
+	rest[i] = '\0';
+	*rbytes -= rest_length;
+	if ((*list) && ((*list)->total_rbytes))
+		*((*list)->total_rbytes) -= rest_length;
 	return (aux);
 }
 
@@ -86,25 +132,27 @@ char	*process_last(t_list **list, t_list **last)
 char	*get_next_line(int fd)
 {
 	static t_list	*list;
-	static t_list	*last;
 	ssize_t			rbytes;
-	char			*aux_last;
 	char			*content;
+	char			*big;
 
 	rbytes = 1;
-	aux_last = process_last(&list, &last);
-	while ((rbytes > 0) && (!aux_last))
+	big = give_me_rest(&list);
+	while (rbytes > 0 && findn(findn(0, big, 0), big, 1) == -1)
 	{
 		content = ft_read_fd(fd, &rbytes, &list);
-		if ((!content) && (!list))
-			return (NULL);
-		if (findn(content, rbytes) >= 0)
+		if ((!content) && (list))//&& (!list))
+			return (big = compose_string(&list), free_list(&list, 1), big);
+		if (findn(rbytes, content, 1) >= 0)
 		{
-			last = ft_listnew(&list, content, rbytes);
-			break ;
+			big = compose_string(&list);
+			big = process_rest(&big, content, &rbytes, &list);
+			if (content && rbytes > 0)
+				ft_listnew(&list, content, rbytes);
+			return (big);
 		}
 		else if (content)
-			last = ft_listnew(&list, content, rbytes);
+			ft_listnew(&list, content, rbytes); ///si es nulo el content???
 	}
-	return (compose_string(&list, &last, aux_last));
+	return (big);
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/02 21:31:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/04 20:47:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,20 @@
 typedef struct s_list
 {
 	char			*content;
-	ssize_t			read_bytes;
-	ssize_t			total_rbytes;
+	ssize_t			r_bytes;
+	ssize_t			*total_rbytes;
 	struct s_list	*next;
 }					t_list;
 
-char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list);
-void	*ft_calloc(size_t nmemb, size_t size);
-ssize_t	findn(const char *s, size_t n);
-t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes);
 char	*get_next_line(int fd);
+char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list);
+char	*str_join(char *dest, char *src, char *rest, ssize_t length);
+char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list);
+ssize_t	findn( size_t n, const char *s, int option);
+t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes);
+char	*compose_string(t_list **list);
+char	*give_me_rest(t_list **list);
 void	free_list(t_list **list, int option);
-char	*compose_string(t_list **list, t_list **last, char *aux_last);
-char	*process_last(t_list **list, t_list **last);
-void	copy_content(char *line, t_list *node, t_list *last, size_t node_i);
+void	*ft_calloc(size_t nmemb, size_t size);
 
 #endif

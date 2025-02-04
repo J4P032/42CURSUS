@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 18:18:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/02 21:50:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/04 21:11:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@ int	main(int argc, char **argv)
 	int		fd;
 	char	*linea;
 	int		flag = 1;
+	int		i = 0;
 
 	/* if (argc != 2)
 		return (1); */
 	(void)argc;
 	(void)argv;
 	linea = NULL;
-	fd = open("TEST/multiple_line_no_nl", O_RDONLY);
+	fd = open("test/01.txt", O_RDONLY);
 	if (fd == -1)
 		write(2, "Error reading\n", 14);
 
@@ -34,8 +35,12 @@ int	main(int argc, char **argv)
 		flag = 0;
 		linea = get_next_line(fd);
 		if (linea)
-			printf("%s_", linea);
+		{
+			printf("%s", linea);
+		//	printf("\n");
+		}
 		free (linea);
+		i++;
 	}
 
 	/* linea = get_next_line(fd);
