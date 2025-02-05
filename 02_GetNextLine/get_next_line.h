@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/05 13:44:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:34:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list);
 ssize_t	findn( size_t n, const char *s, int option);
 t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes);
 char	*compose_string(t_list **list);
-char	*give_me_rest(t_list **list, char **content, int option, ssize_t *b);
+char	*give_me_rest(t_list **l, char **content, int option, ssize_t *b);
 void	free_list(t_list **list, int option);
 void	*ft_calloc(size_t nmemb, size_t size);
 

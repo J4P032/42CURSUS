@@ -6,15 +6,15 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/05 14:30:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:30:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/*search for first byte with char c in first n bytes of s*/
-/*if not found return -1 as 0 can be a valid index */
-/*if s protection needed if s=NULL (bad calloc or EOF)*/
+/*this function do 2 things depending on option*/
+/*option1:search for index of \n. if not found returns -1 (ssize_t)*/
+/*option0:makes an strlen*/
 ssize_t	findn(size_t n, const char *s, int option)
 {
 	size_t	i;
@@ -39,6 +39,9 @@ ssize_t	findn(size_t n, const char *s, int option)
 	return (i);
 }
 
+/*reads from open fd and insert it in aux with BUFFER_SIZE*/
+/*if bytes read (that is modified by pointer) != BUFFER_SIZE...*/
+/*it 'realoc' it into resize to better memory management*/
 char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
 {
 	char	*aux;
@@ -48,7 +51,7 @@ char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
 	i = 0;
 	aux = (char *)ft_calloc(BUFFER_SIZE, 1);
 	if (!aux)
-		return (free_list(list, 1), NULL);
+		return (*bytes = 0, free_list(list, 1), NULL);
 	*bytes = read(fd, aux, BUFFER_SIZE);
 	if (*bytes == 0)
 		return (free(aux), NULL);
@@ -67,6 +70,8 @@ char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
 	return (free(aux), resize);
 }
 
+/*joins source and rest into dest with correct size*/
+/*it does it if both exists in one pass*/
 char	*str_join(char *dest, char *src, char *rest, ssize_t length)
 {
 	ssize_t	i;
@@ -96,7 +101,9 @@ char	*str_join(char *dest, char *src, char *rest, ssize_t length)
 	return (dest);
 }
 
-/*line 119: from back to front of the rest after /n*/
+/*joins 'big' data from list nodes without \n with up to first \n in rest*/
+/*line 119: moves from back to front of the rest after /n*/
+/*updates bytes of node & totalbytes of whole list with the rest to process*/
 char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
 {
 	ssize_t	i;
@@ -126,9 +133,12 @@ char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
 	return (aux);
 }
 
-/*process first the rest of the last node in case still are bytes in it*/
-/*when done the 'last' it creates a new node-list with the content readed*/
-/*if finds character \n in the content readed->breaks composition of list*/
+/*give_me_rest: gives the string of chars up to first \n*/
+/*content: Function that reads the number of bytes. updated by pointer*/
+/*if find the \n in content it dont store it in list but join it with big*/
+/*rest of 'rest' with or not \n chars is stored in a new first head node*/
+/*give_me_rest in middle is a hack to free last content without bytes readed*/
+/*if not found in 'content' any \n char then directly stores in list*/
 char	*get_next_line(int fd)
 {
 	static t_list	*list;

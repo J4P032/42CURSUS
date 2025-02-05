@@ -6,12 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/05 14:27:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:45:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+/*just a 'simple' calloc to save from writing \0 lines*/
+/*extra protection with sizes to 0 to return NULL*/
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	size_t			total_bytes;
@@ -66,6 +68,11 @@ void	free_list(t_list **list, int option)
 	*list = aux;
 }
 
+/*first with option0 is a hack to store in 25norminette lines from GNL func*/
+/*second: if finds \n in stored 'rest' in list*/
+/*calloc of num of chars with \n from left of 'rest' plus 1 (so +2) for \0*/
+/*process_rest with that aux(calloced). In this case 'big' is empty*/
+/*finale frees are in case last data read with content reserved & list left*/
 char	*give_me_rest(t_list **l, char **content, int option, ssize_t *b)
 {
 	char	*aux;
@@ -93,6 +100,9 @@ char	*give_me_rest(t_list **l, char **content, int option, ssize_t *b)
 	return (NULL);
 }
 
+/*joins all the content of each node into one big 'line'*/
+/*because rbytes and totalbytes are updated it is dynamic in calloc*/
+/*once each node is passed to 'line' it just free that node and content*/
 char	*compose_string(t_list **list)
 {
 	char	*line;
