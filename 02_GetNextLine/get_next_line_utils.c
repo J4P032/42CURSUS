@@ -6,24 +6,20 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/04 20:50:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:27:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
- void	*ft_calloc(size_t nmemb, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
 	size_t			total_bytes;
 	unsigned char	*ptr;
 	size_t			i;
 
 	i = 0;
-/* 	static int count; ///////////
-	count++;
-	if (count == 4)
-		return (NULL);/////// */
- 	if (nmemb == 0 || size == 0)
+	if (nmemb == 0 || size == 0)
 		return (NULL);
 	if (nmemb > (size_t)-1 / size)
 		return (NULL);
@@ -70,31 +66,31 @@ void	free_list(t_list **list, int option)
 	*list = aux;
 }
 
-char	*give_me_rest(t_list **list)
+char	*give_me_rest(t_list **l, char **content, int option, ssize_t *b)
 {
 	char	*aux;
-	ssize_t	rest_length;
 
-	if (!*list)
-		return (NULL);
-	rest_length = 0;
-	if (findn((*list)->r_bytes, (*list)->content, 1) >= 0)
+	if (option == 0)
 	{
-		rest_length = findn((*list)->r_bytes, (*list)->content, 1) + 1;
-		aux = (char *)ft_calloc(rest_length + 1, 1);
-		if (!aux)
-			return (free_list(list, 1), NULL);
-		aux = process_rest(&aux, (*list)->content, &((*list)->r_bytes), list);
-		return (aux);
+		if (*b == 0 && *content)
+			free(*content);
+		return (NULL);
 	}
-	rest_length = (*list)->r_bytes;
-	aux = (char *)ft_calloc(rest_length + 1, 1);
-	if (!aux)
-		return (free_list(list, 1), NULL);
-	aux = str_join(aux, NULL, (*list)->content, (*list)->r_bytes);
-	return (aux);  //si no encuentra \n pero hay lista pasamos NULL para que pase dentro del while
-
-	//return (aux);
+	*content = NULL;
+	if (!*l)
+		return (NULL);
+	if (findn((*l)->r_bytes, (*l)->content, 1) >= 0)
+	{
+		aux = (char *)ft_calloc(findn((*l)->r_bytes, (*l)->content, 1) + 2, 1);
+		if (!aux)
+			return (free_list(l, 1), NULL);
+		return (process_rest(&aux, (*l)->content, &((*l)->r_bytes), l));
+	}
+	if (*content)
+		free(*content);
+	if (*l && (*l)->r_bytes == 0)
+		free_list(l, 1);
+	return (NULL);
 }
 
 char	*compose_string(t_list **list)
@@ -106,22 +102,21 @@ char	*compose_string(t_list **list)
 	if (!*list)
 		return (NULL);
 	j = 0;
-	line = (char *)ft_calloc((size_t)*(*list)->total_rbytes + 1, 1);
+	line = (char *)ft_calloc((size_t) *(*list)->total_rbytes + 1, 1);
 	if (!line)
 		return (free_list(list, 1), NULL);
-
 	while (*list)
 	{
 		i = 0;
 		while ((i < (size_t)(*list)->r_bytes))
 		{
-			if (j >= (size_t)*(*list)->total_rbytes) // Protección
-            	return (free_list(list, 1), NULL);
-        	line[j] = (*list)->content[i]; // Copia en orden
-        i++;
-        j++;
+			if (j >= (size_t) *(*list)->total_rbytes)
+				return (free_list(list, 1), NULL);
+			line[j] = (*list)->content[i];
+			i++;
+			j++;
 		}
-		free_list(list, 0);//solo limpia un nodo y pasa al siguiente
+		free_list(list, 0);
 	}
 	return (line);
 }
@@ -135,7 +130,7 @@ t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes)
 
 	lnew = ft_calloc(1, sizeof(t_list));
 	if (!lnew)
-		return (free_list(lst, 1), NULL);   //liberacion total de lista
+		return (free_list(lst, 1), NULL);
 	lnew->content = content;
 	lnew->r_bytes = rbytes;
 	lnew->next = NULL;

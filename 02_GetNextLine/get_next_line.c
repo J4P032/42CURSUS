@@ -6,12 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/04 21:16:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:30:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "string.h"///
 
 /*search for first byte with char c in first n bytes of s*/
 /*if not found return -1 as 0 can be a valid index */
@@ -86,7 +85,7 @@ char	*str_join(char *dest, char *src, char *rest, ssize_t length)
 		return (dest);
 	}
 	i = 0;
-	while (i < src_len || i < length) //concatenacion
+	while (i < src_len || i < length)
 	{
 		if (i < src_len)
 			dest[i] = src[i];
@@ -97,6 +96,7 @@ char	*str_join(char *dest, char *src, char *rest, ssize_t length)
 	return (dest);
 }
 
+/*line 119: from back to front of the rest after /n*/
 char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
 {
 	ssize_t	i;
@@ -107,7 +107,7 @@ char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
 
 	big_length = findn(0, *big, 0);
 	rest_length = 0;
-	if ((*rbytes > 0) && (findn(*rbytes, rest, 1) >= 0)) //proteccion frente a no n aunque no se le pasara la funcion
+	if ((*rbytes > 0) && (findn(*rbytes, rest, 1) >= 0))
 		rest_length = findn(*rbytes, rest, 1) + 1;
 	aux = (char *)ft_calloc(big_length + rest_length + 1, 1);
 	if (!aux)
@@ -117,7 +117,7 @@ char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
 		free(*big);
 	i = 0;
 	j = rest_length;
-	while (i < *rbytes - rest_length)//transferencia atras adelante de resto no tratado
+	while (i < *rbytes - rest_length)
 		rest[i++] = rest[j++];
 	rest[i] = '\0';
 	*rbytes -= rest_length;
@@ -137,11 +137,11 @@ char	*get_next_line(int fd)
 	char			*big;
 
 	rbytes = 1;
-	big = give_me_rest(&list);
-	while (rbytes > 0 && findn(findn(0, big, 0), big, 1) == -1)
+	big = give_me_rest(&list, &content, 1, &rbytes);
+	while (rbytes > 0 && (!big))
 	{
 		content = ft_read_fd(fd, &rbytes, &list);
-		if ((!content) && (list))//&& (!list))
+		if ((!content) && (list))
 			return (big = compose_string(&list), free_list(&list, 1), big);
 		if (findn(rbytes, content, 1) >= 0)
 		{
@@ -149,10 +149,11 @@ char	*get_next_line(int fd)
 			big = process_rest(&big, content, &rbytes, &list);
 			if (content && rbytes > 0)
 				ft_listnew(&list, content, rbytes);
+			give_me_rest(&list, &content, 0, &rbytes);
 			return (big);
 		}
 		else if (content)
-			ft_listnew(&list, content, rbytes); ///si es nulo el content???
+			ft_listnew(&list, content, rbytes);
 	}
 	return (big);
 }
