@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 18:18:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/05 15:46:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/06 19:59:51 by japo32           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	linea = NULL;
-	fd = open("TEST/quijote.txt", O_RDONLY);
+	fd = open("TEST/dib4.txt", O_RDONLY);
 	if (fd == -1)
 		write(2, "Error reading\n", 14);
 

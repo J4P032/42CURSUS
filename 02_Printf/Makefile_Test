@@ -1,12 +1,13 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = libftprintf.a
 LIBRARY = ./libft/libft.a
+EXEC = ft_printf_exe
 SRC = ft_printf.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 
-all: $(NAME) $(LIBRARY)
+all: $(NAME) $(LIBRARY) $(EXEC)
 
 $(LIBRARY):
 	make -C libft
@@ -17,8 +18,11 @@ $(LIBRARY):
 $(NAME): $(OBJS) $(LIBRARY)
 	ar -rc $@ $(OBJS) $(LIBRARY)
 
+$(EXEC): $(OBJS) $(LIBRARY)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS) $(LIBRARY)
+
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(EXEC)
 	make clean -C libft
 
 fclean: clean
