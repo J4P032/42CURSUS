@@ -6,14 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:33:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/06 18:26:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:31:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdarg.h>
 
-int	ft_printf(char const *, ...);
+int	ft_printf(char const *, ...)
 {
 
 	return (0);

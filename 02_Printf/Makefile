@@ -8,6 +8,9 @@ RM	= rm -rf
 
 all: $(NAME) $(LIBRARY)
 
+$(LIBRARY):
+	make -C libft
+
 %.o: %.c libftprintf.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -25,5 +28,4 @@ fclean: clean
 re: fclean all
 	make fclean -C libft
 
-.PHONY all re clean fclean
-
+.PHONY: all re clean fclean
