@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:33:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/07 11:37:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/07 16:57:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_printf(char const *str, ...)
 #include <stdio.h>
 int main ()
 {
-	ft_printf("el numero es %zu, patatas", 5, 8);
+	ft_printf("hola % %zu", 5, 8);
 	//printf("hola %zk");
 	return (0);
 }

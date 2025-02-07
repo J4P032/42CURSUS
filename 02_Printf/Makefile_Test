@@ -13,16 +13,16 @@ $(LIBRARY):
 	make -C libft
 
 %.o: %.c libftprintf.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBRARY)
-	ar -rc $@ $(OBJS) $(LIBRARY)
+	@ar -rc $@ $(OBJS) $(LIBRARY)
 
 $(EXEC): $(OBJS) $(LIBRARY)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS) $(LIBRARY)
+	@$(CC) $(CFLAGS) -o $(EXEC) $(OBJS) $(LIBRARY)
 
 clean:
-	$(RM) $(OBJS) $(EXEC)
+	@$(RM) $(OBJS) $(EXEC)
 	make clean -C libft
 
 fclean: clean
