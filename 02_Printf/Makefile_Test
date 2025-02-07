@@ -13,7 +13,7 @@ $(LIBRARY):
 	make -C libft
 
 %.o: %.c libftprintf.h
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBRARY)
 	@ar -rc $@ $(OBJS) $(LIBRARY)
