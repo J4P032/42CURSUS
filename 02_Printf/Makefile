@@ -29,5 +29,3 @@ re: fclean all
 	make fclean -C libft
 
 .PHONY: all re clean fclean
-
-//prueba

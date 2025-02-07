@@ -6,11 +6,10 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:33:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/07 17:10:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:12:13 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//prueba
 #include "ft_printf.h"
 
 void	ft_write(char const *str, va_list param)

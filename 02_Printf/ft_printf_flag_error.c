@@ -6,11 +6,10 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 10:08:01 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/07 17:10:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:12:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//prueba
 #include "ft_printf.h"
 
 /*option 0: just one char flag error. ex: %w is not a valid...*/
