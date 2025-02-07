@@ -6,17 +6,17 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:33:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/06 21:10:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/07 11:37:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdarg.h>
-
 
 void	ft_write(char const *str, va_list param)
 {
 	char	*num;
+	
+	num = NULL;
 	while (str && *str)
 	{
 		if (*str == '%')
@@ -34,8 +34,12 @@ void	ft_write(char const *str, va_list param)
 	}
 }
 
+/*original printf returns number of chars printed to verify error*/
 int	ft_printf(char const *str, ...)
 {
+	
+	if (check_printf_flag_error(str)) //si da 1 es error. Si es 0 puede continuar
+		return (1);
 	va_list	params;
 	va_start(params, str);
 
@@ -49,7 +53,7 @@ int	ft_printf(char const *str, ...)
 #include <stdio.h>
 int main ()
 {
-	ft_printf("el numero es %d", 2);
-	//printf("hola %d %d", 4);
+	ft_printf("el numero es %zu, patatas", 5, 8);
+	//printf("hola %zk");
 	return (0);
 }

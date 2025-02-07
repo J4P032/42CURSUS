@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 NAME = libftprintf.a
 LIBRARY = ./libft/libft.a
 EXEC = ft_printf_exe
-SRC = ft_printf.c
+SRC = ft_printf.c ft_printf_flag_error.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 
