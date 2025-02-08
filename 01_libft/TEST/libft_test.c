@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 23:29:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/27 10:57:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/08 21:20:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1105,11 +1105,13 @@ int main_memcpy()
 			switch (press)
 			{
 				case '1':
-					strcpy(s_ft, s1);
+					if (s1)
+						strcpy(s_ft, s1);
 					ft_memcpy(s_ft, s2, num_bytes);
 					break;
 				case '2':
-					strcpy(s_or, s1);
+					if (s1)
+						strcpy(s_or, s1);
 					memcpy(s_or, s2, num_bytes);
 					break;
 				default:
