@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_printf_flag_type.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/06 18:24:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/08 14:45:29 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/02/08 13:56:12 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/02/08 14:51:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "ft_printf.h"
 
-# ifndef FLAGS
-#  define FLAGS "cspdiuxX%"
-# endif
-
-# include "./libft/libft.h"
-# include <stdarg.h>
-# include <unistd.h>
-
-int		ft_printf(char const *str, ...);
-int		check_printf_flag_error(char const *str);
-void	ft_print_flag_di(char const **str, va_list params, size_t *num_chars);
-
-#endif
+void ft_print_flag_di(char const **str, va_list params, size_t *num_chars)
+{
+	char	*num;
+	
+	++(*str);
+	num = ft_itoa(va_arg(params, int));
+	while (num && *num)
+	{
+		write(1, num++, 1);
+		(*num_chars)++;
+	}
+}

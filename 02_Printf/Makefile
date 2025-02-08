@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = libftprintf.a
 LIBRARY = ./libft/libft.a
-SRC = ft_printf.c ft_printf_flag_error.c
+SRC = ft_printf.c ft_printf_flag_error.c ft_printf_flag_type.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 

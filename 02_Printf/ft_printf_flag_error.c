@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 10:08:01 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/08 13:30:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:48:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /*option 2: for just printing '%' in case of % at the end of the string*/
 void	write_flag_error(char c, int option)
 {
-	write(2, "%", 1);
+	write(2, "\n%", 2);
 	if (option == 0)
 		write(2, &c, 1);
 	if (option == 1)

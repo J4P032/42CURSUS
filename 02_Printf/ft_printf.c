@@ -6,58 +6,65 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:33:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/08 13:33:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/08 14:53:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdio.h> ///
 
-
-void	ft_write(char const *str, va_list param)
+/* (char[]){va_arg(param, int)} I trick forming an array of ony a char with..*/
+/*..va_arg(param,int) so it will have the address of that string to print*/
+void	ft_write(char const *str, va_list param, size_t *num_chars)
 {
-	char	*num;
-	
-	num = NULL;
 	while (str && *str)
 	{
 		if (*str == '%')
 		{
-			if (*++str == 'd')
+			if ((*++str == 'd') || (*str == 'i'))
+				ft_print_flag_di(&str, param, num_chars);
+			else if (*str == 'c')
 			{
+				write(1, (char []){va_arg(param, int)}, 1);
+				(*num_chars)++;
 				str++;
-				num = ft_itoa(va_arg(param, int));
-				while (num && *num)
-					write(1, num++, 1);
 			}
-		}	
+		}
 		if (str && *str)
+		{
 			write(1, str++, 1);
+			(*num_chars)++;
+		}
 	}
 }
 
 /*original printf returns number of chars printed to verify error*/
 int	ft_printf(char const *str, ...)
 {
-	int	num_flags;
-	
+	int		num_flags;
+	size_t	num_chars;
+
+	num_chars = 0;
 	num_flags = check_printf_flag_error(str);
-	printf("\n\nel num de flags es: %d", num_flags); //
 	if (num_flags == -1) //si da -1 es error. si no da num de % validos
 		return (1);
 	va_list	params;
 	va_start(params, str);
-	ft_write(str, params);
+	ft_write(str, params, &num_chars);
+	
+	
 	
 	va_end(params);
+	printf("\nEl num de chars es: %zu\n", num_chars);
 	
-	return (0);
+	return (num_chars);
 }
 
 
 int main ()
 {
-	ft_printf("hola %d %p %i atata", 5, 8);
+	ft_printf("ho%ca %d", 'l', -32);
+	ft_printf("adios%%");
 	//printf("hola %zk");
 	return (0);
 }
