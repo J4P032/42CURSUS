@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 10:08:01 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/07 17:12:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:30:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,29 @@ void	write_flag_error(char c, int option)
 /*Check if flags are correct. I included %zu for size_t ones*/
 /*runs all chars up to '%' then compares next one */
 /*if next one is inside group of FLAGS in define ft_printf.h -> ok*/
+/*returns number of valid %. %% is not count but is not an error*/
 int	check_printf_flag_error(char const *str)
 {
-	size_t	i;
-	size_t	len;
+	size_t	num_flags;
 
-	i = 0;
-	len = ft_strlen(str);
-	while (str[i])
+	num_flags = 0;
+	while (*str)
 	{
-		while(str[i] && str[i] != '%')
-			i++;
-		if (i == len - 1)
-			return(write_flag_error('%', 2), 1);
-		if (i == len)
-			return (0);
-		if (str[++i] && str[i] == 'z' && str[i + 1] == 'u')
-			i++;
-		else if (str[i] == 'z' && str[i + 1] != 'u')
-			return(write_flag_error(str[i + 1], 1), 1);
-		else if (!ft_strchr(FLAGS, str[i]))
-			return(write_flag_error(str[i], 0), 1);
-		
-		i++;
+		while(*str && *str != '%')
+			str++;
+		if (*str == '%' && !*(str + 1))
+			return(write_flag_error('%', 2), -1);
+		if (!*str)
+			return (num_flags);
+		if (*(++str) == 'z' && *(str + 1) == 'u')
+			num_flags++;
+		else if (*str == 'z' && *(str + 1) != 'u')
+			return(write_flag_error(*(str + 1), 1), -1);
+		else if (!ft_strchr(FLAGS, *str))
+			return(write_flag_error(*str, 0), -1);
+		if ((*str != 'z') && (*str != '%'))
+			num_flags++;
+		str++;
 	}
-	return (0);
+	return (num_flags);
 }
