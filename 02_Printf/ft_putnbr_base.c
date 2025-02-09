@@ -6,13 +6,9 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 12:25:30 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/09 14:20:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/09 14:59:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-/*int range -2,147,483,648 - 647*/
-/* Will give 0 if not valid, or the base number (length) if valid */
 
 #include "ft_printf.h"
 
@@ -85,21 +81,4 @@ void	ft_putnbr_base(unsigned long *nbr, char *base)
 	}
 	free (aux);
 	aux = NULL;
-}
-
-//#include <stdio.h>
-
-int	main()
-{
-	unsigned long	number;
-//	char	base[] = "01";
-//	char	base[] = "PATI"; //Tiene que salir TPI para num=35
-//	char	base[] = "01234567";
-	char	base[] = "0123456789ABCDEF";
-
-	number = 18446744073709551615ul;
-//	number = -35;
-	ft_putnbr_base(&number, base);
-	
-	return (0);
 }

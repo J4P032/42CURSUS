@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 17:33:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/08 14:53:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/09 14:58:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	ft_write(char const *str, va_list param, size_t *num_chars)
 				(*num_chars)++;
 				str++;
 			}
+			else if (*str == 'p')
+				ft_print_flag_p(&str, param, num_chars);
 		}
 		if (str && *str)
 		{
@@ -63,8 +65,13 @@ int	ft_printf(char const *str, ...)
 
 int main ()
 {
-	ft_printf("ho%ca %d", 'l', -32);
-	ft_printf("adios%%");
+	void *puntero;
+	puntero = (void *)malloc(34);
+	
+	printf("puntero printf: %p", puntero);
+	fflush(stdout);
+	ft_printf("\npuntero: %p", puntero);
+	//ft_printf("adios%%");
 	//printf("hola %zk");
 	return (0);
 }

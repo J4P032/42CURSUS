@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 13:56:12 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/08 14:51:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/09 14:56:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,16 @@ void ft_print_flag_di(char const **str, va_list params, size_t *num_chars)
 		write(1, num++, 1);
 		(*num_chars)++;
 	}
+}
+
+void ft_print_flag_p(char const **str, va_list params, size_t *num_chars)
+{
+	unsigned long aux;
+	char base[] = "0123456789abcdef";
+	
+	write(1, "0x", 2);
+	aux = (unsigned long) va_arg(params, void *);
+	++(*str);
+	ft_putnbr_base(&aux, base);
+	(void)num_chars;
 }
