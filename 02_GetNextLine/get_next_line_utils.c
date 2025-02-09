@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/05 17:45:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/09 23:40:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,27 +133,27 @@ char	*compose_string(t_list **list)
 
 /*create new node, link it to exist list or will be the new list*/
 /*returns the & of head if one only node or last node & if more than one*/
-t_list	*ft_listnew(t_list **lst, char *content, ssize_t rbytes)
+t_list	*ft_listnew(t_list **lst, char *content, ssize_t *rbytes)
 {
 	t_list	*lnew;
 	t_list	*aux;
 
 	lnew = ft_calloc(1, sizeof(t_list));
 	if (!lnew)
-		return (free_list(lst, 1), NULL);
+		return (*rbytes = 0, free(content), free_list(lst, 1), NULL);
 	lnew->content = content;
-	lnew->r_bytes = rbytes;
+	lnew->r_bytes = *rbytes;
 	lnew->next = NULL;
 	if ((!*lst))
 	{
 		lnew->total_rbytes = ft_calloc(1, sizeof(ssize_t));
 		if (!lnew->total_rbytes)
-			return (free(lnew), free_list(lst, 1), NULL);
-		*(lnew->total_rbytes) = rbytes;
+			return (*rbytes = 0, free(content), free(lnew), NULL);
+		*(lnew->total_rbytes) = *rbytes;
 		return (*lst = lnew, lnew);
 	}
 	lnew->total_rbytes = (*lst)->total_rbytes;
-	*(lnew->total_rbytes) += rbytes;
+	*(lnew->total_rbytes) += *rbytes;
 	aux = *lst;
 	while (aux->next)
 		aux = aux->next;

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/05 17:30:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/09 23:41:31 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,12 +158,12 @@ char	*get_next_line(int fd)
 			big = compose_string(&list);
 			big = process_rest(&big, content, &rbytes, &list);
 			if (content && rbytes > 0)
-				ft_listnew(&list, content, rbytes);
+				ft_listnew(&list, content, &rbytes);
 			give_me_rest(&list, &content, 0, &rbytes);
 			return (big);
 		}
 		else if (content)
-			ft_listnew(&list, content, rbytes);
+			ft_listnew(&list, content, &rbytes);
 	}
 	return (big);
 }
