@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/09 23:41:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/10 11:50:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*str_join(char *dest, char *src, char *rest, ssize_t length)
 /*joins 'big' data from list nodes without \n with up to first \n in rest*/
 /*line 119: moves from back to front of the rest after /n*/
 /*updates bytes of node & totalbytes of whole list with the rest to process*/
-char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
+char	*process_rest(char **big, char **rest, ssize_t *rbytes, t_list **lst)
 {
 	ssize_t	i;
 	size_t	j;
@@ -114,22 +114,22 @@ char	*process_rest(char **big, char *rest, ssize_t *rbytes, t_list **list)
 
 	big_length = findn(0, *big, 0);
 	rest_length = 0;
-	if ((*rbytes > 0) && (findn(*rbytes, rest, 1) >= 0))
-		rest_length = findn(*rbytes, rest, 1) + 1;
+	if ((*rbytes > 0) && (findn(*rbytes,*rest, 1) >= 0))
+		rest_length = findn(*rbytes, *rest, 1) + 1;
 	aux = (char *)ft_calloc(big_length + rest_length + 1, 1);
 	if (!aux)
-		return (free(rest), free(*big), free_list(list, 1), NULL);
-	aux = str_join(aux, *big, rest, rest_length);
+		return (free(*rest), *rest = NULL, free(*big), free_list(lst, 1), NULL);
+	aux = str_join(aux, *big, *rest, rest_length);
 	if (*big)
 		free(*big);
 	i = 0;
 	j = rest_length;
 	while (i < *rbytes - rest_length)
-		rest[i++] = rest[j++];
-	rest[i] = '\0';
+		(*rest)[i++] = (*rest)[j++];
+	(*rest)[i] = '\0';
 	*rbytes -= rest_length;
-	if ((*list) && ((*list)->total_rbytes))
-		*((*list)->total_rbytes) -= rest_length;
+	if ((*lst) && ((*lst)->total_rbytes))
+		*((*lst)->total_rbytes) -= rest_length;
 	return (aux);
 }
 
@@ -156,14 +156,14 @@ char	*get_next_line(int fd)
 		if (findn(rbytes, content, 1) >= 0)
 		{
 			big = compose_string(&list);
-			big = process_rest(&big, content, &rbytes, &list);
-			if (content && rbytes > 0)
-				ft_listnew(&list, content, &rbytes);
+			big = process_rest(&big, &content, &rbytes, &list);
+			if (content && rbytes > 0 && big)
+				ft_listnew(&list, &content, &rbytes);
 			give_me_rest(&list, &content, 0, &rbytes);
 			return (big);
 		}
 		else if (content)
-			ft_listnew(&list, content, &rbytes);
+			ft_listnew(&list, &content, &rbytes);
 	}
 	return (big);
 }

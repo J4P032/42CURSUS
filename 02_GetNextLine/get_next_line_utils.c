@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/09 23:40:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/10 11:53:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	*give_me_rest(t_list **l, char **content, int option, ssize_t *b)
 		aux = (char *)ft_calloc(findn((*l)->r_bytes, (*l)->content, 1) + 2, 1);
 		if (!aux)
 			return (free_list(l, 1), NULL);
-		return (process_rest(&aux, (*l)->content, &((*l)->r_bytes), l));
+		return (process_rest(&aux, &((*l)->content), &((*l)->r_bytes), l));
 	}
 	if (*content)
 		free(*content);
@@ -133,22 +133,24 @@ char	*compose_string(t_list **list)
 
 /*create new node, link it to exist list or will be the new list*/
 /*returns the & of head if one only node or last node & if more than one*/
-t_list	*ft_listnew(t_list **lst, char *content, ssize_t *rbytes)
+t_list	*ft_listnew(t_list **lst, char **content, ssize_t *rbytes)
 {
 	t_list	*lnew;
 	t_list	*aux;
 
 	lnew = ft_calloc(1, sizeof(t_list));
 	if (!lnew)
-		return (*rbytes = 0, free(content), free_list(lst, 1), NULL);
-	lnew->content = content;
+		return (*rbytes = 0, free(*content), *content = NULL,
+			free_list(lst, 1), NULL);
+	lnew->content = *content;
 	lnew->r_bytes = *rbytes;
 	lnew->next = NULL;
 	if ((!*lst))
 	{
 		lnew->total_rbytes = ft_calloc(1, sizeof(ssize_t));
 		if (!lnew->total_rbytes)
-			return (*rbytes = 0, free(content), free(lnew), NULL);
+			return (*rbytes = 0, free(*content), *content = NULL,
+				free(lnew), NULL);
 		*(lnew->total_rbytes) = *rbytes;
 		return (*lst = lnew, lnew);
 	}
