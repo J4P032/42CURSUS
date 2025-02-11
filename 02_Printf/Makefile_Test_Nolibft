@@ -1,22 +1,26 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g -w
 NAME = libftprintf.a
+EXEC = ft_printf_exe
 SRC = ft_printf.c ft_printf_flag_error.c ft_printf_flag_type.c \
 ft_putnbr_base.c ft_utoa.c ft_itoa.c ft_strlen.c ft_strchr.c \
-ft_calloc.c ft_bzero.c ft_printf_other_flags.c
+ft_calloc.c ft_bzero.c main.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 
-all: $(NAME)
+all: $(NAME) $(EXEC)
 
 %.o: %.c libftprintf.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	ar -rc $@ $(OBJS)
+	@ar -rc $@ $(OBJS)
+
+$(EXEC): $(OBJS)
+	@$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
 clean:
-	$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(EXEC)
 
 fclean: clean
 	$(RM) $(NAME)

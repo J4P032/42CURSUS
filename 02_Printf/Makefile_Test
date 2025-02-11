@@ -1,36 +1,30 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -g -w
 NAME = libftprintf.a
-LIBRARY = ./libft/libft.a
 EXEC = ft_printf_exe
 SRC = ft_printf.c ft_printf_flag_error.c ft_printf_flag_type.c \
-ft_putnbr_base.c
+ft_putnbr_base.c ft_utoa.c ft_itoa.c ft_strlen.c ft_strchr.c \
+ft_calloc.c ft_bzero.c main.c ft_printf_other_flags.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 
-all: $(NAME) $(LIBRARY) $(EXEC)
-
-$(LIBRARY):
-	make -C libft
+all: $(NAME) $(EXEC)
 
 %.o: %.c libftprintf.h
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS) $(LIBRARY)
-	@ar -rc $@ $(OBJS) $(LIBRARY)
+$(NAME): $(OBJS)
+	@ar -rc $@ $(OBJS)
 
-$(EXEC): $(OBJS) $(LIBRARY)
-	@$(CC) $(CFLAGS) -o $(EXEC) $(OBJS) $(LIBRARY)
+$(EXEC): $(OBJS)
+	@$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
 clean:
 	@$(RM) $(OBJS) $(EXEC)
-	make clean -C libft
 
 fclean: clean
 	$(RM) $(NAME)
-	make fclean -C libft
 
 re: fclean all
-	make fclean -C libft
 
 .PHONY: all re clean fclean

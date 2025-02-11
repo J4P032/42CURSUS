@@ -1,0 +1,132 @@
+% -> nada
+%  -> (con espacio detras) no imprime nada
+%a -> float o double basura, en formato HEX en minusculas
+%A -> float o double basura, en formatdo HEX MAYUSCULAS
+%b -> binario
+%B -> binario (lo mismo que el b en resultado)
+%c -> char basura
+%C -> no sale nada. No es valido
+%d -> int basura
+%D -> %D
+%e -> double o float en e cientifica
+%E -> lo mismo que %e
+%f -> double o float normal
+%F -> lo mismo que %f
+%g -> imprime un 0 si nada y solo dejara los ceros necesarios
+%G -> Lo mismo que %g
+%h -> solo no hace nada. con %hd(sort int), %hhd(signed char), %hu(unsigned short), %hhu(unsigned char)
+%H -> %H
+%i -> entero basura
+%I -> no imprime nada
+%j -> Solo no hace nada. con %jd, %ju, %jx etc...
+%J -> %J
+%k -> %k
+%K -> %K
+%l -> Solo no hace nada. %ld %lf son long int y double respectivamente
+%L -> Solo no hace nada. con %Lf es Long Double.
+%m -> Imprime "Success" y el errno no esta configurado.
+%M -> %M
+%n -> De por si no imprime nada. Pero almacena el numero de chars impresos almacenandoselo en un &num
+%N -> %N
+%o -> imprime numero en octal
+%O -> %O
+%p -> puntero
+%P -> %P
+%q -> no imprime nada. no es valido.
+%Q -> %Q
+%r -> %r
+%R -> %R
+%s -> imprime basura
+%S -> no imprime nada.
+%t -> no imprime nada. No es valido.
+%T -> %t
+%u -> unsigned basura
+%U -> %U
+%v -> %v
+%V -> %V
+%w -> %w
+%W -> %W
+%x -> hex basura
+%X -> HEX basura en mayusculas
+%y -> %y
+%Y -> %Y
+%z -> no imprime nada pero con zu son size_t
+%Z -> no imprime nada
+%0-9 -> no imprime nada.
+
+%# -> no imprime nada
+%* -> no imprime nada
+%- -> no imprime nada
+%+ -> no imprime nada
+%' -> no imprime nada
+%. -> no imprime nada
+el resto imprime el % con su caracter.
+
+
+RAROS QUE DAN VALOR CHAR EN MITAD DE STRING
+%h -> imprime detras con el % pero no la h
+%I -> imprime caracteres 0x0p+0a y corta el resto
+%j -> imprime detras con el % pero no la j
+%l -> imprime detras con el % pero no la l
+%L -> imprime detras con el % pero no la L
+%q -> imprime detras con el % pero no la q
+%S -> imprime detras SIN el % y tampoco la S.
+%t -> imprime detras con el % pero no la t
+%z -> imprime detras con el % pero no la z
+%Z -> imprime detras con el % pero no la Z
+%0 -> imprime detras pero con valor 0.000000e+00 y corta parte del resto
+%# -> lo mismo que el %0
+%- -> lo mismo que el %0
+%+ -> lo mismo que el %0
+%' -> lo mismo que el %0
+%1-9 -> imprime tal cual con esta es decir incluido el %1-9
+%n -> imprime detras SIN el % NI la n
+%* -> imprime detras y en la posicion del flag pone el %y un numero seguido.. luego el resto bien
+%. -> imprime detras y pone el %.0 y lo que haya detras.
+
+
+RAROS QUE DAN -1 AL FINAL DEL STRING
+%h -> imprime lo de antes pero ni % ni la h
+%I -> imprime lo de antes pero ni % ni la I
+%j -> imprime lo de antes pero ni % ni la j
+%l -> imprime lo de antes pero ni % ni la l
+%L -> imprime lo de antes pero ni % ni la L
+%q -> imprime lo de antes pero ni % ni la q
+%t -> imprime lo de antes pero ni % ni la t
+%z -> imprime lo de antes pero ni % ni la z
+%Z -> imprime lo de antes pero ni % ni la Z
+%0-9 -> imprime lo de antes pero ni % ni la 0
+%# -> imprime lo de antes pero ni % ni la #
+%- -> imprime lo de antes pero ni % ni la -
+%+ -> imprime lo de antes pero ni % ni la +
+%' -> imprime lo de antes pero ni % ni la '
+%* -> imprime lo de antes pero ni % ni la *
+%. -> imprime lo de antes pero ni % ni la .
+
+RAROS QUE DAN -1 AL INICIO DEL STRING SIN NADA DESPUES
+%h -> nada
+%I -> nada
+%j -> nada
+%l -> nada
+%L -> nada
+%q -> nada
+%t -> nada
+%z -> nada
+%Z -> nada
+%0-9 -> nada
+.... todos 
+
+RAROS QUE DAN VALOR DE CHARS AL FINAL DEL STRING
+%S -> imprime detras SIN el % y tampoco la S.
+%n -> imprime detras SIN el % y tampoco la n.
+
+
+
+
+
+
+LOS QUE DARAN -1 EN SALIDA DE CHARS LEIDOS
+% -> nada
+%C -> no imprime nada de lo que hay detras de %C
+
+
