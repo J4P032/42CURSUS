@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:53:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/11 16:01:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:26:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 /*allocates memory for array of nmemb elements of size bytes*/
 /*returns a pointer to that memory. Memory is set to zeros*/
 /*if nmemb x size is > SIZE_MAX (~(size_t)0) returns NULL*/
-/*if nmemb or size == 0 unknown but can be valid pointer without memory alloc*/
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	size_t			total_bytes;

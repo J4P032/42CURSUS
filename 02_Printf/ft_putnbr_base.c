@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 12:25:30 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/11 18:30:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:43:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	ft_base_check(char *chr)
 	return (i);
 }
 
+/*it forms an array of chars with index of base to choose in opposite order*/
 void	ft_conversion(unsigned long *num, int *base, char *aux)
 {
 	size_t	i;
@@ -69,6 +70,8 @@ void	ft_conversion32(unsigned int *num, int *base, char *aux)
 		aux[i] = (*num % *base) + '0';
 }
 
+/*the array of index of base to choose is composed opposite so write from...*/
+/*...finish to start*/
 void	ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars)
 {
 	int		base_type;
@@ -76,7 +79,7 @@ void	ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars)
 	size_t	index;
 	char	*aux;
 
-	i = 64;
+	i = 63;
 	index = 0;
 	aux = (char *)ft_calloc(64, sizeof(char));
 	if (!aux)
@@ -97,6 +100,7 @@ void	ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars)
 	free (aux);
 	aux = NULL;
 }
+
 void	ft_putnbr_base32(unsigned int *nbr, char *base, int *num_chars)
 {
 	int		base_type;
@@ -104,7 +108,7 @@ void	ft_putnbr_base32(unsigned int *nbr, char *base, int *num_chars)
 	size_t	index;
 	char	*aux;
 
-	i = 32;
+	i = 31;
 	index = 0;
 	aux = (char *)ft_calloc(32, sizeof(char));
 	if (!aux)

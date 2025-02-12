@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 18:24:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/11 20:55:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:55:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@
 # endif
 
 # ifndef NEGFLAGS
-#  define NEGFLAGS "ChIjlLnqStzZ012345679#*-+'."
+#  define NEGFLAGS "hIjlLqtzZ012345679#*-+'."
+# endif
+
+# ifndef TWOFLAGS
+#  define TWOFLAGS "DHJkKMNOPQrRTUvVwWyY"
 # endif
 
 # ifndef HEX_LOW
@@ -34,20 +38,20 @@
 # include <unistd.h>
 
 int		ft_printf(char const *str, ...);
-int		checkflag(const char *str);
 void	other_flags(const char **str, int *num_chars);
 void	*ft_calloc(size_t nmemb, size_t size);
 void	ft_bzero(void *s, size_t n);
 void	ft_print_flag_dic(char const **str, va_list prm, int *numc, int opt);
 void	ft_print_flag_p(char const **str, va_list params, int *num_chars);
-void	ft_print_flag_x(char const **str, va_list param, int *num_c, char c);
+void	ft_print_flag_x(va_list param, int *num_c, char c);
 void	ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars);
 void	ft_putnbr_base32(unsigned int *nbr, char *base, int *num_chars);
-char	*ft_utoa(unsigned n);
+char	*ft_utoa(unsigned int n);
 char	*ft_itoa(int n);
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-void	ft_print_flag_u(char const **str, va_list parm, int *num_chars);
-void	ft_print_flag_s(char const **str, va_list param, int *num_chars);
+void	ft_print_flag_u(va_list parm, int *num_chars);
+void	ft_print_flag_s(va_list param, int *num_chars);
+void	print_two_flags(const char **str, int *num_chars);
 
 #endif

@@ -6,15 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:45 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/11 10:07:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:44:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 /*returns in string format the int number given*/
-/*NULL if not MALLOC*/
-
 static int	ft_num_digits(unsigned int num, int *div)
 {
 	int	digits;
@@ -46,7 +44,7 @@ static char	*compose_number(char *s, long number, int div, size_t digits)
 }
 
 /* divisor is max possible for UNSIGNED will be reducing in ft_numb_digits*/
-char	*ft_utoa(unsigned n)
+char	*ft_utoa(unsigned int n)
 {
 	unsigned int	aux;
 	int				divisor;

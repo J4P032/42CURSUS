@@ -1,9 +1,9 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = libftprintf.a
-SRC = ft_printf.c ft_printf_flag_error.c ft_printf_flag_type.c \
-ft_putnbr_base.c ft_utoa.c ft_itoa.c ft_strlen.c ft_strchr.c \
-ft_calloc.c ft_bzero.c ft_printf_other_flags.c
+SRC = ft_printf.c ft_printf_flag_type.c ft_putnbr_base.c  \
+ft_utoa.c ft_itoa.c ft_strlen.c ft_strchr.c ft_calloc.c \
+ft_bzero.c ft_printf_other_flags.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 

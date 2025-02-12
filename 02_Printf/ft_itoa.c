@@ -6,14 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 16:07:48 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/11 15:44:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:27:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 /*returns in string format the int number given*/
-/*NULL if not MALLOC*/
 static int	ft_num_digits(long num, int *div)
 {
 	int	digits;
@@ -46,7 +45,6 @@ static char	*compose_number(char *s, long number, int div, size_t digits)
 
 /* divisor is max possible for MAX_INT will be reducing in ft_numb_digits*/
 /*if negative = 1 add one byte to calloc and start index 1 in char *number*/
-
 char	*ft_itoa(int n)
 {
 	long	aux;
