@@ -1,0 +1,93 @@
+CAMBIO DE USUARIO
+	su			: Cambio a root
+	su -		: Cambio a root inicializa el entorno. Empezar de cero
+	su usuario	: Cambia al "usuario"
+
+INSTALACION DE PROGRAMAS
+	(sudo) apt install nombre_programa
+	(sudo) apt update
+	(sudo) apt upgrade
+	(sudo) apt full-update
+
+USUARIOS
+	(sudo) adduser nombre
+	(sudo) userdel -r nombre - pero deja su grupo formado. -r borra su home
+	(sudo) adduser usuario nombre_grupo
+
+GRUPOS
+	(sudo) groupadd nombre_grupo
+	(sudo) delgroup nombre_grupo
+	(sudo) usermod -g otro_grupo usuario - lo mueve a otro grupo
+	(sudo) usermod -aG otro_grupo usuario - lo copia a otro grupo pero no pierde el original
+	groups usuario
+	getent group nombre_grupo - nombre_grupo:x:GID:lista_de_usuarios
+
+SSH
+config en /etc/ssh/sshd_config y sshd_config
+	(sudo) service ssh status
+	(sudo) service ssh restart
+	hostname -I
+	ip a - muestra ip donde esta el server
+	(cliente) ssh usuario@localhost -p(num del forwarding)
+	(cliente) exit
+
+FIREWALL
+	(sudo) ufw enable
+	(sudo) ufw allow 4242
+	(sudo) ufw status
+	(sudo) systemctl enable ufw - hace que se autoarranque al inicio de la maquina.
+
+SUDO
+	apt install sudo
+	config en /etc/sudoers.d/nombre_config (puede ser sudo_config)
+	logs en /var/log y creamos carpeta "sudo"
+	en sudo_config:
+		Defaults  passwd_tries=3
+		Defaults  badpass_message="Mensaje de error personalizado"
+		Defaults  logfile="/var/log/sudo/sudo_config"
+		Defaults  log_input, log_output
+		Defaults  iolog_dir="/var/log/sudo"
+		Defaults  requiretty
+		Defaults  secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+
+PASSWORD
+	config en /etc/login.Defs. modificar lineas:
+	PASS_MAX_DAYS 30
+	PASS_MIN_DAYS 2
+	PASS_WARN_AGE 7
+	(sudo) apt install libpam-pwquality (password fuerza checker)
+		editar: /etc/pam.d/common-password. linea retry=3 (PASSWORD requisite)
+		minlen=10 ucredit=-1 dcredit=-1 lcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
+		minlen : minimo de longitud del passwd
+		ucredit, lcredit, dcredit : minimo 1 de upper lower y digit
+		maxrepeat : cuantos chars pueden repetirse seguidos.
+		reject_username : no puede estar el login en el passwd
+		difok : cuantos chars distintos tiene que tener el pass
+		enforce_for_root : fuerza al root a seguir las mismas reglas
+
+SCRIPT
+	arch=$(uname -a) -> da informacion de la arquitectura. -a es que muestre todo
+			pero ha de ser llamado asi que se hace con un:
+			wall "Architecture: $arch"
+	cpu_physical=$(lscpu | grep '^CPU(s):' | awk '{print $2}')
+			lscpu da mucha info de la CPU.
+			grep lleva a la primera linea que EMPIEZE (con el ^) por CPU(s)
+			awk es un lenguaje de programacion y print imprimira el segundo campo ($2) (es CPU(s):     1)
+	# RAM
+	ram_total=$(free --mega | grep "^Mem:" | awk '{print $2}')
+	ram_used=$(free --mega | grep "^Mem:" | awk '{print $3}')
+	ram_percent=$(awk "BEGIN {printf \"%.2f\", $ram_used * 100 / $ram_total}")
+
+
+
+CRONTAB
+	define el tiempo en que se ejecuta.
+	(sudo) crontab -e -> para acceder a el por primera vez
+	se genera un archivo con nombre de usuario en /var/spool/cron/crontabs
+	* * * * * /root/monitoring.sh
+	* * * * * sleep 30; /root/monitoring.sh
+	(cada * indica un tiempo: de izda a derecha -> minutos(0-59), horas(0-23), dia (1-31), mes (1-12), dia semana (0-6, 0=Domingo) )
+	la linea sleep hace que se ejecute cada 30 segundos.
+	*/30 * * * * /root/monitoring.sh seria cada 30 minutos
+	*/30 -> ejecuta cada 30 minutos pero si empieza a 12:02 el siguiente sera a 12:32
+	30 solo -> ejecuta a y medias y puntos. 12:30, 1:00, etc...
