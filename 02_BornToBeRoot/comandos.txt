@@ -1,3 +1,9 @@
+HOSTNAME
+	para cambiarlo ejecutar:
+	(sudo) hostnamectl set-hostname nuevo_nombre
+	hostname -> muestra el nombre del hostname.
+	exec bash -> para rearrancar el bash y mostrar el cambio.
+
 CAMBIO DE USUARIO
 	su			: Cambio a root
 	su -		: Cambio a root inicializa el entorno. Empezar de cero
@@ -33,7 +39,11 @@ config en /etc/ssh/sshd_config y sshd_config
 
 FIREWALL
 	(sudo) ufw enable
+	(sudo) ufw reload
 	(sudo) ufw allow 4242
+	(sudo) ufw deny 4242 - 4242/tcp (cierra para un protocolo determinado)
+		(sudo) ufw status numbered - Muestra los numeros de procesos
+		(sudo) ufw delete numero ejemplo 3.
 	(sudo) ufw status
 	(sudo) systemctl enable ufw - hace que se autoarranque al inicio de la maquina.
 
@@ -51,7 +61,10 @@ SUDO
 		Defaults  secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
 PASSWORD
-	config en /etc/login.Defs. modificar lineas:
+	encryptado: la de 42
+	user: 2Adgjlsfhk
+	root: 1Qetuowryip
+	config en /etc/login.defs. modificar lineas:
 	PASS_MAX_DAYS 30
 	PASS_MIN_DAYS 2
 	PASS_WARN_AGE 7
@@ -64,8 +77,22 @@ PASSWORD
 		reject_username : no puede estar el login en el passwd
 		difok : cuantos chars distintos tiene que tener el pass
 		enforce_for_root : fuerza al root a seguir las mismas reglas
+	getent shadow usuario -> comprueba que se ha cambiado la paswrd
+	passwd - para cambiar el password
+
+	IMPORTANTE:
+	para estas reglas solo se aplican (las de 30 dias 2 y 7) a USUARIOS nuevos
+	para que funcione en antiguos hay que hacer esto:
+	sudo chage -M 30 -m 2 -W 7 usuario
+	y verificar con: getend shadow usuario
+	no mostrara quiza el cambio reciente pero se obtiene con:
+	sudo chage -l usuario
+
+
 
 SCRIPT
+	muchos comandos salen en el idioma instalado. Se puede momentaneamente
+	ponerlo en ingles como: LANG=en_us.UTF-8 who -b
 	arch=$(uname -a) -> da informacion de la arquitectura. -a es que muestre todo
 			pero ha de ser llamado asi que se hace con un:
 			wall "Architecture: $arch"
@@ -83,6 +110,7 @@ SCRIPT
 CRONTAB
 	define el tiempo en que se ejecuta.
 	(sudo) crontab -e -> para acceder a el por primera vez
+	(sudo) crontab -u root -e
 	se genera un archivo con nombre de usuario en /var/spool/cron/crontabs
 	* * * * * /root/monitoring.sh
 	* * * * * sleep 30; /root/monitoring.sh
@@ -91,3 +119,84 @@ CRONTAB
 	*/30 * * * * /root/monitoring.sh seria cada 30 minutos
 	*/30 -> ejecuta cada 30 minutos pero si empieza a 12:02 el siguiente sera a 12:32
 	30 solo -> ejecuta a y medias y puntos. 12:30, 1:00, etc...
+	PARA PARARLO O REINICIARLO:
+	sudo /etc/init.d/cron stop o start
+	tambien:
+	sudo systemctl stop cron
+	sudo systemclt enable cron
+
+
+FIRMA
+	NO HAY QUE ABRIR DE NUEVO LA MAQUINA YA QUE CAMBIA. HAY QUE CLONARLA
+	O SACAR UN SNAPSHOT DE LA MISMA Y RESTAURAR A PARTIR DEL SNAPSHOT
+	shasum nombre.vdi dentro de la carpeta creada /sgoingfre/nombre_maquina
+
+CHECKS
+	ls /usr/bin/*session - No entorno grafico
+
+	sudo ufw status
+	sudo service ufw status - check firewall
+
+	sudo service ssh status - check ssh
+
+	uname --kernel-version - check OS
+
+	getent group sudo user42 - check user y GRUPOS
+
+	sudo adduser name_user - anyade user y check pass policy
+
+	sudo addgroup evaluating - Check group creacion
+
+	sudo adduser name_user evaluating - check anyade a grupo
+
+	hostname - check hostname
+
+	sudo nano /etc/hostname - check cambio hostname
+	sudo nano /etc/hosts
+	sudo reboot
+	hostname
+
+	lsblk - check particiones
+
+	which sudo - check sudo
+
+	sudo adduser name_user sudo - check anyade user to sudo
+	getent group sudo
+
+	nano /etc/sudoers.d/sudo_config - check sudo rules
+
+	cd -check sudo logs
+	cd /var/log/sudo
+	ls
+	cat sudo_config
+
+	dpkg -s ufw - check ufw advance
+
+	sudo ufw status numbered - check normas activas
+
+	sudo ufw allow 8080 - check rule creations
+	sudo ufw status numbered
+	sudo ufw delete num_rule
+	sudo ufw status numbered
+	sudo ufw delete 5
+	sudo ufw status numbered
+
+	which ssh - check ssh advance
+	sudo service ssh status
+
+	ssh root@localhost -p 4241 -check ssh usermod
+	ssh newuser@localhost -p 4241
+
+	sudo crontab -u root -e - check crontab SCRIPT
+
+
+
+
+
+
+
+
+
+
+
+
