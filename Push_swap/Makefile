@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = push_swap
 LIBRARY = ./libft/libft.a
-SRC = main.c
+SRC = main.c stack.c ps_atol.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 
