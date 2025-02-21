@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 12:56:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:59:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,13 @@ int	main(int argc, char **argv)
 		if (!argv)
 			return (1);
 	}	
-	if (compose_stack_a(&a, argc, &argv))
+	if (compose_stack_a(&a, argc, argv))
 	{
 		write (1, "Error\n", 6);
 		return (1);
 	}
-	//argv = NULL; //lo ha liberado dentro de compose_stack
+	if (!a) //cuando falla la composicion del stack
+		argv = NULL; //lo ha liberado dentro de compose_stack
 	aux = a;
 	while (aux && aux->next)
 	{

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:53:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 12:55:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:58:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	size_t			total_bytes;
 	unsigned char	*ptr;
 
-/* 	static int j;
+	static int j;
 	j++;
-	if (5 == j)
-		return (NULL); */
+	if (6 == j)
+		return (NULL);
 
 	
 	if (nmemb == 0 || size == 0)

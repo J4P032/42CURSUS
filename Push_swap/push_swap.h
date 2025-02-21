@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:51:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 12:57:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:54:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ typedef struct s_stack
 	struct s_stack	*next;
 }					t_stack;
 
-int			compose_stack_a(t_stack **stack, int argc, char ***argv);
+int			compose_stack_a(t_stack **stack, int argc, char **argv);
 long int	ps_atol(char *nptr, int *error);
-int			ft_free(void **item, int option);
+void		ft_free(void **item, int option);
 
 #endif
