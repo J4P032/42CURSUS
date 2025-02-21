@@ -6,21 +6,21 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 13:53:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:19:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 /*function free an stack or argv from split*/
-void	ft_free(void **item, int option)
+int	ft_free(void **item, int option)
 {
 	t_stack	*aux;
 	t_stack *stack;
 	char	**str;
 	
 	if (!item || !*item)
-		return ;
+		return (1);
 	if (1 == option)
 	{
 		stack = (t_stack *)*item;
@@ -30,7 +30,7 @@ void	ft_free(void **item, int option)
 			free(stack);
 			stack = aux;
 		}
-		return ;
+		return (*item = NULL, 1) ;
 	}
 	str = (char **)*item;
 	while (*str)
@@ -39,7 +39,7 @@ void	ft_free(void **item, int option)
 		*str = NULL;
 		str++;			
 	}
-	free (*item);
+	return (free (*item), 1);
 }
 
 /*list is double side (previous and next)*/
@@ -81,9 +81,11 @@ void	store_number(t_stack **stack, char **argv, int *error)
 {
 	long int	number;
 	t_stack		*node;
+	char		**aux;
 	
 	node = NULL;
-	while (*argv)
+	aux = argv;
+	while (*aux)
 	{
 		number = ps_atol(*argv, error);
 		node = ft_calloc(1, sizeof(t_stack));
@@ -101,7 +103,7 @@ void	store_number(t_stack **stack, char **argv, int *error)
 			ft_free((void **)&argv, 0);
 			return ;
 		}
-		argv++;
+		aux++;
 	}
 	ft_free((void **)argv, 0);
 }
