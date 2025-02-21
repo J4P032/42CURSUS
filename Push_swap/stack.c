@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/20 19:47:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:19:45 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	create_node(t_stack **stack, t_stack *node, int value, int *error)
 	t_stack	*aux;
 	
 	aux = NULL;
+	node->value = value;
 	if ((!*stack))
 	{
-		node->value = value;
 		node->next = NULL;
 		node->prev = NULL;
 		*stack = node;
@@ -94,7 +94,7 @@ void	store_number(t_stack **stack, char **argv, int *error)
 			ft_free((void **)argv, 0);
 			return ;
 		}
-		create_node (*stack, node, number, error);
+		create_node (stack, node, number, error);
 		if (*error)
 		{
 			ft_free((void **)stack, 1);
@@ -117,11 +117,11 @@ int	compose_stack_a(t_stack **stack, int argc, char **argv)
 	error = 0;
 	if (2 == argc)
 	{
-		store_number(*stack, argv, &error);
+		store_number(stack, argv, &error);
 		//free (argv); //este es el general se necesita liberar *argv
 		//argv = NULL;
 	}
 	else
-		store_number(*stack, argv + 1, &error);
+		store_number(stack, argv + 1, &error);
 	return (error);
 }
