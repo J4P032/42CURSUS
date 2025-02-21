@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 11:00:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:56:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,25 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (argc == 2)
+	{
 		argv = ft_split(argv[1], ' ');
-	if (compose_stack_a(&a, argc, argv))
+		if (!argv)
+			return (1);
+	}	
+	if (compose_stack_a(&a, argc, &argv))
 	{
 		write (1, "Error\n", 6);
 		return (1);
 	}
+	//argv = NULL; //lo ha liberado dentro de compose_stack
 	aux = a;
-	while (aux->next)
+	while (aux && aux->next)
 	{
 		printf("%d\n", aux->value); ///
 		aux = aux->next;
 	}
-	printf("%d\n", aux->value);
+	if (aux)
+		printf("%d\n", aux->value);
 	ft_free((void **)&a, 1);
 	ft_free((void **)&argv, 0);
 	return (0);

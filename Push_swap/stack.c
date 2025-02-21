@@ -6,21 +6,21 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 11:02:16 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:56:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 /*function free an stack or argv from split*/
-void	ft_free(void **item, int option)
+int	ft_free(void **item, int option)
 {
 	t_stack	*aux;
 	t_stack *stack;
 	char	**str;
 	
 	if (!item || !*item)
-		return ;
+		return (1);
 	if (1 == option)
 	{
 		stack = (t_stack *)*item;
@@ -30,7 +30,7 @@ void	ft_free(void **item, int option)
 			free(stack);
 			stack = aux;
 		}
-		return ;
+		return (1);
 	}
 	str = (char **)*item;
 	while (*str)
@@ -39,7 +39,7 @@ void	ft_free(void **item, int option)
 		*str = NULL;
 		str++;			
 	}
-	free (*item);
+	return (free (*item), *item = NULL, 1);
 }
 
 /*list is double side (previous and next)*/
@@ -110,18 +110,17 @@ void	store_number(t_stack **stack, char **argv, int *error)
 /*if numbers in "..." I call store_number from argv[0]*/
 /*if numbers not in "..." call store_number without the name program*/
 /*there is an error to check in all functions any error to change to 1*/
-int	compose_stack_a(t_stack **stack, int argc, char **argv)
+int	compose_stack_a(t_stack **stack, int argc, char ***argv)
 {
 	int		error;
 		
 	error = 0;
 	if (2 == argc)
 	{
-		store_number(stack, argv, &error);
-		//free (argv); //este es el general se necesita liberar *argv
-		//argv = NULL;
+		store_number(stack, *argv, &error);
+
 	}
 	else
-		store_number(stack, argv + 1, &error);
+		store_number(stack, *argv + 1, &error);
 	return (error);
 }
