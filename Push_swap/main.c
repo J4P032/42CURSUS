@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 10:26:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:00:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int	main(int argc, char **argv)
 		printf("%d\n", aux->value); ///
 		aux = aux->next;
 	}
-	
-	ft_free((void **)a, 1);
-	ft_free((void **)argv, 0);
+	printf("%d\n", aux->value);
+	ft_free((void **)&a, 1);
+	ft_free((void **)&argv, 0);
 	return (0);
 }

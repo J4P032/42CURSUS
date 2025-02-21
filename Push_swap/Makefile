@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = push_swap
 LIBRARY = ./libft/libft.a
 SRC = main.c stack.c ps_atol.c

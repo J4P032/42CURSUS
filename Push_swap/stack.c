@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 10:19:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:02:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,14 @@ void	store_number(t_stack **stack, char **argv, int *error)
 		{
 			ft_free((void **)stack, 1);
 			free(node); //SI ES POR ERROR QUE VIENE DEL NUMBER HAY QUE LIBERAR EL NODO.CHEQUEAR QUE ESTA BIEN!!!
-			ft_free((void **)argv, 0);
+			ft_free((void **)&argv, 0);
 			return ;
 		}
 		create_node (stack, node, number, error);
 		if (*error)
 		{
 			ft_free((void **)stack, 1);
-			ft_free((void **)argv, 0);
+			ft_free((void **)&argv, 0);
 			return ;
 		}
 		argv++;
