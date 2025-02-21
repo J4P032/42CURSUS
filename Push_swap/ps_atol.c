@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:45 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/20 19:40:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:52:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,29 @@
 
 char	*clean_ceros(char *number, int *error)
 {
-	if (!number)
+	int	negative;
+
+	negative = 0;
+	if (!number || !*number)
 		return (NULL);
+	if ('-' == *number)
+	{
+		negative = 1;
+		number++;
+	}
+	if ('+' == *number)
+		number++;
+	if (!*number)
+		*error = 1;
 	while ('0' == *number && *(number + 1))
 		number++;
 	if (ft_strlen(number) > 19)
 		*error = 1;
+	if (*number && negative)
+	{
+		*(number - 1) = '-';
+		number--;
+	}
 	return (number);
 }
 
@@ -48,6 +65,8 @@ long int	ps_atol(char *nptr, int *error)
 		}
 		result = (result * 10) + (*nptr++ - '0');
 	}
+	if (minus * result > 2147483647 || minus * result < -2147483648)
+		*error = 1;
 	return (minus * result);
 }
 
