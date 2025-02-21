@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 14:19:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:13:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	store_number(t_stack **stack, char **argv, int *error)
 	aux = argv;
 	while (*aux)
 	{
-		number = ps_atol(*argv, error);
+		number = ps_atol(*aux, error);
 		node = ft_calloc(1, sizeof(t_stack));
 		if (!node || *error)
 		{
@@ -105,7 +105,6 @@ void	store_number(t_stack **stack, char **argv, int *error)
 		}
 		aux++;
 	}
-	ft_free((void **)argv, 0);
 }
 
 /*Returns error. 0 = OK. 1 = error*/
