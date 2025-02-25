@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:51:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 17:20:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:58:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ long int	ps_atol(char *nptr, int *error);
 int			ft_free(void **item, int option);
 void		move_swap(t_stack **stack, char c);
 void		double_swap(t_stack **stack1, t_stack **stack2);
-void		move_push(t_stack **stack1, t_stack **stack2);
+void		move_push(t_stack **stack1, t_stack **stack2, char c);
+void		move_rotate(t_stack **stack, char c);
+void		move_inv_rotate(t_stack **stack, char c);
+void		double_rotate(t_stack **stack1, t_stack **stack2);
+void		double_inv_rotate(t_stack **stack1, t_stack **stack2);
 
 #endif

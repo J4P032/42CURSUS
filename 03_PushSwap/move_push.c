@@ -6,13 +6,20 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:39:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 19:14:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/25 19:32:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	move_push(t_stack **stack1, t_stack **stack2)
+void	write_push(char c)
+{
+	write(1, "p", 1);
+	write(1, &c, 1);
+	write(1, "\n", 1);
+}
+
+void	move_push(t_stack **stack1, t_stack **stack2, char c)
 {
 	t_stack	*aux;
 
@@ -37,4 +44,5 @@ void	move_push(t_stack **stack1, t_stack **stack2)
 		if (aux)
 			aux->prev = NULL;
 	}
+	write_push(c);
 }

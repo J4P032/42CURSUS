@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 19:15:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:59:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ int	main(int argc, char **argv)
 		printf("%d\n", aux->value);
 
 	//move_swap(&a, 'a');
-	move_push(&a, &b);
-	move_push(&a, &b);
+	//move_push(&a, &b, 'b');
+	//move_push(&b, &a, 'a');
+	//move_rotate(&a, 'a');
+	move_inv_rotate(&a, 'a');
 	printf("\n");//
 	aux = a;
 	while (aux && aux->next)
