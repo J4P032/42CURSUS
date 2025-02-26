@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 14:55:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:36:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,9 @@ void	create_node(t_stack **stack, t_stack *node, int value, int *error)
 		return ;
 	}
 	aux = *stack;
-	while (aux->next)
-	{
-		if (aux->value == value)
-		{
-			*error = 1;
-			free(node);
-			return ;
-		}
-		aux = aux->next;
-	}
+	checker_value(&aux, node, value, error);
+	if (*error)
+		return ;
 	aux->next = node;
 	node->next = NULL;
 	node->prev = aux;

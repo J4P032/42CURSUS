@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:51:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 20:58:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:33:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 typedef struct s_stack
 {
 	int				value;
+	size_t			index;
 	struct s_stack	*prev;
 	struct s_stack	*next;
 }					t_stack;
@@ -33,5 +34,8 @@ void		move_rotate(t_stack **stack, char c);
 void		move_inv_rotate(t_stack **stack, char c);
 void		double_rotate(t_stack **stack1, t_stack **stack2);
 void		double_inv_rotate(t_stack **stack1, t_stack **stack2);
+void		counting_sort(t_stack *stack);
+void		ksort(t_stack **a, t_stack **b);
+void		checker_value(t_stack **aux, t_stack *node, int value, int *error);
 
 #endif

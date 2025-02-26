@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 20:59:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/26 19:15:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int argc, char **argv)
 		argv = NULL; //lo ha liberado dentro de compose_stack
 		return (1);
 	}
+	counting_sort(a);
 	aux = a;
 	while (aux && aux->next)
 	{
@@ -48,13 +49,14 @@ int	main(int argc, char **argv)
 	if (aux)
 		printf("%d\n", aux->value);
 
+	ksort(&a, &b);
 	//move_swap(&a, 'a');
 	//move_push(&a, &b, 'b');
 	//move_push(&b, &a, 'a');
 	//move_rotate(&a, 'a');
-	move_inv_rotate(&a, 'a');
+	//move_inv_rotate(&a, 'a');
 	printf("\n");//
-	aux = a;
+	aux = b;
 	while (aux && aux->next)
 	{
 		printf("%d\n", aux->value); ///
