@@ -1,1 +1,1 @@
-ARG=$(shuf -i 1-100 | tr '\n' ' '); ./push_swap $ARG | tee lines | ./checker_linux $ARG; wc -l
+ARG=$(shuf -i 1-100 | tr '\n' ' '); ./push_swap $ARG | tee lines | ./checker_linux $ARG; wc -l lines; rm lines
