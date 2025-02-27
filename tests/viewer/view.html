@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        button {
+            @apply grid place-items-center rounded-md bg-zinc-950 cursor-pointer text-center select-none disabled:cursor-not-allowed disabled:opacity-40 hover:not-disabled:bg-indigo-950 outline-2 outline-offset-2 outline-zinc-800 disabled:outline-transparent;
+            transition-duration: 200ms;
+            transition-timing-function: ease-out;
+            transition-property: outline-color, opacity, scale;
+
+            &.focused {
+                @apply outline-indigo-500
+            }
+        }
+
+        #container_control {
+            @apply items-center;
+
+            & button { @apply w-12 h-12; }
+
+            & button#ctrl_start {
+                @apply w-32;
+
+                #ctrl_start-play_icon,
+                #ctrl_start-pause_icon {
+                    display: none;
+                    pointer-events: none;
+                }
+
+                &.ctrl_start-play #ctrl_start-play_icon,
+                &.ctrl_start-pause #ctrl_start-pause_icon {
+                    display: block;
+                }
+            }
+        }
+
+        #container_history {
+            @apply relative w-full flex flex-row py-2 px-4 gap-4 overflow-hidden bg-zinc-950 rounded-full;
+            white-space: nowrap;
+            scroll-snap-type: x mandatory;
+
+            & li {
+                @apply grid w-8 h-8 aspect-square select-none rounded-full bg-zinc-950 place-items-center text-sm outline-2 outline-offset-2 outline-transparent opacity-40;
+                scroll-snap-align: center;
+                scroll-margin-left: 20px;
+                scroll-margin-right: 20px;
+                transition-duration: 400ms;
+                transition-timing-function: ease-in-out;
+                transition-property: outline-color, scale, opacity, background-color;
+
+                &.current {
+                    @apply bg-zinc-800 outline-indigo-500 scale-120 opacity-100;
+
+                    animation: history_highlight 800ms;
+
+                    & + li {
+                        @apply outline-zinc-800;
+                    }
+
+                    & ~ li {
+                        @apply bg-zinc-800;
+                    }
+                }
+            }
+        }
+
+        main {
+
+            &.medium_items_size {
+                & li.stack_item_wrapper div.stack_item {
+                    @apply p-1 text-xs font-bold;
+                }
+            }
+
+            &.compact_items_size {
+                & li.stack_item_wrapper div.stack_item {
+                    @apply p-0 text-xs font-thin;
+                }
+            }
+
+            &.tiny_items_size {
+                & li.stack_item_wrapper div.stack_item {
+                    @apply p-1;
+                    font-size: 0;
+                }
+            }
+        }
+
+        li.stack_item_wrapper {
+            @apply px-2 w-full;
+
+            & div.stack_item {
+                @apply subpixel-antialiased select-none;
+            }
+        }
+
+        label.input_radio {
+            @apply cursor-pointer;
+
+            & input[type="radio"] {
+                @apply sr-only;
+            }
+
+            & span {
+                @apply relative text-sm p-2 bg-zinc-800 border-b-1 border-gray-800 peer-checked:border-green-300;
+                transition-duration: .4s;
+                transition-timing-function: ease-in;
+                transition-property: border-color;
+            }
+        }
+
+        dialog.modal {
+            @apply bg-zinc-900 w-full max-w-lg rounded-lg shadow-xl p-6 m-auto mb-8 text-gray-50 border-0;
+            border: none !important;
+
+            & section {
+                @apply py-4 border-b-1 border-gray-700 last:border-b-0 last:pb-0;
+            }
+
+            &::backdrop {
+                @apply bg-black opacity-60;
+            }
+        }
+
+        .keyboard_shorcuts {
+            & li {
+                @apply flex flex-row justify-between p-1 odd:bg-zinc-800;
+            }
+        }
+
+        @keyframes history_highlight {
+            0%, 100% {
+                background-color: oklch(0.274 0.006 286.033);
+            }
+            50% {            
+                background-color: oklch(0.585 0.233 277.117);
+            }
+        }
+    </style>
+    <script src="anime.min.js" defer></script>
+    <script src="script.min.js" defer></script>
+    <script 
+        src="_data.js"
+        defer
+        onerror="data_load_err();"
+        onload="data_load_ok();"
+    ></script>
+    <title>PushSwap Viewer</title>
+</head>
+
+<body class="flex flex-col min-h-screen bg-zinc-900 text-gray-50 overflow-hidden">
+
+    <header class="flex flex-col gap-4 md:flex-row bg-zinc-950 p-4">
+        <span class="flex flex-col">
+            <h1 class="text-3xl font-bold">
+                Push Swap
+            </h1>
+            <p id="container_easter_egg" class="pl-8 text-sm text-gray-400">
+                viewer tool by werodrig
+            </p>
+        </span>
+
+        <div
+            id="container_control"
+            class="flex-1 flex flex-row item-center justify-center md:justify-end gap-4"
+        >
+            <button type="menu" id="ctrl_menu" title="Menu (M)" disabled onclick="ctrl_menu();">
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-gray-50" width="24" height="24" viewBox="0 0 16 16">
+                    <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
+                </svg>
+            </button>
+            <button type="reset" id="ctrl_reset" title="Reset (R)" disabled onclick="ctrl_reset();">
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-gray-50" width="24" height="24" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                </svg>
+            </button>
+            <button type="button" id="ctrl_start" class="ctrl_start-play" title="Start/Pause (Space)" disabled onclick="ctrl_start();">
+                <svg id="ctrl_start-play_icon" xmlns="http://www.w3.org/2000/svg" class="fill-gray-50" width="24" height="24" viewBox="0 0 16 16">
+                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                </svg>
+                <svg id="ctrl_start-pause_icon" xmlns="http://www.w3.org/2000/svg" class="fill-gray-50" width="24" height="24" viewBox="0 0 16 16">
+                    <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5m5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5"/>
+                </svg>
+            </button>
+            <button type="button" id="ctrl_prev" title="Prev (ArrowLeft)" disabled onclick="ctrl_prev();">
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-gray-50" width="24" height="24" viewBox="0 0 16 16">
+                    <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                </svg>
+            </button>
+            <button type="button" id="ctrl_next" title="Next (ArrowRight)" disabled onclick="ctrl_next();">
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-gray-50" width="24" height="24" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <section class="w-full p-2">
+        <ol id="container_history"></ol>
+    </section>
+
+    <main 
+        id="container_main"
+        style="display: none;"
+        class="flex-grow flex-row mx-auto w-full max-w-4xl"
+    >
+        <ul
+            id="stack_a"
+            role="list"
+            class="flex-1 flex-col py-2 border-r-1 border-zinc-800"
+        >
+        </ul>
+        <ul
+            id="stack_b"
+            role="list"
+            class="flex-1 flex-col py-2 border-l-1 border-zinc-800"
+        >
+        </ul>
+    </main>
+
+    <dialog 
+        id="dialog_menu"
+        class="modal"
+    >
+        <header>
+            <h1 class="text-3xl font-bold">Menu</h1>
+        </header>
+        <section>
+            <h2 class="text-xl font-bold">Stack</h2>
+            <div class="flex flex-row justify-between mx-4 select-none">
+                <label
+                    for="config_allow_anim" 
+                    class="flex flex-col cursor-pointer"
+                >
+                    Animations
+                    <p class="text-sm text-gray-400">
+                        Disable transitions and animations.
+                    </p>
+                </label>
+                <div class="relative inline-block">
+                    <input
+                        id="config_allow_anim"
+                        class="peer h-6 w-12 cursor-pointer appearance-none rounded-full border border-gray-400 bg-gary-400 checked:border-green-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
+                        type="checkbox"
+                        onchange="on_change_allow_anim(this.checked)"
+                    />
+                    <span class="pointer-events-none absolute left-1 top-1 block h-4 w-4 rounded-full bg-zinc-800 transition-all duration-200 peer-checked:left-7 peer-checked:bg-green-300"></span>
+                </div>
+            </div>
+
+            <div class="flex flex-row justify-between mx-4 select-none pt-2">
+                <span class="flex flex-col cursor-pointer">
+                    Size
+                    <p class="text-sm text-gray-400">
+                        Row sizes and numbers.
+                    </p>
+                </span>
+                <div class="relative flex flex-row items-center">
+                    <label class="input_radio" for="config_size_stacks_0">
+                        <input
+                            id="config_size_stacks_0"
+                            name="config_size_stacks"
+                            aria-label="Medium"
+                            class="peer"
+                            type="radio"
+                            value="0"
+                            onchange="on_change_stack_size(this.value)"
+                        />
+                        <span> Medium </span>
+                    </label>
+
+                    <label class="input_radio" for="config_size_stacks_1">
+                        <input
+                            id="config_size_stacks_1"
+                            name="config_size_stacks"
+                            aria-label="Compact"
+                            class="peer"
+                            type="radio"
+                            value="1"
+                            onchange="on_change_stack_size(this.value)"
+                        />
+                        <span> Compact </span>
+                    </label>
+
+                    <label class="input_radio" for="config_size_stacks_2">
+                        <input
+                            id="config_size_stacks_2"
+                            name="config_size_stacks"
+                            aria-label="Tiny"
+                            class="peer sr-only"
+                            type="radio"
+                            value="2"
+                            onchange="on_change_stack_size(this.value)"
+                        />
+                        <span> Tiny </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold">
+                Controls
+            </h2>
+
+            <div class="flex flex-row justify-between mx-4 select-none pt-2">
+                <span class="flex flex-col cursor-pointer">
+                    Execution delay
+                    <label
+                        class="text-sm text-gray-400"
+                        for="config_time_delay"
+                    >
+                        Delay (between 200 and 2000)ms.
+                    </label>
+                </span>
+                <div class="relative flex flex-col justify-center items-center">
+                    <input
+                        id="config_time_delay"
+                        type="range"
+                        min="50"
+                        max="2450"
+                        step="200"
+                        value="1000"
+                        onchange="on_change_time_delay(this.value)"
+                        oninput="this.nextElementSibling.value = `${this.value}ms`"
+                    />
+                    <output>1400ms</output>
+                </div>
+            </div>
+
+            <div class="flex flex-col mx-4 select-none pt-2">
+                <span class="flex flex-col cursor-pointer">
+                    Keyboard Shorcuts
+                </span>
+
+                <ul class="keyboard_shorcuts" role="list">
+                    <li> <span>Start/Pause</span> <kbd>Space</kbd> </li>
+                    <li> <span>Next</span> <kbd>ArrowLeft</kbd> </li>
+                    <li> <span>Prev</span> <kbd>ArrowRight</kbd> </li>
+                    <li> <span>Reset</span> <kbd>R</kbd> </li>
+                    <li> <span>Menu</span> <kbd>M</kbd> </li>
+                    <li> <span>Exit menu</span> <kbd>Esc</kbd> </li>
+                </ul>
+            </div>
+        </section>
+    </dialog>
+    
+</body>
+
+
+</html>
