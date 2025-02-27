@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/27 14:11:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/27 20:00:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ int	main(int argc, char **argv)
 {
 	t_stack *a;
 	t_stack *b;
-	t_stack	*aux;
-
+	
 	a = NULL;
 	b = NULL;
 	if ((argc == 1) || (argc == 2 && !argv[1][0]))
@@ -40,31 +39,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	counting_sort(a);
-	aux = a;
-	while (aux && aux->next)
-	{
-		printf("%d\n", aux->value); ///
-		aux = aux->next;
-	}
-	if (aux)
-		printf("%d\n", aux->value);
-
 	ksort(&a, &b);
-	//move_swap(&a, 'a');
-	//move_push(&a, &b, 'b');
-	//move_push(&b, &a, 'a');
-	//move_rotate(&a, 'a');
-	//move_inv_rotate(&a, 'a');
-	printf("\n");//
-	aux = b;
-	while (aux && aux->next)
-	{
-		printf("%d\n", aux->value); ///
-		aux = aux->next;
-	}
-	if (aux)
-		printf("%d\n", aux->value);
-
 	ft_free((void **)&a, 1);
 	ft_free((void **)&b, 1);
 	return (0);

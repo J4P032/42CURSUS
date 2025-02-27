@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:28:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/27 16:53:11 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/27 19:54:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ size_t	stacksize(t_stack *stack)
 
 void	move_up(t_stack **a, t_stack **b, t_stack *aux)
 {
-	while (aux->prev)
+	while (*b != aux)
 		move_rotate(b, 'b');
 	move_push(b, a, 'a');		
 }
 
 void	move_down(t_stack **a, t_stack **b, t_stack *aux)
 {
-	while (aux->prev)
+	while (*b != aux)
 		move_inv_rotate(b, 'b');
 	move_push(b, a, 'a');		
 }
