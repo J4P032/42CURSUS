@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:28:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/27 19:54:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/27 20:40:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,28 +66,6 @@ void	final_order(t_stack **a, t_stack **b, size_t s_index)
 	}
 	
 }
-
-/* void	ksort(t_stack **a, t_stack **b)
-{
-	double	range;
-	size_t	nodes;
-
-	nodes = stacksize(*a);
-	range = (ft_sqrt(nodes) * 133) / 100;
-	while (*a)
-	{
-		if ((*a)->index <= nodes)
-		{
-			move_push(a, b, 'b');
-			move_rotate(b, 'b');
-		}
-		else if (nodes < (*a)->index && (*a)->index <= nodes + range)
-			move_push(a, b, 'b');
-		else if ((*a)->index > nodes + range)
-			move_rotate(a, 'a');
-		nodes = nodes - 1;
-	}
-} */
 
 void	ksort(t_stack **a, t_stack **b)
 {
