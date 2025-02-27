@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:28:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/27 20:40:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/27 21:14:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,22 @@ void	ksort(t_stack **a, t_stack **b)
 	
 	i = 0;
 	nodes = stacksize(*a);
-	range = ft_sqrt(nodes) * 133 / 100;
+	range = nodes / 12; //para 100 dividir entre 5
 	while (*a)
 	{
 		if ((*a)->index <= i)
 		{
 			move_push(a, b, 'b');
 			move_rotate(b, 'b');
+			i++;
 		}
 		else if (i < (*a)->index && (*a)->index <= i + range)
+		{
 			move_push(a, b, 'b');
+			i++;
+		}
 		else if ((*a)->index > i + range)
 			move_rotate(a, 'a');
-		i++;
 	}
 	final_order(a, b, nodes);
 }
