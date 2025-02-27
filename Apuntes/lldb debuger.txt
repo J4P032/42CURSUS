@@ -1,0 +1,10 @@
+compilar cc -Wall -Wextra -Werror -g
+
+lldb ./a.out
+b main.c:32 (break en linea 32)
+run
+gui
+(pulsar cualquier tecla)
+n -> next
+c -> continue
+s -> meterse dentro de la funcion

@@ -1,0 +1,4 @@
+para actualizar token en unix:
+
+git config --global credential.helper store
+git config --global user.password TU_NUEVO_TOKEN
