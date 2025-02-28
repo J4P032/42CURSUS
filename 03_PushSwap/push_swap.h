@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:51:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/27 13:51:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:26:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ void		counting_sort(t_stack *stack);
 void		ksort(t_stack **a, t_stack **b);
 void		checker_value(t_stack **aux, t_stack *node, int value, int *error);
 int     	ft_sqrt(int nb);
+void		ordering(t_stack **a, t_stack **b);
+size_t		stacksize(t_stack *stack);
 
 #endif

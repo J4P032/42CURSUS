@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/27 20:00:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:33:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 	
 	a = NULL;
 	b = NULL;
-	if ((argc == 1) || (argc == 2 && !argv[1][0]))
+	if (argc == 2 && !argv[1][0])
 	{
 		write (1, "Error\n", 6);
 		return (1);
@@ -39,7 +39,8 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	counting_sort(a);
-	ksort(&a, &b);
+	ordering(&a, &b);
+	//ksort(&a, &b);
 	ft_free((void **)&a, 1);
 	ft_free((void **)&b, 1);
 	return (0);
