@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:51:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 20:29:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:56:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ void		ordering(t_stack **a, t_stack **b);
 size_t		stacksize(t_stack *stack);
 size_t		brute_force(t_stack *a, t_stack **b, size_t nodes);
 t_stack		*last_node(t_stack *stack);
+void		normal_sort(t_stack **a, t_stack **b, size_t nodes);
 
 #endif

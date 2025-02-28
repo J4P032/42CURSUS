@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:28:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 18:03:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:08:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	final_order(t_stack **a, t_stack **b, size_t s_index)
 		 	move_down(a, b, aux);
 		i++;
 	}
-	
 }
 
 void	ksort(t_stack **a, t_stack **b, size_t chunck)

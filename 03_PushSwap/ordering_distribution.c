@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:07:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 20:47:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/28 22:03:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,10 @@ void	ordering(t_stack **a, t_stack **b)
 	chunck = brute_force(*a, b, nodes);
 	if (chunck == 0)
 		return ;
-	if (nodes < 20)
-		return ; ///
-	
-		
-	
-	
-	ksort(a, b, chunck);
+	if (nodes < 4)
+		normal_sort(a, b, nodes);
+	/* if (nodes < 20)
+		return ; /// */
+	else
+		ksort(a, b, chunck);
 }
