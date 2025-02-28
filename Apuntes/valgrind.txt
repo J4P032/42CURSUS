@@ -1,7 +1,7 @@
 cc -g -O0 *.c
 
 Fugas Memoria:
-valgrind --leak-check=full --track-origins=yes -s ./a.out
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./a.out
 
 Procesos lentos:
 valgrind --tool=callgrind ./a.out
