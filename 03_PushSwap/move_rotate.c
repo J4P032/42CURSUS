@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:40:46 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 20:55:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/02/28 20:26:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,3 @@ void	double_inv_rotate(t_stack **stack1, t_stack **stack2)
 	else if ((*stack2)->next)
 		move_inv_rotate(stack2, 'b');
 }
-
-
