@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:13:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 20:47:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/01 13:17:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_stack	*copy_stack(t_stack *a, size_t num_nodes)
 	return (a_copy);
 }
 
-#include <stdio.h> ////
 size_t	brute_force(t_stack *a, t_stack **b, size_t nodes)
 {
 	t_stack	*a_copy;
@@ -78,7 +77,7 @@ size_t	brute_force(t_stack *a, t_stack **b, size_t nodes)
 		sim_ksort(&a_copy, b, i, &movements);
 		if (movements < min_moves)
 		{
-			min_moves = movements;	
+			min_moves = movements;
 			best_i = i;
 		}
 		i++;

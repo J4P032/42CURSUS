@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:51:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 21:56:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:57:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ void		ksort(t_stack **a, t_stack **b, size_t chunck);
 void		sim_ksort(t_stack **a, t_stack **b, size_t chunck, size_t *moves);
 void		sim_order(t_stack **a, t_stack **b, size_t s_index, size_t *moves);
 void		checker_value(t_stack **aux, t_stack *node, int value, int *error);
-int     	ft_sqrt(int nb);
 void		ordering(t_stack **a, t_stack **b);
 size_t		stacksize(t_stack *stack);
 size_t		brute_force(t_stack *a, t_stack **b, size_t nodes);
 t_stack		*last_node(t_stack *stack);
 void		normal_sort(t_stack **a, t_stack **b, size_t nodes);
+t_stack		*copy_stack(t_stack *a, size_t num_nodes);
+int			check_already_ordered(t_stack *a, size_t nodes);
+void		order_to_three(t_stack **a, t_stack **b, size_t nodes);
+void		make_three(t_stack **stack, t_stack **b, char c, size_t nodes);
 
 #endif

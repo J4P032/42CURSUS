@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 12:33:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:55:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ int	main(int argc, char **argv)
 {
 	t_stack *a;
 	t_stack *b;
-	
+
 	a = NULL;
 	b = NULL;
-	if (argc == 2 && !argv[1][0])
+/* 	if (argc == 2 && !argv[1][0])
 	{
 		write (1, "Error\n", 6);
 		return (1);
-	}
+	} */
 	if (compose_stack_a(&a, argc, argv))
 	{
 		write (1, "Error\n", 6);
