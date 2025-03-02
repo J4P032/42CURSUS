@@ -6,12 +6,18 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 20:49:18 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/01 23:22:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 18:29:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+/*This calculates the 3 lowest numbers in the stack and returns which one...*/
+/*it is the shortest distance to raise to top of the stack*/
+/*total_nodes is needed for B stack in i = total_nodes - 1 - 3;... */
+/*...imagine 6 nodes and we want to process 3 in B. nodes pased is 3, but...*/
+/*...total_nodes=6 so i=6-1-3=3. We search for indexes lower than 3 (0 1 2) */
+/*...but if we search in A we search for same indexes that way*/
 size_t	nearest_to_exit(t_stack *stack, t_stack *b, size_t nodes)
 {
 	size_t	i;
@@ -41,6 +47,7 @@ size_t	nearest_to_exit(t_stack *stack, t_stack *b, size_t nodes)
 	return (nearest_exit);
 }
 
+/*Order must be lower botton upper higher, then once done push all to B*/
 void	order_b_to_a(t_stack **a, t_stack **b, size_t order)
 {
 	if (order == 12)
@@ -55,8 +62,6 @@ void	order_b_to_a(t_stack **a, t_stack **b, size_t order)
 	}
 	else if (order == 120)
 		move_swap(b, 'b');
-	else if (order == 210)
-		return ;
 	else if (order == 21)
 		move_rotate(b, 'b');
 	else if (order == 102)
@@ -65,6 +70,7 @@ void	order_b_to_a(t_stack **a, t_stack **b, size_t order)
 		move_push(b, a, 'a');
 }
 
+/*With the sorted final indexes composed we make the right moves*/
 void	order_three(t_stack **stack, size_t order)
 {
 	if (order == 12)
@@ -87,6 +93,14 @@ void	order_three(t_stack **stack, size_t order)
 		move_swap(stack, 'a');
 }
 
+/*we produce in number the conjuntion of all index to compare later and...*/
+/*...produce the right movements to be ordered those 3 nodes of A or B*/
+/*IMPORTANT! order has to be updated to index as if only where 3 nodes*/
+/*that is the reason of aux->index - (nodes - 3) because imagine 4 nodes*/
+/*...order would be 312 or 231 when we search for 201 or 120 */
+/*IMPORTANT! if we want to order B with 3 nodes in arguments must be 0...*/
+/*...as it will update nodes = nodes + stacksize(*b); with 3 or B so...*/
+/*...aux->index - (3 - 3) = the real 0, 1 or 2 index */
 void	make_three(t_stack **stack, t_stack **b, char c, size_t nodes)
 {
 	size_t	i;
@@ -97,7 +111,10 @@ void	make_three(t_stack **stack, t_stack **b, char c, size_t nodes)
 	i = 0;
 	order = 0;
 	multiplier = 100;
-	aux = *stack;
+	if (c == 'a')
+		aux = *stack;
+	else
+		aux = *b;
 	nodes = nodes + stacksize(*b);
 	while (i < 3)
 	{
@@ -113,6 +130,7 @@ void	make_three(t_stack **stack, t_stack **b, char c, size_t nodes)
 }
 
 /*we search for the n (1 to 3) minimums near to exit to B */
+/*Depending of number of nodes it will process different in B*/
 void	order_to_three(t_stack **a, t_stack **b, size_t nodes)
 {
 	size_t	top_distance;
@@ -125,28 +143,17 @@ void	order_to_three(t_stack **a, t_stack **b, size_t nodes)
 		top_distance = nearest_to_exit(*a, *b, nodes);
 		tail_distance = nodes - top_distance - 1;
 		if (top_distance < tail_distance)
-		{
-			while (i++ < top_distance)
-				move_rotate(a, 'a');
-		}
+			moving_up(a, top_distance, 'a');
 		else
-		{
-			while (i++ <= tail_distance)
-				move_inv_rotate(a, 'a');
-		}
+			moving_down(a, tail_distance, 'a');
 		move_push(a, b, 'b');
 		nodes = nodes - 1;
 	}
 	make_three(a, b, 'a', nodes);
 	if (stacksize(*b) == 3)
-		make_three(a, b, 'b', nodes);
+		make_three(a, b, 'b', 0);
 	else if (stacksize(*b) == 2)
-	{
-		if ((*b)->value < (*b)->next->value)
-			move_rotate(b, 'b');
-		move_push(b, a, 'a');
-		move_push(b, a, 'a');
-	}
+		order_two(a, b, 'b');
 	else if (stacksize(*b) == 1)
 		move_push(b, a, 'a');
 }

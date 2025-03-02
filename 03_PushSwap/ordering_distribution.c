@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:07:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/01 21:35:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 18:38:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	check_already_ordered(t_stack *a, size_t nodes)
 	return (1);
 }
 
+/*check_already_ordered is to not make any movement if already order*/
+/*from 7 numbers we start to make ksort as it is great aproximation*/
 void	ordering(t_stack **a, t_stack **b)
 {
 	size_t	chunck;
@@ -34,11 +36,11 @@ void	ordering(t_stack **a, t_stack **b)
 
 	chunck = 0;
 	nodes = stacksize(*a);
-	if(check_already_ordered(*a, nodes))
+	if (check_already_ordered(*a, nodes))
 		return ;
-	if (nodes < 7)
+	if (nodes < 8)
 		normal_sort(a, b, nodes);
-	if (nodes > 6)
+	if (nodes > 7)
 	{
 		chunck = brute_force(*a, b, nodes);
 		if (chunck == 0)

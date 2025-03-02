@@ -6,15 +6,16 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:39:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 16:04:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 15:14:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+/*sa or sb movements*/
 void	move_swap(t_stack **stack, char c)
 {
-	t_stack *aux;
+	t_stack	*aux;
 
 	if (!stack || !*stack)
 		return ;
@@ -40,6 +41,7 @@ void	move_swap(t_stack **stack, char c)
 	}
 }
 
+/*ss double swap movement*/
 void	double_swap(t_stack **stack1, t_stack **stack2)
 {
 	if ((*stack1)->next && (*stack2)->next)

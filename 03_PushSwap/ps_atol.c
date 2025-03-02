@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:45 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/21 16:52:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:51:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ char	*clean_ceros(char *number, int *error)
 }
 
 /*first clean zeros as a valid number could be longer than 19chars with all 0*/
-/*if any char different than 0-9 is found then error.*/
+/*if any char different than 0-9 is found then error..*/
 long int	ps_atol(char *nptr, int *error)
 {
 	long int	result;
 	int			minus;
-	
+
 	minus = 1;
 	result = 0;
 	nptr = clean_ceros(nptr, error);
@@ -69,18 +69,3 @@ long int	ps_atol(char *nptr, int *error)
 		*error = 1;
 	return (minus * result);
 }
-
-
-/* 
-#include <stdio.h>
-int main()
-{
-	char a[] = "21474836493de34";
-	long int b = ps_atol(a);
-	printf ("el num es: %ld", b);
-	return (0);
-	
-	
-	
-} */
-

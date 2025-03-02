@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:13:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/01 13:17:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 14:53:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	copy_node(t_stack *a, t_stack **a_copy, t_stack *node)
 t_stack	*copy_stack(t_stack *a, size_t num_nodes)
 {
 	t_stack	*a_copy;
-	t_stack *node;
+	t_stack	*node;
 	size_t	i;
 
 	i = 0;
@@ -47,7 +47,7 @@ t_stack	*copy_stack(t_stack *a, size_t num_nodes)
 		node = ft_calloc(1, sizeof(t_stack));
 		if (!node)
 		{
-			ft_free((void **)&a_copy, 1); //mirar si lo hace bien en caso de fallo de memoria
+			ft_free((void **)&a_copy, 1);
 			return (NULL);
 		}
 		copy_node (a, &a_copy, node);
@@ -57,6 +57,9 @@ t_stack	*copy_stack(t_stack *a, size_t num_nodes)
 	return (a_copy);
 }
 
+/*simulates different chuncks with a copy of the stack A*/
+/*range = num_nodes / chunks so good aproximation is from 0 to 30*/
+/*the chunck with minimum number of movements is the one chosen*/
 size_t	brute_force(t_stack *a, t_stack **b, size_t nodes)
 {
 	t_stack	*a_copy;

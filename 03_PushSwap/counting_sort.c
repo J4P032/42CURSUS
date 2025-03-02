@@ -6,12 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 10:01:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/26 18:19:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 14:58:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+/*it runs with every number in the stack how many of the rest are less*/
+/*with that number I assign the order index to each one*/
 void	counting_sort(t_stack *stack)
 {
 	t_stack	*aux;

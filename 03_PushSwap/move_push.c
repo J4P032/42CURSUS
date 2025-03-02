@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:39:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 19:32:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 15:10:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	write_push(char c)
 	write(1, "\n", 1);
 }
 
+/*pa or pb movements*/
 void	move_push(t_stack **stack1, t_stack **stack2, char c)
 {
 	t_stack	*aux;

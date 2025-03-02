@@ -6,12 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 18:14:07 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 20:27:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 15:16:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+/*these functions do the same as the real ones but do not write anything...*/
+/*only count movements to record how many it does and then choose the minor*/
 void	simulate_push(t_stack **stack1, t_stack **stack2, size_t *moves)
 {
 	t_stack	*aux;
@@ -61,7 +63,7 @@ void	simulate_inv_rotate(t_stack **stack, size_t *moves)
 
 void	simulate_rotate(t_stack **stack, size_t *moves)
 {
-	t_stack *aux;
+	t_stack	*aux;
 	t_stack	*tail;
 
 	if (!stack || !*stack)
@@ -84,7 +86,7 @@ void	sim_ksort(t_stack **a, t_stack **b, size_t chunck, size_t *moves)
 	int		range;
 	size_t	nodes;
 	size_t	i;
-	
+
 	i = 0;
 	nodes = stacksize(*a);
 	range = nodes / chunck;
@@ -106,6 +108,3 @@ void	sim_ksort(t_stack **a, t_stack **b, size_t chunck, size_t *moves)
 	}
 	sim_order(a, b, nodes, moves);
 }
-
-
-

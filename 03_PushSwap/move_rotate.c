@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:40:46 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/28 20:26:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 15:12:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_stack	*last_node(t_stack *stack)
 	return (stack);
 }
 
+/*rra or rrb movements*/
 void	move_inv_rotate(t_stack **stack, char c)
 {
 	t_stack	*aux;
@@ -45,9 +46,10 @@ void	move_inv_rotate(t_stack **stack, char c)
 	}
 }
 
+/*ra or rb movements*/
 void	move_rotate(t_stack **stack, char c)
 {
-	t_stack *aux;
+	t_stack	*aux;
 	t_stack	*tail;
 
 	if (!stack || !*stack)
@@ -70,6 +72,7 @@ void	move_rotate(t_stack **stack, char c)
 	}
 }
 
+/*rr double rotate movement*/
 void	double_rotate(t_stack **stack1, t_stack **stack2)
 {
 	if ((*stack1)->next && (*stack2)->next)
@@ -84,6 +87,7 @@ void	double_rotate(t_stack **stack1, t_stack **stack2)
 		move_rotate(stack2, 'b');
 }
 
+/*rrr double inverse rotate movement*/
 void	double_inv_rotate(t_stack **stack1, t_stack **stack2)
 {
 	if ((*stack1)->next && (*stack2)->next)
