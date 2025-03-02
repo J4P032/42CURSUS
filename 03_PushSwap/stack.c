@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/02 14:46:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 23:57:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ int	compose_stack_a(t_stack **stack, int argc, char **argv)
 	aux = argv + 1;
 	while (*aux)
 	{
+		if (**aux == '\0')
+			return (ft_free((void **)stack, 1), 1); //tengo que poner error si "" ???
 		temp = ft_split(*aux, ' ');
 		if (!temp)
 		{
