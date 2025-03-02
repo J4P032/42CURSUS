@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 20:49:18 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/02 18:29:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 23:13:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,11 +135,9 @@ void	order_to_three(t_stack **a, t_stack **b, size_t nodes)
 {
 	size_t	top_distance;
 	size_t	tail_distance;
-	size_t	i;
 
 	while (nodes > 3)
 	{
-		i = 0;
 		top_distance = nearest_to_exit(*a, *b, nodes);
 		tail_distance = nodes - top_distance - 1;
 		if (top_distance < tail_distance)

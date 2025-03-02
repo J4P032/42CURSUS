@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 21:02:43 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/02 18:38:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/02 23:11:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ void	remove_from_b(t_stack **a, t_stack **b, size_t nodes)
 	size_t	top_distance;
 	size_t	tail_distance;
 	t_stack	*aux;
-	size_t	i;
 
-	i = 0;
 	top_distance = 0;
 	aux = *b;
 	while (aux && aux->index < (nodes - 1))
