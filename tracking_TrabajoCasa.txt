@@ -6,4 +6,4 @@ normal_short.c la i no usada.
 order.three.c
 de compose_stack_a eliminar (void)argc
 quitar los -g de los makefile
-
+stack.c para dar error y liberar bien memoria si "". Preguntar!!
