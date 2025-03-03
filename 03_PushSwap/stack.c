@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:54:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/02 23:57:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:04:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,19 +111,18 @@ void	store_number(t_stack **stack, char **argv, int *error)
 /*Returns error. 0 = OK. 1 = error*/
 /*Because I want to free when split because argvs in "..." I do split to all*/
 /*An error pointer is created to check in all functions errors so change to 1*/
-int	compose_stack_a(t_stack **stack, int argc, char **argv)
+int	compose_stack_a(t_stack **stack, char **argv)
 {
 	int		error;
 	char	**aux;
 	char	**temp;
 
-	(void)argc;
 	error = 0;
 	aux = argv + 1;
 	while (*aux)
 	{
-		if (**aux == '\0')
-			return (ft_free((void **)stack, 1), 1); //tengo que poner error si "" ???
+		if (checker_quotes(*aux))
+			return (ft_free((void **)stack, 1), 1);
 		temp = ft_split(*aux, ' ');
 		if (!temp)
 		{

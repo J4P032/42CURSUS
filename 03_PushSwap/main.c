@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:50:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/02 14:33:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:24:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ int	main(int argc, char **argv)
 
 	a = NULL;
 	b = NULL;
-	if (compose_stack_a(&a, argc, argv))
+	if (argc == 1)
+		return (0);
+	if (compose_stack_a(&a, argv))
 	{
 		write (1, "Error\n", 6);
 		return (1);

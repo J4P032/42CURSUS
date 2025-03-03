@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:51:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/02 18:30:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:05:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_stack
 	struct s_stack	*next;
 }					t_stack;
 
-int			compose_stack_a(t_stack **stack, int argc, char **argv);
+int			compose_stack_a(t_stack **stack, char **argv);
 long int	ps_atol(char *nptr, int *error);
 int			ft_free(void **item, int option);
 void		move_swap(t_stack **stack, char c);
@@ -55,5 +55,6 @@ void		order_two(t_stack **a, t_stack **b, char c);
 void		moving_up(t_stack **a, size_t top_distance, char c);
 void		moving_down(t_stack **a, size_t tail_distance, char c);
 void		make_three(t_stack **stack, t_stack **b, char c, size_t nodes);
+int			checker_quotes(char	*str);
 
 #endif
