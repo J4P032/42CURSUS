@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/04 11:43:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:49:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,14 @@
 
 int main(void)
 {
-    void *mlx;
-    void *win;
+    void    *mlx;
+    void    *mlx_win;
 
     mlx = mlx_init();
     if (!mlx)
         return (1);
-
-    win = mlx_new_window(mlx, 800, 600, "Mi Ventana");
-    if (!win)
+    mlx_win = mlx_new_window(mlx, 1920, 1080, "hola mundo!");
+    if(!mlx_win)
         return (1);
-
     mlx_loop(mlx);
-    return (0);
 }
