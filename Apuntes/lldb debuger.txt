@@ -1,6 +1,11 @@
 compilar cc -Wall -Wextra -Werror -g
 
 lldb ./a.out
+
+meter argumentos:
+settings set -- target.run-args "arg1" "arg2" "arg3" // conserva entre llamadas por escribir el setting
+process launch -- "arg1" "arg2" "arg3" // hay que llamarlo cada vez.
+
 b main.c:32 (break en linea 32)
 run
 gui
