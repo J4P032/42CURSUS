@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/05 13:01:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:24:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,9 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 }			t_data;
+
+void	draw_window(void *mlx, void **window, t_data *image);
+void	put_pixel(t_data *img, int x, int y, int color);
+int	close_win(void *param);
 
 #endif

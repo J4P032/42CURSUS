@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 NAME = so_long
 LIBRARY = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a
-SRC = so_long.c
+SRC = so_long.c window.c pixels.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 

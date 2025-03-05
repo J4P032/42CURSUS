@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/05 14:25:06 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/03/05 13:12:33 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/03/05 14:24:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int main(void)
+int	close_win(void *param)
 {
-	void	*mlx;
-	void	*mlx_win;
-	t_data	canvas;
+	(void)param;
+	exit(0);
+	return (0);
+}
 
-	mlx_win = NULL;
-	mlx = mlx_init();
-	draw_window(mlx, &mlx_win, &canvas);
-	put_pixel(&canvas, WIDTH / 2, HEIGHT / 2, 0x00FF0000);
-	mlx_put_image_to_window(mlx, mlx_win, canvas.img, 0, 0);
-
-	mlx_hook(mlx_win, 17, 0, close_win, mlx_win);
-	mlx_loop(mlx);
+void	draw_window(void *mlx, void **window, t_data *image)
+{
+	if (!*window)
+		*window = mlx_new_window(mlx, WIDTH, HEIGHT, "So Long");
+	image->img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	image->addr = mlx_get_data_addr(image->img, &(image)->bits_x_pixel,
+			&(image)->line_length, &(image)->endian);
 }
