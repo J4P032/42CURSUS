@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/05 14:24:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:46:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # define WIDTH 1920
 # define HEIGHT 1080
+# define PI 3.141592
 
 typedef struct s_data
 {
@@ -31,8 +32,21 @@ typedef struct s_data
 	int		endian;
 }			t_data;
 
-void	draw_window(void *mlx, void **window, t_data *image);
+typedef struct s_window
+{
+	void	*mlx;
+	void	*win;
+	t_data	canvas;
+	int		x;
+	int		y;
+	float	angle;
+	int		running;
+}			t_window;
+
+
+void	draw_window(t_window *win);
 void	put_pixel(t_data *img, int x, int y, int color);
-int	close_win(void *param);
+void	draw_square(t_data *canvas, int x, int y, int color);
+int		close_win(void *param);
 
 #endif
