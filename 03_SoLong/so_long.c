@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/05 19:56:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:26:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int	update_frame(t_window *win)
 
 	if (!win->running)
 		return (0);
-
-	draw_square(&win->canvas, i + win->x, win->y, 0x00000000);
+		
+	if (win->x < WIDTH && win->y < HEIGHT)
+		draw_square(&win->canvas, i + win->x, win->y, 0x00000000);
 	win->x = WIDTH / 2 + 200 * -1 * sin(win->angle * PI / 180);
 	win->y = HEIGHT / 2 + 200 * cos(angle2 * PI / 180);
-
 
 	angle2 += 0.25f;
 	win->angle+=0.5f;
