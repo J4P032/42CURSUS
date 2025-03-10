@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/05 18:26:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/10 10:50:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int	close_win(void *param)
 {
-	(void)param;
-	exit(0);
+	t_window	*win;
+	win = (t_window *)param;
+	mlx_destroy_window(win->mlx, win->win);
 	return (0);
 }
 

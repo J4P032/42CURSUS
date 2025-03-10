@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:28:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_window
 void	draw_window(t_window *win);
 void	put_pixel(t_data *img, int x, int y, int color);
 void	draw_square(t_data *canvas, int x, int y, int color);
+void	draw_circle(t_data *canvas, int x, int y, int r, int color);
 int		close_win(void *param);
 
 #endif
