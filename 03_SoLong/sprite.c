@@ -6,12 +6,12 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:04:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/11 15:04:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:46:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-void	draw_sprite(t_window *win)
+void	load_pacman(t_window *win)
 {
 	size_t	i;
 
@@ -22,23 +22,19 @@ void	draw_sprite(t_window *win)
 	win->sprite[1].bitmap[0] = "/home/jrollon-/Desktop/CURSUS/03_SoLong/sprites/pacman_l_00.xpm";
 	win->sprite[1].bitmap[1] = "/home/jrollon-/Desktop/CURSUS/03_SoLong/sprites/pacman_l_01.xpm";
 	win->sprite[1].bitmap[2] = "/home/jrollon-/Desktop/CURSUS/03_SoLong/sprites/pacman_l_02.xpm";
-	win->sprite[0].width = 64;
-	win->sprite[0].height = 64;
-	win->sprite[0].x = WIDTH / 2;
-	win->sprite[0].y = HEIGHT / 2;
-	win->sprite[0].go_up = 0;
-	win->sprite[0].go_right = 0;
-	win->sprite[0].go_down = 0;
-	win->sprite[0].go_left = 0;
-
-	win->sprite[1].width = 64;
-	win->sprite[1].height = 64;
-	win->sprite[1].x = WIDTH / 2;
-	win->sprite[1].y = HEIGHT / 2;
-	win->sprite[1].go_up = 0;
-	win->sprite[1].go_right = 0;
-	win->sprite[1].go_down = 0;
-	win->sprite[1].go_left = 0;
+	while (i < 2)
+	{
+		win->sprite[i].width = 64;
+		win->sprite[i].height = 64;
+		win->sprite[i].x = (WIDTH / 2) - win->sprite[i].width / 2;
+		win->sprite[i].y = (HEIGHT / 2)- win->sprite[i].height / 2;
+		win->sprite[i].go_up = 0;
+		win->sprite[i].go_right = 0;
+		win->sprite[i].go_down = 0;
+		win->sprite[i].go_left = 0;
+		i++;
+	}
+	i = 0;
 	while (i < 3)
 	{
 		win->sprite[0].img[i].img = mlx_xpm_file_to_image(win->mlx, win->sprite[0].bitmap[i],
@@ -49,8 +45,4 @@ void	draw_sprite(t_window *win)
 			return ;
 		i++;
 	}
-/* 	win->sprite.img->addr = mlx_get_data_addr(win->sprite.img->img,
-			&win->sprite.img->bits_x_pixel,
-			&win->sprite.img->line_length,
-			&win->sprite.img->endian); */
 }
