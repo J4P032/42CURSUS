@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/11 13:38:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/11 14:52:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_data
 
 typedef struct s_sprite
 {
-	t_data	img;
+	t_data	img[SPRITES_ANIM];
 	int		x;
 	int		y;
 	int		go_right;
@@ -45,7 +45,7 @@ typedef struct s_sprite
 	int		go_up;
 	int		width;
 	int		height;
-	char	*bitmap[NUM_SPRITES][SPRITES_ANIM];
+	char	*bitmap[SPRITES_ANIM];
 }			t_sprite;
 
 typedef struct s_window
@@ -58,7 +58,7 @@ typedef struct s_window
 	int			y;
 	float		angle;
 	int			running;
-	t_sprite	sprite;
+	t_sprite	sprite[NUM_SPRITES];
 }				t_window;
 
 void	draw_window(t_window *win);
