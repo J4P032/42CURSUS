@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/11 16:15:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:53:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include "./minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdlib.h>
+# include <X11/keysym.h>
+//# include <X11/keysymdef.h>
+//# include <X11/X.h>
 
 # define WIDTH 1920
 # define HEIGHT 1080
@@ -62,9 +65,9 @@ typedef struct s_window
 }				t_window;
 
 void	draw_window(t_window *win);
+int		key_press(int key, t_window *win);
+int		update_frame(t_window *win);
 void	put_pixel(t_data *img, int x, int y, int color);
-void	draw_square(t_data *canvas, int x, int y, int color);
-void	draw_circle(t_data *canvas, int x, int y, int r, int color);
 void	load_pacman(t_window *win);
 int		close_win(void *param);
 
