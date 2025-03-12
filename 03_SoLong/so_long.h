@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/12 13:53:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/12 20:51:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,24 @@ typedef struct s_window
 	t_sprite	sprite[NUM_SPRITES];
 }				t_window;
 
+typedef struct s_map
+{
+	char	**map;
+	int		columns;
+	int		lines;
+	int		num_p;
+	int		num_c;
+	int		num_walls;
+	int		no_rectangle;
+	int		no_load;
+}			t_map;
+
 void	draw_window(t_window *win);
 int		key_press(int key, t_window *win);
 int		update_frame(t_window *win);
 void	put_pixel(t_data *img, int x, int y, int color);
 void	load_pacman(t_window *win);
 int		close_win(void *param);
+t_map	*process_map(char *map, int *error);
 
 #endif

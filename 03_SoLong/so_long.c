@@ -6,17 +6,33 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/12 13:53:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/12 20:46:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int main(void)
+void	print_error(int error)
+{
+	if (error == 1)
+		write(1, "error1\n", 7);
+	else if (error == 2)
+		write(1, "error2\n", 7);
+}
+
+int main(int argc, char **argv)
 {
 	t_window	win;
+	int			error;
+	t_map		*map;
 
 	win.win = NULL;
+	error = 0;
+	if (argc != 2)
+		return (1);
+	map = process_map(argv[1], &error);
+	if (!map || error)
+		return (print_error(error), 1); //si no es error salir por que sera que map = NULL
 	win.mlx = mlx_init();
 	draw_window(&win);
 	load_pacman(&win);
