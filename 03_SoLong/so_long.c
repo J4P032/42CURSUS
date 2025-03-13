@@ -6,23 +6,32 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 14:35:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:18:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
+void	clean_up_memory(t_window *win)
+{
+	(void)win;
+	
+}
+
+
+
 int main(int argc, char **argv)
 {
 	t_window	win;
-	t_map		*map;
+	//t_map		*map;
 
 	win.win = NULL;
 	if (argc != 2)
 		return (1);
-	map = process_map(argv[1]);
-	if (!map)
-		return (1);
+	//map = process_map(argv[1]);
+	(void)argv;
+	/* if (!map)
+		return (1); */
 	win.mlx = mlx_init();
 	draw_window(&win);
 	load_pacman(&win);
@@ -34,5 +43,8 @@ int main(int argc, char **argv)
 	//mlx_hook(win.win, 2, 1L<<0 | 1L<<1, print_msg, &win);
 	mlx_hook(win.win, 17, 0, close_win, &win);
 	mlx_loop(win.mlx);
+	//free(map);
+	//clean_up_memory(&win);
+	
 	return (0);
 }

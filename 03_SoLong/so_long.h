@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 14:18:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:21:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@
 # include "./minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdlib.h>
-# include <X11/keysym.h>
-//# include <X11/keysymdef.h>
-//# include <X11/X.h>
+//# include <X11/keysym.h>
 
 # define WIDTH 1920
 # define HEIGHT 1080
@@ -83,6 +81,7 @@ void	put_pixel(t_data *img, int x, int y, int color);
 void	load_pacman(t_window *win);
 int		close_win(void *param);
 t_map	*process_map(char *map);
+void	load_map(t_map *map, char *map_dir);
 char	*get_next_line(int fd);
 
 #endif

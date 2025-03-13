@@ -3,6 +3,7 @@
 		"stdio.h": "c",
 		"ft_printf.h": "c",
 		"cstdlib": "c",
-		"random": "c"
+		"random": "c",
+		"so_long.h": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:00:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/12 13:20:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:27:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,20 @@ void	movement_vertical_keys(t_window *win, char c)
 
 int	key_press(int key, t_window *win)
 {
-	if (key == XK_space) // LO TENGO QUE QUITAR
+	if (key == ' ') // LO TENGO QUE QUITAR
 		win->running = 0;
 	if (key == 65307) //XP_Escape
 	{
 		mlx_destroy_window(win->mlx, win->win);
-		exit (0);
+		return (0);
 	}
-	if (key == XK_d)
+	if (key == 'D' || key == 'd' || key == 65363)
 		movement_horizontal_keys(win, 'r');
-	else if (key == XK_a)
+	else if (key == 'A' || key =='a' || key == 65361)
 		movement_horizontal_keys(win, 'l');
-	else if (key == XK_w)
+	else if (key == 'W' || key == 'w' || key == 65362)
 		movement_vertical_keys(win, 'u');
-	else if (key == XK_s)
+	else if (key == 'S' || key == 's' || key == 65364)
 		movement_vertical_keys(win, 'd');
 	return (0);
 }

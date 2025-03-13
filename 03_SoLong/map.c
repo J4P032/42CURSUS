@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 14:38:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:54:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	check_map_errors(t_map *map)
 		write(1, "There is no char start position, or more than one\n", 50);		
 	return (error);
 }
-
+/*map->lines == 0 in if, is because fd = -1 in open file*/
 t_map	*process_map(char *map_dir)
 {
 	t_map	*map;
@@ -122,8 +122,9 @@ t_map	*process_map(char *map_dir)
 	if (!map)
 		return (NULL);
 	check_map(map, map_dir);
-	if (check_map_errors(map))
+	if (check_map_errors(map) || map->lines == 0)
 		return (free(map), NULL);
+	load_map(map, map_dir);
 	/* if (!map->map) ///TENGO QUE ASIGNARLE EL MAPA UNA VEZ VISTO QUE ES VALIDO.
 		return (free(map), NULL); */
 	

@@ -4,7 +4,7 @@ NAME = so_long
 LIBRARY = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a
 SRC = so_long.c window.c sprite.c keys.c frame.c get_next_line.c get_next_line_utils.c \
-map.c
+map.c map_2.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 
