@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 12:30:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:15:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ void	check_line(char *line, char *next_line, t_map *map, size_t columns)
 	}
 	while(line[i] && ft_strlen(line) == columns)
 	{
-		if (line[0] == '1' ||  line[columns - 1] == '1')
+		if (i == 0 && line[0] == '1')
+			map->num_walls++;
+		if (i == (columns - 1) && line[columns - 1] == '1')
 			map->num_walls++;
 		if (line[i] == 'C')
 			map->num_c++;
@@ -53,9 +55,7 @@ void	check_map(t_map *map, char *map_dir)
 	char	*line;
 	char	*next_line;
 	int		fd;
-	size_t	columns;
 
-	columns = 0;
 	fd = open(map_dir, O_RDONLY);
 	if (fd == -1)
 		map->no_load = 1;
@@ -65,8 +65,8 @@ void	check_map(t_map *map, char *map_dir)
 	{
 		next_line = get_next_line(fd);
 		if (map->lines == 0)
-			columns = ft_strlen(line);
-		check_line(line, next_line, map, columns);
+			map->columns = ft_strlen(line);
+		check_line(line, next_line, map, map->columns);
 		free(line);
 		line = next_line;
 	}
@@ -81,7 +81,7 @@ t_map	*process_map(char *map_dir)
 	if (!map)
 		return (NULL);
 	check_map(map, map_dir);
-	if (!map->map)
+	if (!map->map) ///TENGO QUE ASIGNARLE EL MAPA UNA VEZ VISTO QUE ES VALIDO.
 		return (free(map), NULL);
 	
 
