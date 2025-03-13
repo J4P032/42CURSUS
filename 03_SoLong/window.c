@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/10 16:29:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:37:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	close_win(void *param)
 {
 	t_window	*win;
 	win = (t_window *)param;
-	mlx_destroy_window(win->mlx, win->win);
-	return (0);
+	clean_up_memory(win);
+	exit (0);
 }
 
 void	draw_window(t_window *win)

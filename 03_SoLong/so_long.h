@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 16:21:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:14:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 # define WIDTH 1920
 # define HEIGHT 1080
-# define NUM_SPRITES 5
+# define NUM_SPRITES 4
 # define SPRITES_ANIM 3
 # define PI 3.141592
 
@@ -55,9 +55,6 @@ typedef struct s_window
 	void		*win;
 	t_data		canvas;
 	t_data		buffer;
-	int			x;
-	int			y;
-	float		angle;
 	int			running;
 	t_sprite	sprite[NUM_SPRITES];
 }				t_window;
@@ -83,5 +80,6 @@ int		close_win(void *param);
 t_map	*process_map(char *map);
 void	load_map(t_map *map, char *map_dir);
 char	*get_next_line(int fd);
+void	clean_up_memory(t_window *win);
 
 #endif

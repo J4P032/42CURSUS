@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:00:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 16:27:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:36:45 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int	key_press(int key, t_window *win)
 		win->running = 0;
 	if (key == 65307) //XP_Escape
 	{
-		mlx_destroy_window(win->mlx, win->win);
-		return (0);
+		clean_up_memory(win);
+		exit (0);
 	}
 	if (key == 'D' || key == 'd' || key == 65363)
 		movement_horizontal_keys(win, 'r');
