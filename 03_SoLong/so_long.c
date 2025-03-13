@@ -6,16 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 12:42:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 14:35:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void	print_error()
-{
-	return;
-}
 
 int main(int argc, char **argv)
 {
@@ -27,7 +22,7 @@ int main(int argc, char **argv)
 		return (1);
 	map = process_map(argv[1]);
 	if (!map)
-		return (print_error(), 1); //si no es error salir por que sera que map = NULL
+		return (1);
 	win.mlx = mlx_init();
 	draw_window(&win);
 	load_pacman(&win);

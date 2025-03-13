@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 12:31:11 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 14:18:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ typedef struct s_map
 	int		num_e;
 	int		num_walls;
 	int		no_rectangle;
-	int		no_load;
 }			t_map;
 
 void	draw_window(t_window *win);
