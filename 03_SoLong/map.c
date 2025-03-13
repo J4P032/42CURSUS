@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/12 21:54:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:30:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 /*Error numbers: */
 /*-1 error reading map*/
 /* 1 map not rectangle*/
-void	check_line(char *line, char *next_line, t_map *map, int columns)
+void	check_line(char *line, char *next_line, t_map *map, size_t columns)
 {
 	size_t	i;
 
 	i = 0;
 	map->lines++;
-	if (strlen(line) != columns)
+	if (ft_strlen(line) != columns)
 		map->no_rectangle = 1;
 	if (map->lines == 1 || next_line == NULL)
 	{
@@ -34,14 +34,16 @@ void	check_line(char *line, char *next_line, t_map *map, int columns)
 		}
 		return ;
 	}
-	while(line[i] && strlen(line) == columns)
+	while(line[i] && ft_strlen(line) == columns)
 	{
-		if (line[0] == '1' || line[columns - 1] == '1')
+		if (line[0] == '1' ||  line[columns - 1] == '1')
 			map->num_walls++;
 		if (line[i] == 'C')
 			map->num_c++;
 		if (line[i] == 'P')
 			map->num_p++;
+		if (line[i] == 'E')
+			map->num_e++;
 		i++;
 	}
 }
@@ -51,7 +53,7 @@ void	check_map(t_map *map, char *map_dir)
 	char	*line;
 	char	*next_line;
 	int		fd;
-	int		columns;
+	size_t	columns;
 
 	columns = 0;
 	fd = open(map_dir, O_RDONLY);
@@ -63,7 +65,7 @@ void	check_map(t_map *map, char *map_dir)
 	{
 		next_line = get_next_line(fd);
 		if (map->lines == 0)
-			columns = strlen(line);
+			columns = ft_strlen(line);
 		check_line(line, next_line, map, columns);
 		free(line);
 		line = next_line;
@@ -71,14 +73,17 @@ void	check_map(t_map *map, char *map_dir)
 	close (fd);
 }
 
-t_map	*process_map(char *map_dir, int *error)
+t_map	*process_map(char *map_dir)
 {
 	t_map	*map;
 
 	map = (t_map *)ft_calloc(1, sizeof(t_map));
 	if (!map)
-		return ;
+		return (NULL);
 	check_map(map, map_dir);
+	if (!map->map)
+		return (free(map), NULL);
+	
 
 	return (map);
 }

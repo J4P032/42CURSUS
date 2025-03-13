@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/15 20:39:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:37:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	*ft_calloc(size_t nmemb, size_t size)
 
 /*with option 1 removes all the list in case of error*/
 /*with other 'option' it just removes the node worked*/
-void	free_list(t_list **list, int option)
+void	free_list(t_doc **list, int option)
 {
-	t_list	*aux;
+	t_doc	*aux;
 
 	if (!*list)
 		return ;
@@ -73,7 +73,7 @@ void	free_list(t_list **list, int option)
 /*calloc of num of chars with \n from left of 'rest' plus 1 (so +2) for \0*/
 /*process_rest with that aux(calloced). In this case 'big' is empty*/
 /*finale frees are in case last data read with content reserved & list left*/
-char	*give_me_rest(t_list **l, char **content, int option, ssize_t *b)
+char	*give_me_rest(t_doc **l, char **content, int option, ssize_t *b)
 {
 	char	*aux;
 
@@ -103,7 +103,7 @@ char	*give_me_rest(t_list **l, char **content, int option, ssize_t *b)
 /*joins all the content of each node into one big 'line'*/
 /*because rbytes and totalbytes are updated it is dynamic in calloc*/
 /*once each node is passed to 'line' it just free that node and content*/
-char	*compose_string(t_list **list)
+char	*compose_string(t_doc **list)
 {
 	char	*line;
 	size_t	i;
@@ -133,12 +133,12 @@ char	*compose_string(t_list **list)
 
 /*create new node, link it to exist list or will be the new list*/
 /*returns the & of head if one only node or last node & if more than one*/
-t_list	*ft_listnew(t_list **lst, char **content, ssize_t *rbytes)
+t_doc	*ft_listnew(t_doc **lst, char **content, ssize_t *rbytes)
 {
-	t_list	*lnew;
-	t_list	*aux;
+	t_doc	*lnew;
+	t_doc	*aux;
 
-	lnew = ft_calloc(1, sizeof(t_list));
+	lnew = ft_calloc(1, sizeof(t_doc));
 	if (!lnew)
 		return (*rbytes = 0, free(*content), *content = NULL,
 			free_list(lst, 1), NULL);

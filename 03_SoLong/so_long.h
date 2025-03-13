@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/12 20:51:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:31:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ typedef struct s_window
 typedef struct s_map
 {
 	char	**map;
-	int		columns;
-	int		lines;
+	size_t	columns;
+	size_t	lines;
 	int		num_p;
 	int		num_c;
+	int		num_e;
 	int		num_walls;
 	int		no_rectangle;
 	int		no_load;
@@ -82,6 +83,7 @@ int		update_frame(t_window *win);
 void	put_pixel(t_data *img, int x, int y, int color);
 void	load_pacman(t_window *win);
 int		close_win(void *param);
-t_map	*process_map(char *map, int *error);
+t_map	*process_map(char *map);
+char	*get_next_line(int fd);
 
 #endif

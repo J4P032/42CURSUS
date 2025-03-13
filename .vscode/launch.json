@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/03_SoLong/so_long",
-			"args": ["5", "1"],
+			"args": ["/home/japo32/42CURSUS/03_SoLong/maps/pacman.ber"],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
 			"environment": [],

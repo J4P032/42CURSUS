@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 17:19:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/10 11:50:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:36:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ ssize_t	findn(size_t n, const char *s, int option)
 /*reads from open fd and insert it in aux with BUFFER_SIZE*/
 /*if bytes read (that is modified by pointer) != BUFFER_SIZE...*/
 /*it 'realoc' it into resize to better memory management*/
-char	*ft_read_fd(int fd, ssize_t *bytes, t_list **list)
+char	*ft_read_fd(int fd, ssize_t *bytes, t_doc **list)
 {
 	char	*aux;
 	char	*resize;
@@ -104,7 +104,7 @@ char	*str_join(char *dest, char *src, char *rest, ssize_t length)
 /*joins 'big' data from list nodes without \n with up to first \n in rest*/
 /*line 119: moves from back to front of the rest after /n*/
 /*updates bytes of node & totalbytes of whole list with the rest to process*/
-char	*process_rest(char **big, char **rest, ssize_t *rbytes, t_list **lst)
+char	*process_rest(char **big, char **rest, ssize_t *rbytes, t_doc **lst)
 {
 	ssize_t	i;
 	size_t	j;
@@ -141,7 +141,7 @@ char	*process_rest(char **big, char **rest, ssize_t *rbytes, t_list **lst)
 /*if not found in 'content' any \n char then directly stores in list*/
 char	*get_next_line(int fd)
 {
-	static t_list	*list;
+	static t_doc	*list;
 	ssize_t			rbytes;
 	char			*content;
 	char			*big;
