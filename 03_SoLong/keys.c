@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:00:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 17:36:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:31:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,22 @@ void	movement_vertical_keys(t_window *win, char c)
 	}
 }
 
-int	key_press(int key, t_window *win)
+int	key_press(int key, t_game *game)
 {
 	if (key == ' ') // LO TENGO QUE QUITAR
-		win->running = 0;
+		game->win->running = 0;
 	if (key == 65307) //XP_Escape
 	{
-		clean_up_memory(win);
+		clean_up_memory(game);
 		exit (0);
 	}
 	if (key == 'D' || key == 'd' || key == 65363)
-		movement_horizontal_keys(win, 'r');
+		movement_horizontal_keys(game->win, 'r');
 	else if (key == 'A' || key =='a' || key == 65361)
-		movement_horizontal_keys(win, 'l');
+		movement_horizontal_keys(game->win, 'l');
 	else if (key == 'W' || key == 'w' || key == 65362)
-		movement_vertical_keys(win, 'u');
+		movement_vertical_keys(game->win, 'u');
 	else if (key == 'S' || key == 's' || key == 65364)
-		movement_vertical_keys(win, 'd');
+		movement_vertical_keys(game->win, 'd');
 	return (0);
 }

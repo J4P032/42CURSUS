@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 17:35:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:45:08 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,61 +25,61 @@ void	free_sprites(t_sprite *sprite, void *mlx)
 	}
 }
 
-void	clean_up_memory(t_window *win)
+void	clean_up_memory(t_game *game)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < NUM_SPRITES)
-		free_sprites(&win->sprite[i++], win->mlx);
-	if(win->canvas.img)
-		mlx_destroy_image(win->mlx, win->canvas.img);
-	if (win->buffer.img)
-		mlx_destroy_image(win->mlx, win->buffer.img);
-	if (win->win)
+		free_sprites(&game->win->sprite[i++], game->win->mlx);
+	if(game->win->canvas.img)
+		mlx_destroy_image(game->win->mlx, game->win->canvas.img);
+	if (game->win->buffer.img)
+		mlx_destroy_image(game->win->mlx, game->win->buffer.img);
+	if (game->win->win)
 	{
-		mlx_destroy_window(win->mlx, win->win);
-        win->win = NULL;
+		mlx_destroy_window(game->win->mlx, game->win->win);
+        game->win->win = NULL;
 	}
-	if (win->mlx)
+	if (game->win->mlx)
 	{
-		mlx_destroy_display(win->mlx);
-		free(win->mlx);
-		win->mlx = NULL;
+		mlx_destroy_display(game->win->mlx);
+		free(game->win->mlx);
+		game->win->mlx = NULL;
 	}
-	if (win)
-		free(win);
+	if (game->win)
+		free(game->win);
+	if (game->map)
+		free(game->map);
+	free (game);
 }
 
-
-
+/*Could use t_window without pointer BUT 'cause errors in free I init all to 0*/
 int main(int argc, char **argv)
 {
-	t_window	*win; // = {0};
-	//t_map		*map;
-
+	t_game	*game;
+	
 	if (argc != 2)
 		return (1);
-	win = (t_window *)ft_calloc(1, sizeof(t_window));
-	if (!win)
+	game = (t_game *)ft_calloc(1, sizeof(t_game));
+	if (!game)
 		return (1);
-	//win.win = NULL;
-	win->running = 1;
-	win->mlx = mlx_init();
-	if (!win->mlx)
-		return (free(win), 1);
-	//map = process_map(argv[1]);
-	(void)argv;
-	/* if (!map)
-		return (1); */
-	draw_window(win);
-	load_pacman(win);
-	mlx_loop_hook(win->mlx, update_frame, win);
-	mlx_key_hook(win->win, key_press, win);
-	////mlx_hook(win.win, 2, 1L<<0 | 1L<<1, print_msg, &win);
-	mlx_hook(win->win, 17, 0, close_win, win);
-	mlx_loop(win->mlx);
-	//free(map);
-	clean_up_memory(win);
+	game->win = (t_window *)ft_calloc(1, sizeof(t_window));
+	if (!game->win)
+		return (free (game), 1);
+	game->win->running = 1;
+	game->win->mlx = mlx_init();
+	if (!game->win->mlx)
+		return (free(game), 1);
+	game->map = process_map(argv[1]);
+	if (!game->map)
+		return (free (game->win->mlx), free (game->win), free (game), 1);
+	draw_window(game);
+	load_pacman(game->win); //hay que pasarle map tambien y que libere memoria si falla en la creacion de sprites.
+	mlx_loop_hook(game->win->mlx, update_frame, game);
+	mlx_key_hook(game->win->win, key_press, game);
+	mlx_hook(game->win->win, 17, 0, close_win, game);
+	mlx_loop(game->win->mlx);
+	clean_up_memory(game);
 	return (0);
 }

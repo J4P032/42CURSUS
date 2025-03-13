@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:52:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/12 14:29:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:29:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ void	pacman_sprite_anim(t_window *win)
 	i = scale_time(&j);
 }
 
-int	update_frame(t_window *win)
+int	update_frame(t_game *game)
 {
-	if (!win->running)
+	if (!game->win->running)
 		return (0);
-	pacman_movement(win);
-	pacman_sprite_anim(win);
+	pacman_movement(game->win); 
+	pacman_sprite_anim(game->win); //put_image_to_window hace malloc y hay que pasarle t_game para liberar tambien map si falla
 	return (0);
 }

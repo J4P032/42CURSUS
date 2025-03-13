@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 17:14:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:39:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "./minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdlib.h>
-//# include <X11/keysym.h>
+# include <stdio.h>
 
 # define WIDTH 1920
 # define HEIGHT 1080
@@ -71,15 +71,21 @@ typedef struct s_map
 	int		no_rectangle;
 }			t_map;
 
-void	draw_window(t_window *win);
-int		key_press(int key, t_window *win);
-int		update_frame(t_window *win);
-void	put_pixel(t_data *img, int x, int y, int color);
+typedef struct	s_game
+{
+	t_window	*win;
+	t_map		*map;
+}				t_game;
+
+void	draw_window(t_game *game);
+int		key_press(int key, t_game *game);
+int		update_frame(t_game *game);
+//void	put_pixel(t_data *img, int x, int y, int color);
 void	load_pacman(t_window *win);
-int		close_win(void *param);
+int		close_win(t_game *game);
 t_map	*process_map(char *map);
 void	load_map(t_map *map, char *map_dir);
 char	*get_next_line(int fd);
-void	clean_up_memory(t_window *win);
+void	clean_up_memory(t_game *game);
 
 #endif
