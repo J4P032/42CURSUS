@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 18:50:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:02:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ int main(int argc, char **argv)
 		return (1);
 	game->win = (t_window *)ft_calloc(1, sizeof(t_window));
 	if (!game->win)
-		return (free (game), 1);
+		return (free(game), 1);
 	game->win->running = 1;
 	game->win->mlx = mlx_init();
 	if (!game->win->mlx)
-		return (free(game), 1);
+		return (free(game->win), free(game), 1);
 	game->map = process_map(argv[1]);
 	if (!game->map)
 		return (clean_up_memory(game), 1);
@@ -80,6 +80,6 @@ int main(int argc, char **argv)
 	mlx_key_hook(game->win->win, key_press, game);
 	mlx_hook(game->win->win, 17, 0, close_win, game);
 	mlx_loop(game->win->mlx);
-	clean_up_memory(game);
+	//clean_up_memory(game);  //sale antes de llegar aqui.. y lo limpia bien.
 	return (0);
 }
