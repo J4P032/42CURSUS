@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 18:45:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:50:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 		return (free(game), 1);
 	game->map = process_map(argv[1]);
 	if (!game->map)
-		return (free (game->win->mlx), free (game->win), free (game), 1);
+		return (clean_up_memory(game), 1);
 	draw_window(game);
 	load_pacman(game->win); //hay que pasarle map tambien y que libere memoria si falla en la creacion de sprites.
 	mlx_loop_hook(game->win->mlx, update_frame, game);
