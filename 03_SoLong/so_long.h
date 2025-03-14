@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 18:39:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:47:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define HEIGHT 1080
 # define NUM_SPRITES 4
 # define SPRITES_ANIM 3
-# define PI 3.141592
+# define VALID_MAP_CHARS "CPE01\n"
 
 typedef struct s_data
 {
@@ -69,6 +69,7 @@ typedef struct s_map
 	int		num_e;
 	int		num_walls;
 	int		no_rectangle;
+	int		no_valid_char;
 }			t_map;
 
 typedef struct	s_game

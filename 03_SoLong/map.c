@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 15:54:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:33:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,13 @@ void	check_line(char *line, char *next_line, t_map *map, size_t columns)
 	map->lines++;
 	if (ft_strlen(line) != columns)
 		map->no_rectangle = 1;
+	while (line[i])
+	{
+		if (!ft_strchr(VALID_MAP_CHARS, line[i]))
+			map->no_valid_char = 1;
+		i++;
+	}
+	i = 0;
 	if (map->lines == 1 || next_line == NULL)
 	{
 		while(line[i])
@@ -96,7 +103,7 @@ int	check_map_errors(t_map *map)
 	error = 0;
 	closed_walls = map->columns * 2 + (map->lines - 2) * 2;
 	if (closed_walls != map->num_walls || map->no_rectangle || map->num_c < 1
-		|| map->num_e != 1 || map->num_p != 1)
+		|| map->num_e != 1 || map->num_p != 1 || map->no_valid_char == 1)
 	{
 		write(1, "Error\n", 6);
 		error = 1;
@@ -110,7 +117,9 @@ int	check_map_errors(t_map *map)
 	if	(map->num_e != 1)
 		write(1, "There is no exit, or more than one\n", 35);
 	if	(map->num_p != 1)
-		write(1, "There is no char start position, or more than one\n", 50);		
+		write(1, "There is no char start position, or more than one\n", 50);	
+	if	(map->no_valid_char)
+		write(1, "There is at least one invalid char in the map\n", 46);	
 	return (error);
 }
 /*map->lines == 0 in if, is because fd = -1 in open file*/
