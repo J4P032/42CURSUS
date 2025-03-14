@@ -6,11 +6,26 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 19:02:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:49:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	free_map(t_game *game)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < game->map->lines)
+	{
+		free(game->map->map[i]);
+		game->map->map[i] = NULL;
+		i++;
+	}
+	free(game->map->map);
+	free(game->map);
+}
 
 void	free_sprites(t_sprite *sprite, void *mlx)
 {
@@ -50,7 +65,7 @@ void	clean_up_memory(t_game *game)
 	if (game->win)
 		free(game->win);
 	if (game->map)
-		free(game->map);
+		free_map(game);
 	free (game);
 }
 

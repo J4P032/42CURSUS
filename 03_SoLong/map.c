@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/14 10:33:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:51:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ t_map	*process_map(char *map_dir)
 	if (check_map_errors(map) || map->lines == 0)
 		return (free(map), NULL);
 	load_map(map, map_dir);
-	/* if (!map->map) ///TENGO QUE ASIGNARLE EL MAPA UNA VEZ VISTO QUE ES VALIDO.
-		return (free(map), NULL); */
-	
+	if (!map->map)
+		return (free(map), NULL);
+	//HAY QUE CHECKEAR QUE HAYA SOLUCION. CHUNGO!!
 	return (map);
 }
