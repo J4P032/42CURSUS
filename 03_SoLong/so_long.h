@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/14 10:58:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/15 22:11:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-# define WIDTH 1920
-# define HEIGHT 1080
-# define NUM_SPRITES 4
+//# define WIDTH 1920
+//# define HEIGHT 1080
+# define SPRITE_WIDTH 64
+# define SPRITE_HEIGHT 64
+# define NUM_SPRITES 10
 # define SPRITES_ANIM 3
 # define VALID_MAP_CHARS "CPE01\n"
 
@@ -55,6 +57,8 @@ typedef struct s_window
 	void		*win;
 	t_data		canvas;
 	t_data		buffer;
+	int			width;
+	int			height;
 	int			running;
 	t_sprite	sprite[NUM_SPRITES];
 }				t_window;
@@ -81,8 +85,9 @@ typedef struct	s_game
 void	draw_window(t_game *game);
 int		key_press(int key, t_game *game);
 int		update_frame(t_game *game);
-//void	put_pixel(t_data *img, int x, int y, int color);
-void	load_pacman(t_window *win);
+void	load_sprites(t_game *game);
+void	load_pacman(t_game *game);
+void	draw_map(t_game *game);
 int		close_win(t_game *game);
 t_map	*process_map(char *map);
 void	load_map(t_map *map, char *map_dir);

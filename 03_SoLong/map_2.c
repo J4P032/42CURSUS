@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/14 11:37:01 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/15 13:58:35 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	load_lines(int fd, char *line, t_map *map)
 	i = 0;
 	while (line)
 	{
-		map->map[i] = line;	
+		map->map[i] = line;
 		i++;
 		line = get_next_line(fd);
 		if (!line && i < map->lines)
@@ -43,7 +43,7 @@ void	load_map(t_map *map, char *map_dir)
 {
 	char	*line;
 	int		fd;
-	
+
 	fd = open(map_dir, O_RDONLY);
 	if (fd == -1)
 	{

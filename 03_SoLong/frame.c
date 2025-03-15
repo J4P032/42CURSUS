@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:52:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/13 18:29:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/15 21:55:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	pacman_movement(t_window *win)
 {
 	if (win->sprite->go_right)
 	{
-		if (win->sprite[0].x > WIDTH - win->sprite[0].width)
-			win->sprite[0].x = WIDTH - win->sprite[0].width;
+		if (win->sprite[0].x > win->width - win->sprite[0].width)
+			win->sprite[0].x = win->width - win->sprite[0].width;
 		(win->sprite[0].x)++;
 	}
 	else if (win->sprite->go_left)
@@ -48,8 +48,8 @@ void	pacman_movement(t_window *win)
 	}
 	else if (win->sprite->go_down)
 	{
-		if (win->sprite[0].y > HEIGHT - win->sprite[0].height)
-			win->sprite[0].y = HEIGHT - win->sprite[0].height;
+		if (win->sprite[0].y > win->height - win->sprite[0].height)
+			win->sprite[0].y = win->height - win->sprite[0].height;
 		(win->sprite[0].y)++;
 	}
 }
@@ -80,7 +80,7 @@ int	update_frame(t_game *game)
 {
 	if (!game->win->running)
 		return (0);
-	pacman_movement(game->win); 
+	pacman_movement(game->win);
 	pacman_sprite_anim(game->win); //put_image_to_window hace malloc y hay que pasarle t_game para liberar tambien map si falla
 	return (0);
 }
