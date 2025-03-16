@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/15 22:11:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/16 14:00:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,12 @@ int		update_frame(t_game *game);
 void	load_sprites(t_game *game);
 void	load_pacman(t_game *game);
 void	draw_map(t_game *game);
+void	frame_map(t_game *game);
 int		close_win(t_game *game);
 t_map	*process_map(char *map);
 void	load_map(t_map *map, char *map_dir);
 char	*get_next_line(int fd);
 void	clean_up_memory(t_game *game);
+void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
 
 #endif
