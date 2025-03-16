@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:11:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 17:10:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/16 21:49:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ void	put_pixel(t_data *img, int x, int y, int color)
 	pxl_adr = img->addr + (y * img->line_length + x * (img->bits_x_pixel / 8));
 	*(unsigned int*)pxl_adr = color;
 }
+
+/* void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y)
+{
+	// Usa mlx_put_image_to_window para colocar la imagen completa en la ventana
+	mlx_put_image_to_window(game->win->mlx, game->win->win, sprite.img[0].img, x, y);
+} */
+
 
 void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y)
 {

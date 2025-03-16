@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:52:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 18:11:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/16 21:49:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	update_frame(t_game *game)
 	if (!game->win->running)
 		return (0);
 	pacman_movement(game->win);
+	//frame_map(game); //aqui permitiria que fuera lento pero no con pixeles. comentar la linea de mlx_put_image_to_window de arriba
 	pacman_sprite_anim(game->win); //put_image_to_window hace malloc y hay que pasarle t_game para liberar tambien map si falla
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 18:43:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 18:33:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/16 21:50:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-char	*get_mlx_address(t_sprite *sprite)
+char	*get_mlx_addr(t_sprite *sprite)
 {
 	char	*aux;
 
@@ -42,10 +42,10 @@ void	load_corners(t_game *game)
 		clean_up_memory(game);
 		exit (1);
 	}
-	game->win->sprite[4].img[0].addr = get_mlx_address(&game->win->sprite[4]);
-	game->win->sprite[5].img[0].addr = get_mlx_address(&game->win->sprite[5]);
-	game->win->sprite[6].img[0].addr = get_mlx_address(&game->win->sprite[6]);
-	game->win->sprite[7].img[0].addr = get_mlx_address(&game->win->sprite[7]);
+	game->win->sprite[4].img[0].addr = get_mlx_addr(&game->win->sprite[4]);
+	game->win->sprite[5].img[0].addr = get_mlx_addr(&game->win->sprite[5]);
+	game->win->sprite[6].img[0].addr = get_mlx_addr(&game->win->sprite[6]);
+	game->win->sprite[7].img[0].addr = get_mlx_addr(&game->win->sprite[7]);
 }
 
 void	load_wall(t_game *game)
@@ -53,21 +53,21 @@ void	load_wall(t_game *game)
 	game->win->sprite[8].img[0].img = mlx_xpm_file_to_image(game->win->mlx,
 			game->win->sprite[8].bitmap[0], &game->win->sprite[8].width,
 			&game->win->sprite[8].height);
-	if (!game->win->sprite[8].img[0].img)
-	{
-		clean_up_memory(game);
-		exit (1);
-	}
-	game->win->sprite[8].img[0].addr = get_mlx_address(&game->win->sprite[8]);
 	game->win->sprite[9].img[0].img = mlx_xpm_file_to_image(game->win->mlx,
 			game->win->sprite[9].bitmap[0], &game->win->sprite[9].width,
 			&game->win->sprite[9].height);
-	if (!game->win->sprite[9].img[0].img)
+	game->win->sprite[10].img[0].img = mlx_xpm_file_to_image(game->win->mlx,
+			game->win->sprite[10].bitmap[0], &game->win->sprite[10].width,
+			&game->win->sprite[10].height);
+	if (!game->win->sprite[9].img[0].img || !game->win->sprite[8].img[0].img
+		|| !game->win->sprite[10].img[0].img)
 	{
 		clean_up_memory(game);
 		exit (1);
 	}
-	game->win->sprite[9].img[0].addr = get_mlx_address(&game->win->sprite[9]);
+	game->win->sprite[8].img[0].addr = get_mlx_addr(&game->win->sprite[8]);
+	game->win->sprite[9].img[0].addr = get_mlx_addr(&game->win->sprite[9]);
+	game->win->sprite[10].img[0].addr = get_mlx_addr(&game->win->sprite[10]);
 }
 
 void	draw_map(t_game *game)
@@ -81,7 +81,8 @@ void	draw_map(t_game *game)
 	game->win->sprite[7].bitmap[0] = "./textures/wall_11.xpm";
 	game->win->sprite[8].bitmap[0] = "./textures/wall_horizontal.xpm";
 	game->win->sprite[9].bitmap[0] = "./textures/wall_vertical.xpm";
-	while (i < 10)
+	game->win->sprite[10].bitmap[0] = "./textures/wall_block.xpm";
+	while (i < 11)
 	{
 		game->win->sprite[i].width = 64;
 		game->win->sprite[i].height = 64;

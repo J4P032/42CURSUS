@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 14:00:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/16 21:42:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 //# define HEIGHT 1080
 # define SPRITE_WIDTH 64
 # define SPRITE_HEIGHT 64
-# define NUM_SPRITES 10
+# define NUM_SPRITES 11
 # define SPRITES_ANIM 3
 # define VALID_MAP_CHARS "CPE01\n"
 
