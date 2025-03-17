@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/15 13:58:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:20:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	load_map(t_map *map, char *map_dir)
 		close(fd);
 		return ;
 	}
-	map->map = (char **)ft_calloc(map->lines + 1 , sizeof(char *));
+	map->map = (char **)ft_calloc(map->lines + 1, sizeof(char *));
 	if (!map->map)
 	{
 		free(line);

@@ -6,12 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:56:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 21:13:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:15:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
 
 void	draw_wall_to_canvas(t_game *game, size_t i, size_t j)
 {
@@ -20,7 +19,6 @@ void	draw_wall_to_canvas(t_game *game, size_t i, size_t j)
 
 	x = SPRITE_WIDTH * j;
 	y = SPRITE_HEIGHT * i;
-
 	if (i == 0 && j == 0)
 		draw_sprite_on_canvas(game, game->win->sprite[4], x, y);
 	else if (i == 0 && j == game->map->columns - 1)
@@ -50,7 +48,7 @@ void	frame_map(t_game *game)
 		j = 0;
 		while (j < game->map->columns)
 		{
-			if(game->map->map[i][j] == '1')
+			if (game->map->map[i][j] == '1')
 				draw_wall_to_canvas(game, i, j);
 			j++;
 		}

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/17 14:20:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:35:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ void	clean_up_memory(t_game *game)
 	i = 0;
 	while (i < NUM_SPRITES)
 		free_sprites(&game->win->sprite[i++], game->win->mlx);
-	if(game->win->canvas.img)
+	if (game->win->canvas.img)
 		mlx_destroy_image(game->win->mlx, game->win->canvas.img);
 	if (game->win->buffer.img)
 		mlx_destroy_image(game->win->mlx, game->win->buffer.img);
 	if (game->win->win)
 	{
 		mlx_destroy_window(game->win->mlx, game->win->win);
-        game->win->win = NULL;
+		game->win->win = NULL;
 	}
 	if (game->win->mlx)
 	{
@@ -70,7 +70,7 @@ void	clean_up_memory(t_game *game)
 }
 
 /*Could use t_window without pointer BUT 'cause errors in free I init all to 0*/
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_game	*game;
 
@@ -93,11 +93,7 @@ int main(int argc, char **argv)
 	load_sprites(game);
 	mlx_loop_hook(game->win->mlx, update_frame, game);
 	mlx_key_hook(game->win->win, key_press, game);
-	//mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
-	//mlx_hook(game->win->win, 3, 1L << 1, key_release, game);
-
 	mlx_hook(game->win->win, 17, 0, close_win, game);
 	mlx_loop(game->win->mlx);
-	//clean_up_memory(game);  //sale antes de llegar aqui.. y lo limpia bien.
 	return (0);
 }

@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g3
 NAME = so_long
 LIBRARY = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a

@@ -6,14 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:04:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 14:07:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:37:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
 void	load_sprites(t_game *game)
 {
 	load_pacman(game);
 	draw_map(game);
-
 }

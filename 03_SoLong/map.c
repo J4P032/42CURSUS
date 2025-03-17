@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/17 09:33:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:22:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 	size_t	i;
 
 	i = 0;
-	while(line[i] && ft_strlen(line) == columns)
+	while (line[i] && ft_strlen(line) == columns)
 	{
 		if (i == 0 && line[0] == '1')
 			map->num_walls++;
@@ -55,7 +55,7 @@ void	check_line(char *line, char *next_line, t_map *map, size_t columns)
 	i = 0;
 	if (map->lines == 1 || next_line == NULL)
 	{
-		while(line[i])
+		while (line[i])
 		{
 			if (line[i] == '1')
 				map->num_walls++;
@@ -116,16 +116,17 @@ int	check_map_errors(t_map *map)
 		write(1, "Map not fully closed by walls\n", 30);
 	if (map->no_rectangle)
 		write(1, "Not a rectangular map\n", 22);
-	if	(map->num_c < 1)
+	if (map->num_c < 1)
 		write(1, "There are no collectibles\n", 26);
-	if	(map->num_e != 1)
+	if (map->num_e != 1)
 		write(1, "There is no exit, or more than one\n", 35);
-	if	(map->num_p != 1)
+	if (map->num_p != 1)
 		write(1, "There is no char start position, or more than one\n", 50);
-	if	(map->no_valid_char)
+	if (map->no_valid_char)
 		write(1, "There is at least one invalid char in the map\n", 46);
 	return (error);
 }
+
 /*map->lines == 0 in if, is because fd = -1 in open file*/
 t_map	*process_map(char *map_dir)
 {

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:41:55 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/17 09:27:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:37:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	load_pacman_anim_horizontal(t_game *game)
 			clean_up_memory(game);
 			exit (1);
 		}
-
 		i++;
 	}
 }
@@ -70,7 +69,7 @@ void	load_pacman_anim_horizontal(t_game *game)
 void	load_pacman(t_game *game)
 {
 	int	width;
-	int height;
+	int	height;
 
 	width = game->win->width;
 	height = game->win->height;

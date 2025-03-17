@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/17 15:55:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:36:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_map
 	int		no_valid_char;
 }			t_map;
 
-typedef struct	s_game
+typedef struct s_game
 {
 	t_window	*win;
 	t_map		*map;
