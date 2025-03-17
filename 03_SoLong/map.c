@@ -6,14 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/14 11:51:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 09:33:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include "get_next_line.h"
 
-void	check_internal_lines(char *line, t_map *map, size_t columns)
+void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 {
 	size_t	i;
 
@@ -27,7 +27,11 @@ void	check_internal_lines(char *line, t_map *map, size_t columns)
 		if (line[i] == 'C')
 			map->num_c++;
 		if (line[i] == 'P')
+		{
 			map->num_p++;
+			map->p_x = i * SPRITE_WIDTH;
+			map->p_y = (ln - 1) * SPRITE_HEIGHT;
+		}
 		if (line[i] == 'E')
 			map->num_e++;
 		i++;
@@ -59,7 +63,7 @@ void	check_line(char *line, char *next_line, t_map *map, size_t columns)
 		}
 		return ;
 	}
-	check_internal_lines(line, map, columns);
+	check_internal_lines(line, map, columns, map->lines);
 }
 
 void	check_map(t_map *map, char *map_dir)
@@ -99,7 +103,7 @@ int	check_map_errors(t_map *map)
 {
 	int	error;
 	int	closed_walls;
-	
+
 	error = 0;
 	closed_walls = map->columns * 2 + (map->lines - 2) * 2;
 	if (closed_walls != map->num_walls || map->no_rectangle || map->num_c < 1
@@ -117,9 +121,9 @@ int	check_map_errors(t_map *map)
 	if	(map->num_e != 1)
 		write(1, "There is no exit, or more than one\n", 35);
 	if	(map->num_p != 1)
-		write(1, "There is no char start position, or more than one\n", 50);	
+		write(1, "There is no char start position, or more than one\n", 50);
 	if	(map->no_valid_char)
-		write(1, "There is at least one invalid char in the map\n", 46);	
+		write(1, "There is at least one invalid char in the map\n", 46);
 	return (error);
 }
 /*map->lines == 0 in if, is because fd = -1 in open file*/

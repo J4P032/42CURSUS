@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:41:55 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/15 21:59:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 09:27:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ void	load_pacman(t_game *game)
 	game->win->sprite[3].bitmap[2] = "./textures/pacman_d_02.xpm";
 	game->win->sprite[0].width = 64;
 	game->win->sprite[0].height = 64;
-	game->win->sprite[0].x = (width / 2) - game->win->sprite[0].width / 2;
-	game->win->sprite[0].y = (height / 2) - game->win->sprite[0].height / 2;
+	game->win->sprite[0].x = game->map->p_x;
+	game->win->sprite[0].y = game->map->p_y;
 	load_pacman_anim_horizontal(game);
 	load_pacman_anim_vertical(game);
 }

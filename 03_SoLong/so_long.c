@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/15 20:17:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:20:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,9 @@ int main(int argc, char **argv)
 	load_sprites(game);
 	mlx_loop_hook(game->win->mlx, update_frame, game);
 	mlx_key_hook(game->win->win, key_press, game);
+	//mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
+	//mlx_hook(game->win->win, 3, 1L << 1, key_release, game);
+
 	mlx_hook(game->win->win, 17, 0, close_win, game);
 	mlx_loop(game->win->mlx);
 	//clean_up_memory(game);  //sale antes de llegar aqui.. y lo limpia bien.

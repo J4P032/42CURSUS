@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 21:42:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:55:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,13 @@ typedef struct s_sprite
 	t_data	img[SPRITES_ANIM];
 	int		x;
 	int		y;
+	int		i;
+	int		j;
 	int		go_right;
 	int		go_down;
 	int		go_left;
 	int		go_up;
+	int		desired_dir;
 	int		width;
 	int		height;
 	char	*bitmap[SPRITES_ANIM];
@@ -69,6 +72,8 @@ typedef struct s_map
 	size_t	columns;
 	size_t	lines;
 	int		num_p;
+	int		p_x;
+	int		p_y;
 	int		num_c;
 	int		num_e;
 	int		num_walls;
@@ -87,6 +92,8 @@ int		key_press(int key, t_game *game);
 int		update_frame(t_game *game);
 void	load_sprites(t_game *game);
 void	load_pacman(t_game *game);
+void	pacman_iddle(t_game *game);
+void	pre_movement(t_game *game);
 void	draw_map(t_game *game);
 void	frame_map(t_game *game);
 int		close_win(t_game *game);
