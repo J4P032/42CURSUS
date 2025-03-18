@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/17 21:36:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:48:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 //# define HEIGHT 1080
 # define SPRITE_WIDTH 64
 # define SPRITE_HEIGHT 64
-# define NUM_SPRITES 11
+# define NUM_SPRITES 12
 # define SPRITES_ANIM 3
 # define VALID_MAP_CHARS "CPE01\n"
 
@@ -92,15 +92,21 @@ int		key_press(int key, t_game *game);
 int		update_frame(t_game *game);
 void	load_sprites(t_game *game);
 void	load_pacman(t_game *game);
+void	load_collect(t_game *game);
 void	pacman_iddle(t_game *game);
 void	pre_movement(t_game *game);
 void	draw_map(t_game *game);
 void	frame_map(t_game *game);
+void	frame_collect(t_game *game);
+int		scale_time(int *num, int time);
 int		close_win(t_game *game);
 t_map	*process_map(char *map);
 void	load_map(t_map *map, char *map_dir);
 char	*get_next_line(int fd);
 void	clean_up_memory(t_game *game);
 void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
+void	collect_sprite_anim(t_game *game, int x, int y);
+
+void	draw_collect_on_canvas(t_game *game, int x, int y, int k);
 
 #endif

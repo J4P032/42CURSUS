@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sprite.c                                           :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 14:04:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/18 11:04:41 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/03/18 10:54:04 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/03/18 13:32:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	load_sprites(t_game *game)
+int	scale_time(int *num, int time)
 {
-	load_pacman(game);
-	load_collect(game);
-	draw_map(game);
+	if (*num < 100 * time)
+		return (1);
+	if (*num > 200 * time && *num < 300 * time)
+		return (2);
+	if (*num == 300 * time)
+	{
+		*num = 0;
+		return (0);
+	}
+	return (0);
 }

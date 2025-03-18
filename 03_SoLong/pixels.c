@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:11:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/17 21:29:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:48:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,3 +65,29 @@ void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y)
 		j++;
 	}
 }
+
+void	draw_collect_on_canvas(t_game *game, int x, int y, int k)
+{
+	size_t	i;
+	size_t	j;
+	int		color;
+	char	*src;
+
+	j = 0;
+	while (j < SPRITE_HEIGHT)
+	{
+		i = 0;
+		while (i < SPRITE_WIDTH)
+		{
+
+			src = game->win->sprite[11].img[k].addr + (j * game->win->sprite[11].img[k].line_length
+					+ i * (game->win->sprite[11].img[k].bits_x_pixel / 8));
+			color = *(unsigned int *)src;
+			put_pixel(&game->win->canvas, x + i, y + j, color);
+			i++;
+		}
+		j++;
+	}
+}
+
+

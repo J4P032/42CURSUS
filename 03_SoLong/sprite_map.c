@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 18:43:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/16 21:50:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:34:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,5 @@ void	draw_map(t_game *game)
 	}
 	load_wall(game);
 	load_corners(game);
-	frame_map(game);
+	frame_map(game); //comentar esta linea si se quiere no redibujar por pixeles el mapa
 }
