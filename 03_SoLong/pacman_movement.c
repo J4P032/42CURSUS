@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 08:56:39 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/18 14:52:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:10:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,18 @@ void	pacman_horizontal_movement(t_game *game)
 
 void	pacman_iddle(t_game *game)
 {
+
 	if (game->win->sprite->go_right == 0 && game->win->sprite->go_left == 0
 		&& game->win->sprite->go_up == 0 && game->win->sprite->go_down == 0)
 	{
-		mlx_put_image_to_window(game->win->mlx, game->win->win,
-			game->win->sprite[0].img[1].img,
-			game->win->sprite[0].x,
-			game->win->sprite[0].y);
+		/* draw_sprite_on_canvas(game, game->win->sprite[0], game->win->sprite[0].x,
+			game->win->sprite[0].y); */
+
+			mlx_put_image_to_window(game->win->mlx, game->win->win,
+				game->win->sprite[0].img[1].img,
+				game->win->sprite[0].x,
+				game->win->sprite[0].y);
+
 	}
 	else
 	{

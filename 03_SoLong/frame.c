@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:52:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/18 14:20:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/18 20:32:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	pacman_sprite_anim(t_window *win)
 	int				time;
 
 	time = 1;
-	mlx_put_image_to_window(win->mlx, win->win, win->canvas.img, 0, 0);
+	//mlx_put_image_to_window(win->mlx, win->win, win->canvas.img, 0, 0);
 	if (win->sprite->go_right)
 		mlx_put_image_to_window(win->mlx, win->win, win->sprite[0].img[i].img,
 			win->sprite[0].x, win->sprite[0].y);
@@ -43,9 +43,11 @@ int	update_frame(t_game *game)
 	if (!game->win->running)
 		return (0);
 	pacman_iddle(game);
-	//frame_map(game); //aqui permitiria que fuera lento pero sin pixeles. comentar la linea de mlx_put_image_to_window de arriba
 	pre_movement(game);
-	pacman_sprite_anim(game->win);
 	frame_collect(game);
+	pacman_sprite_anim(game->win);
+
+	delay_time(game);
+
 	return (0);
 }
