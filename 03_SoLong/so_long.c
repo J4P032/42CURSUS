@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/17 21:35:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:21:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv)
 	draw_window(game);
 	load_sprites(game);
 	mlx_loop_hook(game->win->mlx, update_frame, game);
-	mlx_key_hook(game->win->win, key_press, game);
+	mlx_hook(game->win->win, 2, 1L<<0, key_press, game);
 	mlx_hook(game->win->win, 17, 0, close_win, game);
 	mlx_loop(game->win->mlx);
 	return (0);

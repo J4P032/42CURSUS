@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:07:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/18 18:25:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:51:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ void	load_collect_anim(t_game *game)
 			clean_up_memory(game);
 			exit (1);
 		}
-		game->win->sprite[11].img[i].addr = mlx_get_data_addr(
-				game->win->sprite[11].img[i].img,
-				&game->win->sprite[11].img[i].bits_x_pixel,
-				&game->win->sprite[11].img[i].line_length,
-				&game->win->sprite[11].img[i].endian);
 		i++;
 	}
 }
@@ -74,5 +69,4 @@ void	load_collect(t_game *game)
 	}
 	load_collect_anim(game);
 	load_collect_death_anim(game);
-	//frame_collect(game);
 }

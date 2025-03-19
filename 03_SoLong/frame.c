@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:52:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/18 20:32:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:19:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,18 @@ void	pacman_sprite_anim(t_window *win)
 
 int	update_frame(t_game *game)
 {
+	const double	time = 0.03;
+
 	if (!game->win->running)
 		return (0);
+		
+	where_is_pacman(game);
 	pacman_iddle(game);
 	pre_movement(game);
 	frame_collect(game);
+	frame_exit(game);
 	pacman_sprite_anim(game->win);
-
-	delay_time(game);
-
+	delay_time(game, time);
+	count_movements(game);
 	return (0);
 }

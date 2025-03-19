@@ -5,7 +5,7 @@ LIBRARY = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a
 SRC = so_long.c window.c sprite.c keys.c frame.c get_next_line.c get_next_line_utils.c \
 map.c map_2.c sprite_pacman.c sprite_map.c frame_map.c pixels.c pacman_movement.c \
-sprite_collect.c frame_collect.c time.c
+sprite_collect.c frame_collect.c time.c sprite_exit.c frame_exit.c count_movements.c
 OBJS = $(SRC:.c=.o)
 RM	= rm -rf
 

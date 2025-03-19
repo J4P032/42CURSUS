@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/18 20:32:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:27:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 //# define HEIGHT 1080
 # define SPRITE_WIDTH 64
 # define SPRITE_HEIGHT 64
-# define NUM_SPRITES 13
+# define NUM_SPRITES 14
 # define SPRITES_ANIM 3
 # define VALID_MAP_CHARS "CPE01\n"
 
@@ -44,11 +44,14 @@ typedef struct s_sprite
 	int		y;
 	int		i;
 	int		j;
+	int		prev_i;//
+	int		prev_j;//
 	int		go_right;
 	int		go_down;
 	int		go_left;
 	int		go_up;
 	int		desired_dir;
+	size_t	distance;//
 	int		width;
 	int		height;
 	char	*bitmap[SPRITES_ANIM];
@@ -93,11 +96,14 @@ int		update_frame(t_game *game);
 void	load_sprites(t_game *game);
 void	load_pacman(t_game *game);
 void	load_collect(t_game *game);
+void	load_exit(t_game *game);
 void	pacman_iddle(t_game *game);
+void	pacman_eat(t_game *game);
 void	pre_movement(t_game *game);
 void	draw_map(t_game *game);
 void	frame_map(t_game *game);
 void	frame_collect(t_game *game);
+void	frame_exit(t_game *game);
 int		scale_time(int *num, int time);
 int		only_once(int *num, int time);
 int		close_win(t_game *game);
@@ -107,8 +113,8 @@ char	*get_next_line(int fd);
 void	clean_up_memory(t_game *game);
 void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
 void	collect_sprite_anim(t_game *game, int x, int y);
-void	delay_time(t_game *game);
-
-//void	draw_collect_on_canvas(t_game *game, int x, int y, int k);
+void	delay_time(t_game *game, double time);
+void	where_is_pacman(t_game *game);
+void	count_movements(t_game *game);
 
 #endif
