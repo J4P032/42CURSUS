@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 08:56:39 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/19 22:11:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:40:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void	pacman_horizontal_movement(t_game *game)
 
 void	pacman_iddle(t_game *game)
 {
-
 	if (game->win->sprite->go_right == 0 && game->win->sprite->go_left == 0
 		&& game->win->sprite->go_up == 0 && game->win->sprite->go_down == 0)
 	{

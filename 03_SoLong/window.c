@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/15 22:11:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:38:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ void	error_window(t_game *game, int option)
 		perror("Error creating window");
 	else
 		perror("Error creating canvas window");
-	free (game->win);
-	free (game->map);
+	clean_up_memory(game);
 	exit (1);
 }
 
@@ -51,4 +50,6 @@ void	draw_window(t_game *game)
 			&game->win->canvas.bits_x_pixel,
 			&game->win->canvas.line_length,
 			&game->win->canvas.endian);
+	if (!game->win->canvas.addr)
+		error_window(game, 1);	
 }

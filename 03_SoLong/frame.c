@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:52:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/19 22:19:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:43:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	pacman_sprite_anim(t_window *win)
 	int				time;
 
 	time = 1;
-	//mlx_put_image_to_window(win->mlx, win->win, win->canvas.img, 0, 0);
 	if (win->sprite->go_right)
 		mlx_put_image_to_window(win->mlx, win->win, win->sprite[0].img[i].img,
 			win->sprite[0].x, win->sprite[0].y);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:49:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/19 13:16:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:43:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,4 @@ void	frame_exit(t_game *game)
 		i++;
 	}
 	pacman_eat(game);
-
 }
