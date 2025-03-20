@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:49:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 16:25:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:39:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,9 @@ int	check_map_errors(t_map *map)
 t_map	*process_map(char *map_dir)
 {
 	t_map	*map;
+	size_t	i;
 
+	i = 0;
 	map = (t_map *)ft_calloc(1, sizeof(t_map));
 	if (!map)
 		return (NULL);
@@ -143,10 +145,13 @@ t_map	*process_map(char *map_dir)
 		return (free(map), NULL);
 	if (!check_map_solution(map))
 	{
-		write(1, "Error\n", 6);
-		write(1, "Map without solution\n", 21);
-		free(map);
-		return (NULL);
+		write(1, "Error\nMap without solution\n", 27);
+		while (i < map->lines)
+		{
+			free(map->map[i]);
+			map->map[i++] = NULL;
+		}
+		return (free(map->map), free(map), NULL);
 	}
 	return (map);
 }
