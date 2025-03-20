@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/19 22:27:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:49:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ typedef struct s_sprite
 	int		y;
 	int		i;
 	int		j;
-	int		prev_i;//
-	int		prev_j;//
+	int		prev_i;
+	int		prev_j;
 	int		go_right;
 	int		go_down;
 	int		go_left;
 	int		go_up;
 	int		desired_dir;
-	size_t	distance;//
+	size_t	distance;
 	int		width;
 	int		height;
 	char	*bitmap[SPRITES_ANIM];
@@ -78,7 +78,9 @@ typedef struct s_map
 	int		p_x;
 	int		p_y;
 	int		num_c;
+	int		check_c;
 	int		num_e;
+	int		check_e;
 	int		num_walls;
 	int		no_rectangle;
 	int		no_valid_char;
@@ -108,6 +110,7 @@ int		scale_time(int *num, int time);
 int		only_once(int *num, int time);
 int		close_win(t_game *game);
 t_map	*process_map(char *map);
+int		check_map_solution(t_map *map);
 void	load_map(t_map *map, char *map_dir);
 char	*get_next_line(int fd);
 void	clean_up_memory(t_game *game);

@@ -2,3 +2,12 @@ Ficheros para actualizar en 42:
 
 Cambios variables declaradas pero no usadas:
 sprite_pacman.c
+
+comprobacion solucion:
+Makefile
+map_3.c
+map.c
+so_long.c
+so_long.h
+casa.ber
+test_move.ber
