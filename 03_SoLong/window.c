@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 17:38:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:16:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,5 @@ void	draw_window(t_game *game)
 			&game->win->canvas.line_length,
 			&game->win->canvas.endian);
 	if (!game->win->canvas.addr)
-		error_window(game, 1);	
+		error_window(game, 1);
 }

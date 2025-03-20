@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:25:51 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 17:40:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:17:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,3 @@ void	count_movements(t_game *game)
 		write(1, "\n", 1);
 	}
 }
-

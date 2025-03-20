@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:28:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/19 22:07:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:09:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	collect_sprite_anim(t_game *game, int x, int y)
 	j++;
 	i = scale_time(&j, time);
 }
-
 
 void	collect_sprite_anim2(t_game *game, int x, int y)
 {

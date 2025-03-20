@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:30:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 16:13:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:28:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	restore_map(t_map *map)
 				map->map[i][j] = 'G';
 			else if (map->map[i][j] == 'X')
 				map->map[i][j] = 'E';
-			j++;	
+			j++;
 		}
 		i++;
 	}
@@ -41,19 +41,19 @@ void	look_vertical(t_map *map, int i, int j)
 {
 	if (map->map[i - 1][j] == '0')
 		map->map[i - 1][j] = 'v';
-	else if	(map->map[i - 1][j] == 'C')
+	else if (map->map[i - 1][j] == 'C')
 		map->map[i - 1][j] = 'c';
-	else if	(map->map[i - 1][j] == 'E')
+	else if (map->map[i - 1][j] == 'E')
 		map->map[i - 1][j] = 'e';
-	else if	(map->map[i - 1][j] == 'G')
+	else if (map->map[i - 1][j] == 'G')
 		map->map[i - 1][j] = 'g';
 	if (map->map[i + 1][j] == '0')
 		map->map[i + 1][j] = 'v';
-	else if	(map->map[i + 1][j] == 'C')
+	else if (map->map[i + 1][j] == 'C')
 		map->map[i + 1][j] = 'c';
-	else if	(map->map[i + 1][j] == 'E')
+	else if (map->map[i + 1][j] == 'E')
 		map->map[i + 1][j] = 'e';
-	else if	(map->map[i + 1][j] == 'G')
+	else if (map->map[i + 1][j] == 'G')
 		map->map[i + 1][j] = 'g';
 }
 
@@ -61,19 +61,19 @@ void	look_horizontal(t_map *map, int *i, int *j)
 {
 	if (map->map[*i][(*j) + 1] == '0')
 		map->map[*i][(*j) + 1] = 'v';
-	else if	(map->map[*i][(*j) + 1] == 'C')
+	else if (map->map[*i][(*j) + 1] == 'C')
 		map->map[*i][(*j) + 1] = 'c';
-	else if	(map->map[*i][(*j) + 1] == 'E')
+	else if (map->map[*i][(*j) + 1] == 'E')
 		map->map[*i][(*j) + 1] = 'e';
-	else if	(map->map[*i][(*j) + 1] == 'G')
+	else if (map->map[*i][(*j) + 1] == 'G')
 		map->map[*i][(*j) + 1] = 'g';
 	if (map->map[*i][(*j) - 1] == '0')
 		map->map[*i][(*j) - 1] = 'v';
-	else if	(map->map[*i][(*j) - 1] == 'C')
+	else if (map->map[*i][(*j) - 1] == 'C')
 		map->map[*i][(*j) - 1] = 'c';
-	else if	(map->map[*i][(*j) - 1] == 'E')
+	else if (map->map[*i][(*j) - 1] == 'E')
 		map->map[*i][(*j) - 1] = 'e';
-	else if	(map->map[*i][(*j) - 1] == 'G')
+	else if (map->map[*i][(*j) - 1] == 'G')
 		map->map[*i][(*j) - 1] = 'g';
 	look_vertical(map, *i, *j);
 	*i = 1;
@@ -90,7 +90,7 @@ void	search_visitable(t_map *map, int *i, int *j)
 	else if (map->map[*i][*j] == 'c')
 	{
 		map->check_c++;
-		map->map[*i][*j] ='O';
+		map->map[*i][*j] = 'O';
 	}
 	else if (map->map[*i][*j] == 'e')
 	{
@@ -102,8 +102,6 @@ void	search_visitable(t_map *map, int *i, int *j)
 	else if (map->map[*i][*j] == 'p')
 		map->map[*i][*j] = 'P';
 	look_horizontal(map, i, j);
-	
-	
 }
 
 /*We start from player (P) position and rename it (p). Look horizontal and...*/
@@ -129,7 +127,7 @@ int	check_map_solution(t_map *map)
 			if (map->map[i][j] == 'p' || map->map[i][j] == 'v'
 				|| map->map[i][j] == 'c' || map->map[i][j] == 'e'
 				|| map->map[i][j] == 'g')
-					search_visitable(map, &i, &j);
+				search_visitable(map, &i, &j);
 			j++;
 		}
 		i++;

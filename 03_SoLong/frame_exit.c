@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:49:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 17:43:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:30:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	exit_sprite_anim(t_game *game, int x, int y)
 	if (num_c == 0)
 		i = 2;
 	if (game->map)
-	mlx_put_image_to_window(game->win->mlx, game->win->win,
-		game->win->sprite[13].img[i].img, x, y);
+		mlx_put_image_to_window(game->win->mlx, game->win->win,
+			game->win->sprite[13].img[i].img, x, y);
 }
 
 void	frame_exit(t_game *game)

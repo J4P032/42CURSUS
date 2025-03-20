@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:52:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 17:43:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:19:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	update_frame(t_game *game)
 
 	if (!game->win->running)
 		return (0);
-		
 	where_is_pacman(game);
 	pacman_iddle(game);
 	pre_movement(game);

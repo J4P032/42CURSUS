@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:54:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/19 18:11:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:15:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	delay_time(t_game *game, double time)
 	num_c = game->map->num_c;
 	seconds = ((0.01 - time) / 100) * num_c + time;
 	if (seconds < 0)
-        seconds = 0;
+		seconds = 0;
 	while (sin(start) < seconds)
 		start += 0.0000001;
 }

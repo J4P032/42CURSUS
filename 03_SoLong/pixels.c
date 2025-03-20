@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:11:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/18 14:48:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:26:13 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,6 @@ void	put_pixel(t_data *img, int x, int y, int color)
 	pxl_adr = img->addr + (y * img->line_length + x * (img->bits_x_pixel / 8));
 	*(unsigned int *)pxl_adr = color;
 }
-//esta no dibuja por pixeles
-/* void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y)
-{
-	// Usa mlx_put_image_to_window para colocar la imagen completa en la ventana
-	mlx_put_image_to_window(game->win->mlx, game->win->win, sprite.img[0].img, x, y);
-} */
 
 void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y)
 {
@@ -79,8 +73,8 @@ void	draw_collect_on_canvas(t_game *game, int x, int y, int k)
 		i = 0;
 		while (i < SPRITE_WIDTH)
 		{
-
-			src = game->win->sprite[11].img[k].addr + (j * game->win->sprite[11].img[k].line_length
+			src = game->win->sprite[11].img[k].addr
+				+ (j * game->win->sprite[11].img[k].line_length
 					+ i * (game->win->sprite[11].img[k].bits_x_pixel / 8));
 			color = *(unsigned int *)src;
 			put_pixel(&game->win->canvas, x + i, y + j, color);
@@ -89,5 +83,3 @@ void	draw_collect_on_canvas(t_game *game, int x, int y, int k)
 		j++;
 	}
 }
-
-

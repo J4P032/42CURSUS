@@ -11,3 +11,28 @@ so_long.c
 so_long.h
 casa.ber
 test_move.ber
+
+fix leaks
+count_movements.c
+frame.c
+frame_exit.c
+pacman_movements.c
+sprite_map.c
+sprite_pacman.c
+window.c
+
+Norminette
+frame_collect.c
+sprite_exit.c
+sprite_map.c
+time.c
+window.c
+count_movements.c
+frame.c
+so_long.c
+map_3.c
+frame_exit.c
+
+
+BORRAR simple_geometry.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!
+BORRAR pixels.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
