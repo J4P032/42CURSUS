@@ -33,6 +33,9 @@ so_long.c
 map_3.c
 frame_exit.c
 
+bonus:
+Makefile
+count_movement_bonus.c
 
 BORRAR simple_geometry.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!
 BORRAR pixels.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

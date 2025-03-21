@@ -1,6 +1,7 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = so_long
+NAME_BONUS = so_long_bonus
 LIBRARY = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a
 SRC = so_long.c window.c sprite.c keys.c frame.c get_next_line.c get_next_line_utils.c \
@@ -30,7 +31,7 @@ $(NAME): $(OBJS) $(OBJS2) $(LIBRARY) $(MINILIBX)
 bonus: .bonus
 
 .bonus: ${OBJS} ${OBJS_BONUS} $(LIBRARY) $(MINILIBX)
-	@$(CC) $(CFLAGS) $(OBJS) $(OBJS_BONUS) -L./libft -lft -L./minilibx-linux -lmlx -lX11 -lXext -lm -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(OBJS_BONUS) -L./libft -lft -L./minilibx-linux -lmlx -lX11 -lXext -lm -o $(NAME_BONUS)
 	touch .bonus
 
 clean:
@@ -39,7 +40,7 @@ clean:
 	@make clean -C minilibx-linux
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) $(NAME_BONUS)
 	@make fclean -C libft
 	@make clean -C minilibx-linux
 
