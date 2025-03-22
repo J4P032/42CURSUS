@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:49:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 14:58:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/22 20:37:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,6 @@ void	phantom_sprite_anim(t_game *game, int x, int y)
 
 void	phantom_anim(t_game *game)
 {
-	size_t	i;
-	size_t	j;
-	int		x;
-	int		y;
-
-	i = 0;
-	while (i < game->map->lines)
-	{
-		j = 0;
-		while (j < game->map->columns)
-		{
-			x = SPRITE_WIDTH * j;
-			y = SPRITE_HEIGHT * i;
-			if (game->map->map[i][j] == 'G')
-				phantom_sprite_anim(game, x, y);
-			j++;
-		}
-		i++;
-	}
+	
+	phantom_sprite_anim(game, game->win->sprite[14].x, game->win->sprite[14].y);
 }	
