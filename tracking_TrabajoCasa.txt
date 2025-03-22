@@ -36,6 +36,7 @@ frame_exit.c
 bonus:
 Makefile
 count_movement_bonus.c
+_bonus.*
 
 BORRAR simple_geometry.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!
 BORRAR pixels.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

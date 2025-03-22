@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.h                                          :+:      :+:    :+:   */
+/*   so_long_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 14:33:35 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/03/22 13:31:05 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/03/22 14:50:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#ifndef SO_LONG_BONUS_H
+# define SO_LONG_BONUS_H
 # include <unistd.h>
 # include <stdlib.h>
 # include "libft/libft.h"
@@ -24,7 +24,7 @@
 # define SPRITE_HEIGHT 64
 # define NUM_SPRITES 16
 # define SPRITES_ANIM 3
-# define VALID_MAP_CHARS "CPE01\n"
+# define VALID_MAP_CHARS "CPEG01\n"
 
 typedef struct s_data
 {
@@ -97,6 +97,7 @@ void	load_sprites(t_game *game);
 void	load_pacman(t_game *game);
 void	load_collect(t_game *game);
 void	load_exit(t_game *game);
+void	load_phantom(t_game *game);
 void	pacman_iddle(t_game *game);
 void	pacman_eat(t_game *game);
 void	pre_movement(t_game *game);
@@ -104,6 +105,7 @@ void	draw_map(t_game *game);
 void	frame_map(t_game *game);
 void	frame_collect(t_game *game);
 void	frame_exit(t_game *game);
+void	phantom_anim(t_game *game);
 int		scale_time(int *num, int time);
 int		only_once(int *num, int time);
 int		close_win(t_game *game);
