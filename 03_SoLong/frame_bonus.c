@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:46:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 14:48:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/22 18:11:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ int	update_frame(t_game *game)
 {
 	const double	time = 0.03;
 
-	if (!game->win->running)
-		return (0);
 	where_is_pacman(game);
 	pacman_iddle(game);
 	pre_movement(game);

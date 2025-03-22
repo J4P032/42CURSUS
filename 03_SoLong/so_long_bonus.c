@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 13:56:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 13:57:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/22 19:15:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@ void	free_map(t_game *game)
 {
 	size_t	i;
 
+	i = 0;
+	if (game->map_cpy)
+	{
+		while (i < game->map->lines)
+		{
+			if (game->map_cpy[i])
+				free(game->map_cpy[i]);
+			game->map_cpy[i] = NULL;
+			i++;
+		}
+		free(game->map_cpy);
+		game->map_cpy = NULL;
+	}
 	i = 0;
 	while (i < game->map->lines)
 	{

@@ -4,6 +4,7 @@
 		"ft_printf.h": "c",
 		"cstdlib": "c",
 		"random": "c",
-		"so_long.h": "c"
+		"so_long.h": "c",
+		"so_long_bonus.h": "c"
 	}
 }

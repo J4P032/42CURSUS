@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 13:31:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 14:50:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/22 18:09:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_game
 {
 	t_window	*win;
 	t_map		*map;
+	char		**map_cpy;
 }				t_game;
 
 void	draw_window(t_game *game);
@@ -119,5 +120,6 @@ void	collect_sprite_anim(t_game *game, int x, int y);
 void	delay_time(t_game *game, double time);
 void	where_is_pacman(t_game *game);
 void	count_movements(t_game *game);
+char	**copy_map(t_game *game, char **map);
 
 #endif
