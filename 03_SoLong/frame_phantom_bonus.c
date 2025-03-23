@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:49:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/23 01:07:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/23 02:02:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ void	phantom_path_finding(t_game *game)
 	
 	i = game->win->sprite[14].y / SPRITE_HEIGHT;
 	j = game->win->sprite[14].x / SPRITE_WIDTH;
-	if (game->win->sprite[14].y % SPRITE_HEIGHT != 0)
+	if (game->win->sprite[14].y % SPRITE_HEIGHT != 0 && game->win->sprite[14].go_up == 'u')
 		i = i + 1;
-	if (game->win->sprite[14].x % SPRITE_WIDTH != 0)
+	if (game->win->sprite[14].x % SPRITE_WIDTH != 0 && game->win->sprite[14].go_up == 'l')
 		j = j + 1;
+	
 	if (game->map_cpy[i][j + 1] == '0')
 		game->map_cpy[i][j + 1] = 'g';
 	else if (game->map_cpy[i][j - 1] == '0')
@@ -33,9 +34,11 @@ void	phantom_path_finding(t_game *game)
 		game->map_cpy[i - 1][j] = 'g';
 	else if (game->map_cpy[i][j + 1] == 'g' || game->map_cpy[i][j - 1] == 'g'
 		||	game->map_cpy[i + 1][j] == 'g' || game->map_cpy[i - 1][j] == 'g')
-		game->map_cpy[i][j] = 'g';
+		game->map_cpy[i][j] = 'H';
 }
 
+
+ 
 int	phantom_go(t_game *game)
 {
 	size_t	i;
@@ -69,39 +72,51 @@ void	phantom_sprite_anim(t_game *game, int x, int y)
 
 void	phantom_anim(t_game *game)
 {
-	static int i;
+	static int k;
 	int	x;
 	int	y;
 
-	i++;
+	k++;
 	phantom_path_finding(game);
 	phantom_go(game);
 	x = game->win->sprite[14].j * SPRITE_WIDTH;
 	y = game->win->sprite[14].i * SPRITE_HEIGHT;
-	if (game->win->sprite[14].x != x && i % 10 == 0)
+	if (game->win->sprite[14].x != x && k % 10 == 0)
 	{
 		if (game->win->sprite[14].x < x)
+		{
+			game->win->sprite[14].go_up = 'r';
 			game->win->sprite[14].x++;
+		}
 		else if (game->win->sprite[14].x > x)
+		{
+			game->win->sprite[14].go_up = 'l';
 			game->win->sprite[14].x--;
+		}
 	}
-	else if (game->win->sprite[14].y != y && i % 10 == 0)
+	else if (game->win->sprite[14].y != y && k % 10 == 0)
 	{
 		if (game->win->sprite[14].y < y)
+		{
+			game->win->sprite[14].go_up = 'd';
 			game->win->sprite[14].y++;
+		}
 		else if (game->win->sprite[14].y > y)
+		{
+			game->win->sprite[14].go_up = 'u';
 			game->win->sprite[14].y--;
+		}
 	}
 	phantom_sprite_anim(game, game->win->sprite[14].x, game->win->sprite[14].y);
 
-	printf("xtarget: %d\n", x);//
-	printf("x: %d\n", game->win->sprite[14].x);//
+	//printf("xtarget: %d\n", x);//
+	//printf("x: %d\n", game->win->sprite[14].x);//
 
-/* 	for (size_t i = 0; i < game->map->lines; i++) //
+	for (size_t i = 0; i < game->map->lines; i++) //
 	{
 		printf("%s", game->map_cpy[i]);//
 	}
-	printf("\n");// */
+	printf("\n");//
 
 	///VA POR PAREDES. EL PROBLEMA ES QUE EN CUANTO PASA EL ORIGEN 0,0 DEL FANTASMA A LA OTRA CASILLA, YA CONSIDERA QUE ESTA EN ZONA
 	//SIN PAREDES, CUANDO TODAVIA ESTA. HAY QUE IMPLEMENTAR LO MISMO QUE EL PACMAN. EL ORIGINEN +64 EN Y y origen + 64  en X y que sea
