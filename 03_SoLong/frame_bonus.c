@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:46:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/23 01:40:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/24 21:36:45 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ int	update_frame(t_game *game)
 	frame_collect(game);
 	frame_exit(game);
 	pacman_sprite_anim(game->win);
-	phantom_anim(game);
+	if (game->map->num_g)
+	{
+		phantom_anim(game);
+		phantom2_anim(game);
+	}
 	delay_time(game, time);
 	count_movements(game);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:26:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 18:22:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:25:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 void	draw_square(t_data *canvas, int x, int y, int color)
 {
+
 	int	x2;
 	int	y2;
 
 	x2 = x;
 	y2 = y;
-	while (y2 < y + 32)
+ 	while (y2 < y + 32)
 	{
 		x2 = x;
 		while (x2 < x + 32)

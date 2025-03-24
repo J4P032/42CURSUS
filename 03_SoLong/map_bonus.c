@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:02:22 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 14:03:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/24 19:41:35 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 	size_t	i;
 
 	i = 0;
-	while (line[i] && ft_strlen(line) == columns)
+	while (line[i])
 	{
-		if (i == 0 && line[0] == '1')
+		if (i == 0 && line[0] == '1' && ft_strlen(line) == columns)
 			map->num_walls++;
-		if (i == (columns - 1) && line[columns - 1] == '1')
+		if (i == (columns - 1) && line[columns - 1] == '1'
+			&& ft_strlen(line) == columns)
 			map->num_walls++;
 		if (line[i] == 'C')
 			map->num_c++;
@@ -34,6 +35,8 @@ void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 		}
 		if (line[i] == 'E')
 			map->num_e++;
+		if (line[i] == 'G')
+			map->num_g++;
 		i++;
 	}
 }

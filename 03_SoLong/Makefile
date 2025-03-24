@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = so_long
 NAME_BONUS = so_long_bonus
 LIBRARY = ./libft/libft.a
@@ -9,7 +9,7 @@ map_2.c map_3.c sprite_pacman.c sprite_map.c frame_map.c pixels.c pacman_movemen
 sprite_collect.c frame_collect.c time.c sprite_exit.c frame_exit.c
 SRC2 = count_movements.c frame.c sprite.c so_long.c map.c
 SRCS_BONUS = so_long_bonus.c count_movements_bonus.c sprite_bonus.c sprite_phantom_bonus.c \
-map_bonus.c frame_bonus.c frame_phantom_bonus.c so_long_ai_bonus.c
+map_bonus.c frame_bonus.c frame_phantom_bonus.c so_long_ai_bonus.c frame_phantom2_bonus.c
 OBJS = $(SRC:.c=.o)
 OBJS2 = $(SRC2:.c=.o)
 OBJS_BONUS = ${SRCS_BONUS:.c=.o}

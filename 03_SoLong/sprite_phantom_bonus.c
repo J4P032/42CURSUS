@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 13:28:39 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 20:35:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/24 21:02:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,14 @@ void	position_phantom(t_game *game)
 			if (game->map->map[i][j] == 'G')
 			{
 				game->win->sprite[14].x = j * SPRITE_WIDTH;
-				game->win->sprite[15].x = j * SPRITE_WIDTH;
+				//game->win->sprite[15].x = j * SPRITE_WIDTH;
 				game->win->sprite[14].y = i * SPRITE_HEIGHT;
+				//game->win->sprite[15].y = i * SPRITE_HEIGHT;
+			}
+
+			if (game->map->map[i][j] == 'B')
+			{
+				game->win->sprite[15].x = j * SPRITE_WIDTH;
 				game->win->sprite[15].y = i * SPRITE_HEIGHT;
 			}
 			j++;
@@ -42,8 +48,8 @@ void	load_phantom_sprite(t_game *g)
 			g->win->sprite[14].bitmap[0], &g->win->sprite[14].width,
 			&g->win->sprite[14].height);
 	g->win->sprite[15].img[0].img = mlx_xpm_file_to_image(g->win->mlx,
-		g->win->sprite[15].bitmap[0], &g->win->sprite[15].width,
-		&g->win->sprite[15].height);
+			g->win->sprite[15].bitmap[0], &g->win->sprite[15].width,
+			&g->win->sprite[15].height);
 	if (!g->win->sprite[14].img[0].img || !g->win->sprite[15].img[0].img)
 	{
 		clean_up_memory(g);
@@ -53,7 +59,6 @@ void	load_phantom_sprite(t_game *g)
 
 void	load_phantom(t_game *game)
 {
-	
 	game->win->sprite[14].bitmap[0] = "./textures/g_phantom_r_00.xpm";
 	game->win->sprite[15].bitmap[0] = "./textures/g_phantom_l_00.xpm";
 	game->win->sprite[14].width = 64;
