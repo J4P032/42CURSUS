@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 18:16:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/25 16:24:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,27 @@ int	close_win(t_game *game)
 	exit (0);
 }
 
+/*max screen size with xrandr in bash 3840x2160*/
+void	check_size(t_game *game)
+{
+	size_t	columns;
+	size_t	lines;
+	size_t	max_columns;
+	size_t	max_lines;
+
+	columns = game->map->columns;
+	lines = game->map->lines;
+	max_columns = 3840 / SPRITE_WIDTH;
+	max_lines = 2160 / SPRITE_HEIGHT;
+	if (columns > max_columns || lines > max_lines)
+	{
+		write(1, "Error\n", 6);
+		write(1, "Map too big for the screen\n", 27);
+		clean_up_memory(game);
+		exit (1);
+	}
+}
+
 void	draw_window(t_game *game)
 {
 	int	width;
@@ -35,11 +56,13 @@ void	draw_window(t_game *game)
 
 	game->win->width = game->map->columns * SPRITE_WIDTH;
 	game->win->height = game->map->lines * SPRITE_HEIGHT;
+	check_size(game);
 	width = game->win->width;
 	height = game->win->height;
 	if (!game->win->win)
 	{
-		game->win->win = mlx_new_window(game->win->mlx, width, height, "SL");
+		game->win->win = mlx_new_window(game->win->mlx, width, height,
+				"Pacman SoLong");
 		if (!game->win->win)
 			error_window(game, 0);
 	}

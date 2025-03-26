@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:09:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/20 18:20:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/25 15:54:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		return (1);
+	check_ber(argv[1]);
 	game = (t_game *)ft_calloc(1, sizeof(t_game));
 	if (!game)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:55:02 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 14:33:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/25 15:47:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 # define SPRITE_WIDTH 64
 # define SPRITE_HEIGHT 64
-# define NUM_SPRITES 16
+# define NUM_SPRITES 17
 # define SPRITES_ANIM 3
 # define VALID_MAP_CHARS "CPE01\n"
 
@@ -117,5 +117,6 @@ void	collect_sprite_anim(t_game *game, int x, int y);
 void	delay_time(t_game *game, double time);
 void	where_is_pacman(t_game *game);
 void	count_movements(t_game *game);
+void	check_ber(char *map_dir);
 
 #endif

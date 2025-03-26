@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 17:43:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/22 18:56:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:19:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ void	vacumm_map(char *map_copy, char *map)
 	while (map[j])
 	{
 		if (map[j] == 'C' || map[j] == 'P' || map[j] == 'E' || map[j] == 'G')
-				map_copy[j] = '0';
+			map_copy[j] = '0';
 		else
 			map_copy[j] = map[j];
 		j++;
 	}
 }
 
-char **copy_map(t_game *game, char **map)
+char	**copy_map(t_game *game, char **map)
 {
 	char	**map_copy;
 	size_t	i;
 	size_t	j;
-	
+
 	i = 0;
 	map_copy = (char **)ft_calloc(game->map->lines + 1, sizeof(char *));
 	if (!map_copy)
