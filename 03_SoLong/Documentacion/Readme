@@ -1,0 +1,13 @@
+Program needs minilibx linux.
+it is packed in the project, but you need to install it, so unpack it in the same folder you donwloaded the SoLong code.
+Once you do it if you make a "make" and it don't compile the area of minilibx you will need to install the x11 packages:
+
+sudo apt update
+sudo apt install libxext-dev libx11-dev libbsd-dev
+
+
+y quiza:
+sudo apt install libxrandr-dev libxrender-dev
+
+despues hacer en el directorio minilibx-linux/ un ./configure y ya se podra hacer el make, que si se tiene el wsl2 instalado
+incluso abrirá la ventana en un sistema windows (desde el wsl, por supuesto)
