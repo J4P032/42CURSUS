@@ -1,0 +1,11 @@
+El proyecto parece incluir automatas. Estos me los presentó Paolo y pongo aqui su código
+que usó para parsear su proyecto (diferente al Minitalk) para comprenderlo mejor...
+
+Estados:
+Definen la situación y se pasa por ellos a traves de un "traductor"
+
+  /	Número
+0 -	+   ---\ (puede ser un + y un numero lo cual sería correcto)
+  \	Error
+
+ver codigo automata.c

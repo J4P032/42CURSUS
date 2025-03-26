@@ -1,0 +1,59 @@
+https://www.youtube.com/watch?v=rNGlwqHpoGw
+
+(ver si interesante)https://www.youtube.com/watch?v=XqhY9WHahJQ
+
+Las señales, son procesos que se envian para hacer cosas. se pueden listar en bash con:
+kill -l (apareceran sin la palabra SIG que habra que completar con ella)
+
+desde bash, para mandar una señal, debemos escribir:
+
+kill -SIGSTOP PID (tambien es válido kill -STOP PID)
+
+donde PID es el process identificator, que se puede ver mediante bash:
+
+ps u
+
+este proceso estará primer plano parando todo lo demás. Si queremos mandar dicho proceso
+ejecutándolo en segundo plano sin abrir una nueva terminal (es decir poder usar la terminal)
+tenemos que ejecutar el proceso como:
+
+./a.out &
+
+eso lo lanzará en ese segundo plano, para recuperarlo a primer plano, ejecutamos en bash
+jobs, que no dará el número de los procesos ejecutados. Lo volvemos a primer plano:
+
+fg %num_proceso_de_jobs
+
+siendo el número de poner opcional si es solo existe uno. También se puede madar un proceso
+a segundo plano mediante:
+
+1. control + z -> para pausar el proceso
+2. bg %num_proceso_de_jobs
+
+algunas señales importantes:
+
+SIGKILL -> elimina el proceso
+SIGSTOP -> pausa el proceso
+SIGCONT -> continua el proceso
+
+en c, se necesita #include <signal.h> <unistd.h>
+y se usa la funcion signal:
+
+signal(int signum, sighandler_t handler);
+
+signum es un entero que indica el número de la señal. Y sighandler_t es una funcion a llamar:
+
+void mifuncion(int sig)
+{
+	printf("Signal number is %d\n", sig);
+}
+
+int main(void)
+{
+	signal (SIGKILL, &mifuncion)  //al recibir esa señal la funcion "mifuncion" será llamada.
+}
+bash: kill -SIGKILL PID y dará el numero de la señal.
+tambien se puede en vez de mandar el nombre de la señal, el Id numero de la señal. Si SIGKILL
+es la ID 9 pues:
+kill -9 PID
+
