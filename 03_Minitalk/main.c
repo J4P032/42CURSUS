@@ -6,12 +6,12 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 11:35:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/27 20:24:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/27 20:51:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "ft_printf.h"
+#include "./ft_printf/ft_printf.h"
 
 int main (void)
 {

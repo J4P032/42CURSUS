@@ -9,21 +9,23 @@ RM	= rm -rf
 all: $(LIBRARY) $(NAME)
 
 $(LIBRARY):
-	make -C libft
+	make -C ../libft
 
 %.o: %.c libftprintf.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I../libft -c $< -o $@
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBRARY)
 	ar -rc $@ $(OBJS)
+	ar -x $(LIBRARY) # Extrae los objetos de libft.a
+	ar -rc $@ *.o # Añade los objetos a libftprintf.a
+	ar -s $@ # Indexa la librería
+	rm -f *.o
 
 clean:
 	$(RM) $(OBJS)
-	make clean -C libft
 
 fclean: clean
 	$(RM) $(NAME)
-	make fclean -C libft
 
 re: fclean all
 

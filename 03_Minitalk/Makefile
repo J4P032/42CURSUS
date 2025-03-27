@@ -1,21 +1,24 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -g
 NAME = server
-LIBRARY = ./ft_printf/libftprintf.a
+LIBFT = ./libft/libft.a
+LIBFTPRINTF = ./ft_printf/libftprintf.a
 SRC =  main.c
 OBJS = $(SRC:.c=.o)
-
 RM	= rm -rf
 
-all: $(LIBRARY) $(NAME)
+all: $(LIBFT) $(LIBFTPRINTF) $(NAME)
 
-$(LIBRARY):
+$(LIBFT):
+	@make -C libft
+
+$(LIBFTPRINTF):
 	@make -C ft_printf
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS) $(LIBRARY)
+$(NAME): $(OBJS) $(LIBFT) $(LIBFTPRINTF)
 	@$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -L./ft_printf -lftprintf -o $(NAME)
 
 clean:
@@ -25,6 +28,8 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME)
+	@make fclean -C libft
+	@make fclean -C ft_printf
 
 re: fclean all
 
