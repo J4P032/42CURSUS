@@ -9,3 +9,6 @@ Definen la situación y se pasa por ellos a traves de un "traductor"
   \	Error
 
 ver codigo automata.c
+
+
+PERO para definir un autómata, también se puede realizar como el código automata2.c
