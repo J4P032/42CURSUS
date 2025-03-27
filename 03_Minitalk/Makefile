@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -g
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = server
 LIBFT = ./libft/libft.a
 LIBFTPRINTF = ./ft_printf/libftprintf.a
