@@ -24,7 +24,7 @@ $(LIBFTPRINTF):
 $(NAME_SERVER): $(OBJS_SERVER) $(LIBFT) $(LIBFTPRINTF)
 	@$(CC) $(CFLAGS) $(OBJS_SERVER) -L./libft -lft -L./ft_printf -lftprintf -o $(NAME_SERVER)
 
-$(NAME_CLIENT): $(OBJS_CLIENT) $(LIBFT) $(LIBFTPRINTF)
+$(NAME_CLIENT): $(OBJS_CLIENT) $(LIBFT) $(LIBFTPRINTF) client.h
 	@$(CC) $(CFLAGS) $(OBJS_CLIENT) -L./libft -lft -L./ft_printf -lftprintf -o $(NAME_CLIENT)
 
 clean:
