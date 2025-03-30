@@ -4,7 +4,7 @@ NAME_SERVER = server
 NAME_CLIENT = client
 LIBFT = ./libft/libft.a
 LIBFTPRINTF = ./ft_printf/libftprintf.a
-SRC_SERVER =  server.c
+SRC_SERVER =  server.c server_utils.c
 SRC_CLIENT = client.c
 OBJS_SERVER = $(SRC_SERVER:.c=.o)
 OBJS_CLIENT = $(SRC_CLIENT:.c=.o)
@@ -33,7 +33,7 @@ clean:
 	@make clean -C ft_printf
 
 fclean: clean
-	@$(RM) $(NAME_SERVER) $(NAME_CLIENT) 
+	@$(RM) $(NAME_SERVER) $(NAME_CLIENT)
 	@make fclean -C libft
 	@make fclean -C ft_printf
 

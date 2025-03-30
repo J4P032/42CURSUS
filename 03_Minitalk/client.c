@@ -6,12 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:54:07 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/29 20:48:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/30 20:12:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
+/*usleep 1ms is necesary to not be so fast and jump over bits*/
 void	send_num_bytes(t_client	*client)
 {
 	unsigned int	masc;
@@ -31,6 +32,25 @@ void	send_num_bytes(t_client	*client)
 	}
 }
 
+void	send_char(char	c, pid_t pid)
+{
+	size_t			i;
+	unsigned char	masc;
+
+	i = 0;
+	masc = 0x80;
+	while (i < 8)
+	{
+		if (c & masc)
+			kill(pid, B_1);
+		else
+			kill(pid, B_0);
+		usleep(1);
+		masc >>= 1;
+		i++;
+	}
+}
+
 void	process_msg(t_client *client)
 {
 	size_t	i;
@@ -38,11 +58,8 @@ void	process_msg(t_client *client)
 	i = 0;
 	client->num_bytes = ft_strlen(client->msg) * (sizeof(char));
 	send_num_bytes(client);
-/* 	while (client->msg[i])
-	{
-		process_char(client->msg[i]);
-		i++;
-	} */
+	while (client->msg[i])
+		send_char(client->msg[i++], client->server_pid);
 }
 
 int	main(int ac, char **av)
