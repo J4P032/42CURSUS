@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 14:28:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/30 18:06:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/31 17:34:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define RECEIVE_HDR 0
 # define RECEIVE_MSG 1
 # define MSG_RECEIVED 2
+# define MSG_PRINTED 3
 
 typedef struct s_client
 {

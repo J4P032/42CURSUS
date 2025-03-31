@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 11:32:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/29 15:11:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:52:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@ typedef struct	s_client
 	size_t	num_bytes;
 	char	*msg;
 }			t_client;
+
+extern t_client	client;
 
 #endif

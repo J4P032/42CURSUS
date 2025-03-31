@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined -g
 NAME_SERVER = server
 NAME_CLIENT = client
 LIBFT = ./libft/libft.a
@@ -21,7 +21,7 @@ $(LIBFTPRINTF):
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME_SERVER): $(OBJS_SERVER) $(LIBFT) $(LIBFTPRINTF)
+$(NAME_SERVER): $(OBJS_SERVER) $(LIBFT) $(LIBFTPRINTF) server.h
 	@$(CC) $(CFLAGS) $(OBJS_SERVER) -L./libft -lft -L./ft_printf -lftprintf -o $(NAME_SERVER)
 
 $(NAME_CLIENT): $(OBJS_CLIENT) $(LIBFT) $(LIBFTPRINTF) client.h

@@ -1,0 +1,1 @@
+./client pid_numero $(echo 'print("A" * 5000)' | python3)
