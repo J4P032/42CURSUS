@@ -1,5 +1,7 @@
 HOSTNAME
 	para cambiarlo ejecutar:
+	cambiar el nombre en nano /etc/hostname
+	y luego el login en nano etc/hosts
 	(sudo) hostnamectl set-hostname nuevo_nombre
 	hostname -> muestra el nombre del hostname.
 	exec bash -> para rearrancar el bash y mostrar el cambio.
@@ -47,6 +49,12 @@ FIREWALL
 	(sudo) ufw status
 	(sudo) systemctl enable ufw - hace que se autoarranque al inicio de la maquina.
 
+
+APPARMOR
+	esta en etc/apparmor.d y se edita el sbin.dhclient y en cada linea
+	se incluye la ruta del programa y y al lado se ponen unas etiquetas que da lospermisos
+	por ejemplo Pxrm
+
 SUDO
 	apt install sudo
 	config en /etc/sudoers.d/nombre_config (puede ser sudo_config)
@@ -84,7 +92,7 @@ PASSWORD
 	para estas reglas solo se aplican (las de 30 dias 2 y 7) a USUARIOS nuevos
 	para que funcione en antiguos hay que hacer esto:
 	sudo chage -M 30 -m 2 -W 7 usuario
-	y verificar con: getend shadow usuario
+	y verificar con: getent shadow usuario
 	no mostrara quiza el cambio reciente pero se obtiene con:
 	sudo chage -l usuario
 
@@ -107,7 +115,8 @@ SCRIPT
 
 
 
-CRONTAB
+CRONTAB Pxrm,
+
 	define el tiempo en que se ejecuta.
 	(sudo) crontab -e -> para acceder a el por primera vez
 	(sudo) crontab -u root -e
@@ -123,7 +132,8 @@ CRONTAB
 	sudo /etc/init.d/cron stop o start
 	tambien:
 	sudo systemctl stop cron
-	sudo systemclt enable cron
+	sudo systemctl start cron
+	sudo systemctl status cron
 
 
 FIRMA
@@ -167,22 +177,14 @@ CHECKS
 
 	cd -check sudo logs
 	cd /var/log/sudo
-	ls
-	cat sudo_config
-
-	dpkg -s ufw - check ufw advance
-
-	sudo ufw status numbered - check normas activas
-
-	sudo ufw allow 8080 - check rule creations
-	sudo ufw status numbered
+	lss /usr/bin/*session - No entorno grafitatus numbered
 	sudo ufw delete num_rule
 	sudo ufw status numbered
 	sudo ufw delete 5
 	sudo ufw status numbered
 
 	which ssh - check ssh advance
-	sudo service ssh status
+	sudo servis /usr/bin/*session - No entorno grafice ssh status
 
 	ssh root@localhost -p 4241 -check ssh usermod
 	ssh newuser@localhost -p 4241
