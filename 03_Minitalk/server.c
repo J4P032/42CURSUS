@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:37:30 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/31 18:54:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:12:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,13 @@ void	write_client(t_client **client, t_server *server)
 			prev = aux;
 			aux = aux->next;
 		}
-
 	}
 } */
 
 void	init_msg_reception(t_client *client)
 {
 	client->server_state = RECEIVE_MSG;
-	//ft_printf("numBytes de %d es: %u bytes de mensaje\n", client->pid, client->msg_num_bits);
+
     client->bits_received = 0;
 	client->msg = (char *)ft_calloc(client->msg_num_bits + 1, sizeof(char));
 	if (!client->msg)
@@ -104,7 +103,7 @@ void	store_msg(int signal, t_client *client)
 	client->bits_received++;
 }
 
-void	process_header(int signal, siginfo_t *info, void *context)
+void	process_header_msg(int signal, siginfo_t *info, void *context)
 {
 	t_client	*client;
 	size_t		i;
@@ -142,9 +141,8 @@ int	main(void)
 {
 	struct sigaction	sa;
 
-	//sigemptyset(&sa.sa_mask);//QUIZA NO PUEDO USARLO
 	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = process_header;
+	sa.sa_sigaction = process_header_msg;
 	server = (t_server *)ft_calloc(1, sizeof(t_server));
 	if (!server)
 		return (ft_printf("Error: Failure creating server", 1));

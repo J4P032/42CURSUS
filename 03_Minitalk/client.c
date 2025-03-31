@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:54:07 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/31 20:00:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:25:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,28 @@ void	process_msg(void)
 		send_char(client.msg[i++]);
 }
 
+void	confirmation(int signal, siginfo_t *info, void *context)
+{
+	(void)context;
+	(void)signal;
+	(void)info;
+}
+
+
 int	main(int ac, char **av)
 {
+	struct sigaction	sa;
+
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = confirmation; //
 	if (ac != 3)
 		return (ft_printf("Error: Need: './client PID \"string\"'\n"), 1);
 	client.server_pid = ft_atoi(av[1]);
 	client.client_pid = getpid();
+	client.last_bit_sent = -1;
 	client.msg = av[2];
+	sigaction(B_0, &sa, NULL);
+	sigaction(B_1, &sa, NULL);
 	process_msg();
 	return (0);
 }
