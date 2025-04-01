@@ -6,15 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:37:30 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/01 20:43:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:12:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-t_server	*g_server;
+t_server	*server;
 
-/*11 in strncmp because if stopservera for example it was 10*/
 void	write_client(t_client **client, t_server *server)
 {
 	t_client	*aux;
@@ -27,8 +26,8 @@ void	write_client(t_client **client, t_server *server)
 		{
 			if (aux->msg)
 			{
-				ft_printf("%d: %s\n", aux->pid, aux->msg);
-				if (!ft_strncmp(aux->msg, stopserver, 11))
+				ft_printf("\n%d: %s\n", aux->pid, aux->msg);
+				if (!ft_strncmp(aux->msg, stopserver, 10))
 					server->online = 0;
 			}
 			aux->server_state = MSG_PRINTED;
@@ -37,14 +36,55 @@ void	write_client(t_client **client, t_server *server)
 	}
 }
 
+
+/* void	write_client(t_client **client)
+{
+	t_client	*aux;
+	t_client	*prev;
+
+	aux = *client;
+	prev = NULL;
+	while (aux)
+	{
+		if (aux->server_state == MSG_RECEIVED)
+		{
+			if (aux->msg)
+			{
+				ft_printf("\n%d: %s\n", aux->pid, aux->msg);
+				free (aux->msg);
+				aux->msg = NULL;
+			}
+			if (!prev)
+			{
+				*client = aux->next;
+				free (aux);
+				aux = *client;
+			}
+			else
+			{
+				prev->next = aux->next;
+				free (aux);
+				aux = prev->next;
+
+			}
+		}
+		else
+		{
+			prev = aux;
+			aux = aux->next;
+		}
+	}
+} */
+
 void	init_msg_reception(t_client *client)
 {
 	client->server_state = RECEIVE_MSG;
-	client->bits_received = 0;
+
+    client->bits_received = 0;
 	client->msg = (char *)ft_calloc(client->msg_num_bits + 1, sizeof(char));
 	if (!client->msg)
 	{
-		free_all(g_server);
+		free_all(server);
 		exit (1);
 	}
 	client->msg_num_bits = 8 * client->msg_num_bits;
@@ -60,34 +100,34 @@ void	store_msg(int signal, t_client *client)
 		client->msg[index] <<= 1;
 	if (signal == B_1)
 		client->msg[index] |= 1;
-	kill(client->pid, signal);
 	client->bits_received++;
 }
 
 void	process_header_msg(int signal, siginfo_t *info, void *context)
 {
 	t_client	*client;
+	size_t		i;
 
-	(void)context;
-	client = get_create_client(g_server, &g_server->client, info->si_pid);
-	client->pid = info->si_pid; //quiza no hace falta.
-	if (client->server_state == RECEIVE_HDR && client->bits_received < 32)
-	{
-		client->msg_num_bits <<= 1;
-		if (signal == B_1)
-			client->msg_num_bits |= 1;
-		kill(client->pid, signal);
+    (void)context;
+	i = 0;
+	client = get_create_client(server, &server->client, info->si_pid);
+	client->pid = info->si_pid;
+    if (client->server_state == RECEIVE_HDR && client->bits_received < 32)
+    {
+        client->msg_num_bits <<= 1;
+        if (signal == B_1)
+            client->msg_num_bits |= 1;
 		client->bits_received++;
 		if (client->bits_received == 32)
 			init_msg_reception(client);
 		return ;
-	}
+    }
 	if (client->server_state == RECEIVE_MSG
 		&& client->bits_received < client->msg_num_bits && client->msg)
-		store_msg(signal, client);
+			store_msg(signal, client);
 	if (client->bits_received == client->msg_num_bits)
 		client->server_state = MSG_RECEIVED;
-	write_client (&g_server->client, g_server);
+	write_client (&server->client, server);
 }
 
 /*pid_t is an alias (typedef) defined in sys/types.h instead int.*/
@@ -103,16 +143,16 @@ int	main(void)
 
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = process_header_msg;
-	g_server = (t_server *)ft_calloc(1, sizeof(t_server));
-	if (!g_server)
+	server = (t_server *)ft_calloc(1, sizeof(t_server));
+	if (!server)
 		return (ft_printf("Error: Failure creating server", 1));
-	g_server->pid = getpid();
-	g_server->online = 1;
-	ft_printf("Server PID: %d\n", g_server->pid);
+	server->pid = getpid();
+	server->online = 1;
+	ft_printf("Server PID: %d\n", server->pid);
 	sigaction(B_0, &sa, NULL);
 	sigaction(B_1, &sa, NULL);
-	while (g_server->online)
+	while (server->online)
 		pause();
-	free_all(g_server);
+	free_all(server);
 	return (0);
 }

@@ -1,1 +1,42 @@
 ./client pid_numero $(echo 'print("A" * 5000)' | python3)
+😀
+
+
+/* void	write_client(t_client **client)
+{
+	t_client	*aux;
+	t_client	*prev;
+
+	aux = *client;
+	prev = NULL;
+	while (aux)
+	{
+		if (aux->server_state == MSG_RECEIVED)
+		{
+			if (aux->msg)
+			{
+				ft_printf("\n%d: %s\n", aux->pid, aux->msg);
+				free (aux->msg);
+				aux->msg = NULL;
+			}
+			if (!prev)
+			{
+				*client = aux->next;
+				free (aux);
+				aux = *client;
+			}
+			else
+			{
+				prev->next = aux->next;
+				free (aux);
+				aux = prev->next;
+
+			}
+		}
+		else
+		{
+			prev = aux;
+			aux = aux->next;
+		}
+	}
+} */

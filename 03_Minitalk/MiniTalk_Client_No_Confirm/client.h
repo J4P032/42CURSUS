@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 11:32:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/01 20:01:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:24:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
+#ifndef	CLIENT_H
 # define CLIENT_H
 # include <signal.h>
 # include <sys/types.h>
@@ -19,29 +19,16 @@
 
 # define B_0 SIGUSR1
 # define B_1 SIGUSR2
-# define SENDING_HDR 0
-# define SENDING_MSG 1
-# define MSG_SENT 2
-# define RETRY 3
 
-typedef struct s_client
+typedef struct	s_client
 {
-	pid_t			client_pid;
-	pid_t			server_pid;
-	int				num_bytes;
-	int				bites_sent;
-	int				last_bit_sent;
-	char			*msg;
-	int				transmitting;
-	int				status;
-	size_t			time;
-	unsigned int	masc_hdr;
-	unsigned char	masc_msg;
+	pid_t	client_pid;
+	pid_t	server_pid;
+	size_t	num_bytes;
+	int		last_bit_sent;
+	char	*msg;
 }			t_client;
 
-extern t_client	g_client;
-
-void	print_server_error(void);
-void	wait_retry(t_client *client);
+extern t_client	client;
 
 #endif

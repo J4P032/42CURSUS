@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 14:28:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/31 17:34:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:50:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	SERVER_H
+#ifndef SERVER_H
 # define SERVER_H
 //# define _POSIX_C_SOURCE 199309L
 # include <signal.h>
@@ -35,14 +35,14 @@ typedef struct s_client
 	struct s_client	*next;
 }					t_client;
 
-typedef struct	s_server
+typedef struct s_server
 {
 	pid_t		pid;
 	t_client	*client;
 	int			online;
 }				t_server;
 
-extern t_server	*server;
+extern t_server	*g_server;
 
 t_client	*get_create_client(t_server *server, t_client **client, pid_t pid);
 void		free_all(t_server *server);

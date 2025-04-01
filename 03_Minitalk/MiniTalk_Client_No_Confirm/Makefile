@@ -5,7 +5,7 @@ NAME_CLIENT = client
 LIBFT = ./libft/libft.a
 LIBFTPRINTF = ./ft_printf/libftprintf.a
 SRC_SERVER =  server.c server_utils.c
-SRC_CLIENT = client.c client_utils.c
+SRC_CLIENT = client.c
 OBJS_SERVER = $(SRC_SERVER:.c=.o)
 OBJS_CLIENT = $(SRC_CLIENT:.c=.o)
 RM	= rm -rf
