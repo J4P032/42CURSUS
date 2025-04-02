@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client_utils.c                                     :+:      :+:    :+:   */
+/*   client_utils_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/01 14:32:48 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 22:43:35 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/04/02 19:37:58 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/04/02 22:48:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "client_bonus.h"
 
 void	print_server_error(void)
 {

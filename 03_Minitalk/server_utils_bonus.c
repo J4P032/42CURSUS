@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_utils.c                                     :+:      :+:    :+:   */
+/*   server_utils_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/30 13:46:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 19:30:38 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/04/02 19:38:24 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/04/02 22:51:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "server_bonus.h"
 
 void	free_all(t_server *server)
 {

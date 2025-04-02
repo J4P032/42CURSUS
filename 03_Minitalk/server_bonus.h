@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   server_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/29 14:28:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 21:11:37 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/04/02 19:38:16 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/04/02 22:50:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_H
-# define SERVER_H
+#ifndef SERVER_BONUS_H
+# define SERVER_BONUS_H
 # include <signal.h>
 # include <sys/types.h>
 # include "./ft_printf/ft_printf.h"

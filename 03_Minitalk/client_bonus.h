@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.h                                           :+:      :+:    :+:   */
+/*   client_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/28 11:32:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 20:39:15 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/04/02 19:37:46 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/04/02 22:47:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#ifndef CLIENT_BONUS_H
+# define CLIENT_BONUS_H
 # include <signal.h>
 # include <sys/types.h>
 # include "./ft_printf/ft_printf.h"
