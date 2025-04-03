@@ -1,44 +1,4 @@
 Ficheros para actualizar en 42:
 
-Cambios variables declaradas pero no usadas:
-sprite_pacman.c
-
-comprobacion solucion:
-Makefile
-map_3.c
-map.c
-so_long.c
-so_long.h
-casa.ber
-test_move.ber
-
-fix leaks
-count_movements.c
-frame.c
-frame_exit.c
-pacman_movements.c
-sprite_map.c
-sprite_pacman.c
-window.c
-
-Norminette
-frame_collect.c
-sprite_exit.c
-sprite_map.c
-time.c
-window.c
-count_movements.c
-frame.c
-so_long.c
-map_3.c
-frame_exit.c
-
-bonus:
-Makefile
-count_movement_bonus.c
-_bonus.*
-
-BORRAR simple_geometry.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!
-BORRAR pixels.c de GIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-EN MI PC DE CASA AL MAXIMIZAR PIERDO EL MAPA (TENGO ESE BOTON DE OPCION).. MIRAR EN 42 SI EXISTE OPCION DE MAXIMIZAR. SE QUE NO DE REESCALAR VENTANA DESDE ESQUINAS
-QUE TAMBIEN LO JODE EN PC DE CASA.
+ft_strlen.c - cambiado que pase el \n - CABRON!!
+client.c y client_bonus.c cambiado para ""

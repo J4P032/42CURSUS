@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:54:07 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 20:42:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:13:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	send_num_bytes(void)
 {
 	int	server_status;
 
+	if (g_client.num_bytes == 0)
+		exit (0);
 	if (g_client.bites_sent < 32)
 	{
 		if (g_client.num_bytes & g_client.masc_hdr)
@@ -144,7 +146,6 @@ int	main(int ac, char **av)
 	g_client.time = 0;
 	g_client.num_bytes = ft_strlen(g_client.msg) * (sizeof(char));
 	g_client.msg_formula = add_of_chars(g_client.msg);
-	ft_printf("Formula: %u es", g_client.msg_formula);
 	sigaction(B_0, &sa, NULL);
 	sigaction(B_1, &sa, NULL);
 	send_num_bytes();

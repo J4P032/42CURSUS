@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 19:37:32 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 22:48:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:14:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	send_num_bytes(void)
 {
 	int	server_status;
 
+	if (g_client.num_bytes == 0)
+		exit (0);
 	if (g_client.bites_sent < 32)
 	{
 		if (g_client.num_bytes & g_client.masc_hdr)
