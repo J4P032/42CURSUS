@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 19:11:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 22:45:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 11:45:13 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,27 @@ void	receive_formula(int signal, t_server *server, t_client *client)
 		client->bits_received = 0;
 		client->server_state = RECEIVE_MSG;
 	}
+}
+
+void	retry_server(t_server *server)
+{
+	int			client_status;
+	t_client	*aux;
+
+	client_status = 0;
+	aux = server->client;
+	if (server->retry > 40)
+	{
+		client_status = kill(server->active_pid, B_1);
+		if (client_status < 0)
+		{
+			while (aux && aux->pid != server->active_pid)
+				aux = aux->next;
+			if (aux)
+				aux->server_state = MSG_PRINTED;
+		}
+		server->retry = 0;
+	}
+	usleep(125000);
+	server->retry++;
 }

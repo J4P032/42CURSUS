@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 19:38:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 22:50:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 08:47:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ typedef struct s_server
 	t_client	*client;
 	int			online;
 }				t_server;
-
-extern t_server	*g_server;
 
 t_client		*get_create_client(t_server *server, t_client **client,
 					pid_t pid);

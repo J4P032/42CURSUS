@@ -1,4 +1,7 @@
 Ficheros para actualizar en 42:
 
 ft_strlen.c - cambiado que pase el \n - CABRON!!
-client.c y client_bonus.c cambiado para ""
+client.c y client_bonus.c cambiado para "" y para server_status < 0 en vez de -1
+client_utils.c cambiado a server_status < 0 en vez de igual a -1
+todos los .h quitados el extern del global.
+server.c server_utils2.c añadido client_state para desbloquearlo en caso de perdida de cliente.

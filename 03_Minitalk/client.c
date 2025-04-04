@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:54:07 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/03 16:13:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 11:37:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	send_num_bytes(void)
 			server_status = kill(g_client.server_pid, B_0);
 			g_client.last_bit_sent = B_0;
 		}
-		if (server_status == -1)
+		if (server_status < 0)
 			print_server_error();
 		usleep(1);
 		g_client.transmitting = 0;
@@ -64,7 +64,7 @@ void	send_char(char c)
 			server_status = kill(g_client.server_pid, B_0);
 			g_client.last_bit_sent = B_0;
 		}
-		if (server_status == -1)
+		if (server_status < 0)
 			print_server_error();
 		usleep(1);
 		g_client.transmitting = 0;

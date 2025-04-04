@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 14:32:48 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/03 14:50:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 11:38:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	send_formula(t_client *client)
 			server_status = kill(client->server_pid, B_0);
 			client->last_bit_sent = B_0;
 		}
-		if (server_status == -1)
+		if (server_status < 0)
 			print_server_error();
 		usleep(100);
 		client->transmitting = 0;
@@ -96,7 +96,7 @@ void	wait_retry(t_client *client)
 	if (client->time > RETRY && client->status < MSG_SENT)
 	{
 		server_status = kill(client->server_pid, client->last_bit_sent);
-		if (server_status == -1)
+		if (server_status < 0)
 			print_server_error();
 		client->time = 0;
 	}

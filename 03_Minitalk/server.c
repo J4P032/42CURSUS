@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:37:30 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 22:45:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 11:44:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	process_header_msg(int signal, siginfo_t *info, void *context)
 		store_msg(signal, client);
 	if (client->bits_received == client->msg_num_bits)
 		client->server_state = MSG_RECEIVED;
+	g_server->retry = 0;
 	write_client ();
 }
 
@@ -133,11 +134,12 @@ int	main(void)
 		return (ft_printf("Error: Failure creating server", 1));
 	g_server->pid = getpid();
 	g_server->online = 1;
+	g_server->active_pid = 32;
 	ft_printf("Server PID: %d\n", g_server->pid);
 	sigaction(B_0, &sa, NULL);
 	sigaction(B_1, &sa, NULL);
 	while (g_server->online)
-		pause();
+		retry_server(g_server);
 	free_all(g_server);
 	return (0);
 }

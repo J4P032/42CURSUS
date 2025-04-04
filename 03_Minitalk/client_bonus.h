@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 19:37:46 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 22:47:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 08:47:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ typedef struct s_client
 	unsigned char	masc_msg;
 	unsigned int	msg_formula;
 }			t_client;
-
-extern t_client	g_client;
 
 void			print_server_error(void);
 void			wait_retry(t_client *client);
