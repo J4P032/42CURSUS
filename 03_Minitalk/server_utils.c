@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 13:46:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/02 19:30:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:23:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ t_client	*get_create_client(t_server *server, t_client **client, pid_t pid)
 	return (aux);
 }
 
+/*This function will make only one client to transmit at a time*/
+/*once MSG is PRINTED will will go to next one and process it*/
 void	get_active_pid(t_server *server)
 {
 	t_client	*aux;

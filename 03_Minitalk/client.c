@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:54:07 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/04 11:37:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:14:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 t_client	g_client;
 
 /*Sends the number of chars that the server is going to expect*/
-/*usleep 100ms is necesary to not be so fast and jump over bits*/
+/*usleep 1ms is necesary to not be so fast and jump over bits*/
 /*it compares num_bytes with a masc to know if we have a 0 or a 1 and it sends*/
-/*store this signal sent to later compare with confirmation of server...*/
-/*...and init the time to retries. Until it receives confirmation it stop...*/
-/*...transmitting. When all bites sent client go to transmit msg state*/
+/*store this signal sent in case we need to 'kick' the kill again with a...*/
+/*...server busy state. Until it receives confirmation it stop...*/
+/*...transmitting. When all bites sent client go to sending FORMULA to compare*/
 void	send_num_bytes(void)
 {
 	int	server_status;
@@ -71,8 +71,7 @@ void	send_char(char c)
 	}
 }
 
-/*This treats the confirmation from server. If the signal is same as transmit*/
-/*it allows continue of next bit. If not it will send back again last bit sent*/
+/*This treats the confirmation from server. It allows continue of next bit.*/
 /*we have to count here the bites_sent because in function that sents not work*/
 /*not a while because it will loop through every received signal from server*/
 /*once we have reached 8 bits sent per char (1byte) it will reactivate masc*/
@@ -101,8 +100,12 @@ void	send_msg(int signal)
 /*...no more, no less. So that is the reason to use a global variable, to send*/
 /*...every variable there through the rest of functions.*/
 /*SENDING_HDR will send the number of bytes to receive the server*/
+/*SENDING_FORMULA is a confirmation that the msg is the same in server 2 print*/
 /*It here confirm reception of server. SENDING_MSG will send the msg itself*/
 /*usleep is necesary when last bite from SENDING_HDR 2 SENDING_MSG Noloosebits*/
+/*When the MSG_(is)SENT* the SERVER will send a B_1 if the msg is the same...*/
+/*...as the one sent from the client. If not, SERVER will send a B_0 to...*/
+/*...order the client to send back the full msg.*/
 void	process_msg(int signal, siginfo_t *info, void *context)
 {
 	(void)context;
@@ -126,6 +129,8 @@ void	process_msg(int signal, siginfo_t *info, void *context)
 /*send_num_byte needs to be here to kick the first bit sent. If not won't...*/
 /*...continue as it depends on server confirmation. Sigaction will be the one*/
 /*...to choose point what to do once the bit is received*/
+/*wait retry is a function to allow resend of last sent bit in case of...*/
+/*...server busy*/
 int	main(int ac, char **av)
 {
 	struct sigaction	sa;

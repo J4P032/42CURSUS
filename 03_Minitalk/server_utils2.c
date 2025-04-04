@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 19:11:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/04 11:45:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:31:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,18 @@ void	receive_formula(int signal, t_server *server, t_client *client)
 	}
 }
 
+/*This function is in case the client crash while sending a msg.*/
+/*Because the server makes exclusive a client with active_pid if client...*/
+/*...crashes, that client will never change to MSG_PRINTED so server will...*/
+/*...wait for ever for a signal from a crashed client. This way once 5 seconds*/
+/*...it will send a 'ping' to the active_pid client. If it is < 0 means it...*/
+/*...doesn't exist, so it will force that client to MSG_PRINTED so active_pid*/
+/*...will change to next client (if exists). IT IS VERY IMPORTANT, that...*/
+/*...in the handler sigaction function we reset the server->retry back to cero*/
+/*...with each byte received from the client, because if not, it will send...*/
+/*...this ping B_1 signal to client modifying the msg each time. AS it only...*/
+/*...send it the ping to the active_pid, it won't reactivate the waiting...*/
+/*...clients. OFUUUUUUU!!! someone said this Minitalk is easy!!???*/
 void	retry_server(t_server *server)
 {
 	int			client_status;

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:37:30 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/04 11:44:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:22:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ t_server	*g_server;
 /*11 in strncmp because if stopservera for example it was 10 that way it will*/
 /*... count the \0 and not in the middle of a string*/
 /*If it finds MSG_RECEIVED it will print it and will turn it to PRINTED to...*/
-/*...not write it again.*/
+/*...not write it again. If the msg received is not the same as the client...*/
+/*...sent with the FORMULA comparison, it will send the B_0 to force the...*/
+/*...client to start back again, and the server change to RECEIVE_MSG state*/
 void	write_client(void)
 {
 	t_client	*aux;
@@ -47,8 +49,9 @@ void	write_client(void)
 	}
 }
 
-/*init back the bits_received as a counter later to compare with msg bits*/
+/*init back the bits_received as a counter later to compare with formula bits*/
 /*first msg_num_bits is BYTES of MSG to compose malloc. Later turn to bits*/
+/*...but once calloc, it will pass to RECEIVE_FORMULA to compare msg*/
 void	init_msg_reception(t_client *client)
 {
 	client->server_state = RECEIVE_FORMULA;
@@ -90,6 +93,9 @@ void	store_msg(int signal, t_client *client)
 /*in every moment we see if there is something to write (once the str is...)*/
 /*...completed*/
 /*NEW! I added an active pid to only process one client at a time*/
+/*NEW2! g_server->retry = 0; necesary reset counter in case of signal...*/
+/*...received from client. This one is for restart server in case of client...*/
+/*...crash with function retry_server(g_server); in main()*/
 void	process_header_msg(int signal, siginfo_t *info, void *context)
 {
 	t_client	*client;
@@ -123,6 +129,7 @@ void	process_header_msg(int signal, siginfo_t *info, void *context)
 /*To allow visual studio IntelliSense I had to add a lua c_cpp_properties.json*/
 /*pause() halt the program until a new signal is recieved so no CPU load*/
 /*even is a infinite while, it only admit signals. Won't malloc server again*/
+/*retry_server(g_server); is in case client has crash in middle of sending msg*/
 int	main(void)
 {
 	struct sigaction	sa;

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 14:32:48 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/04 11:38:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:04:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ unsigned int	add_of_chars(char *str)
 	return (solution);
 }
 
+/*This Formula will add all the values of each char of the string...*/
+/*...That way the server will compare with its received msg and see if is...*/
+/*...the same. If not, The server will force the client to resend msg*/
+/*...client->bites_sent = -1; because index of sending char will add...*/
+/*...add it to cero in first iteration.*/
 void	send_formula(t_client *client)
 {
 	int	server_status;
@@ -82,9 +87,12 @@ void	send_formula(t_client *client)
 }
 
 /*There are situations when 2 bits are together received by server and one...*/
-/*...is lost. In that case I wait RETRY seconds and not not solved by it own*/
-/*kick another bit sending the last one that should have been sent.*/
-/*of course we don't kick that bit if the msg already has been sent.*/
+/*...is lost. In that case I wait RETRY seconds and if not solved by it own...*/
+/*...kick another bit sending the last one that should have been sent...*/
+/*...of course we don't kick that bit if the msg already has been sent.*/
+/*if (client->status == SENDING_FORMULA) send_formula(client); is...*/
+/*...because between HDR and FORMULA it was sending this 'kick' kill again...*/
+/*...the last one so it make a mistake. This way we override it.*/
 void	wait_retry(t_client *client)
 {
 	int	server_status;
