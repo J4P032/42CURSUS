@@ -1,6 +1,6 @@
 ./client pid_numero $(echo 'print("A" * 5000)' | python3)
 😀
-
+./client_bonus 31089 "$(printf 'A%.0s' {1..50000})"
 
 /* void	write_client(t_client **client)
 {
