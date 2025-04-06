@@ -1,0 +1,106 @@
+Visual Studio:
+--------------
+Modulos Instalados:
+C/C++ Themes
+C/C++ IntelliSnese debugging
+C/C++ Extension Pack
+42 ft count lines
+
+Config:
+Cursor Blinking - Expand
+linked editing - activado
+bracked pair colorization - on
+bracket pairs - True
+cursor animtion cursor smooth carret animation
+
+sigaction config para no squid red lines:
+c_cpp_properties.json:
+"configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_POSIX_C_SOURCE=199309L"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c99",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+
+
+Config json:
+{
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.cursorBlinking": "expand",
+    "editor.linkedEditing": true,
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.guides.bracketPairs": true,
+    "editor.cursorSmoothCaretAnimation": "explicit",
+    "editor.fontSize": 18,
+    "github.copilot.editor.enableAutoCompletions": false,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "42header.email": "jrollon-@student.42madrid.com",
+    "42header.username": "jrollon-",
+    "editor.insertSpaces": false,
+    "files.insertFinalNewline": true,
+     "editor.quickSuggestions": {
+        "other": "off"
+    },
+    "editor.parameterHints.enabled": false,
+    "files.autoSave": "afterDelay",
+    "json.schemas": [
+        
+
+
+
+
+
+
+
+    ],
+    "editor.showFoldingControls": "always",
+    "editor.hover.enabled": false
+}
+
+
+VIM:
+.zshrc:
+alias mini='~/mini-moulinette/mini-moul.sh'
+alias mini='~/mini-moulinette/mini-moul.sh'
+USER=jrollon-
+export USER
+MAIL="$USER@student.42madrid.com"
+export MAIL
+
+alias francinette=/home/japo32/francinette/tester.sh
+
+alias paco=/home/japo32/francinette/tester.sh
+
+
+.vimrc:
+set ts=4
+set sw=4
+set nu
+set ai
+autocmd BufReadPost * startinsert
+set mouse=a
+
+.bashrc (ultimas lineas):
+# Created by `pipx` on 2024-12-04 17:11:21
+export PATH="$PATH:/home/japo32/.local/bin"
+export PATH=$PATH:/home/japo32/.venv/bin
+USER=jrollon-
+export USER
+MAIL="$USER@student.42madrid.com"
+export MAIL 
+
+en .vim directorio, en plugin meter el stdheader.vim
+
+
+
