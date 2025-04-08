@@ -1,0 +1,56 @@
+0. Uno o más filósofos a la mesa
+1. Mesa Redonda con espaguetis (infinitos?)
+2. Solo Comen - Duermen - Piensan en este orden. Y solo un proceso al mismo tiempo.
+3. Hay tantos tenedores como filosofos, pero cada uno puede pillar 2 tenedores (si están a su izda y dcha)
+4. Si no comen mueren (¿cuantas veces pueden estar sin comer? -> time_to_die)
+5. Los filosofos no interaccionan entre si. No saben si otro va a morir. Todos deben vivir.
+
+PROGRAMA (mandatory):
+1. debe o deben aceptar estos argumentos:
+	"number_of_philosophers" - el número de filósofos y también el de tenedores
+	"time_to_die" (ms)		- tiempo que puede pasar sin comer. Si más pasa -> muere.
+	"time_to_eat" (ms) 		- El tiempo que tiene el filósofo para comer.
+	"time_to_sleep" (ms)	- El tiempo que tiene para Dormir.
+	
+	"number_of_times_each_philosopher_must_eat" (opcional) - Si todos comen ese número la simulación stop. Si no se especifica la sim Stop cuando muere un filósofo.
+
+2. Cada filósofo tiene asignado un número de 1 al número de filósofos.\
+3. Se sentarán en orden. El phi-1 se sienta al lado del phi-2 y el phi-number_of_philosophers. (lista circular)
+4. Debe haber LOGS (supongo que uno por ejecución):
+	timestamp_in_ms X has taken a fork
+	timestamp_in_ms X is eating
+	timestamp_in_ms X is sleeping
+	timestamp_in_ms X is thinking
+	timestamp_in_ms X died.
+	(timestamp_in_ms se sustituye por el tiempo en milisegundos y X por el número del filósofo)
+
+	Dicho estado no debe estar roto o alterado por el estado de otros filósofos (???)
+	IMPORTANTE!!! no pasar más de 10ms entre muerte de un filósofo y su muerte impresa.
+
+IMPORTANTE2!!! El programa no debe tener ningun data races (????)
+
+
+5. El programa se llamará: "philo"
+6. Fuentes .c Makefile .h en el directorio philo/
+7. Funciones autorizadas:
+	memset
+	printf
+	malloc - incorporar el ft_calloc para inicializar todo a zero.
+	free
+	write
+	usleep - se mide en milisegundos creo.
+	gettimeofday
+	pthread_create
+	pthread_detach
+	pthread_join
+	pthread_mutex_init
+	pthread_mutex_destroy
+	pthread_mutex_lock
+	pthread_mutex_unlock
+7. CADA FILÓSOFO DEBE SER UN HILO
+8. IMPORTANTE: para prevenir que se dupliquen los tenedores, debo proteger los estados con un mutex por cada uno de ellos (tenedores?).
+
+
+
+Musica: 
+The Paper Kites - On the Train Ride Home
