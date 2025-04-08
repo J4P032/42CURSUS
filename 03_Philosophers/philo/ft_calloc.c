@@ -6,9 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:29:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/08 11:31:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:30:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "philo.h"
 
 void	ft_bzero(void *s, size_t n)
 {

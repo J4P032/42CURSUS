@@ -1,0 +1,148 @@
+
+
+# PTHREAD_CREATE (include pthread.h)
+	Crea un nuevo hilo en un programa que utiliza la biblioteca de hilos POSIX (pthread)
+
+	int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                   void *(*start_routine) (void *), void *arg);
+	1.pthread_t *thread -> se almacena el ID del hilo
+	2.const pthread_attr_t *attr -> Atributos del hilo. NULL = atributos por defecto.
+	3.void *(*start_routine) (void *) -> funcion que se ejecuta en nuevo hilo. Un parametro tipo void y devuelve un void.
+	4.void *arg -> argumento que se pasa a la funcion start_rutine. Se puede pasar NULL.
+
+	Si tiene exito devuelve un 0. Si no, diferente a 0.
+	El límite de hilos a crear viene marcado por el sistema. Se puede ver en bash con ulimit -a
+	IMPORTANTE!!!! se puede limitar el numero de hilos y procesos con ulimit -u 100 por ejemplo. ulimit -u unlimited lo dejaria por defecto.
+
+# PTHREAD_DETACH
+	Desvincula un hilo. Es decir libera sus recursos cuando termina. Es igual que el _join. La diferencia
+	con Join es que el Join espera... el detach no lo hace (no sincroniza) continua el hilo principal y
+	cuando termina el principal se cierra el programa aunque el hilo secundario queden cosas por hacer.
+
+	pthread_join = esperas al hilo + limpias recursos.
+	pthread_detach = no esperas, pero limpias recursos cuando el hilo termina por sí solo.
+
+	#include <pthread.h>
+	#include <stdio.h>
+	#include <unistd.h>
+
+	void *thread_function(void *arg)
+	{
+	    printf("Hilo en ejecución\n");
+	    sleep(1);
+	    printf("Hilo termina\n");
+	    return NULL;
+	}
+
+	int main()
+	{
+	    pthread_t thread;
+
+	    pthread_create(&thread, NULL, thread_function, NULL);
+	    pthread_detach(thread); // Se libera solo al terminar
+
+	    sleep(2); // Esperamos para que el hilo termine antes de salir del main
+	    return 0;
+	}
+
+
+# PTHREAD_JOIN (include pthread.h)
+	Espera a que un hilo especifico termine su ejecución. Se usa para sincronizar la finalización de los hilos
+	Una vez esperado y liberado se une.
+	Se usa para esperar el hilo principal que todos los subhilos terminen, antes de finalizar el programa.
+
+	int pthread_join(pthread_t thread, void **retval);
+	1.thread -> el hilo a esperar, que debe haber sido creado antes con create.
+	2.retval -> puntero a variable donde se almacena el valor de retorno del hilo. NULL si no interesa.
+
+
+
+Aqui se crea un nuevo hilo y las i son independientes un hilo de otro.
+#include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+
+void *counting_thread(void *arg) {
+    size_t i = 0;
+    while (1) {
+        printf("Thread: %zu\n", i);
+        i++;
+        sleep(1);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t thread;
+    
+    pthread_create(&thread, NULL, counting_thread, NULL); // No se pasa nada
+    
+    size_t i = 0;
+    while (1) {
+        printf("Main: %zu\n", i);
+        i++;
+        sleep(1);
+    }
+    
+    pthread_join(thread, NULL); // Espera al hilo
+    return 0;
+}
+
+
+
+Aqui se crea un nuevo hilo y las variables son pasadas al otro
+// Definir los datos a compartir
+struct thread_data {
+    int valor1;
+    char* mensaje;
+    // otros datos...
+};
+// Crear los datos
+struct thread_data datos;
+datos.valor1 = 42;
+datos.mensaje = "Hola desde el hilo principal";
+// Crear el hilo pasando un puntero a los datos
+pthread_create(&thread, NULL, counting_thread, (void*)&datos);
+void* counting_thread(void* arg) {
+    struct thread_data* mis_datos = (struct thread_data*)arg;
+    // Ahora puedes acceder y modificar los datos
+    printf("Recibí: %d y %s\n", mis_datos->valor1, mis_datos->mensaje);
+    mis_datos->valor1++; // Esta modificación será visible en el hilo principal
+    return NULL;
+}
+
+
+
+# PTHREAD_MUTEX_T (include pthread.h) ES UN TIPO DE DATO!!!
+	pthread_mutex_t -> actua como un semáforo (1 o 0) de tal manera que si esta verde (1), el "recurso" puede usarse
+		si es cero no y se espera el proceso a que se libere por otro para usarlo.
+		
+		pthread_mutex_t mutex;
+		
+		* pthread_mutex_init(&mutex, NULL) -> inicializa el proceso
+		* pthread_mutex_lock(&tenedor) -> bloquea el recurso
+		* pthread_mutex_unlock(*tenedor) -> lo libera.
+		* pthread_mutex_destroy(&mutex) -> lo destruyes.
+
+	Es fundamental cambiar el ultimo filósofo el orden en que pilla los cubiertos para evitar el deadlock (bucle infinito de espera)
+
+
+
+
+# GETTIMEOFDAY:
+	Se devuelve una estructura timeval:
+
+	struct	timeval{
+		time_t			tv_sec;
+		suseconds_t		tv_usec;};
+	
+	USO:
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	printf("Segundos: %ld, Microsegundos: %ld\n", tv.tv_sec, tv.tv_usec);
+
+	Son Long ints.
+
+
+
+
