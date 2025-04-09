@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/09 17:53:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/09 21:28:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@
 typedef struct		s_philo
 {
 	int				id;
+	long			times_eaten;
 	pthread_t       thread;
 	struct timeval	last_eat_time;
-	pthread_mutex_t	*fork;
+	pthread_mutex_t	fork;
 	struct s_philo	*next;
 	struct s_philo	*prev;
+	t_game			*game;
 }					t_philo;
 
 typedef struct		s_game
@@ -46,5 +48,6 @@ typedef struct		s_game
 void		*ft_calloc(size_t nmemb, size_t size);
 long int	ft_atol(char *nptr, int *error);
 void		free_all(t_game *game);
+int			create_threads(t_game *game);
 
 #endif

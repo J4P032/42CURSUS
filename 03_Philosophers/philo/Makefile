@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 NAME = philo
 INCLUDES = philo.h
-SRC = ft_calloc.c philo.c ft_atol.c free.c
+SRC = ft_calloc.c philo.c ft_atol.c free.c threads.c
 OBJS = $(SRC:.c=.o)
 RM = rm -rf
 

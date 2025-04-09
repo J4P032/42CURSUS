@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 08:42:58 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/09 12:28:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/09 19:15:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*clean_ceros(char *number, int *error)
 
 	negative = 0;
 	if (!number || !*number)
-		return (NULL);
+		return (printf("Error: Empty Argument\n"), NULL);
 	if ('-' == *number)
 	{
 		negative = 1;
