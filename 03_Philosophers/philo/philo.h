@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/09 21:28:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/13 17:07:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@
 # include <limits.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <unistd.h>
 
 # define PHILOS_MAX 250
+
+typedef struct s_game t_game;
 
 typedef struct		s_philo
 {
 	int				id;
-	long			times_eaten;
+	long			times_eatten;
+	int				eatten_min;
 	pthread_t       thread;
 	struct timeval	last_eat_time;
 	pthread_mutex_t	fork;
@@ -39,6 +43,8 @@ typedef struct		s_game
 	long			time_2_eat;
 	long			time_2_sleep;
 	long			num_times_2_eat;
+	long			philos_eatten;
+	pthread_t		judge;
 	int				running;
 	pthread_mutex_t	writing;
 	struct timeval	start_game_time;
@@ -49,5 +55,7 @@ void		*ft_calloc(size_t nmemb, size_t size);
 long int	ft_atol(char *nptr, int *error);
 void		free_all(t_game *game);
 int			create_threads(t_game *game);
+void		write_log(t_philo *philo, int c);
+void		init_time(t_game *game);
 
 #endif

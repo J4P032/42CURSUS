@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:38:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/09 21:09:01 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/13 14:05:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ void	init_game_rules(t_game *game, int argc, char **argv, int *error)
 		*error = 1;
 		printf("Error: Only positive arguments allowed\n");
 	}
-	game->running = 1;
+	game->running = 0;//
+	game->philos_eatten = 0;
 }
 int	not_number_argc(int argc)
 {
@@ -98,9 +99,10 @@ int	not_number_argc(int argc)
 
 int	main(int argc, char **argv)
 {
-	t_game	game;
-	int		error;
-
+	t_game		game;
+	int			error;
+	t_philo		*aux;
+	
 	error = 0;
 	if (not_number_argc(argc))
 		return (1);
@@ -117,10 +119,17 @@ int	main(int argc, char **argv)
 		return (printf("Error: Memory problems\n"), 1);
 	if (!create_threads(&game))
 		return (free_all(&game), 1);
-	
-	loop_function(&game); // meter el pthread_join(thread, NULL);
-	/* while (game.running)
-		game.running = 0; */
+	aux = game.philo;
+	pthread_join(aux->thread, NULL);
+	aux = aux->next;
+	while (aux->id != 1)
+	{
+		pthread_join(aux->thread, NULL);
+		aux = aux->next;
+	}
+	pthread_join(game.judge, NULL);//
+	printf("Hilo principal pasando");	
+	//pthread_mutex_destroy(&mutex);
 	free_all(&game);
 	return (0);
 }
