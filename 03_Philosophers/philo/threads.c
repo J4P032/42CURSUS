@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 13:28:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:36:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	philo_eat(t_philo *philo)
 	gettimeofday(&philo->last_eat_time, NULL);
 	write_log(philo, 'e');
 	usleep(philo->game->time_2_eat * 1000);
-	pthread_mutex_unlock(&philo->prev->fork);
 	pthread_mutex_unlock(&philo->fork);
+	pthread_mutex_unlock(&philo->prev->fork);
 	pthread_mutex_unlock(&philo->eat_mutex);//*
 	philo->times_eatten++;
 }
@@ -73,8 +73,9 @@ void	*judge_time(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&aux->eat_mutex);//*
-		if (aux->times_eatten == game->num_times_2_eat && !aux->eatten_min)
-			check_min_eat_times(game, aux);
+		//if (aux->times_eatten == game->num_times_2_eat && !aux->eatten_min)
+		if (check_min_eat_times(game, aux))
+			break ;
 		aux = aux->next;	
 	}
 	return (NULL);

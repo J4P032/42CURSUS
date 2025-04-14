@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 12:35:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:30:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ int			create_threads(t_game *game);
 void		write_log(t_philo *philo, int c);
 void		init_time(t_game *game);
 void		mutex_destroyer(t_game *game);
-void		check_min_eat_times(t_game *game, t_philo *aux);
+int			check_min_eat_times(t_game *game, t_philo *aux);
 
 #endif

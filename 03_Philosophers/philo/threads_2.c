@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 13:10:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:40:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	mutex_destroyer(t_game *game)
 	
 	aux = game->philo;
 	
-/* 	pthread_mutex_unlock(&game->writing);
+	/* pthread_mutex_unlock(&game->writing);
 	pthread_mutex_unlock(&aux->fork);
 	pthread_mutex_unlock(&aux->eat_mutex);
 	aux = aux->next;
@@ -40,21 +40,19 @@ void	mutex_destroyer(t_game *game)
 	pthread_mutex_destroy(&game->writing);
 }
 
-void	check_min_eat_times(t_game *game, t_philo *aux)
+int	check_min_eat_times(t_game *game, t_philo *aux)
 {
 	if (aux->times_eatten == game->num_times_2_eat && !aux->eatten_min)
-		{
-			game->philos_eatten++;
-			aux->eatten_min = 1;
-		}
-		if (game->philos_eatten > game->num_philos - 1)
-		{
-			game->running = 0;
-			mutex_destroyer(game);///
-		}
-	
-
-	
+	{
+		game->philos_eatten++;
+		aux->eatten_min = 1;
+	}
+	if (game->philos_eatten > game->num_philos - 1)
+	{
+		game->running = 0;
+		return (1);
+	}
+	return (0);
 }
 
 void	init_time(t_game *game)
@@ -103,9 +101,12 @@ void	write_log(t_philo *philo, int c)
 		philo->game->running = 0;
 		printf("%d has DIED!!\n", philo->id);
 		//pthread_mutex_unlock(&philo->game->writing);
-		//pthread_mutex_unlock(&philo->fork);
-		mutex_destroyer(philo->game);
+		pthread_mutex_unlock(&philo->fork);
+		//mutex_destroyer(philo->game);
+		//pthread_mutex_destroy(&philo->fork);
+		//pthread_mutex_destroy(&philo->eat_mutex);
+		pthread_mutex_destroy(&philo->game->writing);
 	}
-	if (philo->game->running)
-		pthread_mutex_unlock(&philo->game->writing);
+	//if (philo->game->running)
+	pthread_mutex_unlock(&philo->game->writing);
 }
