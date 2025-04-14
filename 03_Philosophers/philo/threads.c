@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/13 17:07:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 08:29:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	*judge_time(void *arg)
 	game = (t_game *)arg;
 	aux = game->philo;
 	while (!game->running)
-		usleep(500000);
+		usleep(1000);
 	while (game->running)
 	{
 		if (time_without_eatting(aux) > game->time_2_die)
@@ -88,7 +88,7 @@ void	*thread_function(void *arg)
 
 	philo = (t_philo *)arg;
 	while (!philo->game->running)
-		usleep(1000000);
+		usleep(1000);
 	//gettimeofday(&philo->game->start_game_time, NULL);//
 	//philo->last_eat_time = philo->game->start_game_time;//
 	while (philo->game->running)

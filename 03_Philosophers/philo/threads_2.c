@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/13 17:06:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 08:21:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	init_time(t_game *game)
 {
 	t_philo	*aux;
-	//inicializar el tiempo.	
 	aux = game->philo;
 	gettimeofday(&game->start_game_time, NULL);//
 	aux->last_eat_time = game->start_game_time;
