@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 10:01:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 13:28:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,22 @@ long	time_without_eatting(t_philo *philo)
 void	philo_eat(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
-		usleep(1000);
-	if (philo->next->id == 1)
+		usleep(1003); //1000 funciona muy bien pero no perfecto
+/* 	if (philo->next->id == 1)
 	{
 		pthread_mutex_lock(&philo->fork);
 		write_log(philo, 'f');
 		pthread_mutex_lock(&philo->prev->fork);
 		write_log(philo, 'f');
-	}
-	else
-	{	
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'f');
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'f');
-	}
-	pthread_mutex_lock(&philo->eat_mutex);//*
+	} */
+	//else
+	//{	
+	pthread_mutex_lock(&philo->prev->fork);
+	write_log(philo, 'f');
+	pthread_mutex_lock(&philo->fork);
+	write_log(philo, 'f');
+	//}
+	pthread_mutex_lock(&philo->eat_mutex);
 	gettimeofday(&philo->last_eat_time, NULL);
 	write_log(philo, 'e');
 	usleep(philo->game->time_2_eat * 1000);
@@ -62,7 +62,7 @@ void	*judge_time(void *arg)
 	game = (t_game *)arg;
 	aux = game->philo;
 	while (!game->running)
-		usleep(1000);
+		usleep(1000);//estos numeros importantisimo. funciona bien 1000
 	while (game->running)
 	{
 		pthread_mutex_lock(&aux->eat_mutex);//*
@@ -74,15 +74,9 @@ void	*judge_time(void *arg)
 		}
 		pthread_mutex_unlock(&aux->eat_mutex);//*
 		if (aux->times_eatten == game->num_times_2_eat && !aux->eatten_min)
-		{
-			game->philos_eatten++;//cuidado quiza cuenta varias veces mismo philo?
-			aux->eatten_min = 1;
-		}
-		if (game->philos_eatten == game->num_philos)
-			game->running = 0;
+			check_min_eat_times(game, aux);
 		aux = aux->next;	
 	}
-	//free mutex
 	return (NULL);
 }
 
@@ -92,17 +86,15 @@ void	*thread_function(void *arg)
 
 	philo = (t_philo *)arg;
 	while (!philo->game->running)
-		usleep(1000);
-	//gettimeofday(&philo->game->start_game_time, NULL);//
-	//philo->last_eat_time = philo->game->start_game_time;//
+		usleep(1000); //estos numeros importantisimo. funciona bien 1000
 	while (philo->game->running)
 	{
 		philo_eat(philo);
 		write_log(philo, 's');
 		usleep(philo->game->time_2_sleep * 1000);
 		write_log(philo, 't');
-		//usleep( (philo->game->time_2_eat - philo->game->time_2_sleep) * 1000 / 2 ); //de chatgpt para evitar que se sincronicen y mueran todos de golpe.
 	}
+	//mutex_destroyer(philo->game);
 	return (NULL);
 }
 
@@ -122,6 +114,7 @@ int	create_threads(t_game *game)
 	while (i < game->num_philos)
 	{
 		pthread_mutex_init(&aux->fork, NULL); //no hace malloc pero hay que liberar recursos con un pthread_mutex_destroy(&mutex)
+		pthread_mutex_init(&aux->eat_mutex, NULL);//*
 		aux->game = game;
 		error = pthread_create(&aux->thread, NULL, thread_function, aux);
 		if (error)

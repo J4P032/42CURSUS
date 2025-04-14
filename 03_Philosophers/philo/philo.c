@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:38:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/13 14:05:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:28:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ void	init_game_rules(t_game *game, int argc, char **argv, int *error)
 		*error = 1;
 		printf("Error: Only positive arguments allowed\n");
 	}
-	game->running = 0;//
+	game->running = 0;
 	game->philos_eatten = 0;
 }
-int	not_number_argc(int argc)
+int	arg_errors(int argc, t_game *game, int error, int option)
 {
-	if (argc < 5 || argc > 6)
+	if ((argc < 5 || argc > 6) && option)
 	{
 		printf("RUN: ./philo num1 num2 num3 num4 (optional num5)\n");
 		printf("num1: Number of philosophers. Maximun = %d.\n", PHILOS_MAX);
@@ -94,9 +94,26 @@ int	not_number_argc(int argc)
 		printf("num5: Number each philosopher must eat to finish simulation\n");
 		return (1);
 	}
+	else if (!option)
+	{
+		if (game->num_philos < 1 || game->num_philos > PHILOS_MAX)
+			printf("Error: Please num of Philos between 1-%d.\n", PHILOS_MAX);
+		if (error && argc == 6)
+			printf("Error: Checkout last argument (valid LONG number)\n");
+	}
 	return (0);
 }
 
+/*Test to see all have eatten minimun times:
+	printf("Philos Eatten: %ld\n", game.philos_eatten);
+	printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+	aux = aux->next;
+	while (aux->id != 1)
+	{
+		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+		aux = aux->next;
+	}
+*/
 int	main(int argc, char **argv)
 {
 	t_game		game;
@@ -104,17 +121,11 @@ int	main(int argc, char **argv)
 	t_philo		*aux;
 	
 	error = 0;
-	if (not_number_argc(argc))
+	if (arg_errors(argc, &game, error, 1))
 		return (1);
 	init_game_rules(&game, argc, argv, &error);
 	if (game.num_philos < 1 || game.num_philos > PHILOS_MAX || error)
-	{
-		if (game.num_philos < 1 || game.num_philos > PHILOS_MAX)
-			printf("Error: Please num of Philos between 1-%d.\n", PHILOS_MAX);
-		if (error && argc == 6)
-			printf("Error: Checkout last argument (valid LONG number)\n");
-		return (1);
-	}
+		return (arg_errors(argc, &game, error, 0), 1);
 	if (!init_philo(&game))
 		return (printf("Error: Memory problems\n"), 1);
 	if (!create_threads(&game))
@@ -128,8 +139,22 @@ int	main(int argc, char **argv)
 		aux = aux->next;
 	}
 	pthread_join(game.judge, NULL);//
-	printf("Hilo principal pasando");	
 	//pthread_mutex_destroy(&mutex);
+	
+
+	printf("Philos Eatten: %ld\n", game.philos_eatten);
+	printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+	aux = aux->next;
+	while (aux->id != 1)
+	{
+		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+		aux = aux->next;
+	}
+	
+	
+	
+	
+	
 	free_all(&game);
 	return (0);
 }
