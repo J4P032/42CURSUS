@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/13 17:07:11 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 09:42:08 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct		s_philo
 	long			times_eatten;
 	int				eatten_min;
 	pthread_t       thread;
+	pthread_mutex_t	eat_mutex;//
 	struct timeval	last_eat_time;
 	pthread_mutex_t	fork;
 	struct s_philo	*next;

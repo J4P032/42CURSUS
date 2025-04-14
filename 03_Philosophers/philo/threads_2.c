@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 08:21:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:00:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ long	log_time(t_game *game)
 void	write_log(t_philo *philo, int c)
 {
 	pthread_mutex_lock(&philo->game->writing);
-	printf("%lu\t", log_time(philo->game));
+	if (philo->game->running)
+		printf("%lu\t", log_time(philo->game));
 	if (c == 'f' && philo->game->running)
 		printf("%d has taken a fork\n", philo->id);
 	else if (c == 'e' && philo->game->running)

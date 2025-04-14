@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 08:29:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:01:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ long	time_without_eatting(t_philo *philo)
 void	philo_eat(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
-		usleep(100);
+		usleep(1000);
 	if (philo->next->id == 1)
 	{
 		pthread_mutex_lock(&philo->fork);
@@ -44,11 +44,13 @@ void	philo_eat(t_philo *philo)
 		pthread_mutex_lock(&philo->fork);
 		write_log(philo, 'f');
 	}
+	pthread_mutex_lock(&philo->eat_mutex);//*
 	gettimeofday(&philo->last_eat_time, NULL);
 	write_log(philo, 'e');
 	usleep(philo->game->time_2_eat * 1000);
 	pthread_mutex_unlock(&philo->prev->fork);
 	pthread_mutex_unlock(&philo->fork);
+	pthread_mutex_unlock(&philo->eat_mutex);//*
 	philo->times_eatten++;
 }
 
@@ -63,11 +65,14 @@ void	*judge_time(void *arg)
 		usleep(1000);
 	while (game->running)
 	{
+		pthread_mutex_lock(&aux->eat_mutex);//*
 		if (time_without_eatting(aux) > game->time_2_die)
 		{
+			pthread_mutex_unlock(&aux->eat_mutex);//*
 			write_log(aux, 'd');
 			break ;
 		}
+		pthread_mutex_unlock(&aux->eat_mutex);//*
 		if (aux->times_eatten == game->num_times_2_eat && !aux->eatten_min)
 		{
 			game->philos_eatten++;//cuidado quiza cuenta varias veces mismo philo?
@@ -77,7 +82,6 @@ void	*judge_time(void *arg)
 			game->running = 0;
 		aux = aux->next;	
 	}
-	printf("PASA POR AQUI!!!!!!!");
 	//free mutex
 	return (NULL);
 }
