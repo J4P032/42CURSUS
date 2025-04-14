@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 15:40:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:25:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	check_min_eat_times(t_game *game, t_philo *aux)
 	}
 	if (game->philos_eatten > game->num_philos - 1)
 	{
-		game->running = 0;
+		write_game_running(game, 0);
 		return (1);
 	}
 	return (0);
