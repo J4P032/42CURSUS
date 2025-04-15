@@ -1,0 +1,95 @@
+Se puede imitar lo de la static int j; j++; if (j = numero) return NULL del ft_calloc. No lo he probado pero hay tres posibilidades:
+
+METODO 1:
+1. Crear un archivo malloc_wrapper.c:
+
+#include <stdlib.h>
+#include <dlfcn.h>
+
+// Variable para controlar fallos
+static int malloc_counter = 0;
+static int fail_frequency = 5; // Falla cada 5 llamadas, por ejemplo
+
+void* malloc(size_t size) {
+    // Puntero a la función original de malloc
+    static void* (*real_malloc)(size_t) = NULL;
+    
+    // Si es la primera vez, carga la función original
+    if (!real_malloc) {
+        real_malloc = dlsym(RTLD_NEXT, "malloc");
+        if (!real_malloc) {
+            // Si no se puede cargar, comportamiento de emergencia
+            return NULL;
+        }
+    }
+    
+    // Incrementa contador
+    malloc_counter++;
+    
+    // Decide si falla o no
+    if (malloc_counter % fail_frequency == 0) {
+        return NULL; // Simula fallo
+    }
+    
+    // Llama a la implementación original
+    return real_malloc(size);
+}
+
+2 compilar como biblioteca compartida:
+gcc -shared -fPIC malloc_wrapper.c -o malloc_wrapper.so -ldl
+3. usar la biblioteca cuando ejecuto el programa:
+LD_PRELOAD=./malloc_wrapper.so ./tu_programa
+
+Este método es para cuando no se tiene acceso al codigo fuente. Funciona sin el.
+
+
+------------------------------------------------------------------------------------
+METODO2
+definir una macro:
+#ifdef TEST_MALLOC_FAILURES
+    #define malloc(size) my_test_malloc(size)
+    
+    void* my_test_malloc(size_t size) {
+        static int malloc_counter = 0;
+        malloc_counter++;
+        
+        if (malloc_counter % 5 == 0) // Falla cada 5 llamadas
+            return NULL;
+        
+        return malloc(size); // Esto llamará al malloc real
+    }
+#endif
+compilar con 
+-DTEST_MALLOC_FAILURES
+
+---------------------------------------------------------------------------------------
+METODO3
+usar la opcion --wrap
+1. crear u n archivo malloc_wrapper.c:
+#include <stdlib.h>
+
+// Función original (renombrada por el linker)
+extern void *__real_malloc(size_t size);
+
+// Nuestra implementación
+void *__wrap_malloc(size_t size) {
+    static int counter = 0;
+    counter++;
+    
+    if (counter % 5 == 0) // Falla cada 5 llamadas
+        return NULL;
+    
+    return __real_malloc(size);
+}
+
+2. compilar con:
+gcc -Wl,--wrap=malloc tu_programa.c malloc_wrapper.c -o tu_programa
+
+
+
+
+
+
+
+
+
