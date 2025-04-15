@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 17:47:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:01:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct		s_philo
 	long			times_eatten;
 	int				eatten_min;
 	pthread_t       thread;
-	pthread_mutex_t	eat_mutex;//
+	pthread_mutex_t	eat_mutex;
 	struct timeval	last_eat_time;
 	pthread_mutex_t	fork;
 	struct s_philo	*next;
@@ -61,7 +61,6 @@ void		write_log(t_philo *philo, int c);
 void		init_time(t_game *game);
 void		mutex_destroyer(t_game *game);
 int			check_min_eat_times(t_game *game, t_philo *aux);
-void		write_game_running(t_game *game, int value);
-void		read_game_running(t_game *game, int *running);
+int			game_running(t_game *game, int value);
 
 #endif

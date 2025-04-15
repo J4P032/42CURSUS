@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 18:25:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:15:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	check_min_eat_times(t_game *game, t_philo *aux)
 	}
 	if (game->philos_eatten > game->num_philos - 1)
 	{
-		write_game_running(game, 0);
+		game_running(game, 0);
 		return (1);
 	}
 	return (0);
@@ -86,27 +86,22 @@ long	log_time(t_game *game)
 void	write_log(t_philo *philo, int c)
 {
 	pthread_mutex_lock(&philo->game->writing);
-	if (philo->game->running)
+	if (game_running(philo->game, -1))
 		printf("%lu\t", log_time(philo->game));
-	if (c == 'f' && philo->game->running)
+	if (c == 'f' && game_running(philo->game, -1))
 		printf("%d has taken a fork\n", philo->id);
-	else if (c == 'e' && philo->game->running)
+	else if (c == 'e' && game_running(philo->game, -1))
 		printf("%d is eating\n", philo->id);
-	else if (c == 's' && philo->game->running)
+	else if (c == 's' && game_running(philo->game, -1))
 		printf("%d is sleeping\n", philo->id);
-	else if (c == 't' && philo->game->running)
+	else if (c == 't' && game_running(philo->game, -1))
 		printf("%d is thinking\n", philo->id);
-	else if (c == 'd' && philo->game->running)
+	else if (c == 'd' && game_running(philo->game, -1))
 	{
-		philo->game->running = 0;
+		game_running(philo->game, 0);
 		printf("%d has DIED!!\n", philo->id);
-		//pthread_mutex_unlock(&philo->game->writing);
 		pthread_mutex_unlock(&philo->fork);
-		//mutex_destroyer(philo->game);
-		//pthread_mutex_destroy(&philo->fork);
-		//pthread_mutex_destroy(&philo->eat_mutex);
 		pthread_mutex_destroy(&philo->game->writing);
 	}
-	//if (philo->game->running)
 	pthread_mutex_unlock(&philo->game->writing);
 }

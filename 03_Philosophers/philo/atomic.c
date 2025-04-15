@@ -6,22 +6,21 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:01:54 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 17:47:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:00:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	write_game_running(t_game *game, int value)
+int	game_running(t_game *game, int value)
 {
+	int	run;
+	
 	pthread_mutex_lock(&game->running_mutex);
-	game->running = value;
+	if (value > -1)
+		game->running = value;
+	run = game->running;
 	pthread_mutex_unlock(&game->running_mutex);
+	return (run);
 }
-
-void	read_game_running(t_game *game, int *running)
-{
-	pthread_mutex_lock(&game->running_mutex);
-	*running = game->running;
-	pthread_mutex_unlock(&game->running_mutex);
-}
+		
