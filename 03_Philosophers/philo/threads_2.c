@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/15 16:15:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/16 09:26:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ void	write_log(t_philo *philo, int c)
 	{
 		game_running(philo->game, 0);
 		printf("%d has DIED!!\n", philo->id);
-		pthread_mutex_unlock(&philo->fork);
-		pthread_mutex_destroy(&philo->game->writing);
+		pthread_mutex_unlock(&philo->fork); //este es unlock de uno que no esta lock pero lo necesito para salir
+		//pthread_mutex_destroy(&philo->game->writing); //este provoca un destroy de un lock que sigue estando lock
 	}
 	pthread_mutex_unlock(&philo->game->writing);
 }

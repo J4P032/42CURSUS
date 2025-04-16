@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/15 16:07:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:50:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,18 @@ void	philo_eat(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
 		usleep(1003); //1000 funciona muy bien pero no perfecto
-/* 	if (philo->next->id == 1)
-	{
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'f');
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'f');
-	} */
-	//else
-	//{	
 	pthread_mutex_lock(&philo->prev->fork);
 	write_log(philo, 'f');
 	pthread_mutex_lock(&philo->fork);
 	write_log(philo, 'f');
-	//}
 	pthread_mutex_lock(&philo->eat_mutex);
 	gettimeofday(&philo->last_eat_time, NULL);
 	write_log(philo, 'e');
 	usleep(philo->game->time_2_eat * 1000);
+	philo->times_eatten++;
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(&philo->prev->fork);
 	pthread_mutex_unlock(&philo->eat_mutex);//*
-	philo->times_eatten++;
 }
 
 void	*judge_time(void *arg)
@@ -73,7 +63,6 @@ void	*judge_time(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&aux->eat_mutex);//*
-		//if (aux->times_eatten == game->num_times_2_eat && !aux->eatten_min)
 		if (check_min_eat_times(game, aux))
 			break ;
 		aux = aux->next;	
