@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:38:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/14 12:28:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:32:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	init_philo(t_game *game)
 	}
 	aux->next = game->philo;
 	game->philo->prev = aux;
+	game->one_died = 0;//
 	return (1);
 }
 
@@ -114,6 +115,9 @@ int	arg_errors(int argc, t_game *game, int error, int option)
 		aux = aux->next;
 	}
 */
+
+#include <stdlib.h>
+
 int	main(int argc, char **argv)
 {
 	t_game		game;
@@ -141,16 +145,17 @@ int	main(int argc, char **argv)
 	pthread_join(game.judge, NULL);//
 	//pthread_mutex_destroy(&mutex);
 	
-
-	printf("Philos Eatten: %ld\n", game.philos_eatten);
-	printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
-	aux = aux->next;
-	while (aux->id != 1)
+	if (argc == 6)
 	{
+		printf("\nPhilos Eatten: %ld\n", game.philos_eatten);
 		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
 		aux = aux->next;
+		while (aux->id != 1)
+		{
+			printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+			aux = aux->next;
+		}
 	}
-	
 	
 	
 	

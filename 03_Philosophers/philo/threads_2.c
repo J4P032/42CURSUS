@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 09:26:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:55:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,21 @@ void	mutex_destroyer(t_game *game)
 	pthread_mutex_destroy(&game->writing);
 }
 
-int	check_min_eat_times(t_game *game, t_philo *aux)
+void	check_min_eat_times(t_philo *aux)
 {
-	if (aux->times_eatten == game->num_times_2_eat && !aux->eatten_min)
+	pthread_mutex_lock(&aux->game->death_mutex);
+	if (aux->times_eatten == aux->game->num_times_2_eat && !aux->eatten_min)
 	{
-		game->philos_eatten++;
+		aux->game->philos_eatten++;
 		aux->eatten_min = 1;
 	}
-	if (game->philos_eatten > game->num_philos - 1)
+	pthread_mutex_unlock(&aux->game->death_mutex);
+	/* if (game->philos_eatten > game->num_philos - 1)
 	{
 		game_running(game, 0);
 		return (1);
 	}
-	return (0);
+	return (0); */
 }
 
 void	init_time(t_game *game)
@@ -85,6 +87,8 @@ long	log_time(t_game *game)
 
 void	write_log(t_philo *philo, int c)
 {
+	t_philo *aux;
+	aux = philo;
 	pthread_mutex_lock(&philo->game->writing);
 	if (game_running(philo->game, -1))
 		printf("%lu\t", log_time(philo->game));
@@ -98,10 +102,10 @@ void	write_log(t_philo *philo, int c)
 		printf("%d is thinking\n", philo->id);
 	else if (c == 'd' && game_running(philo->game, -1))
 	{
+		while (!aux->died)
+			aux = aux->next;
 		game_running(philo->game, 0);
-		printf("%d has DIED!!\n", philo->id);
-		pthread_mutex_unlock(&philo->fork); //este es unlock de uno que no esta lock pero lo necesito para salir
-		//pthread_mutex_destroy(&philo->game->writing); //este provoca un destroy de un lock que sigue estando lock
+		printf("%d has DIED!!\n", aux->id);
 	}
 	pthread_mutex_unlock(&philo->game->writing);
 }
