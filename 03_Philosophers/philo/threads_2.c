@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 17:55:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:27:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	init_time(t_game *game)
 		aux->last_eat_time = game->start_game_time;
 		aux = aux->next;
 	}
+	game_running(game, 1);
 }
 
 long	log_time(t_game *game)

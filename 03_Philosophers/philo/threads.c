@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 20:36:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:27:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int	create_threads(t_game *game)
 	pthread_mutex_init(&game->writing, NULL);
 	pthread_mutex_init(&game->running_mutex, NULL);
 	pthread_mutex_init(&game->death_mutex, NULL);///
-	while (i < game->num_philos)
+	while (i++ < game->num_philos)
 	{
 		pthread_mutex_init(&aux->fork, NULL); //no hace malloc pero hay que liberar recursos con un pthread_mutex_destroy(&mutex)
 		pthread_mutex_init(&aux->eat_mutex, NULL);//
@@ -138,13 +138,11 @@ int	create_threads(t_game *game)
 		if (error)
 			return (0);
 		aux = aux->next;
-		i++;
 	}
 	error = pthread_create(&game->judge, NULL, judge_time, game);//hay que crear un hilo juez que sea el que mide los tiempos de comer ya que se puede bloquear el propio filosofo mientras espera el tenedor y morir mientras espera por lo que pasa un tiempo desde que muere hasta la linea donde compruebo. Este hilo no espera.
 	if (error)
 		return (0);
 	init_time(game); // lo he movido desde arriba del while para que empieze en cero.
-	game_running(game, 1);
 	return (1);
 }
 

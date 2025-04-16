@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:38:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 15:32:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:30:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,6 @@ int	arg_errors(int argc, t_game *game, int error, int option)
 		aux = aux->next;
 	}
 */
-
-#include <stdlib.h>
-
 int	main(int argc, char **argv)
 {
 	t_game		game;
@@ -156,10 +153,6 @@ int	main(int argc, char **argv)
 			aux = aux->next;
 		}
 	}
-	
-	
-	
-	
 	free_all(&game);
 	return (0);
 }
