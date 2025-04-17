@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:01:54 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:43:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:33:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ long	time_sleep(t_philo *philo)
 	dif_time = (dif_seconds * 1000) + (dif_useconds / 1000);
 	return (dif_time);
 }
-
 
 long	time_no_eat(t_philo *philo)
 {
@@ -58,7 +57,7 @@ int	i_died(t_philo *philo)
 int	game_running(t_game *game, int value)
 {
 	int	run;
-	
+
 	pthread_mutex_lock(&game->running_mutex);
 	if (value > -1)
 		game->running = value;
@@ -66,4 +65,3 @@ int	game_running(t_game *game, int value)
 	pthread_mutex_unlock(&game->running_mutex);
 	return (run);
 }
-		

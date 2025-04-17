@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 08:42:58 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/09 19:15:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:41:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*clean_ceros(char *number, int *error)
 
 	negative = 0;
 	if (!number || !*number)
-		return (printf("Error: Empty Argument\n"), NULL);
+		return (printf("Error: There is an empty argument\n"), NULL);
 	if ('-' == *number)
 	{
 		negative = 1;
@@ -78,7 +78,8 @@ long int	ft_atol(char *nptr, int *error)
 
 	minus = 1;
 	result = 0;
-	if (!(nptr = clean_ceros(nptr, error)))
+	nptr = clean_ceros(nptr, error);
+	if (!nptr)
 		*error = 1;
 	if (nptr && *nptr && (*nptr == '-' || *nptr == '+'))
 	{

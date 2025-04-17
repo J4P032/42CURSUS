@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:10:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:27:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,8 @@
 void	mutex_destroyer(t_game *game)
 {
 	t_philo	*aux;
-	
+
 	aux = game->philo;
-	
-	/* pthread_mutex_unlock(&game->writing);
-	pthread_mutex_unlock(&aux->fork);
-	pthread_mutex_unlock(&aux->eat_mutex);
-	aux = aux->next;
-	while (aux->id != 1)
-	{
-		pthread_mutex_unlock(&aux->fork);
-		pthread_mutex_unlock(&aux->eat_mutex);
-		aux = aux->next;
-	} */
 	pthread_mutex_destroy(&aux->fork);
 	pthread_mutex_destroy(&aux->eat_mutex);
 	aux = aux->next;
@@ -37,6 +26,9 @@ void	mutex_destroyer(t_game *game)
 		pthread_mutex_destroy(&aux->eat_mutex);
 		aux = aux->next;
 	}
+	pthread_mutex_destroy(&game->forks);
+	pthread_mutex_destroy(&game->death_mutex);
+	pthread_mutex_destroy(&game->running_mutex);
 	pthread_mutex_destroy(&game->writing);
 }
 
@@ -54,9 +46,9 @@ void	check_min_eat_times(t_philo *aux)
 void	init_time(t_game *game)
 {
 	t_philo	*aux;
-	
+
 	aux = game->philo;
-	pthread_mutex_init(&game->forks, NULL);////
+	pthread_mutex_init(&game->forks, NULL);
 	gettimeofday(&game->start_game_time, NULL);
 	aux->last_eat_time = game->start_game_time;
 	aux = aux->next;
@@ -84,7 +76,8 @@ long	log_time(t_game *game)
 
 void	write_log(t_philo *philo, int c)
 {
-	t_philo *aux;
+	t_philo	*aux;
+
 	aux = philo;
 	pthread_mutex_lock(&philo->game->writing);
 	if (game_running(philo->game, -1))
