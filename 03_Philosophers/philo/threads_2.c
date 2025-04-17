@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 21:27:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:13:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,10 @@ void	write_log(t_philo *philo, int c)
 	pthread_mutex_lock(&philo->game->writing);
 	if (game_running(philo->game, -1))
 		printf("%lu\t", log_time(philo->game));
-	if (c == 'f' && game_running(philo->game, -1))
-		printf("%d has taken a fork\n", philo->id);
+	if (c == 'r' && game_running(philo->game, -1))
+		printf("%d has taken the R-Fork\n", philo->id);
+	if (c == 'l' && game_running(philo->game, -1))
+		printf("%d has taken the L-Fork\n", philo->id);
 	else if (c == 'e' && game_running(philo->game, -1))
 		printf("%d is eating\n", philo->id);
 	else if (c == 's' && game_running(philo->game, -1))
