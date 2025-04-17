@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 17:10:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:59:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ void	mutex_destroyer(t_game *game)
 void	check_min_eat_times(t_philo *aux)
 {
 	pthread_mutex_lock(&aux->game->death_mutex);
-	if (aux->times_eaten == aux->game->num_times_2_eat && !aux->eaten_min)
+	if (aux->times_eatten == aux->game->num_times_2_eat && !aux->eatten_min)
 	{
-		aux->game->philos_eaten++;
-		aux->eaten_min = 1;
+		aux->game->philos_eatten++;
+		aux->eatten_min = 1;
 	}
 	pthread_mutex_unlock(&aux->game->death_mutex);
 }
@@ -89,7 +89,7 @@ void	write_log(t_philo *philo, int c)
 		printf("%lu\t", log_time(philo->game));
 	if (c == 'r' && game_running(philo->game, -1))
 		printf("%d has taken the R-Fork\n", philo->id);
-	if (c == 'l' && game_running(philo->game, -1))
+	else if (c == 'l' && game_running(philo->game, -1))
 		printf("%d has taken the L-Fork\n", philo->id);
 	else if (c == 'e' && game_running(philo->game, -1))
 		printf("%d is eating\n", philo->id);
