@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 18:47:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:28:45 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 		gettimeofday(&philo->last_eat_time, NULL);
 		write_log(philo, 'e');
 		while (!i_died(philo) && time_no_eating(philo) < philo->game->time_2_eat)
-			usleep(50);
+			usleep(1);
 	}
 	else if (!i_died(philo))
 	{
 		gettimeofday(&philo->sleep_time, NULL);//
 		write_log(philo, 's');
 		while (!i_died(philo) && time_sleeping(philo) < philo->game->time_2_sleep)
-			usleep(50);
+			usleep(1);
 		write_log(philo, 't');
 	}	
 }
@@ -119,44 +119,6 @@ void	philo_eat(t_philo *philo)
 	take_one_fork(philo, 'l');
 }
 
-
-
-
-/* void	philo_eat(t_philo *philo)
-{
-	if (philo->id % 2 != 0)
-	{
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'r');
-		if (i_died(philo))
-		{
-			pthread_mutex_unlock(&philo->fork);
-			return ;
-		}
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'l');
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'l');
-		if (i_died(philo))
-		{
-			pthread_mutex_unlock(&philo->prev->fork);
-			return ;
-		}
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'r');
-	}
-	pthread_mutex_lock(&philo->eat_mutex);
-	philo_eat_sleep_think_times(philo, 'e');//
-	philo->times_eatten++;
-	check_min_eat_times(philo);//
-	pthread_mutex_unlock(&philo->fork);
-	pthread_mutex_unlock(&philo->prev->fork);
-	pthread_mutex_unlock(&philo->eat_mutex);//
-} */
-
 void	*judge_time(void *arg)
 {
 	t_game		*game;
@@ -229,7 +191,6 @@ int	create_threads(t_game *game)
 	pthread_mutex_init(&game->writing, NULL);
 	pthread_mutex_init(&game->running_mutex, NULL);
 	pthread_mutex_init(&game->death_mutex, NULL);
-	pthread_mutex_init(&game->forks, NULL);////
 	while (i++ < game->num_philos)
 	{
 		pthread_mutex_init(&aux->fork, NULL);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 18:31:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:58:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <stdarg.h>
 
 # define PHILOS_MAX 250
 

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 17:59:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:10:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ void	check_min_eat_times(t_philo *aux)
 void	init_time(t_game *game)
 {
 	t_philo	*aux;
+	
 	aux = game->philo;
-	gettimeofday(&game->start_game_time, NULL);//
+	pthread_mutex_init(&game->forks, NULL);////
+	gettimeofday(&game->start_game_time, NULL);
 	aux->last_eat_time = game->start_game_time;
 	aux = aux->next;
 	while (aux->id != 1)
@@ -86,23 +88,23 @@ void	write_log(t_philo *philo, int c)
 	aux = philo;
 	pthread_mutex_lock(&philo->game->writing);
 	if (game_running(philo->game, -1))
-		printf("%lu\t", log_time(philo->game));
+		printf("🕖%lu\t", log_time(philo->game));
 	if (c == 'r' && game_running(philo->game, -1))
-		printf("%d has taken the R-Fork\n", philo->id);
+		printf("🥄%d has taken the R-Fork\n", philo->id);
 	else if (c == 'l' && game_running(philo->game, -1))
-		printf("%d has taken the L-Fork\n", philo->id);
+		printf("🥄%d has taken the L-Fork\n", philo->id);
 	else if (c == 'e' && game_running(philo->game, -1))
-		printf("%d is eating\n", philo->id);
+		printf("🍔%d is eating\n", philo->id);
 	else if (c == 's' && game_running(philo->game, -1))
-		printf("%d is sleeping\n", philo->id);
+		printf("😴%d is sleeping\n", philo->id);
 	else if (c == 't' && game_running(philo->game, -1))
-		printf("%d is thinking\n", philo->id);
+		printf("🙄%d is thinking\n", philo->id);
 	else if (c == 'd' && game_running(philo->game, -1))
 	{
 		while (!aux->died)
 			aux = aux->next;
 		game_running(philo->game, 0);
-		printf("%d has DIED!!\n", aux->id);
+		printf("☠️%d has DIED!!\n", aux->id);
 	}
 	pthread_mutex_unlock(&philo->game->writing);
 }
