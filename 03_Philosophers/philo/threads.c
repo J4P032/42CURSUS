@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 18:11:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:47:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,97 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 }
 
 
+
+
+
+
+
+
+
+
+int	take_both_forks(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->game->forks);
+	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
+	{
+		pthread_mutex_unlock(&philo->game->forks);
+		usleep(50);
+		pthread_mutex_lock(&philo->game->forks);
+	}
+	pthread_mutex_unlock(&philo->game->forks);
+	if (i_died(philo))
+		return (0);
+	return (1);
+}
+
+
+void	take_one_fork(t_philo *philo, int c)
+{
+	if (c == 'R')
+	{
+		pthread_mutex_lock(&philo->game->forks);
+		philo->fork_taken = 1;
+		pthread_mutex_unlock(&philo->game->forks);
+	}
+	if (c == 'L')
+	{
+		pthread_mutex_lock(&philo->game->forks);
+		philo->prev->fork_taken = 1;
+		pthread_mutex_unlock(&philo->game->forks);
+	}
+	if (c == 'r')
+	{
+		pthread_mutex_lock(&philo->game->forks);
+		philo->fork_taken = 0;
+		pthread_mutex_unlock(&philo->game->forks);
+	}
+	if (c == 'l')
+	{
+		pthread_mutex_lock(&philo->game->forks);
+		philo->prev->fork_taken = 0;
+		pthread_mutex_unlock(&philo->game->forks);
+	}
+}
+
+
+
 void	philo_eat(t_philo *philo)
+{
+	if (!take_both_forks(philo))
+		return ;
+	if (philo->id % 2 != 0)
+	{
+		pthread_mutex_lock(&philo->fork);
+		write_log(philo, 'r');
+		take_one_fork(philo, 'R');
+		pthread_mutex_lock(&philo->prev->fork);
+		write_log(philo, 'l');
+		take_one_fork(philo, 'L');
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->prev->fork);
+		write_log(philo, 'l');
+		take_one_fork(philo, 'L');
+		pthread_mutex_lock(&philo->fork);
+		write_log(philo, 'r');
+		take_one_fork(philo, 'R');
+	}
+	pthread_mutex_lock(&philo->eat_mutex);
+	philo_eat_sleep_think_times(philo, 'e');
+	philo->times_eatten++;
+	check_min_eat_times(philo);//
+	pthread_mutex_unlock(&philo->eat_mutex);
+	pthread_mutex_unlock(&philo->fork);
+	take_one_fork(philo, 'r');
+	pthread_mutex_unlock(&philo->prev->fork);
+	take_one_fork(philo, 'l');
+}
+
+
+
+
+/* void	philo_eat(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
 	{
@@ -64,8 +154,8 @@ void	philo_eat(t_philo *philo)
 	check_min_eat_times(philo);//
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(&philo->prev->fork);
-	pthread_mutex_unlock(&philo->eat_mutex);//*
-}
+	pthread_mutex_unlock(&philo->eat_mutex);//
+} */
 
 void	*judge_time(void *arg)
 {
@@ -107,8 +197,8 @@ void	*thread_function(void *arg)
 	{
 		if (philo->game->num_philos != 1)
 		{
-			if (!i_died(philo))
-				philo_eat(philo);
+			//if (!i_died(philo))
+			philo_eat(philo);
 			philo_eat_sleep_think_times(philo, 's');
 		}
 		else
@@ -138,18 +228,19 @@ int	create_threads(t_game *game)
 	aux = game->philo;
 	pthread_mutex_init(&game->writing, NULL);
 	pthread_mutex_init(&game->running_mutex, NULL);
-	pthread_mutex_init(&game->death_mutex, NULL);///
+	pthread_mutex_init(&game->death_mutex, NULL);
+	pthread_mutex_init(&game->forks, NULL);////
 	while (i++ < game->num_philos)
 	{
-		pthread_mutex_init(&aux->fork, NULL); //no hace malloc pero hay que liberar recursos con un pthread_mutex_destroy(&mutex)
-		pthread_mutex_init(&aux->eat_mutex, NULL);//
+		pthread_mutex_init(&aux->fork, NULL);
+		pthread_mutex_init(&aux->eat_mutex, NULL);
 		aux->game = game;
 		error = pthread_create(&aux->thread, NULL, thread_function, aux);
 		if (error)
 			return (0);
 		aux = aux->next;
 	}
-	error = pthread_create(&game->judge, NULL, judge_time, game);//hay que crear un hilo juez que sea el que mide los tiempos de comer ya que se puede bloquear el propio filosofo mientras espera el tenedor y morir mientras espera por lo que pasa un tiempo desde que muere hasta la linea donde compruebo. Este hilo no espera.
+	error = pthread_create(&game->judge, NULL, judge_time, game);//hilo juez
 	if (error)
 		return (0);
 	init_time(game); // lo he movido desde arriba del while para que empieze en cero.
