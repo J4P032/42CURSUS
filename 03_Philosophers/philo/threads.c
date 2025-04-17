@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 14:19:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:18:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,129 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 	}
 }
 
+int	access_both_forks(t_philo *philo)
+{
+	int  mine = philo->id;
+	int  prev = philo->prev->id;
+	t_philo *first = (mine < prev) ? philo : philo->prev;
+	t_philo *second = (mine < prev) ? philo->prev : philo;
+	
+	pthread_mutex_lock(&first->eat_mutex);
+	pthread_mutex_lock(&second->eat_mutex);
+	
+	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
+		usleep(100);
+	
+	if (i_died(philo))
+	{
+		pthread_mutex_unlock(&second->eat_mutex);
+		pthread_mutex_unlock(&first->eat_mutex);
+		return 0;
+	}
+	
+	// ya no necesitamos eat_mutex para chequear flags
+	pthread_mutex_unlock(&second->eat_mutex);
+	pthread_mutex_unlock(&first->eat_mutex);
+	return 1;
+}
+
+//
+/* int	access_both_forks(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->eat_mutex);
+	pthread_mutex_lock(&philo->prev->eat_mutex);
+	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
+		usleep(100);
+	if (i_died(philo))
+	{
+		pthread_mutex_unlock(&philo->prev->eat_mutex);
+		pthread_mutex_unlock(&philo->eat_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&philo->prev->eat_mutex);
+	pthread_mutex_unlock(&philo->eat_mutex);
+	return (1);
+} */
+
+void	access_fork(t_philo *philo, int c)
+{
+	if (c == 'R')
+	{
+		pthread_mutex_lock(&philo->eat_mutex);
+		philo->fork_taken = 1;
+		pthread_mutex_unlock(&philo->eat_mutex);
+	}
+	else if (c == 'L')
+	{
+		pthread_mutex_lock(&philo->prev->eat_mutex);
+		philo->prev->fork_taken = 1;
+		pthread_mutex_unlock(&philo->prev->eat_mutex);
+	}
+	if (c == 'r')
+	{
+		pthread_mutex_lock(&philo->eat_mutex);
+		philo->fork_taken = 0;
+		pthread_mutex_unlock(&philo->eat_mutex);
+	}
+	else if (c == 'l')
+	{
+		pthread_mutex_lock(&philo->prev->eat_mutex);
+		philo->prev->fork_taken = 0;
+		pthread_mutex_unlock(&philo->prev->eat_mutex);
+	}
+}
+
 
 void	philo_eat(t_philo *philo)
+{
+	
+	if (!access_both_forks(philo))
+		return ;
+	if (philo->id % 2 != 0)
+	{
+		pthread_mutex_lock(&philo->fork);
+		write_log(philo, 'r');
+		access_fork(philo, 'R');
+		pthread_mutex_lock(&philo->prev->fork);
+		write_log(philo, 'l');
+		access_fork(philo, 'L');
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->prev->fork);
+		write_log(philo, 'l');
+		access_fork(philo, 'L');
+		pthread_mutex_lock(&philo->fork);
+		write_log(philo, 'r');
+		access_fork(philo, 'R');
+	}
+	if (i_died(philo))
+		return ;
+	pthread_mutex_lock(&philo->eat_mutex);
+	philo_eat_sleep_think_times(philo, 'e');//
+	philo->times_eatten++;
+	pthread_mutex_unlock(&philo->eat_mutex);//*
+	check_min_eat_times(philo);//
+	
+	if (philo->id % 2 != 0)
+	{
+		pthread_mutex_unlock(&philo->prev->fork);
+		access_fork(philo, 'l');
+		pthread_mutex_unlock(&philo->fork);
+		access_fork(philo, 'r');
+	}
+	else
+	{
+		pthread_mutex_unlock(&philo->fork);
+		access_fork(philo, 'r');
+		pthread_mutex_unlock(&philo->prev->fork);
+		access_fork(philo, 'l');
+	}
+}
+
+
+
+/* void	philo_eat(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
 	{
@@ -65,8 +186,8 @@ void	philo_eat(t_philo *philo)
 	check_min_eat_times(philo);//
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(&philo->prev->fork);
-	pthread_mutex_unlock(&philo->eat_mutex);//*
-}
+	pthread_mutex_unlock(&philo->eat_mutex);//
+} */
 
 void	*judge_time(void *arg)
 {
