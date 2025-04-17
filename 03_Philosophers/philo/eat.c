@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:38:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:46:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 	{
 		gettimeofday(&philo->last_eat_time, NULL);
 		write_log(philo, 'e');
-		while (!i_died(philo) && time_no_eating(philo) < philo->game->time_2_eat)
+		while (!i_died(philo) && time_no_eat(philo) < philo->game->time_2_eat)
 			usleep(1);
 	}
 	else if (!i_died(philo))
 	{
-		gettimeofday(&philo->sleep_time, NULL);//
+		gettimeofday(&philo->sleep_time, NULL);
 		write_log(philo, 's');
-		while (!i_died(philo) && time_sleeping(philo) < philo->game->time_2_sleep)
+		while (!i_died(philo) && time_sleep(philo) < philo->game->time_2_sleep)
 			usleep(1);
 		write_log(philo, 't');
-	}	
+	}
 }
 
 int	take_both_forks(t_philo *philo)
@@ -45,7 +45,6 @@ int	take_both_forks(t_philo *philo)
 		return (0);
 	return (1);
 }
-
 
 void	take_one_fork(t_philo *philo, int c)
 {
@@ -105,7 +104,7 @@ void	philo_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->eat_mutex);
 	philo_eat_sleep_think_times(philo, 'e');
 	philo->times_eatten++;
-	check_min_eat_times(philo);//
+	check_min_eat_times(philo);
 	pthread_mutex_unlock(&philo->eat_mutex);
 	pthread_mutex_unlock(&philo->fork);
 	take_one_fork(philo, 'r');

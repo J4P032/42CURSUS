@@ -6,29 +6,17 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:29:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:52:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
-
-
-
-
-
-
-
-
-
-
-
 void	*judge_time(void *arg)
 {
 	t_game		*game;
 	t_philo		*aux;
-	
+
 	game = (t_game *)arg;
 	aux = game->philo;
 	while (!game_running(game, -1))
@@ -41,7 +29,7 @@ void	*judge_time(void *arg)
 			write_log(aux, 'd');
 			pthread_mutex_unlock(&game->death_mutex);
 			break ;
-		}	
+		}
 		if (game->philos_eatten > game->num_philos - 1)
 		{
 			game_running(game, 0);
@@ -55,7 +43,7 @@ void	*judge_time(void *arg)
 
 void	*thread_function(void *arg)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	while (!game_running(philo->game, -1))
@@ -87,7 +75,7 @@ int	create_threads(t_game *game)
 	long	i;
 	int		error;
 	t_philo	*aux;
-	
+
 	i = 0;
 	error = 0;
 	aux = game->philo;
@@ -110,4 +98,3 @@ int	create_threads(t_game *game)
 	init_time(game);
 	return (1);
 }
-

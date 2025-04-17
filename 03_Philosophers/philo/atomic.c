@@ -6,13 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:01:54 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 21:16:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:43:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long	time_sleeping(t_philo *philo)
+long	time_sleep(t_philo *philo)
 {
 	struct timeval	time;
 	time_t			dif_seconds;
@@ -27,7 +27,7 @@ long	time_sleeping(t_philo *philo)
 }
 
 
-long	time_no_eating(t_philo *philo)
+long	time_no_eat(t_philo *philo)
 {
 	struct timeval	time;
 	time_t			dif_seconds;
@@ -44,7 +44,7 @@ long	time_no_eating(t_philo *philo)
 int	i_died(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->game->death_mutex);
-	if (time_no_eating(philo) > philo->game->time_2_die)
+	if (time_no_eat(philo) > philo->game->time_2_die)
 	{
 		philo->game->one_died = 1;
 		philo->died = 1;

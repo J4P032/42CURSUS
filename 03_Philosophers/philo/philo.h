@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:18:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:42:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void		init_time(t_game *game);
 void		mutex_destroyer(t_game *game);
 void		check_min_eat_times(t_philo *aux);
 int			game_running(t_game *game, int value);
-long		time_sleeping(t_philo *philo);//
-long		time_no_eating(t_philo *philo);
+long		time_sleep(t_philo *philo);//
+long		time_no_eat(t_philo *philo);
 int			i_died(t_philo *philo);
 void		philo_eat(t_philo *philo);
 void		philo_eat_sleep_think_times(t_philo *philo, char c);

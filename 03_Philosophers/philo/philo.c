@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:38:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 21:30:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:48:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int	main(int argc, char **argv)
 	pthread_join(game.judge, NULL);//
 	//pthread_mutex_destroy(&mutex);
 	
-	if (argc == 6)
+	if (argc == 6 && game.num_philos != 1)
 	{
 		printf("\nPhilos Eatten: %ld\n", game.philos_eatten);
 		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
