@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:18:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:38:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	take_both_forks(t_philo *philo)
 	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
 	{
 		pthread_mutex_unlock(&philo->game->forks);
-		usleep(50);
+		usleep(1);
 		pthread_mutex_lock(&philo->game->forks);
 	}
 	pthread_mutex_unlock(&philo->game->forks);
@@ -75,12 +75,8 @@ void	take_one_fork(t_philo *philo, int c)
 	}
 }
 
-
-
-void	philo_eat(t_philo *philo)
+void	philos_behaviour(t_philo *philo)
 {
-	if (!take_both_forks(philo))
-		return ;
 	if (philo->id % 2 != 0)
 	{
 		pthread_mutex_lock(&philo->fork);
@@ -99,6 +95,13 @@ void	philo_eat(t_philo *philo)
 		write_log(philo, 'r');
 		take_one_fork(philo, 'R');
 	}
+}
+
+void	philo_eat(t_philo *philo)
+{
+	if (!take_both_forks(philo))
+		return ;
+	philos_behaviour(philo);
 	pthread_mutex_lock(&philo->eat_mutex);
 	philo_eat_sleep_think_times(philo, 'e');
 	philo->times_eatten++;
