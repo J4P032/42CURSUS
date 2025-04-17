@@ -6,30 +6,12 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 19:28:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:29:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_eat_sleep_think_times(t_philo *philo, char c)
-{
-	if (c == 'e' && !i_died(philo))
-	{
-		gettimeofday(&philo->last_eat_time, NULL);
-		write_log(philo, 'e');
-		while (!i_died(philo) && time_no_eating(philo) < philo->game->time_2_eat)
-			usleep(1);
-	}
-	else if (!i_died(philo))
-	{
-		gettimeofday(&philo->sleep_time, NULL);//
-		write_log(philo, 's');
-		while (!i_died(philo) && time_sleeping(philo) < philo->game->time_2_sleep)
-			usleep(1);
-		write_log(philo, 't');
-	}	
-}
 
 
 
@@ -40,84 +22,7 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 
 
 
-int	take_both_forks(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->game->forks);
-	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
-	{
-		pthread_mutex_unlock(&philo->game->forks);
-		usleep(50);
-		pthread_mutex_lock(&philo->game->forks);
-	}
-	pthread_mutex_unlock(&philo->game->forks);
-	if (i_died(philo))
-		return (0);
-	return (1);
-}
 
-
-void	take_one_fork(t_philo *philo, int c)
-{
-	if (c == 'R')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->fork_taken = 1;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'L')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->prev->fork_taken = 1;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'r')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->fork_taken = 0;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'l')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->prev->fork_taken = 0;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-}
-
-
-
-void	philo_eat(t_philo *philo)
-{
-	if (!take_both_forks(philo))
-		return ;
-	if (philo->id % 2 != 0)
-	{
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'r');
-		take_one_fork(philo, 'R');
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'l');
-		take_one_fork(philo, 'L');
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'l');
-		take_one_fork(philo, 'L');
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'r');
-		take_one_fork(philo, 'R');
-	}
-	pthread_mutex_lock(&philo->eat_mutex);
-	philo_eat_sleep_think_times(philo, 'e');
-	philo->times_eatten++;
-	check_min_eat_times(philo);//
-	pthread_mutex_unlock(&philo->eat_mutex);
-	pthread_mutex_unlock(&philo->fork);
-	take_one_fork(philo, 'r');
-	pthread_mutex_unlock(&philo->prev->fork);
-	take_one_fork(philo, 'l');
-}
 
 void	*judge_time(void *arg)
 {
@@ -127,7 +32,7 @@ void	*judge_time(void *arg)
 	game = (t_game *)arg;
 	aux = game->philo;
 	while (!game_running(game, -1))
-		usleep(1);//estos numeros importantisimo. funciona bien 1000
+		usleep(1);
 	while (game_running(game, -1))
 	{
 		pthread_mutex_lock(&game->death_mutex);
@@ -154,26 +59,24 @@ void	*thread_function(void *arg)
 
 	philo = (t_philo *)arg;
 	while (!game_running(philo->game, -1))
-		usleep(1); //estos numeros importantisimo. funciona bien 1000
+		usleep(1);
 	while (game_running(philo->game, -1))
 	{
 		if (philo->game->num_philos != 1)
 		{
-			//if (!i_died(philo))
 			philo_eat(philo);
 			philo_eat_sleep_think_times(philo, 's');
 		}
 		else
 		{
 			pthread_mutex_lock(&philo->fork);
-			write_log(philo, 'f');
-			usleep(philo->game->time_2_die * 1000);
+			write_log(philo, 'r');
+			while (!i_died(philo))
+				usleep(5);
 			pthread_mutex_unlock(&philo->fork);
-			i_died(philo);
 			break ;
 		}
 	}
-	//mutex_destroyer(philo->game);
 	return (NULL);
 }
 
@@ -201,10 +104,10 @@ int	create_threads(t_game *game)
 			return (0);
 		aux = aux->next;
 	}
-	error = pthread_create(&game->judge, NULL, judge_time, game);//hilo juez
+	error = pthread_create(&game->judge, NULL, judge_time, game);
 	if (error)
 		return (0);
-	init_time(game); // lo he movido desde arriba del while para que empieze en cero.
+	init_time(game);
 	return (1);
 }
 
