@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:38:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/16 21:30:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:10:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	init_game_rules(t_game *game, int argc, char **argv, int *error)
 		printf("Error: Only positive arguments allowed\n");
 	}
 	game->running = 0;
-	game->philos_eatten = 0;
+	game->philos_eaten = 0;
 }
 int	arg_errors(int argc, t_game *game, int error, int option)
 {
@@ -105,13 +105,13 @@ int	arg_errors(int argc, t_game *game, int error, int option)
 	return (0);
 }
 
-/*Test to see all have eatten minimun times:
-	printf("Philos Eatten: %ld\n", game.philos_eatten);
-	printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+/*Test to see all have eaten minimun times:
+	printf("Philos Eaten: %ld\n", game.philos_eaten);
+	printf("%d\tEated: %ld\n", aux->id, aux->times_eaten);
 	aux = aux->next;
 	while (aux->id != 1)
 	{
-		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+		printf("%d\tEated: %ld\n", aux->id, aux->times_eaten);
 		aux = aux->next;
 	}
 */
@@ -144,12 +144,12 @@ int	main(int argc, char **argv)
 	
 	if (argc == 6)
 	{
-		printf("\nPhilos Eatten: %ld\n", game.philos_eatten);
-		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+		printf("\nPhilos Eaten: %ld\n", game.philos_eaten);
+		printf("%d\tEated: %ld\n", aux->id, aux->times_eaten);
 		aux = aux->next;
 		while (aux->id != 1)
 		{
-			printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+			printf("%d\tEated: %ld\n", aux->id, aux->times_eaten);
 			aux = aux->next;
 		}
 	}
