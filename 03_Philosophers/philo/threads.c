@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 17:58:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:11:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 
 void	philo_eat_sleep_think_times(t_philo *philo, char c)
 {
-	if (c == 'e')
+	if (c == 'e' && !i_died(philo))
 	{
 		gettimeofday(&philo->last_eat_time, NULL);
-	write_log(philo, 'e');
-	while (!i_died(philo) && time_no_eating(philo) < philo->game->time_2_eat)
-		usleep(50);
-	return ;
+		write_log(philo, 'e');
+		while (!i_died(philo) && time_no_eating(philo) < philo->game->time_2_eat)
+			usleep(50);
 	}
-	gettimeofday(&philo->sleep_time, NULL);//
-	write_log(philo, 's');
-	while (!i_died(philo) && time_sleeping(philo) < philo->game->time_2_sleep)
-		usleep(50);
-	write_log(philo, 't');
+	else if (!i_died(philo))
+	{
+		gettimeofday(&philo->sleep_time, NULL);//
+		write_log(philo, 's');
+		while (!i_died(philo) && time_sleeping(philo) < philo->game->time_2_sleep)
+			usleep(50);
+		write_log(philo, 't');
+	}	
 }
 
 
@@ -36,16 +38,24 @@ void	philo_eat(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->fork);
 		write_log(philo, 'r');
-		if (!i_died(philo))
-			pthread_mutex_lock(&philo->prev->fork);
+		if (i_died(philo))
+		{
+			pthread_mutex_unlock(&philo->fork);
+			return ;
+		}
+		pthread_mutex_lock(&philo->prev->fork);
 		write_log(philo, 'l');
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->prev->fork);
 		write_log(philo, 'l');
-		if (!i_died(philo))
-			pthread_mutex_lock(&philo->fork);
+		if (i_died(philo))
+		{
+			pthread_mutex_unlock(&philo->prev->fork);
+			return ;
+		}
+		pthread_mutex_lock(&philo->fork);
 		write_log(philo, 'r');
 	}
 	pthread_mutex_lock(&philo->eat_mutex);
@@ -97,7 +107,7 @@ void	*thread_function(void *arg)
 	{
 		if (philo->game->num_philos != 1)
 		{
-			if (!i_died(philo))///
+			if (!i_died(philo))
 				philo_eat(philo);
 			philo_eat_sleep_think_times(philo, 's');
 		}
