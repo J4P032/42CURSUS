@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 12:04:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:19:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 	}
 }
 
-int	take_both_forks(t_philo *philo)
+void	take_both_forks(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->game->forks);
 	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
@@ -41,9 +41,6 @@ int	take_both_forks(t_philo *philo)
 		pthread_mutex_lock(&philo->game->forks);
 	}
 	pthread_mutex_unlock(&philo->game->forks);
-	if (i_died(philo))
-		return (0);
-	return (1);
 }
 
 void	take_one_fork(t_philo *philo, int c)
@@ -98,8 +95,7 @@ void	philos_behaviour(t_philo *philo)
 
 void	philo_eat(t_philo *philo)
 {
-	if (!take_both_forks(philo))
-		return ;
+	take_both_forks(philo);
 	philos_behaviour(philo);
 	pthread_mutex_lock(&philo->eat_mutex);
 	philo_eat_sleep_think_times(philo, 'e');
