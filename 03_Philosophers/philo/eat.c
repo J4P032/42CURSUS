@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:46:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:04:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 		gettimeofday(&philo->last_eat_time, NULL);
 		write_log(philo, 'e');
 		while (!i_died(philo) && time_no_eat(philo) < philo->game->time_2_eat)
-			usleep(1);
+			usleep(TIME_WAIT);
 	}
 	else if (!i_died(philo))
 	{
 		gettimeofday(&philo->sleep_time, NULL);
 		write_log(philo, 's');
 		while (!i_died(philo) && time_sleep(philo) < philo->game->time_2_sleep)
-			usleep(1);
+			usleep(TIME_WAIT);
 		write_log(philo, 't');
 	}
 }
@@ -37,7 +37,7 @@ int	take_both_forks(t_philo *philo)
 	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
 	{
 		pthread_mutex_unlock(&philo->game->forks);
-		usleep(1);
+		usleep(TIME_WAIT);
 		pthread_mutex_lock(&philo->game->forks);
 	}
 	pthread_mutex_unlock(&philo->game->forks);
