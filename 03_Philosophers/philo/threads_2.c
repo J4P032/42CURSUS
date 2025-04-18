@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 21:27:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:21:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ void	init_time(t_game *game)
 		aux->last_eat_time = game->start_game_time;
 		aux = aux->next;
 	}
+	if (game->num_philos < 50)
+		game->odd_philos_to_wait = 1003;
+	else
+		game->odd_philos_to_wait = 10003;
 	game_running(game, 1);
 }
 

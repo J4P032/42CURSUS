@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 13:04:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:20:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_game
 	long			time_2_sleep;
 	long			num_times_2_eat;
 	long			philos_eatten;
+	int				odd_philos_to_wait;
 	int				running;
 	int				one_died;
 	pthread_t		judge;

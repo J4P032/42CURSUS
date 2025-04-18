@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 13:57:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:23:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	philos_behaviour(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
 	{
-		usleep(10003);
+		usleep(philo->game->odd_philos_to_wait);
 		pthread_mutex_lock(&philo->fork);
 		write_log(philo, 'r');
 		take_one_fork(philo, 'R');
