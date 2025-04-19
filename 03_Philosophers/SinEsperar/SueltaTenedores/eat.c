@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/19 22:07:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/20 01:12:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	take_one_fork(t_philo *philo, int c)
 
 int	philos_behaviour(t_philo *philo)
 {
-	i_died(philo);
 	if (philo->id % 2 != 0)
 	{
 		usleep(philo->game->odd_philos_to_wait);
@@ -94,6 +93,7 @@ int	philos_behaviour(t_philo *philo)
 		{
 			pthread_mutex_unlock(&philo->game->forks);
 			pthread_mutex_unlock(&philo->fork);
+			take_one_fork(philo, 'r');
 			return (0);
 		}
 		pthread_mutex_unlock(&philo->game->forks);
@@ -121,6 +121,7 @@ int	philos_behaviour(t_philo *philo)
 		{
 			pthread_mutex_unlock(&philo->game->forks);
 			pthread_mutex_unlock(&philo->prev->fork);
+			take_one_fork(philo, 'l');
 			return (0);
 		}
 		pthread_mutex_unlock(&philo->game->forks);
@@ -135,6 +136,8 @@ int	philos_behaviour(t_philo *philo)
 int	philo_eat(t_philo *philo)
 {
 	//take_both_forks(philo);
+	if (i_died(philo))///
+		return (0);
 	if (!philos_behaviour(philo))
 		return (0);
 	pthread_mutex_lock(&philo->eat_mutex);
