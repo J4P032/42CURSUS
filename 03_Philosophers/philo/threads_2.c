@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 14:21:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/19 12:19:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,11 @@ long	log_time(t_game *game)
 
 void	write_log(t_philo *philo, int c)
 {
-	t_philo	*aux;
-
-	aux = philo;
+	if (c == 'd')
+	{
+		write_death(philo);
+		return ;
+	}
 	pthread_mutex_lock(&philo->game->writing);
 	if (game_running(philo->game, -1))
 		printf("🕖%lu\t", log_time(philo->game));
@@ -96,12 +98,5 @@ void	write_log(t_philo *philo, int c)
 		printf("😴%d is sleeping\n", philo->id);
 	else if (c == 't' && game_running(philo->game, -1))
 		printf("🙄%d is thinking\n", philo->id);
-	else if (c == 'd' && game_running(philo->game, -1))
-	{
-		while (!aux->died)
-			aux = aux->next;
-		game_running(philo->game, 0);
-		printf("☠️%d has DIED!!\n", aux->id);
-	}
 	pthread_mutex_unlock(&philo->game->writing);
 }

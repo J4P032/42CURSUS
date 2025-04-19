@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 14:20:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/19 12:21:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ int			arg_errors(int argc, t_game *game, int error, int option);
 long int	ft_atol(char *nptr, int *error);
 void		free_all(t_game *game);
 int			create_threads(t_game *game);
+long		log_time(t_game *game);
 void		write_log(t_philo *philo, int c);
+void		write_death(t_philo *philo);
 void		init_time(t_game *game);
 void		mutex_destroyer(t_game *game);
 void		check_min_eat_times(t_philo *aux);
