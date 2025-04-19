@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/19 21:24:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:10:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	*thread_function(void *arg)
 	{
 		if (philo->game->num_philos != 1)
 		{
-			philo_eat(philo);
-			philo_eat_sleep_think_times(philo, 's');
+			if (philo_eat(philo))
+				philo_eat_sleep_think_times(philo, 's');
 		}
 		else
 		{
@@ -90,6 +90,7 @@ int	create_threads(t_game *game)
 	aux = game->philo;
 	game_running(game, 1);
 	gettimeofday(&game->start_game_time, NULL);
+	init_time(game);
 	while (i++ < game->num_philos)
 	{
 		gettimeofday(&aux->last_eat_time, NULL);

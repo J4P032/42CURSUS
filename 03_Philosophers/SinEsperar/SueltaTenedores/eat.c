@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/19 21:30:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:07:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,33 +71,72 @@ void	take_one_fork(t_philo *philo, int c)
 	}
 }
 
-void	philos_behaviour(t_philo *philo)
+int	philos_behaviour(t_philo *philo)
 {
+	i_died(philo);
 	if (philo->id % 2 != 0)
 	{
 		usleep(philo->game->odd_philos_to_wait);
+		pthread_mutex_lock(&philo->game->forks);
+		if(philo->fork_taken)
+		{
+			pthread_mutex_unlock(&philo->game->forks);
+			return (0);
+		}
+		pthread_mutex_unlock(&philo->game->forks);
+		
 		pthread_mutex_lock(&philo->fork);
 		write_log(philo, 'r');
 		take_one_fork(philo, 'R');
+		
+		pthread_mutex_lock(&philo->game->forks);
+		if(philo->prev->fork_taken)
+		{
+			pthread_mutex_unlock(&philo->game->forks);
+			pthread_mutex_unlock(&philo->fork);
+			return (0);
+		}
+		pthread_mutex_unlock(&philo->game->forks);
+				
 		pthread_mutex_lock(&philo->prev->fork);
 		write_log(philo, 'l');
 		take_one_fork(philo, 'L');
 	}
 	else
 	{
+		pthread_mutex_lock(&philo->game->forks);
+		if(philo->prev->fork_taken)
+		{
+			pthread_mutex_unlock(&philo->game->forks);
+			return (0);
+		}
+		pthread_mutex_unlock(&philo->game->forks);
+		
 		pthread_mutex_lock(&philo->prev->fork);
 		write_log(philo, 'l');
 		take_one_fork(philo, 'L');
+
+		pthread_mutex_lock(&philo->game->forks);
+		if(philo->fork_taken)
+		{
+			pthread_mutex_unlock(&philo->game->forks);
+			pthread_mutex_unlock(&philo->prev->fork);
+			return (0);
+		}
+		pthread_mutex_unlock(&philo->game->forks);
+		
 		pthread_mutex_lock(&philo->fork);
 		write_log(philo, 'r');
 		take_one_fork(philo, 'R');
 	}
+	return (1);
 }
 
-void	philo_eat(t_philo *philo)
+int	philo_eat(t_philo *philo)
 {
-	take_both_forks(philo);
-	philos_behaviour(philo);
+	//take_both_forks(philo);
+	if (!philos_behaviour(philo))
+		return (0);
 	pthread_mutex_lock(&philo->eat_mutex);
 	philo_eat_sleep_think_times(philo, 'e');
 	philo->times_eatten++;
@@ -107,4 +146,5 @@ void	philo_eat(t_philo *philo)
 	take_one_fork(philo, 'r');
 	pthread_mutex_unlock(&philo->prev->fork);
 	take_one_fork(philo, 'l');
+	return (1);
 }
