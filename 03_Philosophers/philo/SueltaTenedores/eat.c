@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/20 01:37:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/20 02:09:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	philos_pick_forks(t_philo *philo)
 		return (0);
 	if (philo->id % 2 != 0)
 	{
-		//usleep(philo->game->odd_philos_to_wait);
+		usleep(philo->game->odd_philos_to_wait);
 		
 		pthread_mutex_lock(&philo->game->forks);
 		if (philo->fork_taken)

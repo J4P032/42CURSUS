@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/20 01:39:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/20 02:09:31 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <stdarg.h>
 
 # define PHILOS_MAX 250
-# define TIME_WAIT 100
+# define TIME_WAIT 200
 
 typedef struct s_game	t_game;
 
