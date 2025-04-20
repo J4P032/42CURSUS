@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/19 22:16:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/20 02:12:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ void	*thread_function(void *arg)
 		if (philo->game->num_philos != 1)
 		{
 			if (philo_eat(philo))
+			{
 				philo_eat_sleep_think_times(philo, 's');
+				usleep(50);
+			}
 		}
 		else
 		{
