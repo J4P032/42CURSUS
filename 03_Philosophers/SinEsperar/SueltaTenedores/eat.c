@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/20 02:16:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/20 02:21:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,10 @@ int	philos_take_forks(t_philo *philo)
 int	philo_eat(t_philo *philo)
 {
 	if (!philos_take_forks(philo))
+	{
+		//usleep(1000);
 		return (0);
+	}
 	pthread_mutex_lock(&philo->eat_mutex);
 	philo_eat_sleep_think_times(philo, 'e');
 	philo->times_eatten++;
