@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:01:54 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/20 02:09:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:10:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,16 @@ int	game_running(t_game *game, int value)
 	run = game->running;
 	pthread_mutex_unlock(&game->running_mutex);
 	return (run);
+}
+
+void	write_death(t_philo *philo)
+{
+	t_philo	*aux;
+
+	aux = philo;
+	while (!aux->died)
+		aux = aux->next;
+	game_running(philo->game, 0);
+	printf("🕖 %lu\t", log_time(philo->game));
+	printf("☠️ %d has DIED!!\n", aux->id);
 }

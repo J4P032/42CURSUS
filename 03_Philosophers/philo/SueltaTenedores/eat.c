@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/20 02:09:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:01:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,116 +31,8 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 	}
 }
 
-void	take_both_forks(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->game->forks);
-	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
-	{
-		pthread_mutex_unlock(&philo->game->forks);
-		usleep(TIME_WAIT);
-		pthread_mutex_lock(&philo->game->forks);
-	}
-	pthread_mutex_unlock(&philo->game->forks);
-}
-
-void	take_one_fork(t_philo *philo, int c)
-{
-	if (c == 'R')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->fork_taken = 1;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'L')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->prev->fork_taken = 1;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'r')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->fork_taken = 0;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'l')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->prev->fork_taken = 0;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-}
-
-int	philos_pick_forks(t_philo *philo)
-{
-	if(i_died(philo))
-		return (0);
-	if (philo->id % 2 != 0)
-	{
-		usleep(philo->game->odd_philos_to_wait);
-		
-		pthread_mutex_lock(&philo->game->forks);
-		if (philo->fork_taken)
-		{
-			pthread_mutex_unlock(&philo->game->forks);
-			return (0);
-		}
-		pthread_mutex_unlock(&philo->game->forks);
-		
-		
-		pthread_mutex_lock(&philo->fork);
-		take_one_fork(philo, 'R');
-		
-		pthread_mutex_lock(&philo->game->forks);
-		if (philo->prev->fork_taken)
-		{
-			pthread_mutex_unlock(&philo->game->forks);
-			pthread_mutex_unlock(&philo->fork);
-			take_one_fork(philo, 'r');
-			return (0);
-		}
-		pthread_mutex_unlock(&philo->game->forks);
-		
-		
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'r');
-		write_log(philo, 'l');
-		take_one_fork(philo, 'L');
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		if (philo->prev->fork_taken)
-		{
-			pthread_mutex_unlock(&philo->game->forks);
-			return (0);
-		}
-		pthread_mutex_unlock(&philo->game->forks);
-				
-		pthread_mutex_lock(&philo->prev->fork);
-		take_one_fork(philo, 'L');
-		
-		pthread_mutex_lock(&philo->game->forks);
-		if (philo->fork_taken)
-		{
-			pthread_mutex_unlock(&philo->game->forks);
-			pthread_mutex_unlock(&philo->prev->fork);
-			take_one_fork(philo, 'l');
-			return (0);
-		}
-		pthread_mutex_unlock(&philo->game->forks);
-		
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'l');
-		write_log(philo, 'r');
-		take_one_fork(philo, 'R');
-	}
-	return (1);
-}
-
 int	philo_eat(t_philo *philo)
 {
-	//take_both_forks(philo);
 	if (!philos_pick_forks(philo))
 		return (0);
 	pthread_mutex_lock(&philo->eat_mutex);

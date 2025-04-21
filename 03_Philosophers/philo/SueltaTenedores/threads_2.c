@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 14:21:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:20:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	init_time(t_game *game)
 	if (game->num_philos < 50)
 		game->odd_philos_to_wait = 1003;
 	else
-		game->odd_philos_to_wait = 10003;
+		game->odd_philos_to_wait = 1003;
 	game_running(game, 1);
 }
 
@@ -80,28 +80,23 @@ long	log_time(t_game *game)
 
 void	write_log(t_philo *philo, int c)
 {
-	t_philo	*aux;
-
-	aux = philo;
+	if (c == 'd')
+	{
+		write_death(philo);
+		return ;
+	}
 	pthread_mutex_lock(&philo->game->writing);
 	if (game_running(philo->game, -1))
-		printf("🕖%lu\t", log_time(philo->game));
+		printf("🕖 %lu\t", log_time(philo->game));
 	if (c == 'r' && game_running(philo->game, -1))
-		printf("🥄%d has taken the R-Fork\n", philo->id);
+		printf("🥄 %d has taken the R-Fork\n", philo->id);
 	else if (c == 'l' && game_running(philo->game, -1))
-		printf("🥄%d has taken the L-Fork\n", philo->id);
+		printf("🥄 %d has taken the L-Fork\n", philo->id);
 	else if (c == 'e' && game_running(philo->game, -1))
-		printf("🍔%d is eating\n", philo->id);
+		printf("🍔 %d is eating\n", philo->id);
 	else if (c == 's' && game_running(philo->game, -1))
-		printf("😴%d is sleeping\n", philo->id);
+		printf("🌛 %d is sleeping\n", philo->id);
 	else if (c == 't' && game_running(philo->game, -1))
-		printf("🙄%d is thinking\n", philo->id);
-	else if (c == 'd' && game_running(philo->game, -1))
-	{
-		while (!aux->died)
-			aux = aux->next;
-		game_running(philo->game, 0);
-		printf("☠️%d has DIED!!\n", aux->id);
-	}
+		printf("🙄 %d is thinking\n", philo->id);
 	pthread_mutex_unlock(&philo->game->writing);
 }

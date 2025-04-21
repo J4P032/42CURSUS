@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/20 02:27:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:01:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,15 @@ void	*judge_time(void *arg)
 	return (NULL);
 }
 
+void	only_one_philo_try_to_eat(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->fork);
+	write_log(philo, 'r');
+	while (!i_died(philo))
+		usleep(5);
+	pthread_mutex_unlock(&philo->fork);
+}
+
 void	*thread_function(void *arg)
 {
 	t_philo	*philo;
@@ -52,19 +61,15 @@ void	*thread_function(void *arg)
 	{
 		if (philo->game->num_philos != 1)
 		{
-			if(philo_eat(philo))
+			if (philo_eat(philo))
 			{
 				philo_eat_sleep_think_times(philo, 's');
-				usleep(2000);//quiza el numero magico
+				usleep(2000);
 			}
 		}
 		else
 		{
-			pthread_mutex_lock(&philo->fork);
-			write_log(philo, 'r');
-			while (!i_died(philo))
-				usleep(5);
-			pthread_mutex_unlock(&philo->fork);
+			only_one_philo_try_to_eat(philo);
 			break ;
 		}
 	}
