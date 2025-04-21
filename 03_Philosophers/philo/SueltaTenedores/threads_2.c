@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:04:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/21 18:20:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:07:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ void	mutex_destroyer(t_game *game)
 	pthread_mutex_destroy(&game->writing);
 }
 
+/*This is for the sixth value to check and stop all simulation*/
+/*to not count several times same philo that passes the minimun, added...*/
+/*...eatten_min valiable in philos struct*/
 void	check_min_eat_times(t_philo *aux)
 {
 	pthread_mutex_lock(&aux->game->death_mutex);
@@ -43,6 +46,8 @@ void	check_min_eat_times(t_philo *aux)
 	pthread_mutex_unlock(&aux->game->death_mutex);
 }
 
+/*init all time to start game and first read of last_eat_time and start the...*/
+/*...game_running to enter the whiles in philos and judge threads*/
 void	init_time(t_game *game)
 {
 	t_philo	*aux;
@@ -58,12 +63,13 @@ void	init_time(t_game *game)
 		aux = aux->next;
 	}
 	if (game->num_philos < 50)
-		game->odd_philos_to_wait = 1003;
+		game->odd_philos_to_wait = 103;
 	else
-		game->odd_philos_to_wait = 1003;
+		game->odd_philos_to_wait = 103;
 	game_running(game, 1);
 }
 
+/*Just for printing purposes. In miliseconds*/
 long	log_time(t_game *game)
 {
 	struct timeval	time;
@@ -78,6 +84,9 @@ long	log_time(t_game *game)
 	return (dif_time);
 }
 
+/*At the beggining the death was at the botton. Raising at top detect...*/
+/*...death faster, but it has to be away of blocking write mutex to enter...*/
+/*...the quickest possible*/
 void	write_log(t_philo *philo, int c)
 {
 	if (c == 'd')

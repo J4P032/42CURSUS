@@ -6,12 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/21 18:03:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:01:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/*This is for modifing the variable of each philo to see if he toke the fork..*/
+/*...or not. So it is protected by a general mutex instead the each philo ones*/
 void	take_one_fork(t_philo *philo, int c)
 {
 	if (c == 'R')
@@ -40,6 +42,15 @@ void	take_one_fork(t_philo *philo, int c)
 	}
 }
 
+/*This is for the ODD id philos. They will wait some time to not make a...*/
+/*...deadlock with the EVEN ones. If the philo see that the fork that is...*/
+/*...going to pickup is already taken, It will leave and wait next time...*/
+/*ODDs will take first the right one (self one), so if it already taken...*/
+/*...they will just exit. Then will see if left fork is taken. If so they...*/
+/*...will just leave the right fork taken and exit waiting for next time*/
+/*Because I dont want to print fork taken several times in case he has to...*/
+/*leave them, I just print both same time when taken the second fork. Time...*/
+/*...that pass between the first fork taken and the second to see is minimun*/
 int	take_first_right_fork(t_philo *philo)
 {
 	usleep(philo->game->odd_philos_to_wait);
@@ -68,6 +79,7 @@ int	take_first_right_fork(t_philo *philo)
 	return (1);
 }
 
+/*Same as ODDs but opposite. This ones dont wait anything to pick forks*/
 int	take_first_left_fork(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->game->forks);
@@ -95,6 +107,8 @@ int	take_first_left_fork(t_philo *philo)
 	return (1);
 }
 
+/*asign the return from both functions to value as it is faster...*/
+/*...instead of if(!take_first_right_fork(philo))*/
 int	philos_pick_forks(t_philo *philo)
 {
 	int	value;
