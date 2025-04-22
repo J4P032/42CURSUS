@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:38:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 21:25:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/22 09:26:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,20 +99,6 @@ void	wait_for_threads_to_end(t_game *game)
 	pthread_join(game->judge, NULL);
 }
 
-/*Test to see all have eatten minimun times:
-t_philo *aux = game.philo;
-if (argc == 6 && game.num_philos != 1)
-{
-	printf("\nPhilos Eatten: %ld\n", game.philos_eatten);
-	printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
-	aux = aux->next;
-	while (aux->id != 1)
-	{
-		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
-		aux = aux->next;
-	}
-}
-*/
 int	main(int argc, char **argv)
 {
 	t_game		game;
@@ -130,6 +116,8 @@ int	main(int argc, char **argv)
 		return (free_all(&game), 1);
 	wait_for_threads_to_end(&game);
 	mutex_destroyer(&game);
+	if (argc == 6)
+		check_all_eated(game.philo);
 	free_all(&game);
 	return (0);
 }

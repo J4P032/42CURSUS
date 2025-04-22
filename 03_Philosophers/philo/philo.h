@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:25:59 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 14:20:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/22 09:27:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,12 @@ int			game_running(t_game *game, int value);
 long		time_sleep(t_philo *philo);//
 long		time_no_eat(t_philo *philo);
 int			i_died(t_philo *philo);
-void		philo_eat(t_philo *philo);
+int			philo_eat(t_philo *philo);
 void		philo_eat_sleep_think_times(t_philo *philo, char c);
+int			philos_pick_forks(t_philo *philo);
+void		take_one_fork(t_philo *philo, int c);
+void		write_death(t_philo *philo);
+long		log_time(t_game *game);
+void		check_all_eated(t_philo *philo);
 
 #endif

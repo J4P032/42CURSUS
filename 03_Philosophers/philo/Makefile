@@ -1,8 +1,8 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=thread -pthread
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=thread -pthread
 NAME = philo
 INCLUDES = philo.h
-SRC = ft_calloc.c philo.c ft_atol.c free.c threads.c threads_2.c atomic.c eat.c errors.c
+SRC = ft_calloc.c philo.c ft_atol.c free.c threads.c threads_2.c atomic.c eat.c errors.c forks.c
 OBJS = $(SRC:.c=.o)
 RM = rm -rf
 

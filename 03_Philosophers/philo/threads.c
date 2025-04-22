@@ -6,12 +6,15 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 19:54:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/17 20:52:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:13:31 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/*Do 2 things. Check the variable to see if someone died all the time, so...*/
+/*...the quickest possible. And also check that all philos has eatten the...*/
+/*...minimun times. Last usleep of 1000 is for not writting junk at the end*/
 void	*judge_time(void *arg)
 {
 	t_game		*game;
@@ -38,9 +41,22 @@ void	*judge_time(void *arg)
 		}
 		pthread_mutex_unlock(&game->death_mutex);
 	}
-	return (NULL);
+	return (usleep(1000), NULL);
 }
 
+void	only_one_philo_try_to_eat(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->fork);
+	write_log(philo, 'r');
+	while (!i_died(philo))
+		usleep(5);
+	pthread_mutex_unlock(&philo->fork);
+}
+
+/*The magic number is 1000 or 2000 in usleep. It will give more time of...*/
+/*...thinking when succseeded. Philos that dont take the forks because ocupied*/
+/*...will pass quick to try again. One philo is not with trick. Just pick fork*/
+/*...and see if he dies. He will, but not forced.*/
 void	*thread_function(void *arg)
 {
 	t_philo	*philo;
@@ -52,16 +68,15 @@ void	*thread_function(void *arg)
 	{
 		if (philo->game->num_philos != 1)
 		{
-			philo_eat(philo);
-			philo_eat_sleep_think_times(philo, 's');
+			if (philo_eat(philo))
+			{
+				philo_eat_sleep_think_times(philo, 's');
+				usleep(1000);
+			}
 		}
 		else
 		{
-			pthread_mutex_lock(&philo->fork);
-			write_log(philo, 'r');
-			while (!i_died(philo))
-				usleep(5);
-			pthread_mutex_unlock(&philo->fork);
+			only_one_philo_try_to_eat(philo);
 			break ;
 		}
 	}

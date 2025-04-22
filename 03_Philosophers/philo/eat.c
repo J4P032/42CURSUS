@@ -6,12 +6,32 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:15:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/18 14:23:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/22 09:28:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	check_all_eated(t_philo *philo)
+{
+	t_philo	*aux;
+
+	aux = philo;
+	if (philo->game->num_philos != 1)
+	{
+		printf("\nPhilos Eatten: %ld\n", philo->game->philos_eatten);
+		printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+		aux = aux->next;
+		while (aux->id != 1)
+		{
+			printf("%d\tEated: %ld\n", aux->id, aux->times_eatten);
+			aux = aux->next;
+		}
+	}
+}
+
+/*It can die while it is eating if time to survive is less than time need to..*/
+/*...eat. Also can die while he is sleeping. I look every TIME_WAIT time*/
 void	philo_eat_sleep_think_times(t_philo *philo, char c)
 {
 	if (c == 'e' && !i_died(philo))
@@ -31,73 +51,12 @@ void	philo_eat_sleep_think_times(t_philo *philo, char c)
 	}
 }
 
-void	take_both_forks(t_philo *philo)
+/*pick forks is complex. If he has grabed a fork but the other is not...*/
+/*...free it will leave the grabed one, and retry later.*/
+int	philo_eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->game->forks);
-	while (!i_died(philo) && (philo->fork_taken || philo->prev->fork_taken))
-	{
-		pthread_mutex_unlock(&philo->game->forks);
-		usleep(TIME_WAIT);
-		pthread_mutex_lock(&philo->game->forks);
-	}
-	pthread_mutex_unlock(&philo->game->forks);
-}
-
-void	take_one_fork(t_philo *philo, int c)
-{
-	if (c == 'R')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->fork_taken = 1;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'L')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->prev->fork_taken = 1;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'r')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->fork_taken = 0;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-	if (c == 'l')
-	{
-		pthread_mutex_lock(&philo->game->forks);
-		philo->prev->fork_taken = 0;
-		pthread_mutex_unlock(&philo->game->forks);
-	}
-}
-
-void	philos_behaviour(t_philo *philo)
-{
-	if (philo->id % 2 != 0)
-	{
-		usleep(philo->game->odd_philos_to_wait);
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'r');
-		take_one_fork(philo, 'R');
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'l');
-		take_one_fork(philo, 'L');
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->prev->fork);
-		write_log(philo, 'l');
-		take_one_fork(philo, 'L');
-		pthread_mutex_lock(&philo->fork);
-		write_log(philo, 'r');
-		take_one_fork(philo, 'R');
-	}
-}
-
-void	philo_eat(t_philo *philo)
-{
-	take_both_forks(philo);
-	philos_behaviour(philo);
+	if (!philos_pick_forks(philo))
+		return (0);
 	pthread_mutex_lock(&philo->eat_mutex);
 	philo_eat_sleep_think_times(philo, 'e');
 	philo->times_eatten++;
@@ -107,4 +66,5 @@ void	philo_eat(t_philo *philo)
 	take_one_fork(philo, 'r');
 	pthread_mutex_unlock(&philo->prev->fork);
 	take_one_fork(philo, 'l');
+	return (1);
 }
