@@ -1,0 +1,61 @@
+CONSIDERACIONES CHATGPT:
+1. Parsers y tokens.
+	Dividir el input del user como ls -l | grep txt > out.txt
+	en tokens y luego construir una estructura para interpretarlo
+2. Redirección de pipes.
+	Entender como funcion dup2, pipe, fork y execve
+3. Builtins
+	Comandos como cd, exit, export, pwd hay que implementarlos
+	sin execve. Mejor hacerlos aparte en ficheros c. y probar
+4. Variables de entorno.
+	Usar envp del main, y gestionar nuestras propias variables (Manuel,
+	puso dos que no se podian destruir) con export y unset
+5. Señales. 
+	Control+c, control+D, control+\ tienen que comportarse como Bash.
+6. Sin errores de valgrind. Norminette y sanitizer
+
+FUNCIONES AUTORIZADAS:
+
+readline(const char *prompt) #include <readline.h>
+	Muestra un prompt ("terminal$ ") y esperar que el usuario
+	escriba algo.
+	Devuelve lo que escribió el user como un char * que se ha de liberar
+	con un free(). Es como un read pero con ventajas:
+	1. soporta historial (fechas ↑ ↓)
+	2. soporta edición de linea para borrar con backspace
+	3. parece una terminal real.
+	ej:
+		char *input;
+
+		input = readline("minishell$ ");
+		if (input){
+			//usar input
+			free(input);
+		}
+		else{
+			//esto ocurre si se pulsa Ctrl+D
+			printf("exit\n");
+			exit(0);
+		}
+
+rl_clear_history()
+	Borra el historial de comandos guardado por readline.
+	Cada vez que se usa readline, SI SE GUARDA el comando con add_history(input)
+	se va acumulando en una lista. rl_clear_history() borra esa lista. Si no se
+	usa add_history(input) no hay nada que borrar.
+	DEBE SER PUESTO AL FINAL DEL PROGRAMA PARA NO HABER LEAKS DE MEMORIA.
+
+rl_on_new_line(void)
+	Le dice a realine que estamos comenzando una nueva linea de entrada.
+	Útil cuando se usan señales como Ctrl+c y necesito que readline se reajuste
+	para mostrar el prompt bien en la siguiente linea.
+	rl_replace_line("", 0) //borra la linea actual
+	rl_on_new_line(); //le dice a readline que empieze una nueva linea
+	rl_redisplay(); Muéstra el prompt de nuevo.
+	Estas 3 lineas de arriba se hacen por ejemplo si se hace Ctrl+c para que no se
+	quede el prompt a medias y quede limpio
+	Es decir: "ey readline!! vamos a empezar una nueva linea!" No imprime nada. Solo informa
+	a readline.
+
+
+	
