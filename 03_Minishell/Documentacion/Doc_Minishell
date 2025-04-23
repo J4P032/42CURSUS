@@ -92,8 +92,7 @@ add_history(const char *line)
 	En el comportamiento original de bash, history no duplica comandos repetidos. Solo
 	los coloca abajo. Esto lo hace internamente add_history. NO hace falta hacer nada.
 
-
-					************ FUNCIONES NORMALES **************
+					************** FUNCIONES NORMALES **************
 
 access (#include <unistd.h>)
 	int access(const char *pathname, int mode)
@@ -101,7 +100,7 @@ access (#include <unistd.h>)
 	mode:
 		R_OK: ¿Se puede leer?
 		W_OK: ¿Se puede Escribir?
-		X_OK: ¿Se peude ejecutar?
+		X_OK: ¿Se puede ejecutar?
 		F_OK: ¿Existe el Archivo?
 	retorna:
 		0	-> si los permisos son correctos
@@ -122,8 +121,8 @@ access (#include <unistd.h>)
 						perror("open")
 				}
 
-close(fd)
-	cerrar el archivo abierto
+
+						*************** PROCESOS **************
 
 fork() (#include <unistd.h>)
 	pid_t pid = fork();
@@ -156,7 +155,100 @@ fork() (#include <unistd.h>)
 	    return (1);
 	}
 
+wait(int *status) y pid_t waitpid(pid_t pid, int *status, int options)
+	Los dos esperan a que terminen los procesos hijos. Pero el wait espera a que
+	termine cualquiera de los que haya, y el waitpid uno en específico.
+	en waitpid:
+		si pid == -1 es igual que wait() espera a que cualquier hijo termine
+		pid > 0 -> espera al hijo exacto
+		options == 0 -> comportamiento por defecto (bloqueante)
+		options == WNOHANG no espera si no hay hijo terminado (devuelve 0)
+	status es donde se guarda un valor codificado, COMO TERMINÓ el proceso:
+		WIFEXITED(status) -> ¿Terminó con exit()?
+		WEXITSTATUS(status) -> Si salió con exit(), te da dicho valor de exit()
+		WIFSIGNALED(status) -> ¿Murió por una señal?
+		WTERMSIG(status) -> si murió por señal, cual es la que lo mató.
+		int status;
+		pid_t pid = wait(&status);
+		if (WIFEXITED(status))
+			printf("Hijo termino con codigo %d\n", WEXITSTATUS(status));
+		Si se el pasa con NULL, no interesa dicha info.
 
+wait3(int *status, int options, struct rusage *rusage)
+	lo mismo que wait, pero te da estadisticas (cpu, memoria) del hijo terminado a
+	traves del puntero rusage
+
+wait4(pid_t pid, int *status, int options, struct rusage *rusage)
+	igual que waitpid(), pero con estadísticas rusage.
+	La estructura rusage contiene datos como tiempo de CPU, numero de paginas de memoria
+	usada, swaps, señales recibidas... NO ES NECESARIO PARA LA MINISHELL
+
+
+					************** SEÑALES **************
+
+kill -> int kill(pid_t pid, int sig)
+	Envia la señal sig al proceso pid.
+	pid > 0 -> envia a ese pid
+	pid = 0 -> se envia a todos los procesos en mismo grupo de procesos
+	pid < 0 -> señal enviada a todos lo procesos a los que el user tiene permiso
+	retorna: 0 -> exito
+			-1 -> error.
+
+signal -> void (*signal(int signum, void(*handler)(int)))(int); #include <signal.h>
+	Más sencilla que sigaction, sirve para darle una funcion (handler), a la señal
+	recibida. Tienes menos control
+
+sigaction -> int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+	struct sigaction	sa;
+	sa.sa_flags = SA_SIGINFO; //al definir este flag entra automaticamente la funcion sa_sigaction
+	//definida en la estructura sigaction (*act). Si no entraria sa_handler que seria como un signal()
+	sa.sa_sigaction = process_header_msg;
+	sigaction(B_0, &sa, NULL);
+	-> procesa la funcion: void	process_header_msg(int signal, siginfo_t *info, void *context)
+
+	para pasarle una variable a dicho process_header_msg, como no puede recibir otros parametros
+	por que ya esta predefinida la función (se le puede cambiar el nombre pero no su prototipo)
+	normalmente se pasa una variable global... PERO CREO QUE SE PUEDE HACER ESTO:
+	struct sigaction sa;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = process_header_msg;
+	sa.sa_mask = 0;
+	// Aquí pasamos `g_server` como `context`
+	t_server *g_server_ptr = g_server; // Siendo t_server *g_server;
+	sigaction(B_0, &sa, (struct sigaction *)&g_server_ptr); //se le pasa como el *context
+
+sigaddset -> int sigaddset(sigset_t *set, int signum)
+	añade la señal signum al congunto set.
+	devuelve: 	0 -> si va bien
+				-1 -> si falla
+
+sigemptyset -> int siemptyset(sigset_t *set)
+	Borra el contenido de señales de un conjunto
+	
+	struct sigaction sa;
+    // 1. Ignorar SIGINT. para eliminar el uso de control + c
+    sa.sa_handler = SIG_IGN;  // SIG_IGN es lo que pasar para ignorar la señal. Si no, le pondríamos el nombre de la funcion handler
+    sigemptyset(&sa.sa_mask);  // No bloqueamos ninguna señal.Eliminamos todas las señales de las mascaras. Si no lo hacemos puede tener basura. Es como asignar NULL a una variable puntero creada.
+    sa.sa_flags = 0; //pilla sa_handler y no sa_sigaction que seria con SA_SIGINFO mas valores de flag:
+
+	//	SA_SIGINFO	 -> usa sa_sigaction
+	//	SA_RESTART	 -> Llamadas bloqueantes como read() se reintentan si son interrumpidas por una señal
+	//	SA_NOCLDSTOP -> Evita que SIGCHLD se envie cuando un hijo se detiene o continua
+	//	SA_NOCLDWAIT -> No deja procesos zombi de hijos. Los elimina
+	//	SA_NODEFER   -> Permite que la misma señal se reciba mientras se está manejando.
+	//	SA_RESETHAND -> Despues de manejar la señal una vez se restaura su comportamiento por defecto.
+	// 	Se pueden usar varios como: sa.sa_flags = SA_SIGINFO | SA_RESTART;
+    if (sigaction(SIGINT, &sa, NULL) == -1) {
+        perror("Error al configurar la acción para SIGINT");
+        return 1;}
+	// 2. Restaurar el manejador original de SIGINT
+    sa.sa_handler = handle_sigint;  // Establecemos el manejador original para SIGINT
+    if (sigaction(SIGINT, &sa, NULL) == -1) {
+        perror("Error al restaurar la acción para SIGINT");
+        return 1;}
+
+
+		************** RESERVA DE MEMORIA Y LIBERACION **************
 
 free()
 	para liberar los ft_callocs
@@ -164,14 +256,23 @@ free()
 malloc()
 	Usaremos ft_calloc()
 
+
+			************** FUNCIONES ABRIR ARCHIVOS **************
+
 open()
 	abrir archivos (fd)
 
-printf()
-	Para imprimir
-
 read(fd, buffer, tamaño buffer)
 	lee del fd y lo mete en el buffer.
+
+close(fd)
+	cerrar el archivo abierto
+
+
+				************** FUNCIONES ESCRIBIR **************
+
+printf()
+	Para imprimir
 
 write()
 	para imprimir
