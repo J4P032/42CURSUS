@@ -16,7 +16,9 @@ CONSIDERACIONES CHATGPT:
 
 FUNCIONES AUTORIZADAS:
 
-readline(const char *prompt) #include <readline.h>
+				************ FUNCIONES DE PROMPT **************
+
+readline(const char *prompt) #include <readline/readline.h> #include <readline/history.h>
 	Muestra un prompt ("terminal$ ") y esperar que el usuario
 	escriba algo.
 	Devuelve lo que escribió el user como un char * que se ha de liberar
@@ -57,5 +59,120 @@ rl_on_new_line(void)
 	Es decir: "ey readline!! vamos a empezar una nueva linea!" No imprime nada. Solo informa
 	a readline.
 
-
+rl_redisplay(void)
+	redibuja el prompt y el contenido actual de la linea de entrada. Sin rl_redisplay()
+	no vuelve a mostrar el prompt visualmente aunque internamente esté listo para escribir.
 	
+rl_replace_line(const char *text, int clear_undo)
+	reemplaza el contenido actual de la linea de entrada donde el user está escribiendo
+	por el texto que se le pase
+	rl_replace_line("", 0); //borra la linea actual reemplazando con cadena vacia.
+	clear_undo: indica si se debe limpiar el historial de desacer dicha linea (mejor poner 0)
+	Se usa con señal Ctrl+c ya que si no se hace nada puede dejar carácteres escritos en la linea
+	void handle_sigint(int sig){ //cuando se pulsa Ctrl+c.
+		(void)sig;
+		write(1, "\n", 1);
+		rl_replace_line("", 0); //limpia la linea actual
+		rl_on_new_line(); //prepara nueva linea
+		rl_redisplay(); //muestra el prompt limpio.
+	}
+	readline maneja automáticamente el uso de delete o backspace.
+
+add_history(const char *line)
+	añade una linea al historial de comandos de readline para luego navegar en el 
+	histórico con las flechas ↑ ↓
+	char *input = readline("minishel$ ");
+	if (input && *input){ //se hace para no guardar entradas en blanco.
+		add_history(input);
+		free(input); //si no se hace se produce leak.
+	}
+	este historia se guarda en memoria. NO archivo o sea que se pierde al cerrar minishell
+	cada add_history COPIA INTERNAMENTE La linea asi que al final del programa hay que
+	rl_clear_history(); para no tener leaks.
+	En el comportamiento original de bash, history no duplica comandos repetidos. Solo
+	los coloca abajo. Esto lo hace internamente add_history. NO hace falta hacer nada.
+
+
+					************ FUNCIONES NORMALES **************
+
+access (#include <unistd.h>)
+	int access(const char *pathname, int mode)
+	comprueba los permisos de acceso a un archivo o directorio
+	mode:
+		R_OK: ¿Se puede leer?
+		W_OK: ¿Se puede Escribir?
+		X_OK: ¿Se peude ejecutar?
+		F_OK: ¿Existe el Archivo?
+	retorna:
+		0	-> si los permisos son correctos
+		-1	-> si ocurre un error, y se establece errno para indicar el error.
+
+	int main(){
+			if(access(filename, F_OK) == 0)
+				printf("el archivo existe");}
+	IMPORTANTE:	No siempre es confiable en sistemas concurrentes (procesos e hilos)
+				por lo que hay que hacer mutex. Mejor hacerlo asi:
+				int fd = open("archivo", O_RDONLY);
+				if (fd == -1){
+					if (errno == EACCES)
+						write(2, "Permiso denegado\n", 18);
+					else if (errno == ENOENT)
+						write(2, "Archivo no existe\n", 19); 
+					else
+						perror("open")
+				}
+
+close(fd)
+	cerrar el archivo abierto
+
+fork() (#include <unistd.h>)
+	pid_t pid = fork();
+	devuelve:
+		> 0		-> estamos en el proceso padre y PID es el del hijo.
+		== 0	-> estamos en el hijo
+		< 0		-> error en el fork.
+	Cada vez que ejecutemos un comando externo (ls, echo...) necesitamos:
+		1. crear un hijo con fork()
+		2. En el hijo ejecutar execve() y si falla exit(1);
+		3. En el padre esperar con wait() o waitpid(pid, NULL, 0);
+		Asi la shell sigue activa mientras el hijo corre el comando
+	int main(){
+		printf("Antes del fork\n");
+		pid_t pid = fork();
+		if (pid == 0)
+			printf("Soy el hijo\n");
+		else if (pid > 0){
+			printf("Soy el padre\n");
+			wait(NULL); //para que no se quede ZOMBI el hijo}
+		return (0);}
+	Un proceso ZOMBI no son leaks, pero si ocupa espacio en la tabla de procesos
+	del kernel que es limitada. Si se acumulan no se podrian generar nuevos procesos
+	IMPORTANTE ulimit -u 100 limita a 100 procesos x usuario. PROTEGERSE!!!
+	pid_t pid = fork();
+	if (pid < 0)
+	{
+	    perror("fork");
+		//LIBERAR TODO!!
+	    return (1);
+	}
+
+
+
+free()
+	para liberar los ft_callocs
+
+malloc()
+	Usaremos ft_calloc()
+
+open()
+	abrir archivos (fd)
+
+printf()
+	Para imprimir
+
+read(fd, buffer, tamaño buffer)
+	lee del fd y lo mete en el buffer.
+
+write()
+	para imprimir
+
