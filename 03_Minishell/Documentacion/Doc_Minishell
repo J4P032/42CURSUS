@@ -92,7 +92,31 @@ add_history(const char *line)
 	En el comportamiento original de bash, history no duplica comandos repetidos. Solo
 	los coloca abajo. Esto lo hace internamente add_history. NO hace falta hacer nada.
 
-					************** FUNCIONES NORMALES **************
+                          ==========================
+
+chdir -> int chdir(const char *path)
+	cambia el directorio actual al que se le de en el path
+	retorna: 0 -> ok
+			-1 -> error (ej. si no existe directorio)
+	chdir("/home/usuario");
+
+
+getcwd -> char *getcwd(char *buf, size_t size) #include <unistd.h>
+	Obtiene la ruta absoluta del directorio de trabajo actual del proceso y la almacena
+	en el búfer buf.
+	Si el tamaño del buf es insuficiente para meter la ruta devuelve NULL y pone errno en
+	ERANGE. Si buf es NULL, el sistema asigna memoria dinámica.
+	char cwd[1024];
+	if (getcwd(cwd, sizeof(cwd)) != NULL){
+		printf("Directorio actual: %s\n", cwd);
+	else
+		perror("Error")}
+
+
+
+
+
+				************** FUNCIONES DE ARCHIVOS **************
 
 access (#include <unistd.h>)
 	int access(const char *pathname, int mode)
@@ -121,8 +145,101 @@ access (#include <unistd.h>)
 						perror("open")
 				}
 
+stat -> int stat(const char *pathname, struct stat *buf) 
+	Te da info sobre archivo (tamaño, permisos, tipo, fechas...)
+	Llena la estructura struct stat con info del archivo indicado por pathname
+	retorna: 0 -> ok
+			-1 -> falla
+	Esta es la estructura buf:
+		struct stat {
+    dev_t     st_dev;     // ID del dispositivo que contiene el archivo
+    ino_t     st_ino;     // Número de inodo
+    mode_t    st_mode;    // Tipo de archivo y permisos
+    nlink_t   st_nlink;   // Número de enlaces duros
+    uid_t     st_uid;     // ID del usuario (propietario)
+    gid_t     st_gid;     // ID del grupo
+    dev_t     st_rdev;    // ID del dispositivo (si es especial)
+    off_t     st_size;    // Tamaño total en bytes
+    blksize_t st_blksize; // Tamaño de bloque para E/S
+    blkcnt_t  st_blocks;  // Número de bloques asignados
+
+    struct timespec st_atim;  // Último acceso
+    struct timespec st_mtim;  // Última modificación
+    struct timespec st_ctim;  // Último cambio de metadatos 
+	};
+	Para saber si un archivo es un directorio, o fichero... se usa el:
+		mode_t st_mode; que tiene definidas unas macros:
+
+			S_ISDIR(st_mode)   // es un directorio
+			S_ISREG(st_mode)   // archivo regular
+			S_ISLNK(st_mode)   // enlace simbólico
+			S_ISCHR(st_mode)   // dispositivo de caracteres
+			S_ISBLK(st_mode)   // dispositivo de bloques
+			S_ISFIFO(st_mode)  // FIFO (pipe)
+			S_ISSOCK(st_mode)  // socket
+	ejemplo:
+		struct stat info;
+		stat("archivo.txt", &info);
+		if (S_ISDIR(info.st_mode))
+		    write(1, "Es directorio\n", 14);
+
+lstat -> info sobre archivo como stat. PERO esto es para enlaces simbólicos (accesos directos
+en windows -> 
+ln -s /home/user/documento.txt acceso.txt)
+stat("acceso.txt", &buf) -> accede a documento.txt
+lstat("acceso.txt", &buf) -> accede a acceso.txt (que está vacio. Solo es un acceso directo)
+
+fstat -> int fstat(int fd, struct stat *buf)
+	Se le pasa un file descriptor
+	int fd = open("archivo.txt", O_RDONLY);
+	struct stat info;
+	fstat(fd, &info);
+		stat("archivo.txt", &buf) -> usa el nombre del archivo
+		fstat(fd, &buf) -> usa el descriptor del archivo ya abierto
+	OJOOOOO!!! UTIL PARA ALGUN CABRONCETE QUE BORRE EL ARCHIVO:
+	Util para evitar errores si el archivo se borra o cambia de nombre entre
+	hacer stat y usarlo. También leer propiedades (tamaño, permisos) sin buscar el archivo
+	por nombre. Si se borra el archivo el fd lo mantiene en memoria.
+		(long long)buf.st_size //Muestra el tamaño del archivo
+
+
+unlink() -> int unlink(const char *pathname)
+	Elimina el ENLACE entre el nombre del archivo y su contenido en el sistema
+	Si hay procesos con fd abierto, el contenido sigue abierto  hasta que se cierre 
+	con close dicho fd. Dicho archivo se elimina SOLO CUANDO TODOS LOS DESCRIPTORES
+	ABIERTOS ASOCIADOS A DICHO ARCHIVO SE CIERRAN. Si no hay FDs se borra tal cual.
+		devuelve: 0 -> correcto
+				 -1 -> error al eliminar.
+	inf fd = open("archivo.txt", O_RDONLY);
+	unlink("archivo.txt") //elimina el archivo.txt pero sigue el contenido en el fd
+	read(fd, buffer, 100); //se puede leer el contenido
+	close(fd); //el archivo se elimina completamente.
 
 						*************** PROCESOS **************
+
+execve -> int execve(const char *pathname, char *const argv[], char *const envp[]);
+	Ejecuta un programa dentro del proceso que hace la llamada.
+	pathname -> la ruta del programa a ejecutar. Puede ser relativa o absoluta
+	argv[] -> los argumentos que el programa recibirá. El primero el nombre del programa. Debe terminar con NULL
+	envp[] -> contiene las variables de entorno que se pasan al programa. Debe terminar con NULL
+	Retorno: No retorna en caso de éxito. Si lo hace bien solo sustituye el proceso actual
+			por el nuevo programa.
+			-1 -> si hay error y establece errno para indicar el error
+	int main(){
+		char *argv[] = {"/bin/ls", "-l", NULL}; //comando ls con argumento -l
+		char *env[] = {NULL}; //el proceso hereda las variables entorno del padre
+		//reemplazamos proceso actual con programa bin/ls
+		if (execve("/bin/ls", args, env) == -1)
+			return (perror("Error"), 1);
+		//lo que haya aqui no se ejecuta si tiene exito execve	
+		}
+	IMPORTANTE: lo que esté detras de execve NO VUELVE!! si quiero hacer algo despues
+	mejor usar fork() antes.
+		pid_t pid = fork();
+		if (pid == 0) //si es el hijo
+			execve(...);
+		else
+			waitpid(pid, NULL, 0); //espera qeu termine el hijo.
 
 fork() (#include <unistd.h>)
 	pid_t pid = fork();
@@ -154,6 +271,28 @@ fork() (#include <unistd.h>)
 		//LIBERAR TODO!!
 	    return (1);
 	}
+
+pipe -> pipe(int fd[2])
+	Crea un canal de comunicación unidireccional entre procesos. Crea una "tuberia" entre
+	dos descriptores.
+	fd[0]: lectura
+	fd[1]: escritura
+	ls | wc -l simulado:
+
+	int fd[2];
+	1. pipe(fd);
+	2. fork() para crear hijo
+	3. en hijo:
+		dup2(fd[1], 1); //redirige stdout a la tuberia
+		close(fd[0]);
+		execve("ls", ...);
+	4. en padre:
+		dup2(fd[0], 0); //redirige stdin a la tuberia
+		close(fd[1]);
+		execve("wc", ...);
+	el output de ls entra como input en wc -l.
+
+
 
 wait(int *status) y pid_t waitpid(pid_t pid, int *status, int options)
 	Los dos esperan a que terminen los procesos hijos. Pero el wait espera a que
@@ -259,6 +398,18 @@ malloc()
 
 			************** FUNCIONES ABRIR ARCHIVOS **************
 
+dup2 -> dup2(int oldfd, int newfd)
+	duplica el oldfd en newfd. Si newfd esta abierto lo CIERRA antes. Aquí elegimos
+	el número del descriptor. Ejemplo en dup
+
+dup
+	duplica un fd existente, devolviendo un fd el menor disponible, que apunta al oldfd
+	int backup = dup(1); //guarda el stdout
+	int fd = open("out.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	dup(fd, 1); //redirige el stdout al archivo
+	//...printf va a "out.txt"
+	dup2(backup, 1); //restaura stdout
+
 open()
 	abrir archivos (fd)
 
@@ -267,6 +418,47 @@ read(fd, buffer, tamaño buffer)
 
 close(fd)
 	cerrar el archivo abierto
+
+opendir -> DIR *opendir(const char *name)
+	Abre un directorio y te devuelve un puntero a una estructura DIR que luego se puede
+	usar para leer su contenido (con readir)
+	DIR *dir = opendir("."); //abrimos el directorio actual
+
+readdir -> struct dirent *readdir(DIR *dirp)
+	Lee una entrada (archivo o subdirectorio) de un directorio abierto con opendir
+	devuelve un puntero a una estructura struct direct
+	DIR *dir = opendir(".");
+	struct dirent *entry;
+	while((entry = readdir(dir)) != NULL)
+		printf("%s\n", entry->d_name);
+	closedir(dir);
+
+closedir -> int closedir(DIR *dirp)
+	cierra un directorio abierto con opendir
+	retorna: 0 -> si se cierra correctamente
+			-1 -> si hay error.
+
+
+					+++++++++++++++++++++++++++++++++
+
+
+isatty() -> int isatty(int fd)
+	Te dice si un file descriptor (fd) está conectado a un terminal o no
+		1 -> el fd es un terminal
+		0 -> no lo es.
+		-1 -> no lo es. Mirar el error con errno.
+
+ttyname()	-> char *ttyname(int fd)
+	Dice el nombre del dispositivo de terminal asociado a un descriptor fd
+	Devuelve:
+			un puntero a una cadena con nombre del dispositivo (ej: "/dev/tty1") si es un terminal
+			si no lo es, NULL
+	Identificica desde que terminal esta trabajando el programa.
+
+ttyslot() -> int ttyslot(void)
+	Busca en el archivo
+
+
 
 
 				************** FUNCIONES ESCRIBIR **************
@@ -277,3 +469,19 @@ printf()
 write()
 	para imprimir
 
+				************** FUNCIONES ERROR **************
+
+perror -> void perror(const char *s)
+	Imprime un mensaje de error en stderr personalizado con el error errno
+	perror("Error al abrir");
+	sale -> Error al abrir: No such file or directory.
+	Es decir es lo que sale antes de los dos puntos. el resto es lo que viene del
+	errno.
+
+strerror -> char *strerror(int errnum)
+	Convierte un numero de error (errno) en msg de texto.
+	printf("Error: %s\n", strerror(errno));
+
+
+exit
+	la mejor de las funciones. Se sale sin mas... maravilla de las maravillas.
