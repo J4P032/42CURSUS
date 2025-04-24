@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:26:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/24 14:27:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:28:35 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,11 @@ getenv() -> char *getenv(const char *name)
 		//...util para simular como se resuelven comandos.
 
 
+
+
+
+
+		
 
 #########################
 TERMINALES ##############
@@ -291,6 +296,9 @@ ttyslot() -> int ttyslot(void)
 		
 
 
+
+
+				
 
 ####################################
 FUNCIONES DE ARCHIVOS ##############
@@ -637,8 +645,6 @@ closedir() -> int closedir(DIR *dirp)
 	cierra un directorio abierto con opendir
 	retorna: 0 -> si se cierra correctamente
 			-1 -> si hay error.
-
-
 
 
 
