@@ -1,27 +1,19 @@
-CONSIDERACIONES CHATGPT:
-1. Parsers y tokens.
-	Dividir el input del user como ls -l | grep txt > out.txt
-	en tokens y luego construir una estructura para interpretarlo
-2. Redirección de pipes.
-	Entender como funcion dup2, pipe, fork y execve
-3. Builtins
-	Comandos como cd, exit, export, pwd hay que implementarlos
-	sin execve. Mejor hacerlos aparte en ficheros c. y probar
-4. Variables de entorno.
-	Usar envp del main, y gestionar nuestras propias variables (Manuel,
-	puso dos que no se podian destruir) con export y unset
-5. Señales. 
-	Control+c, control+D, control+\ tienen que comportarse como Bash.
-6. Sin errores de valgrind. Norminette y sanitizer
-
-FUNCIONES AUTORIZADAS:
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Doc_Minishell                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/24 14:26:49 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/04/24 14:27:07 by jrollon-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 
-
-
-
-
-				************ FUNCIONES DE PROMPT **************
+##################################
+FUNCIONES DE PROMPT ##############
+##################################
 
 readline -> char *readline(const char *prompt) #include <readline/readline.h> #include <readline/history.h>
 	const char *prompt -> cadena que se escribirá en el prompt para que el usaurio increse datos. Si no se quiere NULL.
@@ -127,10 +119,9 @@ getenv() -> char *getenv(const char *name)
 
 
 
-
-
-						************** TERMINALES **************
-
+#########################
+TERMINALES ##############
+#########################
 
 isatty() -> int isatty(int fd)
 	Te dice si un file descriptor (fd) está conectado a un terminal o no
@@ -301,8 +292,9 @@ ttyslot() -> int ttyslot(void)
 
 
 
-
-				************** FUNCIONES DE ARCHIVOS **************
+####################################
+FUNCIONES DE ARCHIVOS ##############
+####################################
 
 access (#include <unistd.h>)
 	int access(const char *pathname, int mode)
@@ -406,10 +398,9 @@ unlink() -> int unlink(const char *pathname)
 
 
 
-
-
-
-						*************** PROCESOS **************
+#######################
+PROCESOS ##############
+#######################
 
 execve() -> int execve(const char *pathname, char *const argv[], char *const envp[]);
 	Ejecuta un programa dentro del proceso que hace la llamada.
@@ -522,8 +513,9 @@ wait4(pid_t pid, int *status, int options, struct rusage *rusage)
 
 
 
-
-					************** SEÑALES **************
+#######################
+SEÑALES ###############
+#######################
 
 kill() -> int kill(pid_t pid, int sig)
 	Envia la señal sig al proceso pid.
@@ -589,10 +581,9 @@ sigemptyset() -> int siemptyset(sigset_t *set)
 
 	
 	
-	
-	
-	
-			************** RESERVA DE MEMORIA Y LIBERACION **************
+##############################################	
+RESERVA DE MEMORIA Y LIBERACION ##############
+##############################################
 
 free()
 	para liberar los ft_callocs
@@ -603,10 +594,9 @@ malloc()
 
 
 
-
-
-
-			************** FUNCIONES ABRIR ARCHIVOS **************
+#######################################
+FUNCIONES ABRIR ARCHIVOS ##############
+#######################################
 
 dup2() -> dup2(int oldfd, int newfd)
 	duplica el oldfd en newfd. Si newfd esta abierto lo CIERRA antes. Aquí elegimos
@@ -654,8 +644,9 @@ closedir() -> int closedir(DIR *dirp)
 
 
 
-
-				************** FUNCIONES ESCRIBIR **************
+#################################
+FUNCIONES ESCRIBIR ##############
+#################################
 
 printf()
 	Para imprimir
@@ -666,10 +657,9 @@ write()
 
 
 
-
-
-
-				************** FUNCIONES ERROR **************
+##############################
+FUNCIONES ERROR ##############
+##############################
 
 perror -> void perror(const char *s)
 	Imprime un mensaje de error en stderr personalizado con el error errno
