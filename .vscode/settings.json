@@ -6,6 +6,7 @@
 		"random": "c",
 		"so_long.h": "c",
 		"so_long_bonus.h": "c",
-		"algorithm": "c"
+		"algorithm": "c",
+		"doc_minishell": "c"
 	}
 }
