@@ -6,7 +6,7 @@
 #    By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/24 14:30:42 by jrollon-          #+#    #+#              #
-#    Updated: 2025/04/24 14:46:57 by jrollon-         ###   ########.fr        #
+#    Updated: 2025/04/24 16:15:04 by jrollon-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,22 +38,73 @@ INSTRUCCIONES 42 ###
 	add_history(), rl_clear_history()
 
 3. Buscar y ejecutar el ejecutable correcto (basado en PATH o mediante rutas relativas o absolutas)
+	Pueden ser archivos ejecutables o scrips. 
+	* Si ejecutamos algo como gcc el terminal buscará en la ruta PATH si está. Si no, mostrará:
+		"el comando escrito": command not found
+		si ponemos: "zanahora queso" -> zanahoria: command not found.
+	* si se usan scripts la primera linea (shebang) marca el intérprete: (#!/bin/bash, #!/usr/bin/python3, etc.)
+	* ruta relativa: ./a.out
+	* ruta absoluta: /home/usuario/proyecto/a.out
+	getenv() -> para obtener los PATH y ver si se tiene el ejecutable allí.
+	access() -> para ver si se tiene los permisos
+	execve() -> para ejecutar el programa.
+	fork() -> para ejecutar el programa en un proceso hijo.
+	opendir() y readdir() -> para listar los archivos en un directorio (simular ls)
+	chdir() -> cambia el directorio actual (como cd)
+	sigaction() -> para considerar las señales en el proceso.
+	
 
 4. permitido 1 variable global para indicar recepción de una señal. QUIZA MEJOR USAR LA VARIABLE
 	CONTEXT PARA PASARLE LOS DATOS DE ESTRUCTURAS QUE CREEMOS.
 
 5. NO interprestar comillas sin cerrar, o caracteres especiales (\, ;)
+	* Las comillas dobles "hola mundo" son usadas para pasar por argumentos a programas.
+	* comillas sin cerrar generaria un error de sintaxis -> echo "Esto es una prueba   (" pongo la comilla al final para cambie color) sería un error.
+	* bash, si pongo algo sin cierre de comillas salta ">" como prompt. que solo se sale con Ctrl-C o poniendo las dobles comillas de cierre -> escribiría el texto
+	* zsh, pone "dquote>" y solo se sale con Ctrl-C, o poniendo la doble comilla de cierre -> escribiría el texto.
+	* fish, no pone nada, solo pasa el cursor debajo del comando erroneo, se sale con Ctrl-c o poniendo la doble comilla de cierre
+	* Caracteres especiales: 
+		echo "las \"comillas\" se ponen con \\ delante" -> las "comillas" se ponen con \ delante.
+		echo "hola"; echo "mundo" -> 	hola
+										mundo  //separa comandos entre si, como en C.
+		sleep 5 & -> & hace ejecutar el proceso en segundo plano y muestra [1] pid. Entre corchetes la id del proceso.
+			la id del proceso no vuelve.. se incrementa, aunque termine asi que si pongo sleep 5 & otra vez pondra:
+				[2] 266469
+				[1] Done		sleep 5
 
-6. Gestionar que la ' evite que el shell interprete metacaracteres en la secuencia entrecomillada (???!)'
+6. Gestionar que la ' evite que el shell interprete metacaracteres en la secuencia entrecomillada '
+	* echo 'It\'s a test' //no se pueden tener comillas simples sueltas dentro de comillas simples de apertura y cierre a no ser que se le ponga \
+	* $ name="Javi"
+		$ echo "hola, $name" // aqui $ sirve para introducir la variable y sustituirla
+	* si se quiere incluir -> echo "hola \$name" seria: hola $name.
 
 7. Gestionar que la " evite que el shell interpreste metacaracteres en la secuencia entrecomillada excepto el $"
+	* echo "It's a test" //aquí la comilla simple está dentro de doble y se interpreta como tal para escribirla.
 
 8. Implementar redericcionamientos:
 	< debe redirigir a input
 	> debe redirigir a output
 	<< debe recibir un delimitador, depués de leer del input de la fuenta actual hasta que una linea que contenga solo
-		el delimitador aparezca. Peor no necesita actualizar el historial. (???!!)
+		el delimitador aparezca. Peor no necesita actualizar el historial.
+		* cat <<FIN //entrará en modo edición y se parará cuando reconozca un FIN.
+		(entra en modo > edicion)
+		(escribimos) hola (enter)
+		(escribimos) mundo (enter)
+		(escribimos) FIN (enter)
+		se sale, y escribe: hola
+							mundo
+							$
 	>> debe redirigir el output en modo append (???!!)
+	* imaginemos que tenemos un archivo salida.txt con dos lineas: 
+		linea 1
+		linea 2
+	  Ahora le decimos:
+	  	echo "nueva linea" >> salida.txt
+	  El archivo salida se convertirá en:
+	  	linea 1
+		linea 2
+		nueva linea.
+	Con > simple se sustituiría la linea1 y linea2 por la nueva linea.	
 
 9. Implementar pipes (|)
 
