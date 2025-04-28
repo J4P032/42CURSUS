@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/03/27 20:49:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:08:07 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,9 @@ int		ft_toupper(int c);
 char	*ft_utoa(unsigned int n);
 void	ft_putnbr_base32(unsigned int *nbr, char *base, int *num_chars);
 void	ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars);
+
+//MINISHELL - Mario
+int		ft_strcmp(const char *s1, const char *s2);
+void	ft_matrix_free(char **matrix);
 
 #endif

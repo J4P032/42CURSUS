@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_j.h                                      :+:      :+:    :+:   */
+/*   clean_all_m.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/28 12:41:07 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/04/26 18:05:48 by mpico-bu          #+#    #+#             */
+/*   Updated: 2025/04/26 18:32:30 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_J_H
-# define MINISHELL_J_H
+#include "../inc/minishell_m.h"
+#include "../inc/minishell_j.h"
 
-# include <signal.h>
-
-void	init_sigaction(struct sigaction *sa);
-
-#endif
+void	clean_all(void)
+{
+	ft_manage_history(NULL, 1);
+	rl_clear_history();
+}

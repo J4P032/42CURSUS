@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_j.h                                      :+:      :+:    :+:   */
+/*   ft_matrix_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/28 12:41:07 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/04/26 20:09:14 by mpico-bu          #+#    #+#             */
+/*   Updated: 2025/04/26 20:10:31 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_J_H
-# define MINISHELL_J_H
+#include <stdlib.h>
 
-# include <signal.h>
+void	ft_matrix_free(char **matrix)
+{
+	int	i;
 
-void	init_sigaction(struct sigaction *sa);
-
-#endif
+	i = 0;
+	while (matrix[i])
+	{
+		free(matrix[i]);
+		i++;
+	}
+	free(matrix);
+}
