@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/28 18:49:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/28 20:30:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,25 +72,63 @@ static int	ft_count_words(char *s, char c, int *error)
 /*3.ft_calloc of i + 1 elements of each string*/
 /*4.return to start and form the string from start to i*/
 /*(*start) will be updated to new position to be send back to split*/
-static char	*sub_split(char const *s, char *c, size_t *start)
+static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 {
 	size_t	i;
 	size_t	j;
 	char	*split_aux;
-
+	
 	i = 0;
 	j = 0;
 
-	while ((s[*start] == *c) && (s[*start]))
-		(*start)++;
-	
-	if (s[*start] == '"')
+	if (s[*start] == '"' && !(*quotes % 2))
+	{
 		*c = '"';
-	else if (s[*start] == '\'')
+		*quotes++;
+	}
+	else if (s[*start] == '\'' && !(*quotes % 2))
+	{
 		*c = '\'';
-	
-	if ((s[*start] == *c) && (s[*start]))
+		*quotes++;
+	}
+	else if (s[*start] == '\'' || s[*start] == '"')
+	{
+		*c = ' ';
+		*quotes++;
+		*start++;//
+	}
+
+	if (c != '"' && c != '\'')
+	{
+		while ((s[*start] == *c) && (s[*start]))
+			(*start)++;
+	}
+	else if (c == '"' || c == '\'')
+	{ 
 		(*start)++;
+		//*quotes++;
+	}
+	
+
+	if (s[*start] == '"' && !(*quotes % 2))
+	{
+		*c = '"';
+		*quotes++;
+		*start++;
+	}
+	else if (s[*start] == '\'' && !(*quotes % 2))
+	{
+		*c = '\'';
+		*quotes++;
+		*start++;
+	}
+	else if (s[*start] == '\'' || s[*start] == '"')
+	{
+		*c = ' ';
+		*quotes++;
+		*start++;//
+	}
+	
 	
 	while (s[i + *start] && s[i + *start] != *c)
 		i++;
@@ -99,6 +137,14 @@ static char	*sub_split(char const *s, char *c, size_t *start)
 		return (NULL);
 	while (j < i)
 		split_aux[j++] = s[(*start)++];
+
+	if (c == ' ')
+	{
+		while (s[*start] && s[*start] == c)
+			*start++;
+	}
+		
+
 	return (split_aux);
 }
 
@@ -108,9 +154,11 @@ char	**ft_split_quotes(char const *s, char c, int *error)
 	size_t	i;
 	size_t	start;
 	char	**split;
+	int		quotes;
 
 	i = 0;
 	start = 0;
+	quotes = 0;
 	words = ft_count_words((char *)s, c, error);
 	if (*error)
 		return NULL;
@@ -119,7 +167,7 @@ char	**ft_split_quotes(char const *s, char c, int *error)
 		return (NULL);
 	while (i < words)
 	{
-		split[i] = sub_split(s, &c, &start);
+		split[i] = sub_split(s, &c, &start, &quotes);
 		if (!split[i])
 		{
 			while (i > 0)
