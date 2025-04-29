@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/29 10:01:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:46:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ static int	ft_count_words(char *s, char c, int *error)
 			while ((s[i] != c) && (s[i]))
 			{
 				i++;
-				if (c == ' ' && (s[i] == '"' || s[i] == '\''))//
-					break ;//
+				if (c == ' ' && (s[i] == '"' || s[i] == '\''))
+					break ;
 			}
 		}
 		else if (s[i])
@@ -140,8 +140,11 @@ static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 		k = 1;
 	
 	while (s[i + *start] && s[i + *start] != *c)
-		i++;
-
+	{
+		if (*c == ' ' && (s[i + *start] == '"' || s[i + *start] == '\''))//
+			break ;//
+		i++;//
+	}
 
 	split_aux = (char *)ft_calloc(i + k + 1, sizeof(char));
 	
@@ -162,7 +165,6 @@ static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 	}
 		
 	*c = ' ';
-	
 
 	return (split_aux);
 }
@@ -204,7 +206,7 @@ int main (void)
 {
 	//char	*kk = "\"echo\"   \"   \"\"\"\"'\"'\"'    hola";
 	//char	*kk = "\"\"\"'\"'\"' hola";
-	char *kk = "echo  \"patata\"  frita  \"  de ayer\"";
+	char *kk = " echo \"patata\"  frita  \"  de ayer\"";
 
 	size_t	i = 0;
 	int		error = 0;
