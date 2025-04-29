@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/29 09:13:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:01:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,11 @@ static int	ft_count_words(char *s, char c, int *error)
 		{
 			words++;
 			while ((s[i] != c) && (s[i]))
+			{
 				i++;
+				if (c == ' ' && (s[i] == '"' || s[i] == '\''))//
+					break ;//
+			}
 		}
 		else if (s[i])
 			i++;
@@ -76,10 +80,12 @@ static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 {
 	size_t	i;
 	size_t	j;
+	size_t	k;
 	char	*split_aux;
 	
 	i = 0;
 	j = 0;
+	k = 0;
 
 	if (s[*start] == '"' && !(*quotes % 2))
 	{
@@ -130,17 +136,24 @@ static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 		(*start)++;
 	}
 
+	if (*quotes > 0 && *quotes % 2 == 0 && *c == ' ' && s[(*start) - 1] == ' ')
+		k = 1;
 	
-
 	while (s[i + *start] && s[i + *start] != *c)
 		i++;
 
-		
-	split_aux = (char *)ft_calloc(i + 1, sizeof(char));
+
+	split_aux = (char *)ft_calloc(i + k + 1, sizeof(char));
+	
 	if (!split_aux)
 		return (NULL);
-	while (j < i)
-		split_aux[j++] = s[(*start)++];
+	while (j < i + k)
+	{
+		if (j == 0 && k == 1)
+			split_aux[j++] = ' ';
+		else
+			split_aux[j++] = s[(*start)++];
+	}
 
 	if (*c == ' ')
 	{
@@ -189,18 +202,23 @@ char	**ft_split_quotes(char const *s, char c, int *error, int *words)
 #include <stdio.h>
 int main (void)
 {
-	//char	*kk = "\"echo \"   \"   \"\"\"\"'\"'\"' hola";
-	char	*kk = "\"\"\"'\"'\"' hola";
-	
+	//char	*kk = "\"echo\"   \"   \"\"\"\"'\"'\"'    hola";
+	//char	*kk = "\"\"\"'\"'\"' hola";
+	char *kk = "echo  \"patata\"  frita  \"  de ayer\"";
+
 	size_t	i = 0;
-	int		number = 0;
+	int		error = 0;
 	int		words;
 	words = 0;
-	char 	**solucion = ft_split_quotes(kk, ' ', &number, &words);	
-	
+	char 	**solucion = ft_split_quotes(kk, ' ', &error, &words);	
+	if (error)
+	{
+		printf("error");
+		return (1);
+	}
 	while (i < words)
 	{
-		printf("%s\n", solucion[i]);
+		printf("%s", solucion[i]);
 		free (solucion[i]);
 		i++;
 	}
