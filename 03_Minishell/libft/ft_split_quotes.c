@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/29 10:46:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:25:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 	}
 
 	if (*quotes > 0 && *quotes % 2 == 0 && *c == ' ' && s[(*start) - 1] == ' ')
-		k = 1;
+		k = 1; //marcara condicion para poner un espacio despues de otra palabra anterior entre comillas
 	
 	while (s[i + *start] && s[i + *start] != *c)
 	{
@@ -153,7 +153,7 @@ static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 	while (j < i + k)
 	{
 		if (j == 0 && k == 1)
-			split_aux[j++] = ' ';
+			split_aux[j++] = ' '; //meter espacio despues de comillas dobles si hay un espacio antes de la palabra
 		else
 			split_aux[j++] = s[(*start)++];
 	}
@@ -206,7 +206,8 @@ int main (void)
 {
 	//char	*kk = "\"echo\"   \"   \"\"\"\"'\"'\"'    hola";
 	//char	*kk = "\"\"\"'\"'\"' hola";
-	char *kk = " echo \"patata\"  frita  \"  de ayer\"";
+	char *kk = "\"\"\"\" echo \"patata ''' de ayer   ya!!\"";
+	//char *kk = " echo   \"patata\"  frita  \"de ayer\"";
 
 	size_t	i = 0;
 	int		error = 0;
