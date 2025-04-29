@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/28 20:30:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/04/29 09:13:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	ft_count_words(char *s, char c, int *error)
 		else if (s[i])
 			i++;
 	}
-	if (!(quotes % 2))
+	if (quotes % 2)
 		*error = 1;
 	return (words);
 }
@@ -84,73 +84,79 @@ static char	*sub_split(char const *s, char *c, size_t *start, int *quotes)
 	if (s[*start] == '"' && !(*quotes % 2))
 	{
 		*c = '"';
-		*quotes++;
+		(*quotes)++;
 	}
 	else if (s[*start] == '\'' && !(*quotes % 2))
 	{
 		*c = '\'';
-		*quotes++;
+		(*quotes)++;
 	}
 	else if (s[*start] == '\'' || s[*start] == '"')
 	{
 		*c = ' ';
-		*quotes++;
-		*start++;//
+		(*quotes)++;
+		(*start)++;
 	}
 
-	if (c != '"' && c != '\'')
+	if (*c != '"' && *c != '\'')
 	{
 		while ((s[*start] == *c) && (s[*start]))
 			(*start)++;
 	}
-	else if (c == '"' || c == '\'')
-	{ 
+	else if (*c == '"' || *c == '\'')
 		(*start)++;
-		//*quotes++;
-	}
 	
 
 	if (s[*start] == '"' && !(*quotes % 2))
 	{
 		*c = '"';
-		*quotes++;
-		*start++;
+		(*quotes)++;
+		(*start)++;
 	}
 	else if (s[*start] == '\'' && !(*quotes % 2))
 	{
 		*c = '\'';
-		*quotes++;
-		*start++;
+		(*quotes)++;
+		(*start)++;
 	}
-	else if (s[*start] == '\'' || s[*start] == '"')
+	else if (*c == '"' && s[*start] == '"')
 	{
-		*c = ' ';
-		*quotes++;
-		*start++;//
+		(*quotes)++;
+		(*start)++;
 	}
+	else if (*c == '\'' && s[*start] == '\'')
+	{
+		(*quotes)++;
+		(*start)++;
+	}
+
 	
-	
+
 	while (s[i + *start] && s[i + *start] != *c)
 		i++;
+
+		
 	split_aux = (char *)ft_calloc(i + 1, sizeof(char));
 	if (!split_aux)
 		return (NULL);
 	while (j < i)
 		split_aux[j++] = s[(*start)++];
 
-	if (c == ' ')
+	if (*c == ' ')
 	{
-		while (s[*start] && s[*start] == c)
-			*start++;
+		while (s[*start] && s[*start] == *c)
+			(*start)++;
 	}
 		
+	*c = ' ';
+	
 
 	return (split_aux);
 }
 
-char	**ft_split_quotes(char const *s, char c, int *error)
+char	**ft_split_quotes(char const *s, char c, int *error, int *words)
 {
-	size_t	words;
+	//size_t	words;
 	size_t	i;
 	size_t	start;
 	char	**split;
@@ -159,13 +165,13 @@ char	**ft_split_quotes(char const *s, char c, int *error)
 	i = 0;
 	start = 0;
 	quotes = 0;
-	words = ft_count_words((char *)s, c, error);
+	*words = ft_count_words((char *)s, c, error);
 	if (*error)
 		return NULL;
-	split = (char **)ft_calloc(words + 1, sizeof(char *));
+	split = (char **)ft_calloc(*words + 1, sizeof(char *));
 	if (!split)
 		return (NULL);
-	while (i < words)
+	while (i < *words)
 	{
 		split[i] = sub_split(s, &c, &start, &quotes);
 		if (!split[i])
@@ -178,4 +184,25 @@ char	**ft_split_quotes(char const *s, char c, int *error)
 		i++;
 	}
 	return (split);
+}
+
+#include <stdio.h>
+int main (void)
+{
+	//char	*kk = "\"echo \"   \"   \"\"\"\"'\"'\"' hola";
+	char	*kk = "\"\"\"'\"'\"' hola";
+	
+	size_t	i = 0;
+	int		number = 0;
+	int		words;
+	words = 0;
+	char 	**solucion = ft_split_quotes(kk, ' ', &number, &words);	
+	
+	while (i < words)
+	{
+		printf("%s\n", solucion[i]);
+		free (solucion[i]);
+		i++;
+	}
+	return 0;	
 }
