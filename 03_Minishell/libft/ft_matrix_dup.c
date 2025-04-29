@@ -1,33 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_env_m.c                                         :+:      :+:    :+:   */
+/*   ft_matrix_dup.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 18:24:39 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/04/28 16:47:29 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/04/28 17:01:07 by mpico-bu          #+#    #+#             */
+/*   Updated: 2025/04/28 17:05:19 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell_m.h"
-#include "../inc/minishell_j.h"
+#include "libft.h"
 
-void	ft_env(char **input, char **envp)
+char	**ft_matrix_dup(char **matrix)
 {
-	int	i;
+	int		i;
+	char	**matrix2;
 
-	if (input[1] && input[1][0] == '-' && input[1][1])
-		printf("env: invalid option -- %c\n", input[1][1]);
-	else if (input[1] && input[1][0] != '-')
-		printf("env:'%s': No such file or directory\n", input[1]);
-	else
+	i = 0;
+	while (matrix[i])
+		i++;
+	matrix2 = malloc(sizeof(char *) * (i + 1));
+	if (!matrix2)
+		return (NULL);
+	i = 0;
+	while (matrix[i])
 	{
-		i = 0;
-		while (envp[i])
+		matrix2[i] = ft_strdup(matrix[i]);
+		if (!matrix2[i])
 		{
-			printf("%s\n", envp[i]);
-			i++;
+			while (--i >= 0)
+				free(matrix2[i]);
+			free(matrix2);
+			return (NULL);
 		}
+		i++;
 	}
+	matrix2[i] = NULL;
+	return (matrix2);
 }

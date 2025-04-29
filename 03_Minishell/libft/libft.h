@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/26 20:08:07 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:06:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,23 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
+typedef struct s_split
+{
+	char	*split_aux;
+	char	*s;
+	char	c;
+	size_t	words;
+	size_t	start;
+	int		quotes;
+}			t_split;	
 
 int		ft_atoi(const char *nptr);
 void	ft_bzero(void *s, size_t n);
@@ -73,5 +84,11 @@ void	ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars);
 //MINISHELL - Mario
 int		ft_strcmp(const char *s1, const char *s2);
 void	ft_matrix_free(char **matrix);
+char	**ft_matrix_dup(char **matrix);
+
+//MINISHELL - Javi
+char	**ft_split_quotes(char const *s, char c, int *error);
+int		ft_count_quotes_words(t_split *squotes, int *error);
+char	*sub_split_quotes(t_split *squotes);
 
 #endif

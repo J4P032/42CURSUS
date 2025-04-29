@@ -11,7 +11,8 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
 	ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
 	ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c \
-	ft_utoa.c ft_putnbr_base.c ft_strcmp.c ft_matrix_free.c
+	ft_utoa.c ft_putnbr_base.c ft_strcmp.c ft_matrix_free.c ft_matrix_dup.c \
+	ft_split_quotes.c ft_split_quotes_separator.c ft_split_quotes_words.c
 OBJS	= ${SRCS:.c=.o}
 
 RM		= rm -rf
