@@ -6,11 +6,32 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/01 12:48:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/01 21:25:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+void	clean_nulls(char ***split, t_split *squotes)
+{
+	size_t	i;
+	size_t	j;
+	char	**aux;
+
+	i = 0;
+	j = 0;
+	aux = *split;
+	while (i < squotes->words)
+	{
+		if (aux[i] && aux[i][0] != '\0')
+			(*split)[j++] = aux[i];
+		else
+			free (aux[i]);
+		i++;
+	}
+	(*split)[j] = NULL;
+	squotes->words = j;
+}
 
 void	init_struct(t_split *squotes, char const *s, char c, size_t *i)
 {
@@ -48,6 +69,7 @@ char	**ft_split_quotes(char const *s, char c)
 		}
 		i++;
 	}
+	clean_nulls(&split, &squotes);
 	return (split);
 }
 

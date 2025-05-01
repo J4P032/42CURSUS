@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:21:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/29 18:11:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/01 21:28:13 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	run_spaces_or_one_quote(t_split *squotes, size_t *k)
 	}
 	else if (squotes->c == '"' || squotes->c == '\'')
 	{
-		if (squotes->quotes % 2 && squotes->s[(squotes->start) - 1] == ' ')
+		if (squotes->quotes % 2 && squotes->start != 0
+			&& squotes->s[(squotes->start) - 1] == ' ')
 			*k = 1;
 		(squotes->start)++;
 	}
@@ -67,15 +68,9 @@ void	open_close_quotes(t_split *squotes)
 		(squotes->start)++;
 	}
 	else if (squotes->c == '"' && squotes->s[squotes->start] == '"')
-	{
 		(squotes->quotes)++;
-		(squotes->start)++;
-	}
 	else if (squotes->c == '\'' && squotes->s[squotes->start] == '\'')
-	{
 		(squotes->quotes)++;
-		(squotes->start)++;
-	}
 }
 
 /*k is for inserting an space in certain cases that are spaces before or...*/
@@ -106,29 +101,31 @@ void	compose_split_aux(t_split *squotes, size_t *i, size_t *j, size_t *k)
 /*(*start) will be updated to new position to be send back to split*/
 /*k is for inserting an space in certain cases that are spaces before or...*/
 /*...after the previus word with*/
-char	*sub_split_quotes(t_split *squotes)
+char	*sub_split_quotes(t_split *sq)
 {
 	size_t	i;
 	size_t	j;
 	size_t	k;
 
-	init_separator(squotes, &i, &j, &k);
-	run_spaces_or_one_quote(squotes, &k);
-	open_close_quotes(squotes);
-	if (squotes->quotes > 0 && squotes->quotes % 2 == 0
-		&& squotes->c == ' ' && squotes->s[(squotes->start) - 1] == ' ')
+	init_separator(sq, &i, &j, &k);
+	run_spaces_or_one_quote(sq, &k);
+	open_close_quotes(sq);
+	if (sq->quotes > 0 && sq->quotes % 2 == 0
+		&& sq->c == ' ' && sq->s[(sq->start) - 1] == ' ')
 		k = 1;
-	while (squotes->s[i + squotes->start]
-		&& squotes->s[i + squotes->start] != squotes->c)
+	while (sq->s[i + sq->start] && sq->s[i + sq->start] != sq->c)
 	{
-		if (squotes->c == ' ' && (squotes->s[i + squotes->start] == '"'
-				|| squotes->s[i + squotes->start] == '\''))
+		if (sq->c == ' ' && (sq->s[i + sq->start] == '"'
+				|| sq->s[i + sq->start] == '\''))
 			break ;
 		i++;
 	}
-	squotes->split_aux = (char *)ft_calloc(i + k + 1, sizeof(char));
-	if (!squotes->split_aux)
+	sq->split_aux = (char *)ft_calloc(i + k + 1, sizeof(char));
+	if (!sq->split_aux)
 		return (NULL);
-	compose_split_aux(squotes, &i, &j, &k);
-	return (squotes->split_aux);
+	if ((sq->c == '"' && sq->s[sq->start] == '"')
+		|| (sq->c == '\'' && sq->s[sq->start] == '\''))
+		(sq->start)++;
+	compose_split_aux(sq, &i, &j, &k);
+	return (sq->split_aux);
 }

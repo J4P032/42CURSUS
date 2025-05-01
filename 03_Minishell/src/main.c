@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/01 12:55:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/01 21:28:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ void	ft_manage_input(char **input, char ***envp)
 {
 	if (!input || !input[0])
 		return ;
-	if (strcmp(input[0], "pwd") == 0)
+	if (ft_strcmp(input[0], "pwd") == 0)
 		ft_pwd(input);
-	else if (strcmp(input[0], "cd") == 0)
+	else if (ft_strcmp(input[0], "cd") == 0)
 		ft_cd(input, *envp);
-	else if (strcmp(input[0], "echo") == 0)
+	else if (ft_strcmp(input[0], "echo") == 0)
 		ft_echo(input);
-	else if (strcmp(input[0], "export") == 0 && input[1])
+	else if (ft_strcmp(input[0], "export") == 0 && input[1])
 		ft_export(input[1], envp);
-	else if (strcmp(input[0], "env") == 0)
+	else if (ft_strcmp(input[0], "env") == 0)
 		ft_env(input, *envp);
-	else if (strcmp(input[0], "unset") == 0 && input[1])
+	else if (ft_strcmp(input[0], "unset") == 0 && input[1])
 		ft_unset(input[1], envp);
 	else
 		printf("%s: command not found\n", input[0]);
@@ -39,7 +39,7 @@ int	main(int argc, char **argv, char **envp)
 	char				*input;
 	struct sigaction	sa;
 	char				**my_envp;
-	
+
 	(void)argc;
 	(void)argv;
 	my_envp = ft_matrix_dup(envp);

@@ -41,3 +41,52 @@
 		quitando: int					error;
 				y
 				error = 0;
+
+3. Fix fuera de rango lectura: En ft_split_quotes.separator.c
+	en void	run_spaces_or_one_quote(t_split *squotes, size_t *k):
+	if (squotes->quotes % 2 && squotes->s[(squotes->start) - 1] == ' ') -> if (squotes->quotes % 2 && squotes->start != 0
+																				&& squotes->s[(squotes->start) - 1] == ' ')
+	check norminette.
+
+4. en ft_split_quotes.c, añado una funcion mas:
+void	clean_nulls(char ***split, t_split *squotes)
+{
+	size_t	i;
+	size_t	j;
+	char	**aux;
+
+	i = 0;
+	j = 0;
+	aux = *split;
+	while (i < squotes->words)
+	{
+		if (aux[i] && aux[i][0] != '\0')
+			(*split)[j++] = aux[i];
+		else
+			free (aux[i]);
+		i++;
+	}
+	squotes->words = j;
+}
+y lo llamamos desde char	**ft_split_quotes(char const *s, char c)
+	añadiendo esto:
+}
+clean_nulls(&split, &squotes);
+return (split);
+}
+
+
+5. en ft_strcmp.c corregida funcion para no segfault
+	Añadido: if (!s1)
+				return (1);
+
+6. los strcmp del main pasados a ft_strcmp.
+
+7. fix double free en ft_split_quotes añadiendo al final:
+	i++;
+	}
+	(*split)[j] = NULL;
+	squotes->words = j;
+	}
+
+8. hiper cambio en ft_split_quotes_words.c para contar las palabras bien

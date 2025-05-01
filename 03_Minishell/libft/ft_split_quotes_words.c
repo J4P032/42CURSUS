@@ -6,30 +6,34 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/01 12:50:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/01 20:43:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/*Important to set finale c to space for quote count words do it propertly*/
 void	assign_separator(t_split *squotes, size_t *i, char separator)
 {
 	squotes->c = separator;
-	if (squotes->words % 2 == 0)
+	if (squotes->quotes % 2 == 0)
 		(squotes->words)++;
 	(squotes->quotes)++;
 	(*i)++;
-	if (squotes->words % 2 == 0)
+	while (squotes->s[*i] && squotes->s[*i] != squotes->c)
+		(*i)++;
+	if (squotes->s[*i] == squotes->c)
 	{
-		while ((squotes->s[*i] != squotes->c) && (squotes->s[*i]))
-			(*i)++;
+		(squotes->quotes)++;
+		(*i)++;
 	}
+	squotes->c = ' ';
 }
 
 void	next_word_count(t_split *squotes, size_t *i)
 {
 	(squotes->words)++;
-	while ((squotes->s[*i] != squotes->c) && (squotes->s[*i]))
+	while (squotes->s[*i] && squotes->s[*i] != squotes->c)
 	{
 		(*i)++;
 		if (squotes->c == ' ' && (squotes->s[*i] == '"'
@@ -41,20 +45,16 @@ void	next_word_count(t_split *squotes, size_t *i)
 int	ft_count_quotes_words(t_split *squotes)
 {
 	size_t	i;
-	char	separator;
 
-	if (!(squotes->s))
+	if (!squotes->s)
 		return (0);
 	i = 0;
-	separator = squotes->c;
 	while (squotes->s[i])
 	{
-		if (squotes->s[i] == '"' && !(squotes->quotes % 2))
+		if (squotes->s[i] == '"')
 			assign_separator(squotes, &i, '"');
-		else if (squotes->s[i] == '\'' && !(squotes->quotes % 2))
+		else if (squotes->s[i] == '\'')
 			assign_separator(squotes, &i, '\'');
-		else if (squotes->s[i] == '\'' || squotes->s[i] == '"')
-			assign_separator(squotes, &i, separator);
 		else if (squotes->s[i] != squotes->c)
 			next_word_count(squotes, &i);
 		else if (squotes->s[i])
@@ -62,5 +62,6 @@ int	ft_count_quotes_words(t_split *squotes)
 	}
 	if (squotes->quotes % 2)
 		squotes->error = 1;
+	squotes->quotes = 0;
 	return (squotes->words);
 }
