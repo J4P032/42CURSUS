@@ -1,0 +1,43 @@
+1. En main.c -> ft_manage_input(char **input, char ***envp) - Arregla Segfaul de error que viene de split_quotes.
+	if (!input[0] || !(*input)) -> if (!input || !input[0])
+
+2. Añadir error en estructura para split_quotes:
+
+	A) en libft.h -> typedef struct s_split
+
+	{
+		char	*split_aux;
+		char	*s;
+		char	c;
+		int		error;
+		size_t	words;
+		size_t	start;
+		int		quotes;
+	}			t_split;
+
+		y
+	
+	char	**ft_split_quotes(char const *s, char c, int *error); -> char	**ft_split_quotes(char const *s, char c);
+	int		ft_count_quotes_words(t_split *squotes, int *error); -> int		ft_count_quotes_words(t_split *squotes);
+
+	B) en ft_split_quotes.c -> en void init_struct añadir:
+		squotes->error = 0;	
+	C) en ft_split_quotes.c -> en char **ft_split_quotes quitar
+		char	**ft_split_quotes(char const *s, char c, int *error) -> char	**ft_split_quotes(char const *s, char c)
+
+		y
+
+		squotes.words = ft_count_quotes_words(&squotes, error); -> squotes.words = ft_count_quotes_words(&squotes);
+		if (*error) -> if (squotes.error)
+
+	D) en ft_split_quotes_words.c
+		int	ft_count_quotes_words(t_split *squotes, int *error) -> int	ft_count_quotes_words(t_split *squotes)
+
+			y
+		*error = 1; -> squotes->error = 1;
+
+	E) en main.c
+		ft_manage_input(ft_split_quotes(input, ' ', &error), &my_envp); -> ft_manage_input(ft_split_quotes(input, ' '), &my_envp);
+		quitando: int					error;
+				y
+				error = 0;

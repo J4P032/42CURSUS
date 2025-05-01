@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/04/29 19:06:16 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:55:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	ft_manage_input(char **input, char ***envp)
 {
-	if (!input[0] || !(*input))
+	if (!input || !input[0])
 		return ;
 	if (strcmp(input[0], "pwd") == 0)
 		ft_pwd(input);
@@ -39,11 +39,9 @@ int	main(int argc, char **argv, char **envp)
 	char				*input;
 	struct sigaction	sa;
 	char				**my_envp;
-	int					error;
-
+	
 	(void)argc;
 	(void)argv;
-	error = 0;
 	my_envp = ft_matrix_dup(envp);
 	if (!my_envp)
 		return (clean_all(), 1);
@@ -55,7 +53,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (*input)
 			ft_manage_history(input, 0);
-		ft_manage_input(ft_split_quotes(input, ' ', &error), &my_envp);
+		ft_manage_input(ft_split_quotes(input, ' '), &my_envp);
 		free(input);
 	}
 	ft_matrix_free(my_envp);

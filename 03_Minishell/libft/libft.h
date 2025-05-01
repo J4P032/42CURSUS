@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/29 19:06:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:53:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_split
 	char	*split_aux;
 	char	*s;
 	char	c;
+	int		error;
 	size_t	words;
 	size_t	start;
 	int		quotes;
@@ -87,8 +88,8 @@ void	ft_matrix_free(char **matrix);
 char	**ft_matrix_dup(char **matrix);
 
 //MINISHELL - Javi
-char	**ft_split_quotes(char const *s, char c, int *error);
-int		ft_count_quotes_words(t_split *squotes, int *error);
+char	**ft_split_quotes(char const *s, char c);
+int		ft_count_quotes_words(t_split *squotes);
 char	*sub_split_quotes(t_split *squotes);
 
 #endif

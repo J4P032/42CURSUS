@@ -7,6 +7,7 @@
 		"so_long.h": "c",
 		"so_long_bonus.h": "c",
 		"algorithm": "c",
-		"doc_minishell": "c"
+		"doc_minishell": "c",
+		"minishell_j.h": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/04/29 15:39:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:50:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	next_word_count(t_split *squotes, size_t *i)
 	}
 }
 
-int	ft_count_quotes_words(t_split *squotes, int *error)
+int	ft_count_quotes_words(t_split *squotes)
 {
 	size_t	i;
 	char	separator;
@@ -61,6 +61,6 @@ int	ft_count_quotes_words(t_split *squotes, int *error)
 			i++;
 	}
 	if (squotes->quotes % 2)
-		*error = 1;
+		squotes->error = 1;
 	return (squotes->words);
 }
