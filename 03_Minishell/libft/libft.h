@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/01 12:53:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/02 20:43:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include "../inc/minishell_j.h"
 
 typedef struct s_list
 {
@@ -88,8 +89,9 @@ void	ft_matrix_free(char **matrix);
 char	**ft_matrix_dup(char **matrix);
 
 //MINISHELL - Javi
-char	**ft_split_quotes(char const *s, char c);
-int		ft_count_quotes_words(t_split *squotes);
-char	*sub_split_quotes(t_split *squotes);
+char	**ft_split_quotes(char const *s, char c, t_input *input);
+void	ft_input_free(t_input *input);
+int		ft_count_quotes_words(t_split *squotes, t_input *input);
+char	*sub_split_quotes(t_split *squotes, t_input *input);
 
 #endif

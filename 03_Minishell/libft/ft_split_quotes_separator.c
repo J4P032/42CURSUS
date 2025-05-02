@@ -6,17 +6,17 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:21:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/01 21:28:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:46:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "../inc/minishell_j.h" //javi
 
-void	init_separator(t_split *squotes, size_t *i, size_t *j, size_t *k)
+void	init_separator(t_split *squotes, size_t *i, size_t *j)
 {
 	*i = 0;
 	*j = 0;
-	*k = 0;
 	if (squotes->s[squotes->start] == '"' && !(squotes->quotes % 2))
 	{
 		squotes->c = '"';
@@ -36,21 +36,21 @@ void	init_separator(t_split *squotes, size_t *i, size_t *j, size_t *k)
 	}
 }
 
-void	run_spaces_or_one_quote(t_split *squotes, size_t *k)
+void	run_spaces_or_one_quote(t_split *squotes, t_input *input)
 {
+	input->is_spaced = 0;
+	if (squotes->start != 0 && squotes->s[(squotes->start) - 1] == ' ')
+		input->is_spaced = 1;
 	if (squotes->c != '"' && squotes->c != '\'')
 	{
 		while ((squotes->s[squotes->start] == squotes->c)
 			&& (squotes->s[squotes->start]))
 			(squotes->start)++;
+		if (squotes->start != 0 && squotes->s[(squotes->start) - 1] == ' ')
+			input->is_spaced = 1;
 	}
 	else if (squotes->c == '"' || squotes->c == '\'')
-	{
-		if (squotes->quotes % 2 && squotes->start != 0
-			&& squotes->s[(squotes->start) - 1] == ' ')
-			*k = 1;
 		(squotes->start)++;
-	}
 }
 
 void	open_close_quotes(t_split *squotes)
@@ -75,15 +75,10 @@ void	open_close_quotes(t_split *squotes)
 
 /*k is for inserting an space in certain cases that are spaces before or...*/
 /*...after the previus word with*/
-void	compose_split_aux(t_split *squotes, size_t *i, size_t *j, size_t *k)
+void	compose_split_aux(t_split *squotes, size_t *i, size_t *j)
 {
-	while (*j < *i + *k)
-	{
-		if (*j == 0 && *k == 1)
-			squotes->split_aux[(*j)++] = ' ';
-		else
-			squotes->split_aux[(*j)++] = squotes->s[(squotes->start)++];
-	}
+	while (*j < *i)
+		squotes->split_aux[(*j)++] = squotes->s[(squotes->start)++];
 	if (squotes->c == ' ')
 	{
 		while (squotes->s[squotes->start]
@@ -101,18 +96,17 @@ void	compose_split_aux(t_split *squotes, size_t *i, size_t *j, size_t *k)
 /*(*start) will be updated to new position to be send back to split*/
 /*k is for inserting an space in certain cases that are spaces before or...*/
 /*...after the previus word with*/
-char	*sub_split_quotes(t_split *sq)
+char	*sub_split_quotes(t_split *sq, t_input *input)
 {
 	size_t	i;
 	size_t	j;
-	size_t	k;
 
-	init_separator(sq, &i, &j, &k);
-	run_spaces_or_one_quote(sq, &k);
+	init_separator(sq, &i, &j);
+	run_spaces_or_one_quote(sq, input);
 	open_close_quotes(sq);
-	if (sq->quotes > 0 && sq->quotes % 2 == 0
+	/* if (sq->quotes > 0 && sq->quotes % 2 == 0
 		&& sq->c == ' ' && sq->s[(sq->start) - 1] == ' ')
-		k = 1;
+		input->is_spaced = 1; */
 	while (sq->s[i + sq->start] && sq->s[i + sq->start] != sq->c)
 	{
 		if (sq->c == ' ' && (sq->s[i + sq->start] == '"'
@@ -120,12 +114,12 @@ char	*sub_split_quotes(t_split *sq)
 			break ;
 		i++;
 	}
-	sq->split_aux = (char *)ft_calloc(i + k + 1, sizeof(char));
+	sq->split_aux = (char *)ft_calloc(i + 1, sizeof(char));
 	if (!sq->split_aux)
 		return (NULL);
 	if ((sq->c == '"' && sq->s[sq->start] == '"')
 		|| (sq->c == '\'' && sq->s[sq->start] == '\''))
 		(sq->start)++;
-	compose_split_aux(sq, &i, &j, &k);
+	compose_split_aux(sq, &i, &j);
 	return (sq->split_aux);
 }

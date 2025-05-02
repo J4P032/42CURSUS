@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:53:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/02/25 13:52:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/02 20:11:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /*returns a pointer to that memory. Memory is set to zeros*/
 /*if nmemb x size is > SIZE_MAX (~(size_t)0) returns NULL*/
 /*if nmemb or size == 0 unknown but can be valid pointer without memory alloc*/
+/*to test in minishell start on j==59*/
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	size_t			total_bytes;

@@ -6,11 +6,12 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/01 20:43:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:13:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "../inc/minishell_j.h" //javi
 
 /*Important to set finale c to space for quote count words do it propertly*/
 void	assign_separator(t_split *squotes, size_t *i, char separator)
@@ -42,7 +43,7 @@ void	next_word_count(t_split *squotes, size_t *i)
 	}
 }
 
-int	ft_count_quotes_words(t_split *squotes)
+int	ft_count_quotes_words(t_split *squotes, t_input *input)
 {
 	size_t	i;
 
@@ -63,5 +64,9 @@ int	ft_count_quotes_words(t_split *squotes)
 	if (squotes->quotes % 2)
 		squotes->error = 1;
 	squotes->quotes = 0;
+	input->is_spaced = 0;
+	input->spaced = (int *)ft_calloc(squotes->words, sizeof(int));
+	if (!input->spaced)
+		squotes->error = 1;
 	return (squotes->words);
 }
