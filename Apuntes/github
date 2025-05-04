@@ -2,3 +2,9 @@ para actualizar token en unix:
 
 git config --global credential.helper store
 git config --global user.password TU_NUEVO_TOKEN
+
+Para subir desde otro ordenador (en 42). Tengo que poner el SSH en github (el publico), que solo puede estar en un github.
+luego en el proyecto habrá un .git y hay que configurarlo con el user y email y se hace asi:
+  git config user.name "UsuarioGithub"
+  git config user.email "tu-correo@ejemplo.com"
+
