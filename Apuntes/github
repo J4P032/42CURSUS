@@ -8,3 +8,8 @@ luego en el proyecto habrá un .git y hay que configurarlo con el user y email y
   git config user.name "UsuarioGithub"
   git config user.email "tu-correo@ejemplo.com"
 
+En el caso de tener compartido el github (con colaboradores) si hay error por diferente rama (otro está trabajando y no lo ha subido, y nosotros subimos lo nuestro)
+hay que hacer un: git pull --no-rebase
+Si hubiera conflictos (misma linea diferente código) nos lo mostraría y nosotros elegimos cual quedarnos.
+
+
