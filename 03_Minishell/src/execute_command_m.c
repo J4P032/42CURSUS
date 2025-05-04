@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_m.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/02 19:59:34 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:23:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,60 +72,47 @@ char	*find_executable(char *command, char **envp)
 	return (NULL);
 }
 
-// Divide un comando en sus argumentos.
-char	**split_command(const char *command)
+bool	exec_child(t_input *input, pid_t pid, char *executable)
 {
-	char	**args;
-
-	args = ft_split(command, ' ');
-	if (!args)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	return (args);
-}
-
-// Ejecuta un comando en un proceso hijo con redirección.
-bool	execute_command(char *cmd, int input_fd, int output_fd, char **envp)
-{
-	char	**args;
-	char	*executable;
-	pid_t	pid;
-	int		status;
-
-	args = split_command(cmd);
-	if (!args || !args[0])
-		return (ft_matrix_free(args), false);
-	executable = find_executable(args[0], envp);
-	if (!executable)
-	{
-		write(STDERR_FILENO, "command not found\n", 18);
-		ft_matrix_free(args);
-		return (false);
-	}
-	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
 		free(executable);
-		ft_matrix_free(args);
 		return (false);
 	}
 	if (pid == 0)
 	{
-		if (input_fd != STDIN_FILENO)
-			dup2(input_fd, STDIN_FILENO);
-		if (output_fd != STDOUT_FILENO)
-			dup2(output_fd, STDOUT_FILENO);
-		execve(executable, args, envp);
+		if (input->inputfd != STDIN_FILENO)
+			dup2(input->inputfd, STDIN_FILENO);
+		if (input->outputfd != STDOUT_FILENO)
+			dup2(input->outputfd, STDOUT_FILENO);
+		execve(executable, input->input_split, input->envp);
 		perror("execve");
 		free(executable);
-		ft_matrix_free(args);
 		exit(1);
 	}
+	return (true);
+}
+
+// Ejecuta un comando en un proceso hijo con redirección.
+bool	execute_command(t_input *input)
+{
+	char	*executable;
+	pid_t	pid;
+	int		status;
+
+	if (!input->input_split || !input->input_split[0])
+		return (false);
+	executable = find_executable(input->input_split[0], input->envp);
+	if (!executable)
+	{
+		write(STDERR_FILENO, "command not found\n", 18);
+		return (false);
+	}
+	pid = fork();
+	if (exec_child(input, pid, executable) == 0)
+		return (false);
 	waitpid(pid, &status, 0);
 	free(executable);
-	ft_matrix_free(args);
 	return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
 }

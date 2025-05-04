@@ -6,34 +6,17 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/02 17:13:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/04 14:09:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "../inc/minishell_j.h" //javi
-
-/*Important to set finale c to space for quote count words do it propertly*/
-void	assign_separator(t_split *squotes, size_t *i, char separator)
-{
-	squotes->c = separator;
-	if (squotes->quotes % 2 == 0)
-		(squotes->words)++;
-	(squotes->quotes)++;
-	(*i)++;
-	while (squotes->s[*i] && squotes->s[*i] != squotes->c)
-		(*i)++;
-	if (squotes->s[*i] == squotes->c)
-	{
-		(squotes->quotes)++;
-		(*i)++;
-	}
-	squotes->c = ' ';
-}
+#include "../inc/minishell_j.h"
 
 void	next_word_count(t_split *squotes, size_t *i)
 {
-	(squotes->words)++;
+	if (squotes->s[*i] != '"' && squotes->s[*i] != '\'')//
+		(squotes->words)++;
 	while (squotes->s[*i] && squotes->s[*i] != squotes->c)
 	{
 		(*i)++;
@@ -41,6 +24,33 @@ void	next_word_count(t_split *squotes, size_t *i)
 				|| squotes->s[*i] == '\''))
 			break ;
 	}
+}
+
+/* Important: set final c to space so word count works properly with quotes */
+void	assign_separator(t_split *sq, size_t *i, char separator)
+{
+	int	escaped;
+	
+	escaped = is_escaped(sq, *i);
+	if (escaped)
+	{
+		next_word_count(sq, i);
+		return ;	
+	}		
+	sq->c = separator;
+	if (sq->quotes % 2 == 0 && !escaped)
+		(sq->words)++;
+	if (!escaped)
+		(sq->quotes)++;
+	(*i)++;
+	while (sq->s[*i] && (sq->s[*i] != sq->c || is_escaped(sq, *i)))
+		(*i)++;
+	if (sq->s[*i] == sq->c)
+	{
+		(sq->quotes)++;
+		(*i)++;
+	}
+	sq->c = ' ';
 }
 
 int	ft_count_quotes_words(t_split *squotes, t_input *input)
@@ -64,9 +74,9 @@ int	ft_count_quotes_words(t_split *squotes, t_input *input)
 	if (squotes->quotes % 2)
 		squotes->error = 1;
 	squotes->quotes = 0;
-	input->is_spaced = 0;
-	input->spaced = (int *)ft_calloc(squotes->words, sizeof(int));
-	if (!input->spaced)
+	input->status = (int *)ft_calloc(squotes->words, sizeof(int));
+	if (!input->status)
 		squotes->error = 1;
+	printf("numWords: %zu\n________\n",squotes->words); //
 	return (squotes->words);
 }

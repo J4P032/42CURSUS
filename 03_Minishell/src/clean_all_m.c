@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_all_m.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:05:48 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/02 20:44:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/03 00:13:42 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 void	clean_all(t_input *input)
 {
 	ft_manage_history(NULL, 1);
-	
 	if (input->envp)
 		ft_matrix_free(input->envp);
 	rl_clear_history();

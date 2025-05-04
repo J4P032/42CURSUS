@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_env_m.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:24:39 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/04/28 16:47:29 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/03 11:23:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_env(char **input, char **envp)
 	else
 	{
 		i = 0;
-		while (envp[i])
+		while (envp && envp[i])
 		{
 			printf("%s\n", envp[i]);
 			i++;

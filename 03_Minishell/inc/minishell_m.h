@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_m.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:51:03 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/02 20:36:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/03 19:28:56 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <readline/history.h>
 # include "../libft/libft.h"
 # include <sys/types.h>
-#include <sys/wait.h>
+# include <sys/wait.h>
 
 void	ft_manage_history(char *input, bool clean);
 void	clean_all(t_input *input);
@@ -32,6 +32,7 @@ void	ft_export(char *input, char ***envp);
 void	ft_unset(char *input, char ***envp);
 bool	ft_cd(char **args, char **envp);
 
-bool	execute_command(char *cmd, int input_fd, int output_fd, char **envp);
+bool	execute_command(t_input *input);
+void	ft_manage_pipes(t_input *input);
 
 #endif

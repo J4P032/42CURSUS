@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:09:14 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/02 20:45:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:12:35 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ void	ft_matrix_free(char **matrix)
 	while (matrix[i])
 	{
 		free(matrix[i]);
+		matrix[i] = NULL;
 		i++;
 	}
 	free(matrix);
+	matrix = NULL;
 }
 
 void	ft_input_free(t_input *input)
@@ -33,13 +35,14 @@ void	ft_input_free(t_input *input)
 	i = 0;
 	while (input->input_split[i])
 	{
+		printf("%s\n", input->input_split[i]);//
 		free(input->input_split[i]);
 		input->input_split[i] = NULL;
 		i++;
 	}
 	free(input->input_split);
 	input->input_split = NULL;
-	if (input->spaced)
-		free(input->spaced);
-	input->spaced = NULL;
+	if (input->status)
+		free(input->status);
+	input->status = NULL;
 }

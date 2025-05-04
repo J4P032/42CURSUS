@@ -6,14 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/02 19:34:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:03:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "../inc/minishell_j.h"
 
-void	clean_nulls(char ***split, t_split *squotes, int **spaced)
+void	clean_nulls(char ***split, t_split *squotes, int **status)
 {
 	size_t	i;
 	size_t	j;
@@ -23,18 +23,20 @@ void	clean_nulls(char ***split, t_split *squotes, int **spaced)
 	i = 0;
 	j = 0;
 	aux = *split;
-	numbers = *spaced;
+	numbers = *status;
 	while (i < squotes->words)
 	{
 		if (aux[i] && aux[i][0] != '\0')
 		{
-			(*spaced)[j] = numbers[i];
+			(*status)[j] = numbers[i];
 			(*split)[j++] = aux[i];
 		}
 		else
 			free (aux[i]);
+		printf("%s: %d\n", aux[i], numbers[i]);//
 		i++;
 	}
+	printf("--------\n");
 	(*split)[j] = NULL;
 	squotes->words = j;
 }
@@ -62,11 +64,11 @@ char	**ft_split_quotes(char const *s, char c, t_input *input)
 		return (NULL);
 	split = (char **)ft_calloc(squotes.words + 1, sizeof(char *));
 	if (!split)
-		return (free(input->spaced), NULL);//mirar que free bien el malloc de spaced
+		return (free(input->status), NULL);//mirar que free bien el malloc de spaced
 	while (i < squotes.words)
 	{
 		split[i] = sub_split_quotes(&squotes, input);
-		input->spaced[i] = input->is_spaced;
+		input->status[i] = input->spaced;
 		if (!split[i])
 		{
 			while (i > 0)
@@ -75,7 +77,7 @@ char	**ft_split_quotes(char const *s, char c, t_input *input)
 		}
 		i++;
 	}
-	clean_nulls(&split, &squotes, &(input->spaced));
+	clean_nulls(&split, &squotes, &(input->status));
 	return (split);
 }
 
