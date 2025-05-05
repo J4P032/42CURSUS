@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/05 19:25:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:12:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ bool	exec_child(t_input *input, pid_t pid, char *executable)
 	char **command_union;
 		
 	if (input->args[0])
-		command_union = (char **)ft_calloc(2, sizeof(char *));
+		command_union = (char **)ft_calloc(3, sizeof(char *));
 	else
-		command_union = (char **)ft_calloc(1, sizeof(char *));
+		command_union = (char **)ft_calloc(2, sizeof(char *));
 	if (!command_union)
 		return (false); ///chequear bien que libere bien memoria.
 	command_union[0] = input->command;
@@ -90,6 +90,9 @@ bool	exec_child(t_input *input, pid_t pid, char *executable)
 	{
 		perror("fork");
 		free(executable);
+		if (command_union)
+			free (command_union);
+		command_union = NULL;
 		return (false);
 	}
 	if (pid == 0)
@@ -105,7 +108,8 @@ bool	exec_child(t_input *input, pid_t pid, char *executable)
 		free(executable);
 		exit(1);
 	}
-	return (true);
+	
+	return (free (command_union), true);
 }
 
 // Ejecuta un comando en un proceso hijo con redirección.

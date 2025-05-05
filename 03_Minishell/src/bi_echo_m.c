@@ -6,21 +6,31 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:50:16 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/05 18:17:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:49:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
+/*start is because the first argument from the command or the -n even it is...*/
+/*...spaced it dont have to space it when printed.*/
 void	ft_echo(t_input *in)
 {
 	size_t	i;
+	size_t	n_repeated;
 	int		argument;
 	size_t	start;
 	
-	argument = ft_strcmp(in->args, "-n");
-	if (argument == 0)
+	i = 1;
+	n_repeated = 1;
+	while (in->args[i])
+	{
+		if (in->args[i++] != 'n')
+			n_repeated = 0;
+	}
+	argument = ft_strncmp(in->args, "-n", 2);
+	if (argument == 0 && n_repeated)
 		i = in->word_after_arg;
 	else
 		i = in->word_after_command;
