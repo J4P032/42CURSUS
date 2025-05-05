@@ -6,12 +6,20 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:06:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/04 17:55:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 12:03:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "../inc/minishell_j.h"
+
+int is_quoted(t_input *input, int word)
+{
+	if (input->status[word] == SQUO_NSP || input->status[word] == SQUO_SP
+		|| input->status[word] == DQUO_NSP || input->status[word] == DQUO_SP)
+		return (1);
+	return (0);	
+}
 
 int	is_escaped(t_split *squotes, size_t i)
 {

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/04 21:23:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:25:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,18 @@ char	*find_executable(char *command, char **envp)
 
 bool	exec_child(t_input *input, pid_t pid, char *executable)
 {
+	char **command_union;
+		
+	if (input->args[0])
+		command_union = (char **)ft_calloc(2, sizeof(char *));
+	else
+		command_union = (char **)ft_calloc(1, sizeof(char *));
+	if (!command_union)
+		return (false); ///chequear bien que libere bien memoria.
+	command_union[0] = input->command;
+	if (input->args[0])
+		command_union[1] = input->args;
+	
 	if (pid == -1)
 	{
 		perror("fork");
@@ -86,8 +98,10 @@ bool	exec_child(t_input *input, pid_t pid, char *executable)
 			dup2(input->inputfd, STDIN_FILENO);
 		if (input->outputfd != STDOUT_FILENO)
 			dup2(input->outputfd, STDOUT_FILENO);
-		execve(executable, input->input_split, input->envp);
-		perror("execve");
+		execve(executable, command_union, input->envp);
+		if (command_union)
+			free (command_union);
+		command_union = NULL;
 		free(executable);
 		exit(1);
 	}
@@ -103,15 +117,15 @@ bool	execute_command(t_input *input)
 
 	if (!input->input_split || !input->input_split[0])
 		return (false);
-	executable = find_executable(input->input_split[0], input->envp);
+	executable = find_executable(input->command, input->envp);
 	if (!executable)
 	{
-		write(STDERR_FILENO, "command not found\n", 18);
+		printf("%s: command not found\n", input->command);
 		return (false);
 	}
 	pid = fork();
 	if (exec_child(input, pid, executable) == 0)
-		return (false);
+		return (free(executable), false);///chequear
 	waitpid(pid, &status, 0);
 	free(executable);
 	return (WIFEXITED(status) && WEXITSTATUS(status) == 0);

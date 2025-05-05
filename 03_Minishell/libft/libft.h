@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/04 13:12:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 12:03:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,6 @@ int		ft_count_quotes_words(t_split *squotes, t_input *input);
 char	*sub_split_quotes(t_split *squotes, t_input *input);
 int		is_escaped(t_split *squotes, size_t i);
 int		is_spaced(t_split *sq, size_t i);
+int		is_quoted(t_input *input, int word);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/04 21:03:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:59:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ void	clean_nulls(char ***split, t_split *squotes, int **status)
 		}
 		else
 			free (aux[i]);
-		printf("%s: %d\n", aux[i], numbers[i]);//
+		//printf("%s: %d\n", aux[i], numbers[i]);//
 		i++;
 	}
-	printf("--------\n");
+	//printf("--------\n");
 	(*split)[j] = NULL;
 	squotes->words = j;
 }
@@ -64,7 +64,7 @@ char	**ft_split_quotes(char const *s, char c, t_input *input)
 		return (NULL);
 	split = (char **)ft_calloc(squotes.words + 1, sizeof(char *));
 	if (!split)
-		return (free(input->status), NULL);//mirar que free bien el malloc de spaced
+		return (free(input->status), NULL);
 	while (i < squotes.words)
 	{
 		split[i] = sub_split_quotes(&squotes, input);
@@ -77,35 +77,6 @@ char	**ft_split_quotes(char const *s, char c, t_input *input)
 		}
 		i++;
 	}
-	clean_nulls(&split, &squotes, &(input->status));
+	//clean_nulls(&split, &squotes, &(input->status));
 	return (split);
 }
-
-/* #include <stdio.h>
-int main (void)
-{
-	//char	*kk = "\"echo\"   \"   \"\"\"\"'\"'\"'  hola";
-	//char	*kk = "\"\"\"'\"'\"' hola";
-	//char *kk = "\"\"\"\"echo \"patata ''' de ayer   ya!!\"";
-	char *kk = "echo\"patata\"     tomate    ";
-	
-	//char *kk = "\"echo\"   \"patata 'lechuga'\"    tomate"; //este mal
-
-	size_t	i = 0;
-	int		error = 0;
-	int		words;
-	words = 0;
-	char 	**solucion = ft_split_quotes(kk, ' ', &error, &words);	
-	if (error)
-	{
-		printf("error");
-		return (1);
-	}
-	while (i < words)
-	{
-		printf("%s", solucion[i]);
-		free (solucion[i]);
-		i++;
-	}
-	return 0;	
-} */

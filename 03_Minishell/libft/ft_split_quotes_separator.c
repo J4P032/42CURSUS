@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:21:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/04 22:29:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:45:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	run_spaces_or_one_quote(t_split *sq, t_input *input)
 	char	letter;
 	
 	input->spaced = 0;
-	input->escaped = 0;
 	if (sq->c != '"' && sq->c != '\'')
 	{
 		while ((sq->s[sq->start] == sq->c) && (sq->s[sq->start]))
@@ -93,24 +92,23 @@ void	open_close_quotes(t_split *sq)
 	{
 		(sq->quotes)++;
 		sq->c = ' ';
-		//(sq->start)++;///MIRARLO BIEN
 	}
 	else if (sq->c == '\'' && sq->s[sq->start] == '\'' && !escaped)
 	{
 		(sq->quotes)++;
 		sq->c = ' ';
-		//(sq->start)++;///MIRARLO BIEN
 	}
 }
 
+/*(sq->start)++ only when a '' or "" is found. Necesary to work ok with them*/
 void	compose_split_aux(t_split *sq, size_t *i, size_t *j)
 {
 	while (*j < *i)
 		sq->split_aux[(*j)++] = sq->s[(sq->start)++];
 	if (sq->start > 0
 		&& ((sq->s[sq->start] == '"' && sq->s[sq->start - 1] == '"')
-		|| (sq->s[sq->start] == '\'' && sq->s[sq->start - 1] == '\'')))/////
-		(sq->start)++;////CUIDADO!!!
+		|| (sq->s[sq->start] == '\'' && sq->s[sq->start - 1] == '\'')))
+		(sq->start)++;
 	if (sq->c == ' ')
 	{
 		while (sq->s[sq->start]	&& sq->s[sq->start] == sq->c)

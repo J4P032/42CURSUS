@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/04 18:17:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:28:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,17 @@
 # define SQUO_SP 11
 # define DQUO_NSP 20
 # define DQUO_SP 21
-# define SCP_EPTY_NSP 100
-# define SCP_EPTY_SP 101
-# define SCP_EPTY_2SP 102
-# define SCP_QUO_NSP 110
-# define SCP_QUO_SP 111
-# define SCP_QUO_2SP 112
 
 typedef struct s_input
 {
 	char	*input;
 	char	**input_split;
 	char	**envp;
-	int		escaped;
+	char	command[250];
+	char	args[100];
+	size_t	word_after_command;
+	size_t	word_after_arg;
+	size_t	input_words;
 	int		spaced;
 	int		inputfd;
 	int		outputfd;
@@ -42,7 +40,7 @@ typedef struct s_input
 }			t_input;
 
 //BUILT INS
-void	ft_echo(char **input, t_input *in);
+void	ft_echo(t_input *in);
 
 void	init_sigaction(struct sigaction *sa);
 

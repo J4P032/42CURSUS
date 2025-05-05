@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/04 14:09:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:11:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ int	ft_count_quotes_words(t_split *squotes, t_input *input)
 	input->status = (int *)ft_calloc(squotes->words, sizeof(int));
 	if (!input->status)
 		squotes->error = 1;
-	printf("numWords: %zu\n________\n",squotes->words); //
+	input->input_words = squotes->words;
 	return (squotes->words);
 }
