@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:09:14 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/05 17:09:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:11:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	ft_input_free(t_input *input)
 	i = 0;
 	while (input->input_split[i])
 	{
-		//printf("%s\n", input->input_split[i]);//
 		free(input->input_split[i]);
 		input->input_split[i] = NULL;
 		i++;

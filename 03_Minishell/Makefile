@@ -1,5 +1,6 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -fsanitize=leak -fno-omit-frame-pointer # -O1
+# valgrind --track-fds==yes
 NAME = minishell
 LIBFT = ./libft/libft.a
 SRC = 	src/main.c \
@@ -13,7 +14,8 @@ SRC = 	src/main.c \
 		src/bi_cd_m.c \
 		src/bi_unset_m.c \
 		src/execute_command_m.c \
-		src/manage_inputs_m.c
+		src/manage_inputs_m.c \
+		src/manage_inputs_utils_j.c
 OBJDIR = obj
 OBJS = $(SRC:src/%.c=$(OBJDIR)/%.o)
 RM	= rm -rf

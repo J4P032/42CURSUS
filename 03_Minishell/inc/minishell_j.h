@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/05 17:28:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:41:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,26 @@ typedef struct s_input
 	char	**input_split;
 	char	**envp;
 	char	command[250];
-	char	args[100];
+	char	args[4096];
 	size_t	word_after_command;
 	size_t	word_after_arg;
 	size_t	input_words;
+	size_t	word;
 	int		spaced;
 	int		inputfd;
 	int		outputfd;
-	int		*status;	
+	int		*status;
+	int		status_checked;
 }			t_input;
+
+//CHECK INPUT
+void	compose_command_args(t_input *in);
+void	compose_arg(t_input *in, size_t word);
 
 //BUILT INS
 void	ft_echo(t_input *in);
 
+//SIGNALS
 void	init_sigaction(struct sigaction *sa);
 
 #endif

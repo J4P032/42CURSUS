@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/05 12:03:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:01:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ char	**ft_matrix_dup(char **matrix);
 char	**ft_split_quotes(char const *s, char c, t_input *input);
 void	ft_input_free(t_input *input);
 int		ft_count_quotes_words(t_split *squotes, t_input *input);
+void	assign_token_status(t_input *input, t_split *sq, char letter);
 char	*sub_split_quotes(t_split *squotes, t_input *input);
 int		is_escaped(t_split *squotes, size_t i);
 int		is_spaced(t_split *sq, size_t i);

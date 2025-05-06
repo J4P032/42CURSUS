@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/03 19:28:35 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:04:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	init_sigaction(&sa);
 	while (1)
 	{
-		input.input = readline("minishell$ ");
+		input.input = readline("\001\033[1;32m\002miniyo$\001\033[0m\002 ");
 		if (!input.input)
 			break ;
 		if (input.input && *(input.input))

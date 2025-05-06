@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:06:31 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/04/28 18:00:58 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:57:39 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	ft_check_variables(char *input, char **envp)
 		{
 			free (envp[i]);
 			envp[i] = ft_strdup(input);
-			if (envp[i])
+			if (!envp[i])
 				return (0);
 			return (1);
 		}

@@ -6,14 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/05 13:59:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:48:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "../inc/minishell_j.h"
 
-void	clean_nulls(char ***split, t_split *squotes, int **status)
+/* void	clean_nulls(char ***split, t_split *squotes, int **status)
 {
 	size_t	i;
 	size_t	j;
@@ -33,13 +33,11 @@ void	clean_nulls(char ***split, t_split *squotes, int **status)
 		}
 		else
 			free (aux[i]);
-		//printf("%s: %d\n", aux[i], numbers[i]);//
 		i++;
 	}
-	//printf("--------\n");
 	(*split)[j] = NULL;
 	squotes->words = j;
-}
+} */
 
 void	init_struct(t_split *squotes, char const *s, char c, size_t *i)
 {
@@ -77,6 +75,5 @@ char	**ft_split_quotes(char const *s, char c, t_input *input)
 		}
 		i++;
 	}
-	//clean_nulls(&split, &squotes, &(input->status));
 	return (split);
 }

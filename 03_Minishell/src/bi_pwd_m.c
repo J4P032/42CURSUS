@@ -3,24 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   bi_pwd_m.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:24:39 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/04/28 11:51:29 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:38:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-void	ft_pwd(char **input)
+void	ft_pwd(char *args)
 {
 	char	cwd[1024];
+	int		len;
 
-	if (input[1] && input[1][0] == '-' && input[1][1])
-		printf("pwd: usage: pwd");
-	else if (getcwd(cwd, sizeof(cwd)) != NULL)
+	len = ft_strlen(args);
+	if  ((args[0] == '-' && args[1] != '-' && args[1])
+		|| (args[0] == '-' && args[1] == '-' && len > 2))
+		{
+			printf("pwd: usage: pwd\n");
+			return ;
+		}
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		printf("%s\n", cwd);
 	else
-		perror("minishell: pwd");
+		perror("minishell: pwd\n");
 }

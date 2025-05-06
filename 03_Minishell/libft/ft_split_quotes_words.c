@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/05 10:11:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:49:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	next_word_count(t_split *squotes, size_t *i)
 {
-	if (squotes->s[*i] != '"' && squotes->s[*i] != '\'')//
+	if (squotes->s[*i] != '"' && squotes->s[*i] != '\'')
 		(squotes->words)++;
 	while (squotes->s[*i] && squotes->s[*i] != squotes->c)
 	{
@@ -30,13 +30,13 @@ void	next_word_count(t_split *squotes, size_t *i)
 void	assign_separator(t_split *sq, size_t *i, char separator)
 {
 	int	escaped;
-	
+
 	escaped = is_escaped(sq, *i);
 	if (escaped)
 	{
 		next_word_count(sq, i);
-		return ;	
-	}		
+		return ;
+	}
 	sq->c = separator;
 	if (sq->quotes % 2 == 0 && !escaped)
 		(sq->words)++;
@@ -72,7 +72,7 @@ int	ft_count_quotes_words(t_split *squotes, t_input *input)
 			i++;
 	}
 	if (squotes->quotes % 2)
-		squotes->error = 1;
+		return (squotes->error = 1, 0);
 	squotes->quotes = 0;
 	input->status = (int *)ft_calloc(squotes->words, sizeof(int));
 	if (!input->status)
