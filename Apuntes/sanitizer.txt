@@ -1,0 +1,4 @@
+para data races:
+  -g3 -fsanitize=thread -pthread 
+para fugas memoria (incompatible con data races):
+  -fsanitize=address -fsanitize=leak -fno-omit-frame-pointer -g -O1
