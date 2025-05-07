@@ -6,12 +6,29 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:06:31 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/06 13:57:39 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:47:56 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
+
+bool	ft_manage_SHLVL(char *input, char **envp, int i, int len)
+{
+	int	j;
+	
+	j = len + 1;
+	free (envp[i]);
+	while (input[j])
+	{
+		if (ft_isdigit(input[j++]))
+			continue ;
+		envp[i] = ft_strdup("SHLVL=0");
+		return (1);
+	}
+	envp[i] = ft_strdup(input);
+	return (1);
+}
 
 bool	ft_check_variables(char *input, char **envp)
 {
@@ -28,6 +45,8 @@ bool	ft_check_variables(char *input, char **envp)
 	{
 		if (ft_strncmp(envp[i], input, len) == 0 && envp[i][len] == '=')
 		{
+			if (ft_strncmp("SHLVL", input, len) == 0)
+				return (ft_manage_SHLVL(input, envp, i, len), 1);
 			free (envp[i]);
 			envp[i] = ft_strdup(input);
 			if (!envp[i])

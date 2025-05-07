@@ -6,21 +6,21 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:24:39 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/03 11:23:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:02:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-void	ft_env(char **input, char **envp)
+void	print_env(t_input *in, char **envp)
 {
-	int	i;
+	size_t	i;
 
-	if (input[1] && input[1][0] == '-' && input[1][1])
-		printf("env: invalid option -- %c\n", input[1][1]);
-	else if (input[1] && input[1][0] != '-')
-		printf("env:'%s': No such file or directory\n", input[1]);
+	if (in->input_split[in->word_after_arg]
+		&& in->input_split[in->word_after_arg][0] != '\0')
+		printf("env: '%s': No such file or directory\n",
+			in->input_split[in->word_after_arg]);
 	else
 	{
 		i = 0;
@@ -30,4 +30,25 @@ void	ft_env(char **input, char **envp)
 			i++;
 		}
 	}
+}
+
+void	ft_env(t_input *in, char **envp)
+{
+	if (in->args[0] == '-' && in->args[1] && in->args[1] != '-')
+		printf("env: invalid option -- '%c'\n", in->args[1]);
+	else if (in->args[0] != '\0' && in->args[0] != '-')
+		printf("env:'%s': No such file or directory\n", in->args);
+	else if (in->args[0] == '-' && in->args[1] == '\0')
+	{
+		if (in->input_split[in->word_after_arg]
+			&& in->input_split[in->word_after_arg][0] != '\0')
+			printf("env: '%s': No such file or directory\n",
+				in->input_split[in->word_after_arg]);
+		else
+			return ;
+	}
+	else if (in->args[2] != '\0')
+		printf("env: unrecognized option '%s'\n", in->args);
+	else
+		print_env(in, envp);
 }

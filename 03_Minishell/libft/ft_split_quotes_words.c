@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/06 17:49:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/07 12:04:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,12 @@ void	next_word_count(t_split *squotes, size_t *i)
 /* Important: set final c to space so word count works properly with quotes */
 void	assign_separator(t_split *sq, size_t *i, char separator)
 {
-	int	escaped;
-
-	escaped = is_escaped(sq, *i);
-	if (escaped)
-	{
-		next_word_count(sq, i);
-		return ;
-	}
 	sq->c = separator;
-	if (sq->quotes % 2 == 0 && !escaped)
+	if (sq->quotes % 2 == 0)
 		(sq->words)++;
-	if (!escaped)
-		(sq->quotes)++;
+	(sq->quotes)++;
 	(*i)++;
-	while (sq->s[*i] && (sq->s[*i] != sq->c || is_escaped(sq, *i)))
+	while (sq->s[*i] && (sq->s[*i] != sq->c))
 		(*i)++;
 	if (sq->s[*i] == sq->c)
 	{

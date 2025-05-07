@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:25:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/06 17:48:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:19:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	**ft_split_quotes(char const *s, char c, t_input *input)
 		{
 			while (i > 0)
 				free(split[--i]);
-			return (free(split), NULL);
+			return (free(split), free(input->status), NULL);///CHEQUEAR FREE INPUT STATUS
 		}
 		i++;
 	}

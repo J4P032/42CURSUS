@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 19:28:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/06 18:43:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:32:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 {
 	input->input_split = ft_split_quotes(input->input, ' ', input);
+	if (!input->input_split || !input->input_split[0])
+		return ; //CHEQUEAR NO LEAKS
+	compose_command_args(input);
 	input->inputfd = in_fd;
 	input->outputfd = out_fd;
-	if (!input->input_split || !input->input_split[0])
-		return ;
-	compose_command_args(input);
 	//printf("command :%s\n", input->command);//
 	//printf("arg :%s\n-------------\n", input->args);//
 	if (ft_strcmp(input->command, "pwd") == 0)
@@ -32,8 +32,8 @@ void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 	else if (ft_strcmp(input->command, "export") == 0
 		&& input->input_split[1])//cuidado ese split[1]
 		ft_export(input->args, &input->envp);
-	else if (ft_strcmp(input->command, "env") == 0)//cuidado
-		ft_env(input->input_split, input->envp);
+	else if (ft_strcmp(input->command, "env") == 0)
+		ft_env(input, input->envp);
 	else if (ft_strcmp(input->command, "unset") == 0//cuidado
 		&& input->input_split[1])
 		ft_unset(input->input_split[1], &input->envp);
@@ -54,6 +54,9 @@ void	ft_manage_pipes(t_input *input)
 
 	i = 0;
 	in_fd = 0;
+
+
+	
 	if (!ft_strchr(input->input, '|')) //cuidado lo pueden pasar en un echo "|"
 	{
 		ft_manage_input(input, STDIN_FILENO, STDOUT_FILENO);
