@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/07 18:28:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/09 00:14:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	compose_arg(t_input *in, size_t word);
 
 //BUILT INS
 void	ft_echo(t_input *in);
+void	manage_dollar(t_input *in, size_t w, int spaced);
 int		valid_env(const char *str, t_input *in, size_t w);
 
 //SIGNALS

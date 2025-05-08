@@ -10,6 +10,7 @@ SRC = 	src/main.c \
 		src/bi_env_m.c \
 		src/bi_env_dollar_j.c \
 		src/bi_echo_m.c \
+		src/bi_echo_dollar_j.c \
 		src/bi_export_m.c \
 		src/signal_j.c \
 		src/bi_cd_m.c \
