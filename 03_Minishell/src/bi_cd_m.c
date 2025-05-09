@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:07:20 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/04/28 17:15:57 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/09 01:08:10 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	ft_cd(char **args, char **envp)
 		if (!path)
 			return (printf("cd: HOME not set\n"), 1);
 	}
-	else if (ft_strcmp(args[1], "-") == 0 || ft_strcmp(args[1], "..") == 0)
+	else if (ft_strcmp(args[0], "-") == 0 || ft_strcmp(args[0], "..") == 0)
 	{
 		if (ft_strlen(oldpwd) == 0)
 			return (printf("cd: OLDPWD not set\n"), 1);
