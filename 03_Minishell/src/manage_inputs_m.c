@@ -3,52 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   manage_inputs_m.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 19:28:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/09 01:27:03 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:19:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
+//printf("command :%s\n", input->command);//
+//printf("arg :%s\n-------------\n", input->args);//
 
 void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 {
 	input->inputfd = in_fd;
 	input->outputfd = out_fd;
-
-	// 🔥 Mover esta línea arriba
 	handle_redirection(input);
-
 	input->input_split = ft_split_quotes(input->input, ' ', input);
 	if (!input->input_split || !input->input_split[0])
-		return ; //CHEQUEAR NO LEAKS
-
+		return ;
 	compose_command_args(input);
-
-	//printf("command :%s\n", input->command);//
-	//printf("arg :%s\n-------------\n", input->args);//
-
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args);
 	else if (ft_strcmp(input->command, "cd") == 0)
 		ft_cd(input->input_split, input->envp);
 	else if (ft_strcmp(input->command, "echo") == 0)
 		ft_echo(input);
-	else if (ft_strcmp(input->command, "export") == 0 && input->input_split[1])
+	else if (ft_strcmp(input->command, "export") == 0 && input->input_split[1])//mirar cambiar a && input->args[0] (es decir que no sea \0). Pero!! export sin mas lo que hace es poner "declare -x " delante de todas las variables de entorno
 		ft_export(input->args, &input->envp);
 	else if (ft_strcmp(input->command, "env") == 0)
 		ft_env(input, input->envp);
-	else if (ft_strcmp(input->command, "unset") == 0 && input->input_split[1])
+	else if (ft_strcmp(input->command, "unset") == 0 && input->input_split[1])//mirar cambiar a && input->args[0] (es decir que no sea \0). Pero!! unset sin mas lo que hace es poner una nueva linea de prompt
 		ft_unset(input->input_split[1], &input->envp);
+	else if (ft_strcmp(input->command, "exit") == 0)
+		ft_exit(input);
 	else
 		execute_command(input);
-
 	ft_input_free(input);
 }
-
 
 void	ft_manage_pipes(t_input *input)
 {
@@ -62,15 +56,12 @@ void	ft_manage_pipes(t_input *input)
 
 	i = 0;
 	in_fd = 0;
-
-
-	
-	if (!ft_strchr(input->input, '|')) //cuidado lo pueden pasar en un echo "|"
+	if (!ft_strchr_quotes(input->input, '|'))
 	{
 		ft_manage_input(input, STDIN_FILENO, STDOUT_FILENO);
 		return ;
 	}
-	cmds = ft_split(input->input, '|');
+	cmds = ft_split_quotes(input->input, '|', input);
 	if (!cmds)
 		return ;
 	while (cmds[i])
@@ -108,6 +99,15 @@ void	ft_manage_pipes(t_input *input)
 		else
 		{
 			waitpid(pid, &status, 0);
+			if (cmds[i + 1] == NULL)
+			{
+				if (WIFEXITED(status))
+					input->last_exit_code = WEXITSTATUS(status);
+				else if (WIFSIGNALED(status))
+					input->last_exit_code = 128 + WTERMSIG(status);
+				else
+					input->last_exit_code = 1;
+			}
 			if (in_fd != 0)
 				close(in_fd);
 			if (cmds[i + 1] != NULL)

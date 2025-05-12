@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_inputs_utils_j.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:31:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/09 12:34:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:48:16 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	copy_to_command(t_input *in, size_t *i, size_t *j, size_t *k)
 		if (*i > 0 && in->input_split[*i][0] == '\0'
 			&& (in->status[*i] == SQUO_SP || in->status[*i] == DQUO_SP))
 			break ;
-		
 		//char c = in->input_split[*i][*j];//
 		//(void)c;	//
 		while ((in->input_split[*i][*j] != ' ' || is_quoted(in, *i))

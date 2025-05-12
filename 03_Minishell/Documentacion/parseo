@@ -1,5 +1,94 @@
 Errores:
 
-echo -n"%p" > deberia salir nada.. y sale -n.
+echo "$a664464562ssertetr)'p'" imprimira a partir del primer char que no sea alphanumerico
+
+echo $* patata deberia salir patata(pegado a la izda) y me sale $ patata
+
+expr $SHLVL + $SHLVL deberia soltar la suma y suelta $SHLVL
+
+
+NO ES ERROR
+
+EN BASH:
+echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg 
+PERO EN ZSH 
+si sale como sale en miniyo.
+
+
+
+
+PRUEBAS GENERADAS POR CHATGPT A PARTIR DE PDF DE PAOLO:
+
+TESTS BASICOS
+Input                          	Output esperado
+--------------------------------	------------------------------------------
+echo hola                      	hola
+echo -n hola                   	hola%
+echo -n -n hola                	hola%
+echo -n -nnnn hola             	hola%
+echo -nnnn hola                	hola%
+echo -n -n -n hola             	hola%
+echo -n -n -n -n hola          	hola%
+echo hola \n mundo            	hola n mundo
+ls                            	(lista de archivos, igual que /bin/ls)
+pwd                           	(ruta actual, igual que /bin/pwd)
+env                           	(variables de entorno exportadas)
+export TEST=42; env | grep TEST	TEST=42
+unset TEST; env | grep TEST   	(no muestra nada)
+cd ..; pwd                     	(ruta padre)
+cd; pwd                        	(ruta HOME)
+cd /; pwd                      	/
+exit                          	(shell termina)
+exit 42                       	(shell termina con código 42)
+exit 256                      	(shell termina con código 0)
+exit -1                       	(shell termina con código 255)
+exit hola                     	exit: hola: numeric argument required
+exit 1 2                      	exit: too many arguments
+
+
+REDIRECCIONES
+Input                               	Resultado esperado
+-----------------------------------	--------------------------------------------------
+echo hola > out.txt                	Crea `out.txt` con contenido "hola\n"
+echo adios > out.txt              	Sobrescribe `out.txt` con "adios\n"
+echo mundo >> out.txt             	Concatena "mundo\n" a `out.txt`
+cat < out.txt                     	Muestra el contenido de `out.txt`
+< out.txt cat                     	Muestra el contenido de `out.txt`
+cat < no_existe.txt               	cat: no_existe.txt: No such file or directory
+> out.txt                         	Crea archivo vacío `out.txt` (modo truncar)
+>> out.txt                        	Crea si no existe (modo append), no error
+
+
+PIPES
+Input                                 	Salida esperada
+-------------------------------------	------------------------------------------
+echo hola | cat                       	hola
+echo hola | cat | cat | cat           	hola
+ls | grep minishell                   	(muestra "minishell" si existe el archivo/carpeta)
+cat Makefile | grep minishell         	(muestra líneas con "minishell")
+echo uno | cat -e                     	uno$
+
+
+COMILLAS
+Input                                	Salida esperada
+------------------------------------	-------------------------
+echo "hola mundo"                   	hola mundo
+echo 'hola mundo'                   	hola mundo
+echo hola" mundo"                   	hola mundo
+echo 'hola'" mundo"                 	hola mundo
+echo "$HOME"                        	(/ruta/home/usuario)
+echo '$HOME'                        	$HOME
+echo "saludo: $HOME"                	saludo: /ruta/home/usuario
+
+
+VARIABLES
+Input                            	Salida esperada
+--------------------------------	---------------------------
+export VAR=42; echo $VAR        	42
+export VAR=hola; echo "$VAR"    	hola
+echo $NOEXISTE                  	(salida vacía)
+echo $USER                      	(tu usuario actual)
+echo "$USER"                    	(tu usuario actual)
+echo "$?"                       	(último código de salida)
 
 

@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_pwd_m.c                                         :+:      :+:    :+:   */
+/*   ft_strchr_quotes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 18:24:39 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/11 20:52:05 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/01/16 10:17:39 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/05/09 22:16:55 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell_m.h"
-#include "../inc/minishell_j.h"
+#include <stdlib.h>
 
-void	ft_pwd(char *args)
+char	*ft_strchr_quotes(const char *s, int c)
 {
-	char	cwd[1024];
-	int		len;
+	size_t	i;
+	size_t	quotes;
+	size_t	double_quotes;
 
-	len = ft_strlen(args);
-	if ((args[0] == '-' && args[1] != '-' && args[1])
-		|| (args[0] == '-' && args[1] == '-' && len > 2))
+	i = 0;
+	quotes = 0;
+	double_quotes = 0;
+	while (s[i])
 	{
-		printf("pwd: usage: pwd\n");
-		return ;
+		if (s[i] == '\'')
+			quotes++;
+		else if (s[i] == '"')
+			double_quotes++;
+		if (s[i] == (char)c && quotes % 2 == 0 && double_quotes % 2 == 0)
+			return ((char *)&s[i]);
+		i++;
 	}
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		printf("%s\n", cwd);
+	if ((char)c == '\0')
+		return ((char *)&s[i]);
 	else
-		perror("minishell: pwd\n");
+		return (NULL);
 }

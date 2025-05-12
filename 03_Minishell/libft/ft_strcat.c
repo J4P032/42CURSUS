@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_pwd_m.c                                         :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 18:24:39 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/11 20:52:05 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/01/14 08:33:05 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/05/10 01:24:45 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell_m.h"
-#include "../inc/minishell_j.h"
+#include <stdlib.h>
 
-void	ft_pwd(char *args)
+char	*ft_strcat(char *dest, const char *src)
 {
-	char	cwd[1024];
-	int		len;
+	char	*ptr;
 
-	len = ft_strlen(args);
-	if ((args[0] == '-' && args[1] != '-' && args[1])
-		|| (args[0] == '-' && args[1] == '-' && len > 2))
-	{
-		printf("pwd: usage: pwd\n");
-		return ;
-	}
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		printf("%s\n", cwd);
-	else
-		perror("minishell: pwd\n");
+	ptr = dest;
+	while (*ptr)
+		ptr++;
+	while (*src)
+		*ptr++ = *src++;
+	*ptr = '\0';
+	return (dest);
 }

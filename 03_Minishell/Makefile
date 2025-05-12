@@ -18,7 +18,8 @@ SRC = 	src/main.c \
 		src/execute_command_m.c \
 		src/manage_inputs_m.c \
 		src/manage_inputs_utils_j.c \
-		src/redirections_m.c
+		src/redirections_m.c \
+		src/bi_exit_j.c
 OBJDIR = obj
 OBJS = $(SRC:src/%.c=$(OBJDIR)/%.o)
 RM	= rm -rf

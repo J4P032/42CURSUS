@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:01:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/10 01:22:32 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ void	ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars);
 int		ft_strcmp(const char *s1, const char *s2);
 void	ft_matrix_free(char **matrix);
 char	**ft_matrix_dup(char **matrix);
+char	*ft_strchr_quotes(const char *s, int c);
+char	*ft_strcat(char *dest, const char *src);
+size_t	ft_strcspn(const char *str1, const char *str2);
 
 //MINISHELL - Javi
 char	**ft_split_quotes(char const *s, char c, t_input *input);

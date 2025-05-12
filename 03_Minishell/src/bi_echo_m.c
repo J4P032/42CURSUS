@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:50:16 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/09 13:56:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:56:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ size_t	give_me_the_fist_word(t_input *in, int *error_argument)
 	return (i);
 }
 
+/*print_as_env is 1 when it is "$USER" or $USER because '$USER' will print...*/
+/*...just what is inside the ''*/
 void	print_arguments(t_input *in, size_t	w, int spaced)
 {
 	int		print_as_env;

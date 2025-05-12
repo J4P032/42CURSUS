@@ -6,17 +6,17 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:06:31 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/07 16:47:56 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:51:22 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-bool	ft_manage_SHLVL(char *input, char **envp, int i, int len)
+bool	ft_manage_shlvl(char *input, char **envp, int i, int len)
 {
 	int	j;
-	
+
 	j = len + 1;
 	free (envp[i]);
 	while (input[j])
@@ -46,7 +46,7 @@ bool	ft_check_variables(char *input, char **envp)
 		if (ft_strncmp(envp[i], input, len) == 0 && envp[i][len] == '=')
 		{
 			if (ft_strncmp("SHLVL", input, len) == 0)
-				return (ft_manage_SHLVL(input, envp, i, len), 1);
+				return (ft_manage_shlvl(input, envp, i, len), 1);
 			free (envp[i]);
 			envp[i] = ft_strdup(input);
 			if (!envp[i])

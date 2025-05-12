@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_m.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/05 20:12:54 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:50:35 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,17 @@ char	*find_executable(char *command, char **envp)
 
 bool	exec_child(t_input *input, pid_t pid, char *executable)
 {
-	char **command_union;
-		
+	char	**command_union;
+
 	if (input->args[0])
 		command_union = (char **)ft_calloc(3, sizeof(char *));
 	else
 		command_union = (char **)ft_calloc(2, sizeof(char *));
 	if (!command_union)
-		return (false); ///chequear bien que libere bien memoria.
+		return (false);
 	command_union[0] = input->command;
 	if (input->args[0])
 		command_union[1] = input->args;
-	
 	if (pid == -1)
 	{
 		perror("fork");
@@ -108,7 +107,6 @@ bool	exec_child(t_input *input, pid_t pid, char *executable)
 		free(executable);
 		exit(1);
 	}
-	
 	return (free (command_union), true);
 }
 
@@ -129,7 +127,7 @@ bool	execute_command(t_input *input)
 	}
 	pid = fork();
 	if (exec_child(input, pid, executable) == 0)
-		return (free(executable), false);///chequear
+		return (free(executable), false);
 	waitpid(pid, &status, 0);
 	free(executable);
 	return (WIFEXITED(status) && WEXITSTATUS(status) == 0);

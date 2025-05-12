@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_pwd_m.c                                         :+:      :+:    :+:   */
+/*   ft_strcspn.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 18:24:39 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/11 20:52:05 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/01/14 09:08:01 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/05/10 01:24:38 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell_m.h"
-#include "../inc/minishell_j.h"
+#include <stddef.h>
 
-void	ft_pwd(char *args)
+size_t	ft_strcspn(const char *str1, const char *str2)
 {
-	char	cwd[1024];
-	int		len;
+	size_t		i;
+	const char	*p;
 
-	len = ft_strlen(args);
-	if ((args[0] == '-' && args[1] != '-' && args[1])
-		|| (args[0] == '-' && args[1] == '-' && len > 2))
+	i = 0;
+	while (str1[i])
 	{
-		printf("pwd: usage: pwd\n");
-		return ;
+		p = str2;
+		while (*p)
+		{
+			if (str1[i] == *p)
+				return (i);
+			p++;
+		}
+		i++;
 	}
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		printf("%s\n", cwd);
-	else
-		perror("minishell: pwd\n");
+	return (i);
 }
