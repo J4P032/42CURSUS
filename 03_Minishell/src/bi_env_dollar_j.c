@@ -6,12 +6,33 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 14:14:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/12 20:02:11 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:13:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
+
+/*The function will return length of chars formed in and invalid env...*/
+/* $a3cd_# = 5, $3ese_ = 0 */
+/*if the first char is inside the ODDCHAR strings (rare chars) it will return*/
+/*...cero*/
+size_t	invalidlen_env(const char *str)
+{
+	size_t	i;
+
+	i = 1;
+	if (ft_isdigit(str[0]) || !str[0] || ft_strrchr(D_Y_ODDCHAR, str[0])
+			|| ft_strrchr(N_ODDCHAR, str[0]))
+		return (0);
+	while (str && str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			break ;
+		i++;
+	}
+	return (i);
+}
 
 /*will determine de length of the str depending of the ending c char*/
 /*will receive or \0 or ' '. Space when is double quoted*/
@@ -28,6 +49,63 @@ size_t	validlen_env(const char *str, char c)
 		i++;
 	}
 	return (i);
+}
+
+void	print_rest_no_env(t_input *in, size_t w, size_t *i)
+{
+	size_t	j;
+	int		is_digit;
+	char	*str;
+
+	j = (*i);
+	str = in->input_split[w];
+	is_digit = ft_isdigit(str[in->idollar]);
+		
+	/* 	if (in->input_split[w][(*i) + 1] == ' ' 
+		&& (ft_strrchr(N_ODDCHAR, in->input_split[w][*i])
+		|| ft_strrchr(D_Y_ODDCHAR, in->input_split[w][*i])))
+		printf("%c", in->input_split[w][*i]); */
+	if (str[(*i) + 1] == ' ')
+	{
+		while (str[j] != '$')
+		{
+			if (is_digit || ft_strrchr(N_ODDCHAR, str[j])
+					|| ft_strrchr(D_Y_ODDCHAR, str[j]))
+				break ;
+			j--;
+		}
+		if (str[j] != '$')
+			printf("%c", in->input_split[w][*i]);
+	}
+}
+
+/*print cases as $@p msg -> p msg or $%p msg -> $%p msg*/
+/*when echo $$2p will print 2p. That is the (in->dollars % 2) case...*/
+/*...it is ODD as we dont count the first $. So $$$$ are 3*/
+void	print_rare_cases(t_input *in, size_t w, size_t *i)
+{
+	char	*str;
+	size_t	index;
+	
+	index = in->idollar;
+	str = in->input_split[w];
+	if (in->dollars % 2)
+	{
+		printf("%c", str[index]);
+		(*i) = index;
+		return ;
+	}
+	if (!str[index])
+		printf("$");
+	else if (ft_isdigit(str[index]) || ft_strrchr(N_ODDCHAR, str[index])
+		|| ft_strrchr(D_Y_ODDCHAR, str[index]))
+	{
+		if (!str[index + 1] && !ft_strrchr(D_Y_ODDCHAR, str[index]))
+			in->spaced = 0;
+		if (ft_strrchr(D_Y_ODDCHAR, str[index]))
+			printf("$%c",str[index]);
+		(*i) = index;
+	}
 }
 
 /*if not found will return -1, if found will return the number of env variable*/

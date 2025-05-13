@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/12 21:58:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:52:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 	j = 0;
 	if (env_n > -1)
 		env_len = validlen_env(in->envp[env_n], '=');
+	else if (env_n == -1)
+		env_len = invalidlen_env(in->input_split[w] + (*i));
 	while (in->input_split[w][*i]
 		&& in->input_split[w][(*i) + 1] != ' '
 		&& in->input_split[w][*i] != '$'
@@ -127,10 +129,15 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 				(*i)--;
 			break ;
 		}
-		if (in->dollars > 0 && (in->dollars % 2) && (j < env_len)) //env_len nuevo
+		if (in->dollars > 0 && (in->dollars % 2) && (j < env_len))
 			printf("%c", in->input_split[w][*i]);
-		else if (j >= env_len)
+		else if (j >= env_len && !ft_isdigit(in->input_split[w][in->idollar])
+			&& !ft_strrchr(D_Y_ODDCHAR, in->input_split[w][in->idollar])
+			&& !ft_strrchr(N_ODDCHAR, in->input_split[w][in->idollar]))
+		{
+			in->spaced = 1;
 			printf("%c", in->input_split[w][*i]);	
+		}	
 		(*i)++;
 		j++;
 	}
@@ -138,9 +145,9 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 	if (env_n < 0
 		&& (ft_isalpha(in->input_split[w][in->idollar])
 		|| in->input_split[w][in->idollar] == '_'))
-		;
-	else if (env_n == -1 && !(in->dollars % 2))
-		printf("$");
+		print_rest_no_env(in, w, i);
+	else if (env_n == -1)
+		print_rare_cases(in, w, i);
 	else if (env_n == -2)
 	{
 		(*i)++;

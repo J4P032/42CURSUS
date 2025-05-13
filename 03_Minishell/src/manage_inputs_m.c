@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 19:28:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/12 11:19:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:01:45 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 	input->input_split = ft_split_quotes(input->input, ' ', input);
 	if (!input->input_split || !input->input_split[0])
 		return ;
+	//parsing(input); //EN CONSTRUCCION
 	compose_command_args(input);
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args);

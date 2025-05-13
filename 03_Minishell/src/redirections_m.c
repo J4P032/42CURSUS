@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 01:26:18 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/10 01:23:54 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:07:50 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,50 +68,6 @@ static void	handle_input_redirection(t_input *input, char *redir)
 	if (input->inputfd < 0)
 		perror("open input");
 	free(filename);
-}
-
-static void	handle_heredoc_redirection(t_input *input, char *redir)
-{
-	char	*delim;
-	char	*end;
-	char	*buffer;
-	char	line[1024];
-	int		pipefd[2];
-
-	*redir = '\0';
-	redir += 2;
-	while (*redir == ' ')
-		redir++;
-	delim = ft_strdup(redir);
-	end = delim + ft_strlen(delim) - 1;
-	while (end > delim && (*end == ' ' || *end == '\n'))
-		*end-- = '\0';
-	if (pipe(pipefd) == -1)
-		return (perror("pipe"), free(delim));
-	buffer = malloc(8192);
-	if (!buffer)
-	{
-		free (delim);
-		close(pipefd[0]);
-		close(pipefd[1]);
-		return ;
-	}
-	buffer[0] = '\0';
-	printf("heredoc> ");
-	while (fgets(line, sizeof(line), stdin))
-	{
-		line[ft_strcspn(line, "\n")] = '\0';
-		if (!ft_strcmp(line, delim))
-			break ;
-		ft_strcat(buffer, line);
-		ft_strcat(buffer, "\n");
-		printf("heredoc> ");
-	}
-	write(pipefd[1], buffer, ft_strlen(buffer));
-	close(pipefd[1]);
-	input->inputfd = pipefd[0];
-	free(buffer);
-	free(delim);
 }
 
 void	handle_redirection(t_input *input)

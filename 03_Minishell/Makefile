@@ -19,7 +19,9 @@ SRC = 	src/main.c \
 		src/manage_inputs_m.c \
 		src/manage_inputs_utils_j.c \
 		src/redirections_m.c \
-		src/bi_exit_j.c
+		src/bi_exit_j.c \
+		src/parsing_j.c \
+		src/redirections_heredoc_m.c
 OBJDIR = obj
 OBJS = $(SRC:src/%.c=$(OBJDIR)/%.o)
 RM	= rm -rf
