@@ -6,13 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 11:36:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/21 12:11:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:15:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_lstsize(t_list *lst)
+int	ft_lstsize(t_lists *lst)
 {
 	size_t	i;
 

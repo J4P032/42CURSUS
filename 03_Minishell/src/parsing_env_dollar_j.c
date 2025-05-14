@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_env_dollar_j.c                                  :+:      :+:    :+:   */
+/*   parsing_env_dollar_j.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/07 14:14:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/14 11:40:58 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/05/14 18:42:25 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/05/14 18:59:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /* $a3cd_# = 5, $3ese_ = 0 */
 /*if the first char is inside the ODDCHAR strings (rare chars) it will return*/
 /*...cero*/
-size_t	invalidlen_env(const char *str)
+size_t	p_invalidlen_env(const char *str)
 {
 	size_t	i;
 
@@ -37,7 +37,7 @@ size_t	invalidlen_env(const char *str)
 /*will determine de length of the str depending of the ending c char*/
 /*will receive or \0 or ' '. Space when is double quoted*/
 /*if I give it c = '=' is for determine the length of the real env variable*/
-size_t	validlen_env(const char *str, char c)
+size_t	p_validlen_env(const char *str, char c)
 {
 	size_t	i;
 
@@ -51,7 +51,7 @@ size_t	validlen_env(const char *str, char c)
 	return (i);
 }
 
-void	print_rest_no_env(t_input *in, size_t w, size_t *i)
+void	p_print_rest_no_env(t_input *in, size_t w, size_t *i)
 {
 	size_t	j;
 	int		is_digit;
@@ -77,7 +77,7 @@ void	print_rest_no_env(t_input *in, size_t w, size_t *i)
 /*print cases as $@p msg -> p msg or $%p msg -> $%p msg*/
 /*when echo $$2p will print 2p. That is the (in->dollars % 2) case...*/
 /*...it is ODD as we dont count the first $. So $$$$ are 3*/
-void	print_rare_cases(t_input *in, size_t w, size_t *i)
+void	p_print_rare_cases(t_input *in, size_t w, size_t *i)
 {
 	char	*str;
 	size_t	index;
@@ -108,7 +108,7 @@ void	print_rare_cases(t_input *in, size_t w, size_t *i)
 /*...not valid unless end $. Ex: $USERpotato. USER is 4 but USERpotato more...*/
 /*...$USER$ is valid and $USER$USER$ also*/
 /*Will return -2 when we find a ? after the $ to manage the exit codes.*/
-int	valid_env(const char *str, t_input *in, size_t w)
+int	p_valid_env(const char *str, t_input *in, size_t w)
 {
 	size_t	n;
 	size_t	envlen;
@@ -122,12 +122,12 @@ int	valid_env(const char *str, t_input *in, size_t w)
 		return (-2);
 	while (in->envp[n])
 	{
-		envlen = validlen_env(in->envp[n], '=');
+		envlen = p_validlen_env(in->envp[n], '=');
 		if (!ft_strncmp(in->envp[n], str, envlen))
 		{
-			if (dqu && (validlen_env(str, ' ') == envlen || str[envlen] == '$'))
+			if (dqu && (p_validlen_env(str, ' ') == envlen || str[envlen] == '$'))
 				return (n);
-			else if (!dqu && (validlen_env(str, '\0') == envlen || str[envlen] == '$'))
+			else if (!dqu && (p_validlen_env(str, '\0') == envlen || str[envlen] == '$'))
 				return (n);
 		}
 		n++;

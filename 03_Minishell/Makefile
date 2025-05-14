@@ -3,6 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -fsanitize=leak -fno-omit-f
 # valgrind --track-fds==yes
 NAME = minishell
 LIBFT = ./libft/libft.a
+LIBFTPRINTF = ./ft_printf/libftprintf.a
 SRC = 	src/main.c \
 		src/history_m.c \
 		src/clean_all_m.c \
@@ -20,8 +21,13 @@ SRC = 	src/main.c \
 		src/manage_inputs_utils_j.c \
 		src/redirections_m.c \
 		src/bi_exit_j.c \
+		src/redirections_heredoc_m.c \
+		src/get_next_line.c \
+		src/get_next_line_utils.c \
 		src/parsing_j.c \
-		src/redirections_heredoc_m.c
+		src/parsing_print_j.c \
+		src/parsing_dollar_j.c \
+		src/parsing_env_dollar_j.c
 OBJDIR = obj
 OBJS = $(SRC:src/%.c=$(OBJDIR)/%.o)
 RM	= rm -rf
@@ -31,20 +37,25 @@ all: $(LIBFT) $(NAME)
 $(LIBFT):
 	@make -C libft
 
+$(LIBFTPRINTF):
+	@make -C ft_printf
+
 $(OBJDIR)/%.o: src/%.c
 	@mkdir -p $(OBJDIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS) $(LIBFT) inc/minishell_j.h inc/minishell_m.h
-	@$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -lreadline -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT) $(LIBFTPRINTF) inc/minishell_j.h inc/minishell_m.h
+	@$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -L./ft_printf -lftprintf -lreadline -o $(NAME)
 
 clean:
 	@$(RM) $(OBJDIR)
 	@make clean -C libft
+	@make clean -C ft_printf
 
 fclean: clean
 	@$(RM) $(NAME)
 	@make fclean -C libft
+	@make fclean -C ft_printf
 
 re: fclean all
 

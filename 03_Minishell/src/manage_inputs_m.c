@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 19:28:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/13 22:01:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:54:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 	input->inputfd = in_fd;
 	input->outputfd = out_fd;
 	handle_redirection(input);
-	input->input_split = ft_split_quotes(input->input, ' ', input);
+	/* input->input_split = ft_split_quotes(input->input, ' ', input);
 	if (!input->input_split || !input->input_split[0])
 		return ;
+	compose_command_args(input); */
 	//parsing(input); //EN CONSTRUCCION
-	compose_command_args(input);
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args);
 	else if (ft_strcmp(input->command, "cd") == 0)
 		ft_cd(input->input_split, input->envp);
 	else if (ft_strcmp(input->command, "echo") == 0)
-		ft_echo(input);
+		ft_echo(input, 1);
 	else if (ft_strcmp(input->command, "export") == 0 && input->input_split[1])//mirar cambiar a && input->args[0] (es decir que no sea \0). Pero!! export sin mas lo que hace es poner "declare -x " delante de todas las variables de entorno
 		ft_export(input->args, &input->envp);
 	else if (ft_strcmp(input->command, "env") == 0)

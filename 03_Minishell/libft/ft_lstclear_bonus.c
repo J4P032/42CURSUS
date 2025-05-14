@@ -6,15 +6,15 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 19:44:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/01/22 11:03:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:15:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+void	ft_lstclear(t_lists **lst, void (*del)(void*))
 {
-	t_list	*aux;
+	t_lists	*aux;
 
 	if (!*lst || !lst || !del)
 		return ;

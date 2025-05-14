@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_echo_dollar_j.c                                 :+:      :+:    :+:   */
+/*   parsing_dollar_j.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/14 11:40:30 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/05/14 18:42:30 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/05/14 19:02:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*This is when there is an echo $a msg that has to be without space at beggin*/
 /*...or echo -n $a msg that also has to be without space 'msg' even is spaced*/
-void	space_after_first_invalid_env(t_input *in, size_t w)
+void	p_space_after_first_invalid_env(t_input *in, size_t w)
 {
 	if (!in->echo_error_n_arg && w == in->word_after_arg)
 	{
@@ -35,7 +35,7 @@ void	space_after_first_invalid_env(t_input *in, size_t w)
 /*... 3. only one $ sign, 4. is not quoted with "". echo msg1 $p msg2...*/
 /*...won't be spaced -> msg1 msg2 not msg1  msg2. but echo msg1 "$p" msg2...*/
 /*...will be double spaced -> msg1  msg2*/
-void	print_if_spaced_and_valid_env(t_input *in, size_t w, int spaced)
+void	p_print_if_spaced_and_valid_env(t_input *in, size_t w, int spaced)
 {
 	size_t	i;
 	int		env_n;
@@ -51,12 +51,12 @@ void	print_if_spaced_and_valid_env(t_input *in, size_t w, int spaced)
 		(in->dollars)++;
 		i++;
 	}
-	env_n = valid_env((in->input_split[w] + i), in, w);
+	env_n = p_valid_env((in->input_split[w] + i), in, w);
 	if (env_n == -1
 		&& (ft_isalpha(in->input_split[w][i]) || in->input_split[w][i] == '_')
 		&& !idollar
 		&& is_quoted(in, w) != 2 && in->dollars == 1)
-		space_after_first_invalid_env(in, w);
+		p_space_after_first_invalid_env(in, w);
 	else if (spaced)
 		ft_printf(" ");
 }
@@ -71,12 +71,12 @@ void	print_if_spaced_and_valid_env(t_input *in, size_t w, int spaced)
 /*...reality as we are inside of this function if there is a $ found in str.*/
 /*...Because we advance in 'i' several times we need to check if not \0 in...*/
 /*...final line if (n->input_split[w][*i]) -> (*i)++;*/
-int	print_valid_env_variable(t_input *n, size_t w, size_t *i)
+int	p_print_valid_env_variable(t_input *n, size_t w, size_t *i)
 {
 	int		env_n;
 	size_t	j;
 
-	env_n = valid_env((n->input_split[w] + (*i) + 1), n, w);
+	env_n = p_valid_env((n->input_split[w] + (*i) + 1), n, w);
 	if (env_n > -1)
 	{
 		if (!(n->dollars % 2))
@@ -108,16 +108,16 @@ int	print_valid_env_variable(t_input *n, size_t w, size_t *i)
 /*...or a '_'. That is the reason I do nothing with it.*/
 /*env_n = -2 is when there is an $? so print the exit code. It behaves as...*/
 /*...BASH where echo $???msg will be number???msg*/
-void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
+void	p_print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 {
 	size_t	env_len;
 	size_t	j;
 
 	j = 0;
 	if (env_n > -1)
-		env_len = validlen_env(in->envp[env_n], '=');
+		env_len = p_validlen_env(in->envp[env_n], '=');
 	else if (env_n == -1)
-		env_len = invalidlen_env(in->input_split[w] + (*i));
+		env_len = p_invalidlen_env(in->input_split[w] + (*i));
 	while (in->input_split[w][*i]
 		&& in->input_split[w][(*i) + 1] != ' '
 		&& in->input_split[w][*i] != '$'
@@ -145,9 +145,9 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 	if (env_n < 0
 		&& (ft_isalpha(in->input_split[w][in->idollar])
 		|| in->input_split[w][in->idollar] == '_'))
-		print_rest_no_env(in, w, i);
+		p_print_rest_no_env(in, w, i);
 	else if (env_n == -1)
-		print_rare_cases(in, w, i);
+		p_print_rare_cases(in, w, i);
 	else if (env_n == -2)
 	{
 		(*i)++;
@@ -163,13 +163,13 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 }
 
 /*idollar is the index of the next char after the last $ found*/
-void	manage_dollar(t_input *in, size_t w, int spaced)
+void	p_manage_dollar(t_input *in, size_t w, int spaced)
 {
 	size_t	i;
 	int		env_n;
 
 	i = 0;
-	print_if_spaced_and_valid_env(in, w, spaced);
+	p_print_if_spaced_and_valid_env(in, w, spaced);
 	in->dollars = 0;
 	while (in->input_split[w][i])
 	{
@@ -183,8 +183,8 @@ void	manage_dollar(t_input *in, size_t w, int spaced)
 				(in->dollars)++;
 			}
 			in->idollar = i + 1;
-			env_n = print_valid_env_variable(in, w, &i);
-			print_invalid_envs(in, w, &i, env_n);
+			env_n = p_print_valid_env_variable(in, w, &i);
+			p_print_invalid_envs(in, w, &i, env_n);
 		}
 		if (in->input_split[w][i] && in->input_split[w][i] != '$')
 			i++;
