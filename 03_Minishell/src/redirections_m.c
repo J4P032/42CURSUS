@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 01:26:18 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/13 19:07:50 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/15 00:58:45 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	handle_input_redirection(t_input *input, char *redir)
 	free(filename);
 }
 
-void	handle_redirection(t_input *input)
+bool	handle_redirection(t_input *input)
 {
 	char	*redir;
 
@@ -81,7 +81,7 @@ void	handle_redirection(t_input *input)
 	{
 		redir = ft_strnstr(input->input, "<<", ft_strlen(input->input));
 		if (redir)
-			handle_heredoc_redirection(input, redir);
+			return (handle_heredoc_redirection(input, redir), 1);
 		else
 		{
 			redir = ft_strnstr(input->input, ">", ft_strlen(input->input));
@@ -95,4 +95,5 @@ void	handle_redirection(t_input *input)
 			}
 		}
 	}
+	return (0);
 }

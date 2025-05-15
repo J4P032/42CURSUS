@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/14 22:08:18 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/15 23:23:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,21 @@ int	main(int argc, char **argv, char **envp)
 		if (!input.input)
 			break ;
 		if (!input.input[0])
+		{
+			free(input.input);
 			continue ;
+		}
 		if (input.input && *(input.input))
 			ft_manage_history(input.input, 0);
 		input.input_split = ft_split_quotes(input.input, ' ', &input);
 		if (!input.input_split || !input.input_split[0])
-			return (1);
+			return (clean_all(&input), 1);
 		compose_command_args(&input);\
-		
 		parsing(&input); //EN CONSTRUCCION
-		//printf("PARSEADO: %s\n", input.parsed);
-		//printf("%s\n", input.input);
+		compose_command_args(&input);\
+		/* printf("============\nPARSEADO:%s\n==========\n", input.parsed);
+		printf("command:%s\n", input.command);//
+		printf("arg:%s\n-------------\n", input.args);// */
 		ft_manage_pipes(&input);
 		free(input.input);
 	}

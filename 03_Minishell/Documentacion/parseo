@@ -1,23 +1,44 @@
 Errores:
 
+export kk="echo tomate" el comando deberia ser echo. Ahora mismo es (echo tomate)
 
-crear una variable de entorno -> export kk="hola         que     tal"
+$kk habiendo creado unset kk=a da segfault
+
+echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg
+
+echo $$2 que deberia ser 2 pero no sale nada
+
+CORREGIDO - echo "$ a" deberia ser $ a pero no sale nada.
+
+CORREGIDO - "$a5e#tomate 'p'" DEBERIA dar como comando #tomate 'p' pero da #tomate p. el echo esta bien...  o sea que error del command.
+ 			"$a 'p'" deberia ser ( 'p') pero sale ( p)
+
+CORREGIDO - echo $$ (pares) no deberia salir nada y sale $
+
+CORREGIDO - echo "$$$USER" sale jrollon-$ cuando deberia salir jrollon-
+
+CORREGIDO - echo "$$$patata" deberia salir vacio ya que imprime el pid, pero sale $
+
+echo "$$%patata" deberia salir %patata y me sale $%patata
+
+CORREGIDO - echo "$@patata" deberia salir patata y sale $patata
+
+CORREGIDO - crear una variable de entorno -> export kk="hola         que     tal"
 	la variable se crea con los espacios, pero echo $kk deberia salir "hola que tal" sin comillas.
 
-ARREGLADO -> echo "$a664464562ssertetr)'p'" imprimira a partir del primer char que no sea alphanumerico
+CORREGIDO - echo "$a664464562ssertetr)'p'" imprimira a partir del primer char que no sea alphanumerico
 
-echo "$a5e#tomate 'p'" deberia ser #tomate 'p' pero sale #tomat 'p'
+CORREGIDO - echo "$a5e#tomate 'p'" deberia ser #tomate 'p' pero sale #tomat 'p'
 
-error echo "$ a" deberia ser $ a pero no sale nada.
 
 ARREGLADO ->	echo $2patata deberia salir patata y me sale 2patata.
 				echo $2 patata deberia salir patata y me sale 2$ patata 
-				echo $$2patata sale bien (2patata)
-				echo $$2 patata me sale bien (2 patata)
+echo $$2patata deberia salir (2patata) y me sale patata
+echo $$2 patata deberia salir (2 patata) y me sale patata. resumen fallo en $$2 que deberia ser 2.
 
 ARREGLADO -> echo $* patata deberia salir patata(pegado a la izda) y me sale $ patata
 
-echo '"$USER"' me pone el usuario cuando no deberia.
+CORREGIDO -> 'patata"$USER"' me pone el usuario cuando no deberia.
 
 ARREGLADO -> echo $. deberia poner $.
 
@@ -125,11 +146,8 @@ echo '"hola"'                     	"hola"                     	Comillas dobles d
 echo "$USER$HOME"                 	user/home/user             	Concatenación de variables
 echo "$USER literal $HOME"        	user literal /home/user    	Texto y variables
 echo "$UNSETVAR"                  	(nada)                     	Variable no definida
-echo "texto"escapado"            	texto"escapado             	Escape de comilla doble
-echo 'texto'escapado'            	texto\'escapado            	\ no tiene efecto en comillas simples
 echo ""                           	(nada)                     	Comillas dobles vacías
 echo ''                           	(nada)                     	Comillas simples vacías
-*(no escape)echo hola\ mundo                  	hola mundo                 	Escape de espacio (sin comillas)
 echo "hola     mundo"             	hola     mundo             	Mantiene espacios en comillas dobles
 echo hola     mundo               	hola mundo                 	Reduce múltiples espacios si no hay comillas
 
@@ -141,7 +159,7 @@ echo -n                                 	(nada)                           	Sin t
 echo -n -n -n hola                      	hola                             	Todos los `-n` se interpretan como opción
 echo -n "hola\nmundo"               	hola\nmundo                      	`\n` NO se interpreta si no implementas `-e`
 echo $HOME                             	/home/usuario                    	Variable expandida
-echo $HOME                            	$HOME                            	Escape de `$`
+echo '$HOME'                            	$HOME                            	Escape de `$`
 echo "a'$USER'"                        	a'usuario'                      	Combinación de comillas
 echo "'$USER'"                         	'usuario'                       	Comillas simples literales fuera
 echo "$USER's folder"                 	usuario's folder                	Comillas dobles + apóstrofe

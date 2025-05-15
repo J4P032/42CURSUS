@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/14 11:40:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/15 19:35:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	print_valid_env_variable(t_input *n, size_t w, size_t *i)
 {
 	int		env_n;
 	size_t	j;
+	size_t	start;
 
 	env_n = valid_env((n->input_split[w] + (*i) + 1), n, w);
 	if (env_n > -1)
@@ -84,7 +85,28 @@ int	print_valid_env_variable(t_input *n, size_t w, size_t *i)
 			j = 0;
 			while (n->envp[env_n][j] != '=')
 				j++;
-			ft_printf("%s", (n->envp[env_n] + j + 1));
+			j++;
+			while (n->envp[env_n][j] == ' ')
+				j++;
+			while (n->envp[env_n][j])
+			{
+				write(1, &n->envp[env_n][j++], 1);
+				if (n->envp[env_n][j] == ' ')
+				{
+					start = j;
+					while (n->envp[env_n][j] == ' ')
+					{
+						if (n->envp[env_n][j] == '\0')
+							break ;
+						j++;
+					}
+					if (n->envp[env_n][j] != '\0')
+						write(1, " ", 1);;
+					j = start;
+				}
+				while (n->envp[env_n][j] == ' ')
+					j++;
+			}
 		}
 		else
 		{
@@ -96,7 +118,12 @@ int	print_valid_env_variable(t_input *n, size_t w, size_t *i)
 		}
 	}
 	if (n->input_split[w][*i])
+	{
+		if(n->dollars % 2 == 0 && is_quoted(n, w) != 1 && env_n == -1
+			&& (!n->input_split[w][n->idollar] || n->input_split[w][n->idollar] == ' '))
+			ft_printf("$");
 		(*i)++;
+	}
 	return (env_n);
 }
 

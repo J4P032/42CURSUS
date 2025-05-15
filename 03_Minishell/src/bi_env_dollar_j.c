@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 14:14:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/14 11:40:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:03:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 /*The function will return length of chars formed in and invalid env...*/
 /* $a3cd_# = 5, $3ese_ = 0 */
 /*if the first char is inside the ODDCHAR strings (rare chars) it will return*/
-/*...cero*/
+/*...cero. Also in case of ' ' ex. "$ p"*/
 size_t	invalidlen_env(const char *str)
 {
 	size_t	i;
 
 	i = 1;
 	if (ft_isdigit(str[0]) || !str[0] || ft_strrchr(D_Y_ODDCHAR, str[0])
-			|| ft_strrchr(N_ODDCHAR, str[0]))
+			|| ft_strrchr(N_ODDCHAR, str[0]) || str[0] == ' ') ///cuidado con ' ' que a lo mejor esta bien si es considerado luego con comillas dobles
 		return (0);
 	while (str && str[i])
 	{
@@ -84,18 +84,18 @@ void	print_rare_cases(t_input *in, size_t w, size_t *i)
 	
 	index = in->idollar;
 	str = in->input_split[w];
-	if (in->dollars % 2)
+	if (in->dollars % 2 && in->input_split[w][*i])
 	{
 		ft_printf("%c", str[index]);
 		(*i) = index;
 		return ;
 	}
-	if (!str[index])
+	if (!str[index] && in->input_split[w][*i])
 		ft_printf("$");
-	else if (ft_isdigit(str[index]) || ft_strrchr(N_ODDCHAR, str[index])
-		|| ft_strrchr(D_Y_ODDCHAR, str[index]))
+	else if ((ft_isdigit(str[index]) || ft_strrchr(N_ODDCHAR, str[index])
+		|| ft_strrchr(D_Y_ODDCHAR, str[index])) && str[index])
 	{
-		if (!str[index + 1] && !ft_strrchr(D_Y_ODDCHAR, str[index]))
+		if (str[index] && !str[index + 1] && !ft_strrchr(D_Y_ODDCHAR, str[index]))
 			in->spaced = 0;
 		if (ft_strrchr(D_Y_ODDCHAR, str[index]))
 			ft_printf("$%c",str[index]);
@@ -120,7 +120,7 @@ int	valid_env(const char *str, t_input *in, size_t w)
 	dqu = (in->status[w] == DQUO_SP || in->status[w] == DQUO_NSP);
 	if (str[0] == '?')
 		return (-2);
-	while (in->envp[n])
+	while (in->envp && in->envp[n])
 	{
 		envlen = validlen_env(in->envp[n], '=');
 		if (!ft_strncmp(in->envp[n], str, envlen))

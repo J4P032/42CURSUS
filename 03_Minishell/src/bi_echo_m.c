@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:50:16 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/14 14:01:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:54:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ void	ft_echo(t_input *in, int active)
 
 	in->echo_error_n_arg = 0;
 	start = give_me_the_fist_word(in, &(in->echo_error_n_arg));
-	if (!active && start > 0)//
-		start--;
+	/* if (!active && start > 0)//
+		start--; */
 	i = start;
 	while (i < in->input_words && in->input_split && in->input_split[i])
 	{

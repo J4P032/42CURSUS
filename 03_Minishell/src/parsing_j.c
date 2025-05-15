@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/14 21:00:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/15 19:41:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ void	write_file(t_input *in, int fd, int stdout_save)
 		clean_all(in);
 		exit(1);
 	}
-	p_ft_echo(in, 0);
+	//p_ft_echo(in, 0);
+	ft_echo(in, 0);
 	if (dup2(stdout_save, STDOUT_FILENO) == -1)
 	{
 		close(fd);
