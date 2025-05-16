@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/15 23:23:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:01:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	input.envp = ft_matrix_dup(envp);
 	if (!input.envp)
-		return (clean_all(&input), 1);
+		clean_all(&input, 1);
 	init_sigaction(&sa);
 	input.input_split = NULL;
 	input.status = NULL;
@@ -42,16 +42,19 @@ int	main(int argc, char **argv, char **envp)
 			ft_manage_history(input.input, 0);
 		input.input_split = ft_split_quotes(input.input, ' ', &input);
 		if (!input.input_split || !input.input_split[0])
-			return (clean_all(&input), 1);
+		{
+			free(input.input);
+			continue ;
+		}
 		compose_command_args(&input);\
 		parsing(&input); //EN CONSTRUCCION
-		compose_command_args(&input);\
+		compose_command_args(&input);//tiene que estar doble.
 		/* printf("============\nPARSEADO:%s\n==========\n", input.parsed);
 		printf("command:%s\n", input.command);//
 		printf("arg:%s\n-------------\n", input.args);// */
 		ft_manage_pipes(&input);
 		free(input.input);
 	}
-	clean_all(&input);
+	clean_all(&input, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:31:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/15 21:33:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:51:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	save_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k)
 {
 	int		env_n;
 	size_t	j;
-	size_t 	start;
 
 	env_n = valid_env((n->input_split[w] + (*i) + 1), n, w);
 	if (env_n > -1)
@@ -34,20 +33,7 @@ int	save_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k)
 			{
 				n->command[(*k)++] = n->envp[env_n][j++];
 				if (n->envp[env_n][j] == ' ')
-				{
-					start = j;
-					while (n->envp[env_n][j] == ' ')
-					{
-						if (n->envp[env_n][j] == '\0')
-							break ;
-						j++;
-					}
-					if (n->envp[env_n][j] != '\0')
-						n->command[(*k)++] = ' ';
-					j = start;
-				}
-				while (n->envp[env_n][j] == ' ')
-					j++;
+					break ;
 			}
 		}
 		else
@@ -103,7 +89,7 @@ void	save_rare_cases(t_input *in, size_t w, size_t *i, size_t *k)
 	
 	index = in->idollar;
 	str = in->input_split[w];
-	if (in->dollars % 2 && in->input_split[w][*i])///anadido que sea distinto de cero
+	if (in->dollars % 2)// && in->input_split[w][*i])///anadido que sea distinto de cero
 	{
 		in->command[(*k)++] = str[index];
 		(*i) = index;/////////////
@@ -182,10 +168,7 @@ void	save_invalid_envs(t_input *in, size_t w, size_t *i, size_t *k)
 		{
 			number = ft_itoa(in->last_exit_code);
 			if (!number)
-			{
-				clean_all(in);
-				exit (1);
-			}
+				clean_all(in, 1);
 			while (number[l])
 				in->command[(*k)++] = number[l++];
 			free(number);

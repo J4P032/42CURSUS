@@ -6,26 +6,40 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/15 19:41:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:52:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
+/*parsed returns with the command included. I need this to make expand env...*/
+/*...with echo, So I need to clean the command from parsed and take the rest.*/
 void	write_parsed_output_from_file(t_input *in)
 {
 	char	*file;
 	int		fd;
+	char	*aux;
+	size_t	i;
 
+	i = 0;
 	file = in->filename;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-	{
-		clean_all(in);
-		exit (1);
-	}
+		clean_all(in, 1);
 	in->parsed = get_next_line(fd);
+	aux = in->parsed;
+	while (in->parsed && in->parsed[i] && in->parsed[i] != ' ')
+		i++;
+	while (in->parsed && in->parsed[i] == ' ')
+		i++;
+	if (in->parsed)
+	{
+		in->parsed = ft_strdup((in->parsed) + i);
+		if (!in->parsed)
+			clean_all(in, 1);
+	}
+	free(aux);
 	close(fd);
 	unlink(file);
 }
@@ -79,17 +93,14 @@ void	write_file(t_input *in, int fd, int stdout_save)
 	{
 		close(fd);
 		close(stdout_save);
-		clean_all(in);
-		exit(1);
+		clean_all(in, 1);
 	}
-	//p_ft_echo(in, 0);
 	ft_echo(in, 0);
 	if (dup2(stdout_save, STDOUT_FILENO) == -1)
 	{
 		close(fd);
 		close(stdout_save);
-		clean_all(in);
-		exit(1);
+		clean_all(in, 1);
 	}
 	close(fd);
 	close(stdout_save);
@@ -106,15 +117,13 @@ void	parsing(t_input *in)
 	{
 		if (!in->filename && stdout_save != 1)
 			close(stdout_save);
-		clean_all(in);
-		exit(1);
+		clean_all(in, 1);
 	}
 	fd = open(in->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		close(stdout_save);
-		clean_all(in);
-		exit (1);
+		clean_all(in, 1);
 	}
 	write_file(in, fd, stdout_save);
 	write_parsed_output_from_file(in);

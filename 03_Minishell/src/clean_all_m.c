@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:05:48 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/14 16:42:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:57:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 } */
 
 
-void	clean_all(t_input *input)
+void	clean_all(t_input *input, int error)
 {
 	ft_manage_history(NULL, 1);
 	if (input->input)
@@ -54,5 +54,8 @@ void	clean_all(t_input *input)
 		free(input->parsed);
 		input->parsed = NULL;
 	}
-	rl_clear_history();
+	if (error)
+		rl_clear_history();
+	if (error)
+		exit(1);
 }

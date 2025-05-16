@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/15 21:19:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:18:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,6 @@ void	compose_command_args(t_input *in);
 void	compose_arg(t_input *in, size_t word);
 void	parsing(t_input *in);
 char	*get_next_line(int fd);
-
-void	p_ft_echo(t_input *in, int active);
-void	p_manage_dollar(t_input *in, size_t w, int spaced);
-int		p_valid_env(const char *str, t_input *in, size_t w);
-size_t	p_validlen_env(const char *str, char c);
-size_t	p_invalidlen_env(const char *str);
-void	p_print_rare_cases(t_input *in, size_t w, size_t *i);
-void	p_print_rest_no_env(t_input *in, size_t w, size_t *i);
 
 //BUILT INS
 void	ft_echo(t_input *in, int active);
