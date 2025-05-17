@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/16 10:18:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/17 18:55:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_input
 	size_t	word;
 	size_t	dollars;
 	size_t	idollar;
+	size_t	env_len;
 	int		echo_error_n_arg;
 	int		spaced;
 	int		inputfd;
@@ -53,13 +54,18 @@ typedef struct s_input
 }			t_input;
 
 //CHECK INPUT
+void	ft_echo(t_input *in, int active);
 void	compose_command_args(t_input *in);
 void	compose_arg(t_input *in, size_t word);
 void	parsing(t_input *in);
 char	*get_next_line(int fd);
+void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k);
+void	save_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);
+void	save_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);
+void	save_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);
 
 //BUILT INS
-void	ft_echo(t_input *in, int active);
+void	echo_short(t_input *in);
 void	manage_dollar(t_input *in, size_t w, int spaced);
 int		valid_env(const char *str, t_input *in, size_t w);
 void	ft_exit(t_input *in);

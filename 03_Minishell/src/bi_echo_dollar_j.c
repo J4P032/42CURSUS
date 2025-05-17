@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/15 19:35:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:45:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,34 @@ void	print_if_spaced_and_valid_env(t_input *in, size_t w, int spaced)
 		ft_printf(" ");
 }
 
+void	print_free_or_quoted_env(t_input *n, size_t j, size_t start, size_t w)
+{
+	while (n->envp[n->env_n][j] != '=')
+		j++;
+	j++;
+	while (n->envp[n->env_n][j] == ' ' && is_quoted(n, w) == 0)
+		j++;
+	while (n->envp[n->env_n][j])
+	{
+		write(1, &n->envp[n->env_n][j++], 1);
+		if (n->envp[n->env_n][j] == ' ' && is_quoted(n, w) == 0)
+		{
+			start = j;
+			while (n->envp[n->env_n][j] == ' ')
+			{
+				if (n->envp[n->env_n][j] == '\0')
+					break ;
+				j++;
+			}
+			if (n->envp[n->env_n][j] != '\0')
+				write(1, " ", 1);;
+			j = start;
+		}
+		while (n->envp[n->env_n][j] == ' ' && is_quoted(n, w) == 0)
+			j++;
+	}
+}
+
 /*if we find a valid ENV variable it will print it if the number of $...*/
 /*...previous to that VAR is ODD ($USER, $$$USER -> (pid)jrollon) if...*/
 /*...it is EVEN ($$USER, $$$$USER -> (pid)USER). In Bash $$ prints the PID...*/
@@ -71,60 +99,33 @@ void	print_if_spaced_and_valid_env(t_input *in, size_t w, int spaced)
 /*...reality as we are inside of this function if there is a $ found in str.*/
 /*...Because we advance in 'i' several times we need to check if not \0 in...*/
 /*...final line if (n->input_split[w][*i]) -> (*i)++;*/
-int	print_valid_env_variable(t_input *n, size_t w, size_t *i)
+void	print_valid_env_variable(t_input *n, size_t w, size_t *i)
 {
-	int		env_n;
 	size_t	j;
 	size_t	start;
 
-	env_n = valid_env((n->input_split[w] + (*i) + 1), n, w);
-	if (env_n > -1)
+	n->env_n = valid_env((n->input_split[w] + (*i) + 1), n, w);
+	if (n->env_n > -1)
 	{
 		if (!(n->dollars % 2))
 		{
 			j = 0;
-			while (n->envp[env_n][j] != '=')
-				j++;
-			j++;
-			while (n->envp[env_n][j] == ' ')
-				j++;
-			while (n->envp[env_n][j])
-			{
-				write(1, &n->envp[env_n][j++], 1);
-				if (n->envp[env_n][j] == ' ')
-				{
-					start = j;
-					while (n->envp[env_n][j] == ' ')
-					{
-						if (n->envp[env_n][j] == '\0')
-							break ;
-						j++;
-					}
-					if (n->envp[env_n][j] != '\0')
-						write(1, " ", 1);;
-					j = start;
-				}
-				while (n->envp[env_n][j] == ' ')
-					j++;
-			}
+			start = 0;
+			print_free_or_quoted_env(n, j, start, w);
 		}
 		else
 		{
 			while (n->input_split[w][*i] && n->input_split[w][(*i) + 1] != ' ')
-			{
-				(*i)++;
-				ft_printf("%c", n->input_split[w][*i]);
-			}
+				ft_printf("%c", n->input_split[w][++(*i)]);
 		}
 	}
 	if (n->input_split[w][*i])
 	{
-		if(n->dollars % 2 == 0 && is_quoted(n, w) != 1 && env_n == -1
+		if(n->dollars % 2 == 0 && is_quoted(n, w) != 1 && n->env_n == -1
 			&& (!n->input_split[w][n->idollar] || n->input_split[w][n->idollar] == ' '))
 			ft_printf("$");
 		(*i)++;
 	}
-	return (env_n);
 }
 
 /*echo $$USER will print USER. $$USERp will be USERp. That is the first while*/
@@ -137,14 +138,14 @@ int	print_valid_env_variable(t_input *n, size_t w, size_t *i)
 /*...BASH where echo $???msg will be number???msg*/
 void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 {
-	size_t	env_len;
+	//size_t	env_len;
 	size_t	j;
 
 	j = 0;
 	if (env_n > -1)
-		env_len = validlen_env(in->envp[env_n], '=');
+		in->env_len = validlen_env(in->envp[env_n], '=');
 	else if (env_n == -1)
-		env_len = invalidlen_env(in->input_split[w] + (*i));
+		in->env_len = invalidlen_env(in->input_split[w] + (*i));
 	while (in->input_split[w][*i]
 		&& in->input_split[w][(*i) + 1] != ' '
 		&& in->input_split[w][*i] != '$'
@@ -156,9 +157,9 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 				(*i)--;
 			break ;
 		}
-		if (in->dollars > 0 && (in->dollars % 2) && (j < env_len))
+		if (in->dollars > 0 && (in->dollars % 2) && (j < in->env_len))
 			ft_printf("%c", in->input_split[w][*i]);
-		else if (j >= env_len && !ft_isdigit(in->input_split[w][in->idollar])
+		else if (j >= in->env_len && !ft_isdigit(in->input_split[w][in->idollar])
 			&& !ft_strrchr(D_Y_ODDCHAR, in->input_split[w][in->idollar])
 			&& !ft_strrchr(N_ODDCHAR, in->input_split[w][in->idollar]))
 		{
@@ -193,7 +194,6 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 void	manage_dollar(t_input *in, size_t w, int spaced)
 {
 	size_t	i;
-	int		env_n;
 
 	i = 0;
 	print_if_spaced_and_valid_env(in, w, spaced);
@@ -210,8 +210,8 @@ void	manage_dollar(t_input *in, size_t w, int spaced)
 				(in->dollars)++;
 			}
 			in->idollar = i + 1;
-			env_n = print_valid_env_variable(in, w, &i);
-			print_invalid_envs(in, w, &i, env_n);
+			print_valid_env_variable(in, w, &i);
+			print_invalid_envs(in, w, &i, in->env_n);
 		}
 		if (in->input_split[w][i] && in->input_split[w][i] != '$')
 			i++;

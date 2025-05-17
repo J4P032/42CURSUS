@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_inputs_m.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 19:28:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/15 00:58:19 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/17 17:33:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 	else if (ft_strcmp(input->command, "cd") == 0)
 		ft_cd(input->input_split, input->envp);
 	else if (ft_strcmp(input->command, "echo") == 0)
-		ft_echo(input, 1);
+		echo_short(input);
 	else if (ft_strcmp(input->command, "export") == 0 && input->input_split[1])//mirar cambiar a && input->args[0] (es decir que no sea \0). Pero!! export sin mas lo que hace es poner "declare -x " delante de todas las variables de entorno
 		ft_export(input->args, &input->envp);
 	else if (ft_strcmp(input->command, "env") == 0)
