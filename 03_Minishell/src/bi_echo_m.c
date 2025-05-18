@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:50:16 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/16 13:34:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/18 15:17:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,13 @@ size_t	check_rest_of_n(t_input *in)
 /*...word after the command. If it is, then we check rest of possible...*/
 /*... -nnnn -n that would produce the same result. ONLY the first one...*/
 /*... will be the one that rules if there is an -n non \n print in ft_echo*/
+/*NEW: I return 1 now because I want to preserve the -nnn in PARSED as...*/
+/*...I want to compare with export kk="echo -nnn msg" BUT I need to get in...*/
+/*...the function to check if it is a valid -n argument*/
 size_t	give_me_the_fist_word(t_input *in, int *error_argument)
 {
 	size_t	i;
 	size_t	n_repeated;
-
 	
 	i = 1;
 	n_repeated = 1;
@@ -68,7 +70,7 @@ size_t	give_me_the_fist_word(t_input *in, int *error_argument)
 		i = check_rest_of_n(in);
 	else
 		i = in->word_after_command;
-	return (i);
+	return (1);
 }
 
 /*print_as_env is 1 when it is "$USER" or $USER because '$USER' will print...*/

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/16 12:52:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:10:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 /*parsed returns with the command included. I need this to make expand env...*/
 /*...with echo, So I need to clean the command from parsed and take the rest.*/
+/*be carefull of spaces as we must include them in parsed I sustituted...*/
+/*...while (in->parsed && in->parsed[i] == ' ') by an if to just run one space*/
 void	write_parsed_output_from_file(t_input *in)
 {
 	char	*file;
@@ -31,7 +33,7 @@ void	write_parsed_output_from_file(t_input *in)
 	aux = in->parsed;
 	while (in->parsed && in->parsed[i] && in->parsed[i] != ' ')
 		i++;
-	while (in->parsed && in->parsed[i] == ' ')
+	if (in->parsed && in->parsed[i] == ' ')
 		i++;
 	if (in->parsed)
 	{
