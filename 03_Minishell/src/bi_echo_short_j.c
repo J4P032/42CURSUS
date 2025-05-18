@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 17:24:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/18 15:18:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/18 16:55:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ size_t	check_more_n(t_input *in)
 	size_t	start;
 
 	i = 0;
-	while (in->parsed[i])
+	while (in->parsed && in->parsed[i])
 	{
-		start = i;//
+		start = i;
 		if (in->parsed[i] != '-')
 			return (start);
 		i++;
@@ -44,6 +44,8 @@ size_t	check_argument(t_input *in, int parsed_n)
 	n_repeated = 1;
 	if (parsed_n)
 		in->echo_error_n_arg = 0;
+	if (!in->parsed[0])
+		return (0);
 	while (in->parsed[i] && in->parsed[i] != ' ')
 	{
 		if (in->parsed[i++] != 'n' || in->parsed[0] != '-')

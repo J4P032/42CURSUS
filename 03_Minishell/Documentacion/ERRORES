@@ -18,6 +18,10 @@ hay que tenerlo en cuenta en la propia funcion export, el valor de input->parsed
 
 $kk habiendo creado unset kk=a da segfault
 
+si le pongo unset solo, me dice que comando no encontrado.
+
+Si le hago unset VAR exista o no.. y luego hago unset VAR o unset otra variable peta por SEGFAULT
+
 ls | wc da memory leak
 	creo que es del input->status al tomar otro camino no se libera.
 
@@ -35,6 +39,12 @@ NO error  pero posibilidad de hacer: historial que conserve cuando se cierre la 
 
 (JAVI)
 
+echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg
+
+echo $'msg' deberia salir msg. Sale $msg
+
+el acceso del archivo temp si se protege contra lectura no deja escribir. Tiene que ser ver si puedo acceder a el tambien.
+
 CORREGIDO - export kk="echo -n msg1" y luego $kk msg2 debe salir (msg1 msg2) sin salto de linea
 	export kk="echo -nnnnn -n -nnnann msg1" y luego $kk msg2 debe salir (-nnnann msg1 msg2) sin salto de linea
 	export kk="echo msg1" y luego $kk -n msg2 debe salir (msg1 -n msg2)
@@ -50,7 +60,7 @@ CORREGIDOS
 	echo "-nnnnn " patata NO debe hacerlo
 	echo " " -n patata debe salir -> (  -n patata) dos espacios
 
-CORREGIDO - ECHO " " patata debe salir -> (  patata) dos espacios. Es un error del parsed.
+CORREGIDO - echo " " patata debe salir -> (  patata) dos espacios. Es un error del parsed.
 
 CORREGIDO - crear una variable de entorno -> export kk="hola         que     tal      "
 	la variable se crea con los espacios, pero echo $kk deberia salir "hola que tal" sin comillas.
@@ -58,11 +68,8 @@ CORREGIDO - crear una variable de entorno -> export kk="hola         que     tal
 
 CORREGIDO - echo " se sale la minishell.. es decir, impares comillas
 
-el acceso del archivo temp si se protege contra lectura no deja escribir. Tiene que ser ver si puedo acceder a el tambien.
-
 CORREGIDO - export kk="echo tomate" el comando deberia ser echo. Ahora mismo es (echo tomate)
 
-echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg
 
 CORREGIDO - echo $$2patata que deberia ser 2patata pero sale patata
 
@@ -171,8 +178,6 @@ echo "hola mundo"                   	hola mundo
 echo 'hola mundo'                   	hola mundo
 echo hola" mundo"                   	hola mundo
 echo 'hola'" mundo"                 	hola mundo
-echo "$HOME"                        	(/ruta/home/usuario)
-echo '$HOME'                        	$HOME
 echo "saludo: $HOME"                	saludo: /ruta/home/usuario
 
 
@@ -213,7 +218,6 @@ echo -n                                 	(nada)                           	Sin t
 echo -n -n -n hola                      	hola                             	Todos los `-n` se interpretan como opción
 echo -n "hola\nmundo"               	hola\nmundo                      	`\n` NO se interpreta si no implementas `-e`
 echo $HOME                             	/home/usuario                    	Variable expandida
-echo '$HOME'                            	$HOME                            	Escape de `$`
 echo "a'$USER'"                        	a'usuario'                      	Combinación de comillas
 echo "'$USER'"                         	'usuario'                       	Comillas simples literales fuera
 echo "$USER's folder"                 	usuario's folder                	Comillas dobles + apóstrofe
