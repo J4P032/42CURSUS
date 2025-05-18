@@ -31,6 +31,10 @@ cd $HOME dice que no existe $HOME. eso es por que estarás pillando del split. a
 	char*. si lo ves, input->parsed será /home/usuario  e input->command será cd. De echo si el comando fuera $USER (que no tiene sentido)
 	input->command ahora sería el nombre del usuario expandido y así pondría "perico: command not found".
 
+una ejecucion de un comando que no existe aparte del error debe dar $? = 127, es decir,
+hay que hacer un export de la variable ? a 127 y poner la variable (input->last_exit_code) a 127 por que la debo leer en el exit
+y no puedo hacer un $? dentro del codigo C.
+
 NO error  pero posibilidad de hacer: historial que conserve cuando se cierre la minishell.
 
 

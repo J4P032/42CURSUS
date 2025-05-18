@@ -6,31 +6,12 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:05:48 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/16 16:57:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:03:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
-
-/* void	clean_list(t_pars **list)
-{
-	t_pars	*aux;
-	t_pars	*temp;
-
-	aux = *list;
-	while (aux)
-	{
-		if (aux->str)
-			free (aux->str);
-		temp = aux;			
-		aux = aux->next;
-		if (temp)
-			free(temp);
-	}
-	*list = NULL;	
-} */
-
 
 void	clean_all(t_input *input, int error)
 {
@@ -57,5 +38,5 @@ void	clean_all(t_input *input, int error)
 	if (error)
 		rl_clear_history();
 	if (error)
-		exit(1);
+		exit(error);
 }
