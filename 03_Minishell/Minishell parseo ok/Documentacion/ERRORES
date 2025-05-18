@@ -1,0 +1,234 @@
+Errores. Te pongo arriba los errores Mario, para que no los tengas que buscar y te sea más fácil. Más abajo 
+hay pruebas para hacer...
+
+=============================================================================================================
+
+
+(MARIO)
+
+hacer un export =patata no está permitido en bash. Hay que poner -miniyo: export: `=patata': not a valid identifier
+
+por esto le tiraron a Amelie:
+export hh=patata
+export jj=tomate
+export kk="$hh + $jj"
+echo $kk DEBE DAR patata + tomate. Me da $hh + $jj. Es decir, debe expandirlos.
+Por que es de Mario? por que en mi parseado si aparece bien kk=patata + tomate. Solo 
+hay que tenerlo en cuenta en la propia funcion export, el valor de input->parsed
+
+$kk habiendo creado unset kk=a da segfault
+
+si le pongo unset solo, me dice que comando no encontrado.
+
+Si le hago unset VAR exista o no.. y luego hago unset VAR o unset otra variable peta por SEGFAULT
+
+ls | wc da memory leak
+	creo que es del input->status al tomar otro camino no se libera.
+
+./ls no deberia hacer nada.
+
+cd $HOME dice que no existe $HOME. eso es por que estarás pillando del split. ahora se puede pillar de input->parsed que es un
+	char*. si lo ves, input->parsed será /home/usuario  e input->command será cd. De echo si el comando fuera $USER (que no tiene sentido)
+	input->command ahora sería el nombre del usuario expandido y así pondría "perico: command not found".
+
+NO error  pero posibilidad de hacer: historial que conserve cuando se cierre la minishell.
+
+
+===============================================================================================================
+
+
+(JAVI)
+
+echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg
+
+echo $'msg' deberia salir msg. Sale $msg
+
+el acceso del archivo temp si se protege contra lectura no deja escribir. Tiene que ser ver si puedo acceder a el tambien.
+
+CORREGIDO - export kk="echo -n msg1" y luego $kk msg2 debe salir (msg1 msg2) sin salto de linea
+	export kk="echo -nnnnn -n -nnnann msg1" y luego $kk msg2 debe salir (-nnnann msg1 msg2) sin salto de linea
+	export kk="echo msg1" y luego $kk -n msg2 debe salir (msg1 -n msg2)
+
+
+CORREGIDOS
+	echo "-n" patata debe hacer -n 
+	echo '-n' patata debe hacer -n
+	echo "-n patata" no debe hacerlo
+	echo '-n patata' no debe hacerlo'
+	echo "-n -na" patata no debe hacerlo
+	echo "-nnnnnn" patata SI hace -n
+	echo "-nnnnn " patata NO debe hacerlo
+	echo " " -n patata debe salir -> (  -n patata) dos espacios
+
+CORREGIDO - echo " " patata debe salir -> (  patata) dos espacios. Es un error del parsed.
+
+CORREGIDO - crear una variable de entorno -> export kk="hola         que     tal      "
+	la variable se crea con los espacios, pero echo $kk deberia salir "hola que tal" sin comillas.
+	PERO echo "$kk" tendria que salir como (hola         que     tal      )
+
+CORREGIDO - echo " se sale la minishell.. es decir, impares comillas
+
+CORREGIDO - export kk="echo tomate" el comando deberia ser echo. Ahora mismo es (echo tomate)
+
+
+CORREGIDO - echo $$2patata que deberia ser 2patata pero sale patata
+
+CORREGIDO - echo "$ a" deberia ser $ a pero no sale nada.
+
+CORREGIDO - "$a5e#tomate 'p'" DEBERIA dar como comando #tomate 'p' pero da #tomate p. el echo esta bien...  o sea que error del command.
+ 			"$a 'p'" deberia ser ( 'p') pero sale ( p)
+
+CORREGIDO - echo $$ (pares) no deberia salir nada y sale $
+
+CORREGIDO - echo "$$$USER" sale jrollon-$ cuando deberia salir jrollon-
+
+CORREGIDO - echo "$$$patata" deberia salir vacio ya que imprime el pid, pero sale $
+
+CORREGIDO - echo "$$%patata" deberia salir %patata y me sale $%patata
+
+CORREGIDO - echo "$@patata" deberia salir patata y sale $patata
+
+CORREGIDO - echo "$a664464562ssertetr)'p'" imprimira a partir del primer char que no sea alphanumerico
+
+CORREGIDO - echo "$a5e#tomate 'p'" deberia ser #tomate 'p' pero sale #tomat 'p'
+
+
+ARREGLADO ->	echo $2patata deberia salir patata y me sale 2patata.
+				echo $2 patata deberia salir patata y me sale 2$ patata 
+				echo $$2patata deberia salir (2patata) y me sale patata
+				echo $$2 patata deberia salir (2 patata) y me sale patata. resumen fallo en $$2 que deberia ser 2.
+
+ARREGLADO -> echo $* patata deberia salir patata(pegado a la izda) y me sale $ patata
+
+CORREGIDO -> 'patata"$USER"' me pone el usuario cuando no deberia.
+
+ARREGLADO -> echo $. deberia poner $.
+
+expr $SHLVL + $SHLVL deberia soltar la suma y suelta $SHLVL
+
+control + C debe devolver un numero de exit $? no se cual es.
+
+
+NO ES ERROR
+
+EN BASH:
+echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg 
+PERO EN ZSH 
+si sale como sale en miniyo.
+
+
+
+
+PRUEBAS GENERADAS POR CHATGPT A PARTIR DE PDF DE PAOLO:
+
+TESTS BASICOS
+Input                          	Output esperado
+--------------------------------	------------------------------------------
+echo hola                      	hola
+echo -n hola                   	hola%
+echo -n -n hola                	hola%
+echo -n -nnnn hola             	hola%
+echo -nnnn hola                	hola%
+echo -n -n -n hola             	hola%
+echo -n -n -n -n hola          	hola%
+echo hola \n mundo            	hola n mundo
+ls                            	(lista de archivos, igual que /bin/ls)
+pwd                           	(ruta actual, igual que /bin/pwd)
+env                           	(variables de entorno exportadas)
+export TEST=42; env | grep TEST	TEST=42
+unset TEST; env | grep TEST   	(no muestra nada)
+cd ..; pwd                     	(ruta padre)
+cd; pwd                        	(ruta HOME)
+cd /; pwd                      	/
+exit                          	(shell termina)
+exit 42                       	(shell termina con código 42)
+exit 256                      	(shell termina con código 0)
+exit -1                       	(shell termina con código 255)
+exit hola                     	exit: hola: numeric argument required
+exit 1 2                      	exit: too many arguments
+
+
+REDIRECCIONES
+Input                               	Resultado esperado
+-----------------------------------	--------------------------------------------------
+echo hola > out.txt                	Crea `out.txt` con contenido "hola\n"
+echo adios > out.txt              	Sobrescribe `out.txt` con "adios\n"
+echo mundo >> out.txt             	Concatena "mundo\n" a `out.txt`
+cat < out.txt                     	Muestra el contenido de `out.txt`
+< out.txt cat                     	Muestra el contenido de `out.txt`
+cat < no_existe.txt               	cat: no_existe.txt: No such file or directory
+> out.txt                         	Crea archivo vacío `out.txt` (modo truncar)
+>> out.txt                        	Crea si no existe (modo append), no error
+
+
+PIPES
+Input                                 	Salida esperada
+-------------------------------------	------------------------------------------
+echo hola | cat                       	hola
+echo hola | cat | cat | cat           	hola
+ls | grep minishell                   	(muestra "minishell" si existe el archivo/carpeta)
+cat Makefile | grep minishell         	(muestra líneas con "minishell")
+echo uno | cat -e                     	uno$
+
+
+COMILLAS
+Input                                	Salida esperada
+------------------------------------	-------------------------
+echo "hola mundo"                   	hola mundo
+echo 'hola mundo'                   	hola mundo
+echo hola" mundo"                   	hola mundo
+echo 'hola'" mundo"                 	hola mundo
+echo "saludo: $HOME"                	saludo: /ruta/home/usuario
+
+
+VARIABLES
+Input                            	Salida esperada
+--------------------------------	---------------------------
+export VAR=42; echo $VAR        	42
+export VAR=hola; echo "$VAR"    	hola
+echo $NOEXISTE                  	(salida vacía)
+echo $USER                      	(tu usuario actual)
+echo "$USER"                    	(tu usuario actual)
+echo "$?"                       	(último código de salida)
+
+
+PRUEBAS DE ECHO POR CHATGPT:
+Comando                           	Esperado en bash           	Notas
+------------------------------------------------------------------------------------------
+echo hola                         	hola                       	Texto plano
+echo "hola mundo"                 	hola mundo                 	Comillas dobles permiten espacios
+echo 'hola mundo'                 	hola mundo                 	Comillas simples: literal
+echo "$HOME"                      	/home/user                 	Expansión de variable
+echo '$HOME'                      	$HOME                      	No expande en comillas simples
+echo "'hola'"                     	'hola'                     	Comillas simples dentro de dobles
+echo '"hola"'                     	"hola"                     	Comillas dobles dentro de simples
+echo "$USER$HOME"                 	user/home/user             	Concatenación de variables
+echo "$USER literal $HOME"        	user literal /home/user    	Texto y variables
+echo "$UNSETVAR"                  	(nada)                     	Variable no definida
+echo ""                           	(nada)                     	Comillas dobles vacías
+echo ''                           	(nada)                     	Comillas simples vacías
+echo "hola     mundo"             	hola     mundo             	Mantiene espacios en comillas dobles
+echo hola     mundo               	hola mundo                 	Reduce múltiples espacios si no hay comillas
+
+
+Comando                                	Salida esperada en bash          	Notas
+-------------------------------------------------------------------------------------------------------------
+echo -n hola                           	hola                             	Sin salto de línea final
+echo -n                                 	(nada)                           	Sin texto ni salto
+echo -n -n -n hola                      	hola                             	Todos los `-n` se interpretan como opción
+echo -n "hola\nmundo"               	hola\nmundo                      	`\n` NO se interpreta si no implementas `-e`
+echo $HOME                             	/home/usuario                    	Variable expandida
+echo "a'$USER'"                        	a'usuario'                      	Combinación de comillas
+echo "'$USER'"                         	'usuario'                       	Comillas simples literales fuera
+echo "$USER's folder"                 	usuario's folder                	Comillas dobles + apóstrofe
+echo "$UNDEFINED"                      	(nada)                           	Variable no definida
+echo "$UNDEFINED texto"               	texto                            	Parte expandida está vacía
+echo '$UNDEFINED texto'               	$UNDEFINED texto                	Todo literal
+echo "$USER''$HOME"                    	usuario/home/usuario            	Dos comillas simples no afectan dentro de dobles
+echo "  $USER  "                       	␣␣usuario␣␣                      	Se respetan espacios en dobles comillas
+echo "'single' "double""             	'single' "double"               	Literal
+echo "$? status"                      	$? status                        	No se expande si hay `\`
+echo $?                                 	0 (o código de salida anterior)  	Expande código de salida anterior
+echo "'$?'"                            	'0'                              	Combinación comillas simples y dobles
+echo '"hola"'                        	\"hola\"                        	Backslash no escapa nada en comillas simples
+echo " " $USER " "                 	" $USER "                       	Backslash escapa `$` y `"`, pero innecesario en dobles

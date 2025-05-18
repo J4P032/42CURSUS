@@ -1,0 +1,683 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Doc_Minishell                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/24 14:26:49 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/04/24 14:28:35 by jrollon-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+##################################
+FUNCIONES DE PROMPT ##############
+##################################
+
+readline -> char *readline(const char *prompt) #include <readline/readline.h> #include <readline/history.h>
+	const char *prompt -> cadena que se escribirá en el prompt para que el usaurio increse datos. Si no se quiere NULL.
+	Muestra un prompt ("terminal$ ") y esperar que el usuario
+	escriba algo.
+	Devuelve lo que escribió el user como un char * que se ha de liberar
+	con un free(). Es como un read pero con ventajas:
+	1. soporta historial (fechas ↑ ↓)
+	2. soporta edición de linea para borrar con backspace
+	3. parece una terminal real.
+	
+	ej:
+		char *input;
+
+		input = readline("minishell$ ");
+		if (input){
+			//usar input
+			free(input);
+		}
+		else{
+			//esto ocurre si se pulsa Ctrl+D
+			printf("exit\n");
+			exit(0);
+		}
+
+rl_clear_history() -> void rl_clear_history(void)
+	Borra el historial de comandos guardado por readline.
+	Cada vez que se usa readline, SI SE GUARDA el comando con add_history(input)
+	se va acumulando en una lista. rl_clear_history() borra esa lista. Si no se
+	usa add_history(input) no hay nada que borrar.
+	DEBE SER PUESTO AL FINAL DEL PROGRAMA PARA NO HABER LEAKS DE MEMORIA.
+
+rl_on_new_line() -> void rl_on_new_line(void)
+	Le dice a realine que estamos comenzando una nueva linea de entrada.
+	Útil cuando se usan señales como Ctrl+c y necesito que readline se reajuste
+	para mostrar el prompt bien en la siguiente linea.
+	rl_replace_line("", 0) //borra la linea actual
+	rl_on_new_line(); //le dice a readline que empieze una nueva linea
+	rl_redisplay(); Muéstra el prompt de nuevo.
+	Estas 3 lineas de arriba se hacen por ejemplo si se hace Ctrl+c para que no se
+	quede el prompt a medias y quede limpio
+	Es decir: "ey readline!! vamos a empezar una nueva linea!" No imprime nada. Solo informa
+	a readline.
+
+rl_redisplay() -> void rl_display(void)
+	redibuja el prompt y el contenido actual de la linea de entrada. Sin rl_redisplay()
+	no vuelve a mostrar el prompt visualmente aunque internamente esté listo para escribir.
+	
+rl_replace_line() -> void rl_replace_line(const char *text, int clear_undo)
+	reemplaza el contenido actual de la linea de entrada donde el user está escribiendo
+	por el texto que se le pase
+	rl_replace_line("", 0); //borra la linea actual reemplazando con cadena vacia.
+	clear_undo: indica si se debe limpiar el historial de desacer dicha linea (mejor poner 0)
+	Se usa con señal Ctrl+c ya que si no se hace nada puede dejar carácteres escritos en la linea
+	void handle_sigint(int sig){ //cuando se pulsa Ctrl+c.
+		(void)sig;
+		write(1, "\n", 1);
+		rl_replace_line("", 0); //limpia la linea actual
+		rl_on_new_line(); //prepara nueva linea
+		rl_redisplay(); //muestra el prompt limpio.
+	}
+	readline maneja automáticamente el uso de delete o backspace.
+
+add_history() -> void add_history(const char *line)
+	añade una linea al historial de comandos de readline para luego navegar en el 
+	histórico con las flechas ↑ ↓
+	char *input = readline("minishel$ ");
+	if (input && *input){ //se hace para no guardar entradas en blanco.
+		add_history(input);
+		free(input); //si no se hace se produce leak.
+	}
+	este historia se guarda en memoria. NO archivo o sea que se pierde al cerrar minishell
+	cada add_history COPIA INTERNAMENTE La linea asi que al final del programa hay que
+	rl_clear_history(); para no tener leaks.
+	En el comportamiento original de bash, history no duplica comandos repetidos. Solo
+	los coloca abajo. Esto lo hace internamente add_history. NO hace falta hacer nada.
+
+                          ==========================
+
+chdir -> int chdir(const char *path)
+	cambia el directorio actual al que se le de en el path
+	retorna: 0 -> ok
+			-1 -> error (ej. si no existe directorio)
+	chdir("/home/usuario");
+
+
+getcwd -> char *getcwd(char *buf, size_t size) #include <unistd.h>
+	Obtiene la ruta absoluta del directorio de trabajo actual del proceso y la almacena
+	en el búfer buf.
+	Si el tamaño del buf es insuficiente para meter la ruta devuelve NULL y pone errno en
+	ERANGE. Si buf es NULL, el sistema asigna memoria dinámica.
+	char cwd[1024];
+	if (getcwd(cwd, sizeof(cwd)) != NULL){
+		printf("Directorio actual: %s\n", cwd);
+	else
+		perror("Error")}
+
+
+getenv() -> char *getenv(const char *name)
+		Devuelve el valor de una variable de entorno (PATH, HOME, LANG, SHELL) o NULL si no existe
+		char *path = getenv("PATH") //da acceso a directorios donde buscar ejecutables. En minishel...
+		//...util para simular como se resuelven comandos.
+
+
+
+
+
+
+		
+
+#########################
+TERMINALES ##############
+#########################
+
+isatty() -> int isatty(int fd)
+	Te dice si un file descriptor (fd) está conectado a un terminal o no
+		1 -> el fd es un terminal
+		0 -> no lo es.
+		-1 -> no lo es. Mirar el error con errno.
+
+ioctl() -> int ioctl(int fd, unsigned long request, ...);
+	Controla dispositivos desde el código. Es como un SUPER COMANDO que puede hacer operaciones que no
+	pueden hacer read, write...
+	fd -> file descriptor
+	request -> una CONSTANTE que indica operación a realizar (TIOCGWINSZ para ver tamaño de ventana)
+	... -> argumento opcional (normalmente un puntero a una estructura como struct winsize * o struct termios *)
+	En minishell, puede:
+		1. Desactivar el echo del terminal (para ocultar contraseñas)
+		2. Comprobar si el teminal está en modo interactivo.
+		3. Obtener el tamaño de la terminal (filas columnas)
+		4. Controlar el cursor. Señales o configuración del tty.
+		struct termios term;
+		ioctl(STDIN_FILENO, TIOCGETA, &term); //obtener configuración.
+		term.c_lflag &= ~ECHO;				//desactivar echo	
+		ioctl(STDIN_FILENO, TIOCSETA, &term); //aplicar cambios
+
+tcgetattr() -> int tcgetattr(int fd, struct termios *termios_p)
+		Obtiene la configuración actual del terminal asociado a un descriptor.
+		fd -> file descriptor
+		termios -> explicado en tcsetattr()
+		retorno:
+			0 -> exito
+			-1 -> error
+		int main(){
+			struct termios term_settings;
+			if (tcgetattr(STDIN_FILENO, &term_settings) == -1){
+				perror("tcgetattr");
+				return 1;
+			}
+			//ahora term_settings contiene la config del terminal.
+			return 0;
+		}
+		Una vez se tiene la config del terminal y guardada, podemos modificarla y luego usar
+		tcsetattr() para aplicar los cambios.
+
+
+tcsetattr() -> int tcsetattr(int fd, int optional_actions, const struct termios *termios_p)
+		Modifica los atributos del terminal asociado a un fd. Normalmente STDIN_FILENO (0)
+		Se usa para controlar el comportamiento del terminal
+			- Desactivar la espera por ENTER.
+			- Desactivar el echo (no mostrar lo que se escribe)
+			- Cambiar a modo sin buffer.
+		fd -> file descriptor del terminal
+		optional actions:
+			TCSANOW - aplica inmediatamente (aplica = hace los cambios)
+			TCSADRAIN - espera a que se vacie la salida antes de aplicar
+			TCSAFLUSH - vacia entrada/salida antes de aplicar
+		termios_p: puntero a estructura termios que contine nos nuevos ajustes del terminal
+			Termios define la configuración del terminal en UNIX/LINUX. Contiene flags y parametros que controlan:
+				* El modo de entrada (como se procesan las teclas)
+				* El modo de salida
+				* El control de linea (como se comporta Enter, control+c, etc..)
+				*la velocidad de transmisión (baud rate)
+			Algunos flags importantes:
+				c_iflag - flags de entrada
+				c_oflag - flags de salida
+				c_cflag - flags de control(tamaño de caracteres)
+				c_lflag - flags de modo local (echo, canonical mode...)
+				c_cc[] - Caracteres de control (como control+c)
+			Se usa junto tcgeattr() para obtener la configuración actual y tcselattr() para aplicarla
+
+tgetent() -> int tgetent(char *bp, const char *name)
+		Carga las capacidades de un terminal desde el archivo de base de datos de terminales, normalmente ubicado en
+		/etc/termcap o /usr/share/terminfo. Es util para manejar diferentes tipos de terminales y sus capacidades en
+		programas que necesitan controlar la pantalla o interactuar con el terminal.
+		bp -> puntero a un buffer donde se almacena la información del terminal cargada. Este buffer tiene que tener
+			espacio mínimo de 1024 bytes.
+		name -> el Nombre del terminal o la base de datos de terminales que deseo cargar (xterm, vt100)
+		retorna:
+				0 -> si el terminal no se encuentra en la base de datos
+				1 -> si se encuentra y se carga
+				-1 -> si ocurre un error al acceder a la base de datos.
+		int main(){
+			char buf[1024]; //buffer que almacena las capacidades del terminal
+			int result = tgetent(buf, "xterm"); //cargar las capacidades para xterm
+			if (result <=0){
+				if (result == 0)
+					printf("terminal no encontrado..."); //etc....
+			}
+		}
+		Lo carga y almacena en buffer, y luego se puede usar tgetstr(), tgetnum() para obtener las capacidades específicas
+		del terminal, como su tamaño, colores, teclas especiales, etc...
+		NO CONFUNDIR CON getent de la terminal de linux, que sí, accede también a la base de datos, pero no de configuración,
+		sino de grupos, passwords, etc. Son diferentes.
+
+
+tgetflag() -> int tgetflag(const char *id)
+		Parte de la biblioteca termcap, y se utiliza para obtener un valor booleano asociado con las capacidades de un terminal
+		Te dice si un terminal soporta o no una determinada característica.
+		id -> cadena de chars que representa la capacidad del terminal que deseamos verificar. Este identificador está asociado
+			con las capacidades descritas en el sistema de terminales, que se encuentran en etc/termcap o /usr/share/terminfo
+		retorno:
+				1 -> si soporta la capacidad indicada por id.
+				0 -> si el terminal no lo soporta
+				-1 -> si ocurre un error, como un valor de id que no sea válido.
+		ejemplo: queremos saber si un terminal soporta la capacidad de borrar la pantalla (capacidad clear)
+		int main(){
+			if (tgetflag("cl")){
+				print ok
+			else
+				print no.}}
+		Es útil cuando se hace un programa que interactua con un terminal y necesita saber si el terminal es capaz de realizar 
+		ciertas acciones. como saber si una terminal soporta colores, si puede hacer clear, si puede mostrar negritas.
+		IMPORTANTE: Cuando hacemos una terminal de cero, nosotros programamos dichas capacidades de cero. PERO en la minishell,
+		nuestra terminal corre debajo de OTRA TERMINAL, y por lo tanto para saber la CAPACIDAD de lo que se puede hacer, NO TENEMOS
+		QUE PROGRAMARLAS.. sino simplemente preguntar a la terminal por debajo qué puede hacer.
+
+
+tgetnum() -> int tgetnum(const char *id)
+		Devuelve un valor numerico de capacidad del terminal especificada por id (dos letras). Si la capacidad especificada no existe
+		devolverá -1
+		"co" -> columnas del terminal
+		"li" -> lineas del terminal.
+		ejemplo: 1. se carga con tgetent()  luego usamos tgetnum() para consultar las capacidades.
+		La diferencia con tgetflag() es que en ellas es 0 1 o -1, pero con tgetnum() va un numero asociado.
+		int cols;
+		cols = tgetnum("co"); //si la terminal tiene 80 columnas, devolverá 80.
+ 
+tgetstr() -> char *tgetstr(const char *id, char **area)
+		Devuelve una cadena de control (como secuencia de escape) asociada a una capacidad del terminal
+		char *clear;
+		clear = tgetstr("cl", NULL) //obtiene la secuencia para limpiar la pantalla -> "\033[H\033[2J" LO Q HACE A BAJO NIVEL.
+		write(1, clear, strlen(clear)); //se limpia la pantalla!!!!	(tambien con tputs(clear, 1, putchar));
+		area -> es optional y es un puntero a un buffer de memoria donde tgetstr puede copiar y guardar la cadena devuelta. Si le paso NULL
+		(lo normal), tgetstr usa memoria internal estática y no nos preocupamos y es más simple, pero una vez salido de la función se pierde.
+
+tgoto() -> char *tgoto(const char *cap, int col, int row)
+		Formatea una secuencia de control, que mueve el cursor a una posición de la terminal.
+		cap -> cadena de capacidad (como la de getstr("cm", NULL)) para cursor motion
+		col, row -> columna y fila, a donde mover el cursor
+		Devuelve una cadena con secuencias de escape lista para enviar a la terminal.
+		char *cm = tgetstr("cm", NULL);
+		char *move = tgoto(cm, 10, 5);
+		tputs(move, 1, putchar); //Mueve el cursor a la columna 10 fila 5.
+
+tputs() -> int tputs(const char *str, int affcnt, int (*putc)(int)) #include <termcap.h> o <terminfo.h>
+		Manda secuencias de control a la terminal, como movimiento del ratón, cambio de color, clear, etc. 
+		str -> cadena que contiene la secuencia de control que se obtiene por tgetstr() o tgoto()
+		affcnt -> contador de cuantas veces debe aplicar la secuencai de control. Suele ser 1.
+		putc -> Función que se llama para enviar los caracteres uno por uno a la terminal. En la mayoría suele
+			ser putchar (ft_putchar), que escribe un caracter en la salida estandar.
+
+
+ttyname()	-> char *ttyname(int fd)
+	Dice el nombre del dispositivo de terminal asociado a un descriptor fd
+	Devuelve:
+			un puntero a una cadena con nombre del dispositivo (ej: "/dev/tty1") si es un terminal
+			si no lo es, NULL
+	Identificica desde que terminal esta trabajando el programa.
+
+ttyslot() -> int ttyslot(void)
+	Busca en el archivo /etc/ttys (o similar), qué entrada corresponde al terminal actual.
+	Se usa en sistemas multiusuario para identificar desde qué terminal se está ejecutando un proceso.
+	No es muy común usarlo hoy, pero se puede usar para registrar logs, sesiones, etc...
+	Si se quiere saber desde qué terminal trabaja un usuario (servidor con varias sesione) ttyslot da el número.
+	Podría usarse para imitar PARTE de who, tty, login en unix.
+	Devuelve:	El numero de lineas de terminal (empieza en 1) que coincide con el terminal asociado a
+				stdin (fd = 0)
+				0 -> no encuentra coincidencia o error
+		
+
+
+
+
+				
+
+####################################
+FUNCIONES DE ARCHIVOS ##############
+####################################
+
+access (#include <unistd.h>)
+	int access(const char *pathname, int mode)
+	comprueba los permisos de acceso a un archivo o directorio
+	mode:
+		R_OK: ¿Se puede leer?
+		W_OK: ¿Se puede Escribir?
+		X_OK: ¿Se puede ejecutar?
+		F_OK: ¿Existe el Archivo?
+	retorna:
+		0	-> si los permisos son correctos
+		-1	-> si ocurre un error, y se establece errno para indicar el error.
+
+	int main(){
+			if(access(filename, F_OK) == 0)
+				printf("el archivo existe");}
+	IMPORTANTE:	No siempre es confiable en sistemas concurrentes (procesos e hilos)
+				por lo que hay que hacer mutex. Mejor hacerlo asi:
+				int fd = open("archivo", O_RDONLY);
+				if (fd == -1){
+					if (errno == EACCES)
+						write(2, "Permiso denegado\n", 18);
+					else if (errno == ENOENT)
+						write(2, "Archivo no existe\n", 19); 
+					else
+						perror("open")
+				}
+
+stat -> int stat(const char *pathname, struct stat *buf) 
+	Te da info sobre archivo (tamaño, permisos, tipo, fechas...)
+	Llena la estructura struct stat con info del archivo indicado por pathname
+	retorna: 0 -> ok
+			-1 -> falla
+	Esta es la estructura buf:
+		struct stat {
+    dev_t     st_dev;     // ID del dispositivo que contiene el archivo
+    ino_t     st_ino;     // Número de inodo
+    mode_t    st_mode;    // Tipo de archivo y permisos
+    nlink_t   st_nlink;   // Número de enlaces duros
+    uid_t     st_uid;     // ID del usuario (propietario)
+    gid_t     st_gid;     // ID del grupo
+    dev_t     st_rdev;    // ID del dispositivo (si es especial)
+    off_t     st_size;    // Tamaño total en bytes
+    blksize_t st_blksize; // Tamaño de bloque para E/S
+    blkcnt_t  st_blocks;  // Número de bloques asignados
+
+    struct timespec st_atim;  // Último acceso
+    struct timespec st_mtim;  // Última modificación
+    struct timespec st_ctim;  // Último cambio de metadatos 
+	};
+	Para saber si un archivo es un directorio, o fichero... se usa el:
+		mode_t st_mode; que tiene definidas unas macros:
+
+			S_ISDIR(st_mode)   // es un directorio
+			S_ISREG(st_mode)   // archivo regular
+			S_ISLNK(st_mode)   // enlace simbólico
+			S_ISCHR(st_mode)   // dispositivo de caracteres
+			S_ISBLK(st_mode)   // dispositivo de bloques
+			S_ISFIFO(st_mode)  // FIFO (pipe)
+			S_ISSOCK(st_mode)  // socket
+	ejemplo:
+		struct stat info;
+		stat("archivo.txt", &info);
+		if (S_ISDIR(info.st_mode))
+		    write(1, "Es directorio\n", 14);
+
+lstat() -> int lstat(const char *pathname, struct stat *statbuf)
+info sobre archivo como stat. PERO esto es para enlaces simbólicos (accesos directos en windows)
+ln -s /home/user/documento.txt acceso.txt)
+stat("acceso.txt", &buf) -> accede a documento.txt
+lstat("acceso.txt", &buf) -> accede a acceso.txt (que está vacio. Solo es un acceso directo)
+
+fstat() -> int fstat(int fd, struct stat *buf)
+	Se le pasa un file descriptor
+	int fd = open("archivo.txt", O_RDONLY);
+	struct stat info;
+	fstat(fd, &info);
+		stat("archivo.txt", &buf) -> usa el nombre del archivo
+		fstat(fd, &buf) -> usa el descriptor del archivo ya abierto
+	OJOOOOO!!! UTIL PARA ALGUN CABRONCETE QUE BORRE EL ARCHIVO:
+	Util para evitar errores si el archivo se borra o cambia de nombre entre
+	hacer stat y usarlo. También leer propiedades (tamaño, permisos) sin buscar el archivo
+	por nombre. Si se borra el archivo el fd lo mantiene en memoria.
+		(long long)buf.st_size //Muestra el tamaño del archivo
+
+
+unlink() -> int unlink(const char *pathname)
+	Elimina el ENLACE entre el nombre del archivo y su contenido en el sistema
+	Si hay procesos con fd abierto, el contenido sigue abierto  hasta que se cierre 
+	con close dicho fd. Dicho archivo se elimina SOLO CUANDO TODOS LOS DESCRIPTORES
+	ABIERTOS ASOCIADOS A DICHO ARCHIVO SE CIERRAN. Si no hay FDs se borra tal cual.
+		devuelve: 0 -> correcto
+				 -1 -> error al eliminar.
+	inf fd = open("archivo.txt", O_RDONLY);
+	unlink("archivo.txt") //elimina el archivo.txt pero sigue el contenido en el fd
+	read(fd, buffer, 100); //se puede leer el contenido
+	close(fd); //el archivo se elimina completamente.
+
+
+
+
+
+
+#######################
+PROCESOS ##############
+#######################
+
+execve() -> int execve(const char *pathname, char *const argv[], char *const envp[]);
+	Ejecuta un programa dentro del proceso que hace la llamada.
+	pathname -> la ruta del programa a ejecutar. Puede ser relativa o absoluta
+	argv[] -> los argumentos que el programa recibirá. El primero el nombre del programa. Debe terminar con NULL
+	envp[] -> contiene las variables de entorno que se pasan al programa. Debe terminar con NULL
+	Retorno: No retorna en caso de éxito. Si lo hace bien solo sustituye el proceso actual
+			por el nuevo programa.
+			-1 -> si hay error y establece errno para indicar el error
+	int main(){
+		char *argv[] = {"/bin/ls", "-l", NULL}; //comando ls con argumento -l
+		char *env[] = {NULL}; //el proceso hereda las variables entorno del padre
+		//reemplazamos proceso actual con programa bin/ls
+		if (execve("/bin/ls", args, env) == -1)
+			return (perror("Error"), 1);
+		//lo que haya aqui no se ejecuta si tiene exito execve	
+		}
+	IMPORTANTE: lo que esté detras de execve NO VUELVE!! si quiero hacer algo despues
+	mejor usar fork() antes.
+		pid_t pid = fork();
+		if (pid == 0) //si es el hijo
+			execve(...);
+		else
+			waitpid(pid, NULL, 0); //espera qeu termine el hijo.
+
+fork() (#include <unistd.h>)
+	pid_t pid = fork();
+	devuelve:
+		> 0		-> estamos en el proceso padre y PID es el del hijo.
+		== 0	-> estamos en el hijo
+		< 0		-> error en el fork.
+	Cada vez que ejecutemos un comando externo (ls, echo...) necesitamos:
+		1. crear un hijo con fork()
+		2. En el hijo ejecutar execve() y si falla exit(1);
+		3. En el padre esperar con wait() o waitpid(pid, NULL, 0);
+		Asi la shell sigue activa mientras el hijo corre el comando
+	int main(){
+		printf("Antes del fork\n");
+		pid_t pid = fork();
+		if (pid == 0)
+			printf("Soy el hijo\n");
+		else if (pid > 0){
+			printf("Soy el padre\n");
+			wait(NULL); //para que no se quede ZOMBI el hijo}
+		return (0);}
+	Un proceso ZOMBI no son leaks, pero si ocupa espacio en la tabla de procesos
+	del kernel que es limitada. Si se acumulan no se podrian generar nuevos procesos
+	IMPORTANTE ulimit -u 100 limita a 100 procesos x usuario. PROTEGERSE!!!
+	pid_t pid = fork();
+	if (pid < 0)
+	{
+	    perror("fork");
+		//LIBERAR TODO!!
+	    return (1);
+	}
+
+pipe() -> pipe(int fd[2])
+	Crea un canal de comunicación unidireccional entre procesos. Crea una "tuberia" entre
+	dos descriptores.
+	fd[0]: lectura
+	fd[1]: escritura
+	ls | wc -l simulado:
+
+	int fd[2];
+	1. pipe(fd);
+	2. fork() para crear hijo
+	3. en hijo:
+		dup2(fd[1], 1); //redirige stdout a la tuberia
+		close(fd[0]);
+		execve("ls", ...);
+	4. en padre:
+		dup2(fd[0], 0); //redirige stdin a la tuberia
+		close(fd[1]);
+		execve("wc", ...);
+	el output de ls entra como input en wc -l.
+
+
+
+wait(int *status) y pid_t waitpid(pid_t pid, int *status, int options)
+	Los dos esperan a que terminen los procesos hijos. Pero el wait espera a que
+	termine cualquiera de los que haya, y el waitpid uno en específico.
+	en waitpid:
+		si pid == -1 es igual que wait() espera a que cualquier hijo termine
+		pid > 0 -> espera al hijo exacto
+		options == 0 -> comportamiento por defecto (bloqueante)
+		options == WNOHANG no espera si no hay hijo terminado (devuelve 0)
+	status es donde se guarda un valor codificado, COMO TERMINÓ el proceso:
+		WIFEXITED(status) -> ¿Terminó con exit()?
+		WEXITSTATUS(status) -> Si salió con exit(), te da dicho valor de exit()
+		WIFSIGNALED(status) -> ¿Murió por una señal?
+		WTERMSIG(status) -> si murió por señal, cual es la que lo mató.
+		int status;
+		pid_t pid = wait(&status);
+		if (WIFEXITED(status))
+			printf("Hijo termino con codigo %d\n", WEXITSTATUS(status));
+		Si se el pasa con NULL, no interesa dicha info.
+
+wait3(int *status, int options, struct rusage *rusage)
+	lo mismo que wait, pero te da estadisticas (cpu, memoria) del hijo terminado a
+	traves del puntero rusage
+
+wait4(pid_t pid, int *status, int options, struct rusage *rusage)
+	igual que waitpid(), pero con estadísticas rusage.
+	La estructura rusage contiene datos como tiempo de CPU, numero de paginas de memoria
+	usada, swaps, señales recibidas... NO ES NECESARIO PARA LA MINISHELL
+
+
+
+
+
+
+
+#######################
+SEÑALES ###############
+#######################
+
+kill() -> int kill(pid_t pid, int sig)
+	Envia la señal sig al proceso pid.
+	pid > 0 -> envia a ese pid
+	pid = 0 -> se envia a todos los procesos en mismo grupo de procesos
+	pid < 0 -> señal enviada a todos lo procesos a los que el user tiene permiso
+	retorna: 0 -> exito
+			-1 -> error.
+
+signal() -> void (*signal(int signum, void(*handler)(int)))(int); #include <signal.h>
+	Más sencilla que sigaction, sirve para darle una funcion (handler), a la señal
+	recibida. Tienes menos control
+
+sigaction() -> int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+	struct sigaction	sa;
+	sa.sa_flags = SA_SIGINFO; //al definir este flag entra automaticamente la funcion sa_sigaction
+	//definida en la estructura sigaction (*act). Si no entraria sa_handler que seria como un signal()
+	sa.sa_sigaction = process_header_msg;
+	sigaction(B_0, &sa, NULL);
+	-> procesa la funcion: void	process_header_msg(int signal, siginfo_t *info, void *context)
+
+	para pasarle una variable a dicho process_header_msg, como no puede recibir otros parametros
+	por que ya esta predefinida la función (se le puede cambiar el nombre pero no su prototipo)
+	normalmente se pasa una variable global... PERO CREO QUE SE PUEDE HACER ESTO:
+	struct sigaction sa;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = process_header_msg;
+	sa.sa_mask = 0;
+	// Aquí pasamos `g_server` como `context`
+	t_server *g_server_ptr = g_server; // Siendo t_server *g_server;
+	sigaction(B_0, &sa, (struct sigaction *)&g_server_ptr); //se le pasa como el *context
+
+sigaddset() -> int sigaddset(sigset_t *set, int signum)
+	añade la señal signum al congunto set.
+	devuelve: 	0 -> si va bien
+				-1 -> si falla
+
+sigemptyset() -> int siemptyset(sigset_t *set)
+	Borra el contenido de señales de un conjunto
+	
+	struct sigaction sa;
+    // 1. Ignorar SIGINT. para eliminar el uso de control + c
+    sa.sa_handler = SIG_IGN;  // SIG_IGN es lo que pasar para ignorar la señal. Si no, le pondríamos el nombre de la funcion handler
+    sigemptyset(&sa.sa_mask);  // No bloqueamos ninguna señal.Eliminamos todas las señales de las mascaras. Si no lo hacemos puede tener basura. Es como asignar NULL a una variable puntero creada.
+    sa.sa_flags = 0; //pilla sa_handler y no sa_sigaction que seria con SA_SIGINFO mas valores de flag:
+
+	//	SA_SIGINFO	 -> usa sa_sigaction
+	//	SA_RESTART	 -> Llamadas bloqueantes como read() se reintentan si son interrumpidas por una señal
+	//	SA_NOCLDSTOP -> Evita que SIGCHLD se envie cuando un hijo se detiene o continua
+	//	SA_NOCLDWAIT -> No deja procesos zombi de hijos. Los elimina
+	//	SA_NODEFER   -> Permite que la misma señal se reciba mientras se está manejando.
+	//	SA_RESETHAND -> Despues de manejar la señal una vez se restaura su comportamiento por defecto.
+	// 	Se pueden usar varios como: sa.sa_flags = SA_SIGINFO | SA_RESTART;
+    if (sigaction(SIGINT, &sa, NULL) == -1) {
+        perror("Error al configurar la acción para SIGINT");
+        return 1;}
+	// 2. Restaurar el manejador original de SIGINT
+    sa.sa_handler = handle_sigint;  // Establecemos el manejador original para SIGINT
+    if (sigaction(SIGINT, &sa, NULL) == -1) {
+        perror("Error al restaurar la acción para SIGINT");
+        return 1;}
+
+
+	
+	
+##############################################	
+RESERVA DE MEMORIA Y LIBERACION ##############
+##############################################
+
+free()
+	para liberar los ft_callocs
+
+malloc()
+	Usaremos ft_calloc()
+
+
+
+
+#######################################
+FUNCIONES ABRIR ARCHIVOS ##############
+#######################################
+
+dup2() -> dup2(int oldfd, int newfd)
+	duplica el oldfd en newfd. Si newfd esta abierto lo CIERRA antes. Aquí elegimos
+	el número del descriptor. Ejemplo en dup
+
+dup()
+	duplica un fd existente, devolviendo un fd el menor disponible, que apunta al oldfd
+	int backup = dup(1); //guarda el stdout
+	int fd = open("out.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	dup(fd, 1); //redirige el stdout al archivo
+	//...printf va a "out.txt"
+	dup2(backup, 1); //restaura stdout
+
+open()
+	abrir archivos (fd)
+
+read(fd, buffer, tamaño buffer)
+	lee del fd y lo mete en el buffer.
+
+close(fd)
+	cerrar el archivo abierto
+
+opendir() -> DIR *opendir(const char *name)
+	Abre un directorio y te devuelve un puntero a una estructura DIR que luego se puede
+	usar para leer su contenido (con readir)
+	DIR *dir = opendir("."); //abrimos el directorio actual
+
+readdir() -> struct dirent *readdir(DIR *dirp)
+	Lee una entrada (archivo o subdirectorio) de un directorio abierto con opendir
+	devuelve un puntero a una estructura struct direct
+	DIR *dir = opendir(".");
+	struct dirent *entry;
+	while((entry = readdir(dir)) != NULL)
+		printf("%s\n", entry->d_name);
+	closedir(dir);
+
+closedir() -> int closedir(DIR *dirp)
+	cierra un directorio abierto con opendir
+	retorna: 0 -> si se cierra correctamente
+			-1 -> si hay error.
+
+
+
+
+
+#################################
+FUNCIONES ESCRIBIR ##############
+#################################
+
+printf()
+	Para imprimir
+
+write()
+	para imprimir
+
+
+
+
+##############################
+FUNCIONES ERROR ##############
+##############################
+
+perror -> void perror(const char *s)
+	Imprime un mensaje de error en stderr personalizado con el error errno
+	perror("Error al abrir");
+	sale -> Error al abrir: No such file or directory.
+	Es decir es lo que sale antes de los dos puntos. el resto es lo que viene del
+	errno.
+
+strerror -> char *strerror(int errnum)
+	Convierte un numero de error (errno) en msg de texto.
+	printf("Error: %s\n", strerror(errno));
+
+
+exit
+	la mejor de las funciones. Se sale sin mas... maravilla de las maravillas.
