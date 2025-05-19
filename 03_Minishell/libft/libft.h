@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/18 18:43:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:30:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,6 @@ int			is_escaped(t_split *squotes, size_t i);
 int			is_spaced(t_split *sq, size_t i);
 int			is_quoted(t_input *input, int word);
 long long	ft_atol(char *nptr, int *error);
+char		*ft_first_word(char *str, char c);
 
 #endif

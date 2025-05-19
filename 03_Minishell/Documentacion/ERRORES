@@ -8,13 +8,14 @@ hay pruebas para hacer...
 
 hacer un export =patata no está permitido en bash. Hay que poner -miniyo: export: `=patata': not a valid identifier
 
-por esto le tiraron a Amelie:
-export hh=patata
-export jj=tomate
-export kk="$hh + $jj"
-echo $kk DEBE DAR patata + tomate. Me da $hh + $jj. Es decir, debe expandirlos.
-Por que es de Mario? por que en mi parseado si aparece bien kk=patata + tomate. Solo 
-hay que tenerlo en cuenta en la propia funcion export, el valor de input->parsed
+export kk=patata cebolla deberia ser kk = patata solo. pero es patata cebolla... DEBE SER TODO cuando esta entrecomillado. ¿Como saberlo?
+	1. Se hace una busqueda de "patata cebolla" dentro de cada word (hay input->input_words) de input->input_split
+	2. Si se encuentra, se coge qué palabra es la que corresponde del split. Imaginemos la 3.
+	3. is_quoted(input, 3) devolvera un numero. 0 no entrecomillado. 1 comillas simples. 2 comillas dobles.
+
+CORREGIDO (JAVI) -por esto le tiraron a Amelie:
+			export hh=patata, export jj=tomate, export kk="$hh + $jj"
+			echo $kk DEBE DAR patata + tomate. Me da $hh + $jj. Es decir, debe expandirlos.
 
 $kk habiendo creado unset kk=a da segfault
 
@@ -34,6 +35,10 @@ cd $HOME dice que no existe $HOME. eso es por que estarás pillando del split. a
 una ejecucion de un comando que no existe aparte del error debe dar $? = 127, es decir,
 hay que hacer un export de la variable ? a 127 y poner la variable (input->last_exit_code) a 127 por que la debo leer en el exit
 y no puedo hacer un $? dentro del codigo C.
+
+la funcion exit debe devolver un codigo diferente cuando se ejecuta un script. La manera
+de hacerlo es if (!isatty(STDIN_FILENO)) si es correcto, estamos en un script si no, estamos en un terminal.
+según parece hay que ponerlo en el main al principio.... ni idea.
 
 NO error  pero posibilidad de hacer: historial que conserve cuando se cierre la minishell.
 
