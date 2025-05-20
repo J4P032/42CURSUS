@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/18 21:02:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/20 14:24:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ void	init_input_struct(t_input *input)
 	input->parsed = NULL;
 	input->filename = NULL;
 	input->input_split = NULL;
+	input->split_exp = NULL;
+	input->redir_in = NULL;
+	input->redir_out = NULL;
 	input->status = NULL;
 	input->word_after_command = 0;
 	input->word_after_arg = 0;
@@ -36,11 +39,14 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	
 	input.envp = ft_matrix_dup(envp);
 	if (!input.envp)
 		clean_all(&input, 1);
+	input.is_script = !isatty(STDIN_FILENO);
 	init_sigaction(&sa);
 	init_input_struct(&input);
+	
 	while (1)
 	{
 		input.input = readline("\001\033[1;32m\002miniyo$\001\033[0m\002 ");
@@ -59,15 +65,21 @@ int	main(int argc, char **argv, char **envp)
 			free(input.input);
 			continue ;
 		}
-		compose_command_args(&input);\
-		parsing(&input); //EN CONSTRUCCION
-		compose_command_args(&input);//tiene que estar doble.
-		printf("============\nPARSEADO:%s\n==========\n", input.parsed);
-		printf("command:%s\n", input.command);//
-		printf("arg:%s\n-----SALIDA-----\n", input.args);//
+		compose_command_args(&input);
+		parsing(&input); // EN CONSTRUCCIÓN
+		//compose_command_args(&input);
+		/* printf("============\nPARSEADO:%s\n==========\n", input.parsed);
+		printf("command:%s\n", input.command);
+		printf("arg:%s\n-----SALIDA-----\n", input.args);
+		for (size_t i = 0; input.split_exp[i]; i++)
+			ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]); */
 		ft_manage_pipes(&input);
 		free(input.input);
 	}
+	
 	clean_all(&input, 0);
-	return (0);
+	if (input.is_script)
+		exit(input.last_exit_code != 0 ? input.last_exit_code : 1);
+	else
+		exit(input.last_exit_code);
 }

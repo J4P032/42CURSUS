@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:05:48 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/18 18:03:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:43:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,13 @@ void	clean_all(t_input *input, int error)
 	}
 	if	(input->input_split)
 		ft_matrix_free(input->input_split);
-	if (input->envp)
+	input->input_split = NULL; //hacer ft_matrix_free *** y asi podre asignar ahi el NULL
+	if (input->envp) //si error = 0 deberia eliminarlo?
 		ft_matrix_free(input->envp);
+	input->envp = NULL; //hacer ft_matrix_free *** y asi podre asignar ahi el NULL
+	if (input->split_exp)
+		ft_matrix_free(input->split_exp);
+	input->split_exp = NULL; //hacer ft_matrix_free *** y asi podre asignar ahi el NULL
 	if (input->status)
 	{
 		free(input->status);

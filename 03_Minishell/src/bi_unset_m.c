@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:16:38 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/04/28 18:05:17 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:09:55 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,22 @@ void	ft_search_env(int len, char *input, char ***envp, char **new_env)
 	}
 }
 
-void	ft_unset(char *input, char ***envp)
+void	ft_unset(t_input *input)
 {
 	int		i;
 	int		len;
 	char	**new_env;
 
-	if (!input)
+	if (!input->parsed)
 		return ;
 	i = 0;
-	len = ft_strlen(input);
-	while ((*envp)[i])
+	len = ft_strlen(input->parsed);
+	while (input->envp[i])
 		i++;
-	new_env = ft_calloc(i, sizeof(char *));
+	new_env = ft_calloc(i + 1, sizeof(char *));
 	if (!new_env)
 		return ;
-	ft_search_env(len, input, envp, new_env);
-	free(*envp);
-	*envp = new_env;
+	ft_search_env(len, input->parsed, &input->envp, new_env);
+	free(input->envp);
+	input->envp = new_env;
 }

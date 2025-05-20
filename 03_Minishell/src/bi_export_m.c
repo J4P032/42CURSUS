@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_export_m.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:06:31 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/19 11:43:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:54:36 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,24 @@ bool	ft_manage_shlvl(char *input, char **envp, int i, int len)
 	return (1);
 }
 
+bool	ft_is_valid_identifier(const char *str)
+{
+	int	i;
+
+	if (!str || !str[0])
+		return (false);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (false);
+	i = 1;
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 /*Check if the variable already is in the **envp.*/
 /*1. if the input dont have an '=' it will exit with error 1 so nothing to do*/
 /*2. search if the name of the variable in input is in the envp if not will...*/
@@ -42,6 +60,8 @@ bool	ft_check_variables(char *input, char **envp)
 	int		len;
 	char	*equal;
 
+	if (!ft_is_valid_identifier(input))
+		ft_printf("minishell: export: `%s': not a valid identifier\n", input);
 	equal = ft_strchr(input, '=');
 	if (!equal)
 		return (1);

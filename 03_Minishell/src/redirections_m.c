@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 01:26:18 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/15 00:58:45 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:14:29 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,30 +70,68 @@ static void	handle_input_redirection(t_input *input, char *redir)
 	free(filename);
 }
 
-bool	handle_redirection(t_input *input)
+void	handle_all_redirections(t_input *input)
 {
-	char	*redir;
+	size_t	i = 0;
+	bool	single_quote = false;
+	bool	double_quote = false;
 
-	redir = ft_strnstr(input->input, ">>", ft_strlen(input->input));
-	if (redir)
-		handle_append_redirection(input, redir);
-	else
+	while (input->input[i])
 	{
-		redir = ft_strnstr(input->input, "<<", ft_strlen(input->input));
-		if (redir)
-			return (handle_heredoc_redirection(input, redir), 1);
-		else
+		if (input->input[i] == '\'' && !double_quote)
+			single_quote = !single_quote;
+		else if (input->input[i] == '"' && !single_quote)
+			double_quote = !double_quote;
+		else if (!single_quote && !double_quote)
 		{
-			redir = ft_strnstr(input->input, ">", ft_strlen(input->input));
-			if (redir)
-				handle_output_redirection(input, redir);
-			else
+			if (input->input[i] == '>' && input->input[i + 1] == '>')
 			{
-				redir = ft_strnstr(input->input, "<", ft_strlen(input->input));
-				if (redir)
-					handle_input_redirection(input, redir);
+				handle_append_redirection(input, &input->input[i]);
+				i++;
 			}
+			else if (input->input[i] == '<' && input->input[i + 1] == '<')
+			{
+				handle_heredoc_redirection(input, &input->input[i]);
+				i++;
+			}
+			else if (input->input[i] == '>')
+				handle_output_redirection(input, &input->input[i]);
+			else if (input->input[i] == '<')
+				handle_input_redirection(input, &input->input[i]);
 		}
+		i++;
 	}
-	return (0);
 }
+void	handle_redirection(t_input *input)
+{
+	size_t	i = 0;
+	bool	single_quote = false;
+	bool	double_quote = false;
+
+	while (input->input[i])
+	{
+		if (input->input[i] == '\'' && !double_quote)
+			single_quote = !single_quote;
+		else if (input->input[i] == '"' && !single_quote)
+			double_quote = !double_quote;
+		else if (!single_quote && !double_quote)
+		{
+			if (input->input[i] == '>' && input->input[i + 1] == '>')
+			{
+				handle_append_redirection(input, &input->input[i]);
+				i++;
+			}
+			else if (input->input[i] == '<' && input->input[i + 1] == '<')
+			{
+				handle_heredoc_redirection(input, &input->input[i]);
+				i++;
+			}
+			else if (input->input[i] == '>')
+				handle_output_redirection(input, &input->input[i]);
+			else if (input->input[i] == '<')
+				handle_input_redirection(input, &input->input[i]);
+		}
+		i++;
+	}
+}
+

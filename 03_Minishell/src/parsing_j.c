@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/18 13:10:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:59:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	parsing(t_input *in)
 	int		fd;
 	int		stdout_save;
 
+	compose_token(in);
 	stdout_save = dup(STDOUT_FILENO);
 	in->filename = choose_name();
 	if (stdout_save == -1 || !in->filename)

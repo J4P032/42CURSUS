@@ -6,12 +6,70 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/11 20:50:35 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/20 00:40:25 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
+
+void	update_exit_code_env(t_input *input, int exit_code)
+{
+	char	*new_var;
+	char	**envp;
+	int		i;
+
+	char *code_str = ft_itoa(exit_code);
+	if (!code_str)
+		return ;
+	new_var = ft_strjoin("?", "=");
+	if (!new_var)
+	{
+		free(code_str);
+		return ;
+	}
+	char *tmp = ft_strjoin(new_var, code_str);
+	free(new_var);
+	free(code_str);
+	if (!tmp)
+		return ;
+	new_var = tmp;
+
+	envp = input->envp;
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "?", 1) == 0 && envp[i][1] == '=')
+		{
+			free(envp[i]);
+			envp[i] = new_var;
+			input->last_exit_code = exit_code;
+			return ;
+		}
+		i++;
+	}
+	int len = 0;
+	while (envp[len])
+		len++;
+	char **new_envp = (char **)malloc(sizeof(char *) * (len + 2));
+	if (!new_envp)
+	{
+		free(new_var);
+		return;
+	}
+	i = 0;
+	while (i < len)
+	{
+		new_envp[i] = envp[i];
+		i++;
+	}
+	new_envp[i] = new_var;
+	new_envp[i + 1] = NULL;
+	free(input->envp);
+	input->envp = new_envp;
+	input->last_exit_code = exit_code;
+}
+
 
 // Devuelve el valor de la variable de entorno PATH.
 char	*get_path_env(char **envp)
@@ -21,7 +79,7 @@ char	*get_path_env(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strnstr(envp[i], "PATH=", 5))
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 			return (&envp[i][5]);
 		i++;
 	}
@@ -45,15 +103,23 @@ char	*join_path(const char *dir, const char *command)
 }
 
 // Busca un ejecutable en los directorios de PATH.
+#include <sys/stat.h> // para stat()
+
 char	*find_executable(char *command, char **envp)
 {
 	char	*path;
 	char	**dirs;
 	char	*full_path;
 	int		i;
+	struct stat sb;
 
-	if (access(command, X_OK) == 0)
-		return (ft_strdup(command));
+	if (ft_strchr(command, '/'))
+	{
+		if (access(command, X_OK) == 0 && stat(command, &sb) == 0 && S_ISREG(sb.st_mode))
+			return (ft_strdup(command));
+		else
+			return (NULL);
+	}
 	path = get_path_env(envp);
 	if (!path)
 		return (NULL);
@@ -64,13 +130,14 @@ char	*find_executable(char *command, char **envp)
 	while (dirs[i])
 	{
 		full_path = join_path(dirs[i++], command);
-		if (full_path && access(full_path, X_OK) == 0)
+		if (full_path && access(full_path, X_OK) == 0 && stat(full_path, &sb) == 0 && S_ISREG(sb.st_mode))
 			return (ft_matrix_free(dirs), full_path);
 		free(full_path);
 	}
 	ft_matrix_free(dirs);
 	return (NULL);
 }
+
 
 bool	exec_child(t_input *input, pid_t pid, char *executable)
 {
@@ -123,6 +190,7 @@ bool	execute_command(t_input *input)
 	if (!executable)
 	{
 		printf("%s: command not found\n", input->command);
+		update_exit_code_env(input, 127);
 		return (false);
 	}
 	pid = fork();

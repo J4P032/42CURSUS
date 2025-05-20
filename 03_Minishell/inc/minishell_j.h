@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/18 21:02:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/20 14:15:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include "../ft_printf/ft_printf.h"
 # include "../inc/get_next_line.h"
+# include <stdbool.h>
 
 # define EPTY_NSP 0
 # define EPTY_SP 1
@@ -33,9 +34,14 @@ typedef struct s_input
 	char	*parsed;
 	char	*filename;
 	char	**input_split;
+	char	**split_exp;////
 	char	**envp;
+	char	*redir_in;///
+	char	*redir_out;///
 	int		*status;
+	int		status_exp[100];///
 	char	command[100000];
+	char	token[100000];///
 	char	args[100000];
 	size_t	word_after_command;
 	size_t	word_after_arg;
@@ -51,6 +57,7 @@ typedef struct s_input
 	int		status_checked;
 	int		env_n;
 	pid_t	last_exit_code;
+	bool	is_script;
 }			t_input;
 
 //CHECK INPUT
@@ -63,6 +70,11 @@ void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k);
 void	save_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);
 void	save_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);
 void	save_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);
+void	expand_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k);////
+void	token_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);///
+void	token_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);///
+void	token_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);///
+void	compose_token(t_input *in);
 
 //BUILT INS
 void	echo_short(t_input *in);
