@@ -6,12 +6,34 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/20 13:59:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/20 20:07:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
+
+/*When < token1 token2 token3 command will be token2 and arg token3."<" is...*/
+/*...not valid*/
+void	compose_command(t_input *in)
+{	
+	if (in->split_exp
+		&& (in->split_exp[0][0] == '<' || in->split_exp[0][0] == '>')
+		&& in->status_exp[0] == 0)
+	{
+		if (in->split_exp[0] && in->split_exp[1] && in->split_exp[2])
+			ft_strlcpy(in->command, in->split_exp[2], ft_strlen(in->split_exp[2]) + 1);
+
+		if (in->split_exp[0] && in->split_exp[1] && in->split_exp[2]
+			&& in->split_exp[3])
+			ft_strlcpy(in->args, in->split_exp[3], ft_strlen(in->split_exp[3]) + 1);
+	}
+	/* else
+	{
+		if (in->split_exp && in->split_exp[0] && in->split_exp[1])
+			ft_strlcpy(in->args, in->split_exp[1], ft_strlen(in->split_exp[1]));	
+	} */
+}
 
 /*parsed returns with the command included. I need this to make expand env...*/
 /*...with echo, So I need to clean the command from parsed and take the rest.*/
@@ -114,6 +136,7 @@ void	parsing(t_input *in)
 	int		stdout_save;
 
 	compose_token(in);
+	compose_command(in);///
 	stdout_save = dup(STDOUT_FILENO);
 	in->filename = choose_name();
 	if (stdout_save == -1 || !in->filename)

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 14:14:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/16 13:07:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:57:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ size_t	validlen_env(const char *str, char c)
 	size_t	i;
 
 	i = 0;
+	if (str && str[0] == '?' && str[1] == '=')
+		return (1);
 	while (str && str[i] && str[i] != c)
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')

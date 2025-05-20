@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:50:16 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/18 15:17:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:33:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ size_t	give_me_the_fist_word(t_input *in, int *error_argument)
 	
 	i = 1;
 	n_repeated = 1;
-	while (in->args[i])
+	while (in->args[0] && in->args[i])
 	{
 		if (in->args[i++] != 'n' || in->args[0] != '-')
 		{
