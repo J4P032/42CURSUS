@@ -68,6 +68,8 @@ según parece hay que ponerlo en el main al principio.... ni idea.
 
 (JAVI)
 
+echo $a deberia dejar un salto de linea. No lo
+
 echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg
 
 echo $'msg' deberia salir msg. Sale $msg
