@@ -19,15 +19,6 @@ echo "patata			tomate"
 4. haz: export PATH=:$PATH, o export PATH=$PATH: o metes el : por medio del PATH...
 5. ahora haz script. En bash funciona.. en el nuestro no.
 
-
-export kk=patata cebolla deberia ser kk = patata solo. pero es patata cebolla... DEBE SER TODO cuando esta entrecomillado. ¿Como saberlo?
-	1. Se hace una busqueda de "patata cebolla" dentro de cada word (hay input->input_words) de input->input_split
-	2. Si se encuentra, se coge qué palabra es la que corresponde del split. Imaginemos la 3.
-	3. is_quoted(input, 3) devolvera un numero. 0 no entrecomillado. 1 comillas simples. 2 comillas dobles.
-
-ls | wc da memory leak
-	creo que es del input->status al tomar otro camino no se libera.
-
 NO error  pero posibilidad de hacer: historial que conserve cuando se cierre la minishell.
 
 
@@ -63,12 +54,25 @@ la funcion exit debe devolver un codigo diferente cuando se ejecuta un script. L
 de hacerlo es if (!isatty(STDIN_FILENO)) si es correcto, estamos en un script si no, estamos en un terminal.
 según parece hay que ponerlo en el main al principio.... ni idea.
 
+
+ls | wc da memory leak
+	creo que es del input->status al tomar otro camino no se libera.
+
+
+export kk=patata cebolla deberia ser kk = patata solo. pero es patata cebolla... DEBE SER TODO cuando esta entrecomillado. ¿Como saberlo?
+	1. Se hace una busqueda de "patata cebolla" dentro de cada word (hay input->input_words) de input->input_split
+	2. Si se encuentra, se coge qué palabra es la que corresponde del split. Imaginemos la 3.
+	3. is_quoted(input, 3) devolvera un numero. 0 no entrecomillado. 1 comillas simples. 2 comillas dobles.
+
 ===============================================================================================================
 
 
 (JAVI)
 
-echo $a deberia dejar un salto de linea. No lo
+export kk=-n
+echo $kk patata falla. pone -n patata
+
+CORREGIDO - echo $a deberia dejar un salto de linea. No lo
 
 echo $"mgs" -> deberia salir msg, pero sale $msg. echo $ "msg" sale bien -> $ msg
 

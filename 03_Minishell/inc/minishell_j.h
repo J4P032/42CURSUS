@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/20 14:15:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:22:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,18 @@ typedef struct s_input
 	char	*parsed;
 	char	*filename;
 	char	**input_split;
-	char	**split_exp;////
+	char	**split_exp;
 	char	**envp;
+	char	**local_envp;
 	char	*redir_in;///
 	char	*redir_out;///
 	int		*status;
-	int		status_exp[100];///
+	char	*token;/// HAY QUE LIBERARLO SI EXISTE
+	int		status_exp[100];
 	char	command[100000];
-	char	token[100000];///
+	//char	token[100000];
 	char	args[100000];
+	size_t	realloc_counter;
 	size_t	word_after_command;
 	size_t	word_after_arg;
 	size_t	input_words;
@@ -75,6 +78,8 @@ void	token_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);///
 void	token_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);///
 void	token_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);///
 void	compose_token(t_input *in);
+
+void	dynamic_input(t_input *in, size_t k);
 
 //BUILT INS
 void	echo_short(t_input *in);
