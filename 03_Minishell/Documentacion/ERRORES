@@ -6,10 +6,37 @@ hay pruebas para hacer...
 
 (MARIO)
 
+export kk=" p" ahora no funciona, cuando antes lo hacia.
+se mete en if (!ft_is_valid_identifier(prepared_input)) la parte de " p" y claro, no es un 
+identificador valido, cuando deberia pararse cuando ha llegado al =. de todas formas esto antes funcionaba.
+
+<Makefile<obj>file>file2>>append echo hola deberia hacer un file file 2... 
+no se si es mio. ya que hay que separar los < y >
+
+export solo deberia soltar y todas las variables de entorno aparecen en orden
+alfabetico con un declear -x
+
+IMPORTANTE: el heardoc si haces
+<< $USER cat el terminador ya no se expandira.. es decir no sera jrollon-, sino que sera el literal
+$USER.
+
+<< end cat (y pones)
+$USER
+end
+debe imprimir jrollon- PEROOOOO
+<< 'end' cat
+$USER
+end
+debe imprimir $USER (HAY QUE MATAR AL QUE HIZO EL BASH)
+
+export $a hara lo mismo que en export solo si $a no existe
+
 VAR=patata deberia hacer que echo $VAR soltara patata. (o sin echo). No declara dicha variable
 cuando se hace sin export esa variable existirá PERO SOLO en el proceso que este. 
 echo patata | echo $VAR NO SOLTARA EL ECHO DE VAR ya que no existe en otro proceso hijo. Solo 
 existirá si se hace export VAR (eso tambien lo tienes que mirar)
+
+
 
 1. haz un script llamado "script":
 #!/bin/bash
@@ -68,6 +95,10 @@ export kk=patata cebolla deberia ser kk = patata solo. pero es patata cebolla...
 
 
 (JAVI)
+
+SEÑALRES: ejecutar otra minishell en miniyo... el control c debe aparecer una linea de prompt aparecen
+dos.. es porque hay que dormir al padre.
+
 
 export kk=-n
 echo $kk patata falla. pone -n patata
