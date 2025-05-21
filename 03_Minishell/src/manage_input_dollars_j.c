@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 12:59:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/17 18:53:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:43:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	do_even_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 				(*i)--;
 			return ;
 		}
+		dynamic_command(in, *k);
 		if (in->dollars > 0 && (in->dollars % 2) && (j < in->env_len))
 			in->command[(*k)++] = in->input_split[w][(*i)];
 		else if (j >= in->env_len
@@ -69,14 +70,23 @@ void	env_question(t_input *in, size_t w, size_t *i, size_t *k)
 		if (!number)
 			clean_all(in, 1);
 		while (number[l])
+		{
+			dynamic_command(in, *k);
 			in->command[(*k)++] = number[l++];
+		}
 		free(number);
 	}
 	else
+	{
+		dynamic_command(in, *k);
 		in->command[(*k)++] = '?';
+	}
 	while (in->input_split[w][*i] && in->input_split[w][(*i) + 1] != ' '
 		&& in->input_split[w][*i] != '$')
+	{
+		dynamic_command(in, *k);
 		in->command[(*k)++] = in->input_split[w][(*i)++];
+	}
 }
 
 void	save_invalid_envs(t_input *in, size_t w, size_t *i, size_t *k)
@@ -127,7 +137,10 @@ void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 	while (in->input_split[*i][*j])
 	{
 		if (in->input_split[*i][*j] != '$')
+		{
+			dynamic_command(in, *k);
 			in->command[(*k)++] = in->input_split[*i][(*j)];
+		}
 		else
 		{
 			while (in->input_split[*i][(*j) + 1] == '$')

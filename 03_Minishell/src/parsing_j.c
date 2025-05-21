@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/20 20:07:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:04:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,20 @@ void	compose_command(t_input *in)
 		&& in->status_exp[0] == 0)
 	{
 		if (in->split_exp[0] && in->split_exp[1] && in->split_exp[2])
-			ft_strlcpy(in->command, in->split_exp[2], ft_strlen(in->split_exp[2]) + 1);
-
+		{
+			free(in->command);
+			in->command = ft_strdup(in->split_exp[2]);
+		}
 		if (in->split_exp[0] && in->split_exp[1] && in->split_exp[2]
 			&& in->split_exp[3])
-			ft_strlcpy(in->args, in->split_exp[3], ft_strlen(in->split_exp[3]) + 1);
+		{
+			free(in->command);
+			in->command = ft_strdup(in->split_exp[3]);
+		}
+		if (!in->command)
+				clean_all(in, 1);
 	}
-	/* else
-	{
-		if (in->split_exp && in->split_exp[0] && in->split_exp[1])
-			ft_strlcpy(in->args, in->split_exp[1], ft_strlen(in->split_exp[1]));	
-	} */
+
 }
 
 /*parsed returns with the command included. I need this to make expand env...*/
@@ -135,6 +138,7 @@ void	parsing(t_input *in)
 	int		fd;
 	int		stdout_save;
 
+	in->realloc_counter = 0;
 	compose_token(in);
 	compose_command(in);///
 	stdout_save = dup(STDOUT_FILENO);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:31:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/17 17:07:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:50:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void	search_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 	if (ft_strrchr(in->input_split[*i], '$') && print_as_env)
 		expand_dollar(in, i, j, k);
 	else
+	{
+		dynamic_command(in, *k);
 		in->command[(*k)++] = in->input_split[*i][(*j)++];
+	}
 }
 
 /*Do the same as copy_to_command BUT it starts from the token that was left...*/
@@ -115,7 +118,9 @@ void	compose_command_args(t_input *in)
 	k = 0;
 	in->spaced = 0;
 	in->status_checked = 0;
-	ft_bzero(in->command, 100000);
+	in->realloc_counter = 0;
+	if (in->command)
+		ft_bzero(in->command, ft_strlen(in->command));
 	copy_to_command(in, &i, &j, &k);
 	in->word_after_command = i;
 	compose_arg(in, i);

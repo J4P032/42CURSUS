@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:32:40 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 09:59:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:13:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,5 @@ void	ft_manage_pipes(t_input *input)
 		i++;
 	}
 
-	ft_matrix_free(cmds); // libera cmds generado por ft_split_quotes
+	ft_matrix_free(&cmds); // libera cmds generado por ft_split_quotes
 }

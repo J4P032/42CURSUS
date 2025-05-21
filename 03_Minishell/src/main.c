@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 14:55:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:04:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,8 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		compose_command_args(&input);
-		parsing(&input); // EN CONSTRUCCIÓN
-		//compose_command_args(&input);
-		/* printf("============\nPARSEADO:%s\n==========\n", input.parsed);
+		parsing(&input);
+	/* 	printf("============\nPARSEADO:%s\n==========\n", input.parsed);
 		printf("command:%s\n", input.command);
 		printf("arg:%s\n", input.args);
 		for (size_t i = 0; input.split_exp[i]; i++)

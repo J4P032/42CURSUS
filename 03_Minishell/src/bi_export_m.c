@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:06:31 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 08:48:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:15:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	ft_export(t_input *input_data, char ***envp)
 			new_env[j] = ft_strdup((*envp)[j]);
 		new_env[env_position] = ft_strdup(prepared_input);
 		free(prepared_input);
-		ft_matrix_free(*envp);
+		ft_matrix_free(envp);
 		*envp = new_env;
 
 		i++;

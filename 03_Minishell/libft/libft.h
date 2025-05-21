@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:36:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/19 13:30:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:10:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void		ft_putnbr_base(unsigned long *nbr, char *base, int *num_chars);
 
 //MINISHELL - Mario
 int			ft_strcmp(const char *s1, const char *s2);
-void		ft_matrix_free(char **matrix);
+void		ft_matrix_free(char ***matrix);
 char		**ft_matrix_dup(char **matrix);
 char		*ft_strchr_quotes(const char *s, int c);
 char		*ft_strcat(char *dest, const char *src);

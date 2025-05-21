@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_m.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/20 00:40:25 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:13:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,10 @@ char	*find_executable(char *command, char **envp)
 	{
 		full_path = join_path(dirs[i++], command);
 		if (full_path && access(full_path, X_OK) == 0 && stat(full_path, &sb) == 0 && S_ISREG(sb.st_mode))
-			return (ft_matrix_free(dirs), full_path);
+			return (ft_matrix_free(&dirs), full_path);
 		free(full_path);
 	}
-	ft_matrix_free(dirs);
+	ft_matrix_free(&dirs);
 	return (NULL);
 }
 

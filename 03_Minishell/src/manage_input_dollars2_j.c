@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 16:58:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/17 18:57:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:41:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,17 @@ void	save_env_even_dollars_quo(t_input *in, size_t w, size_t *i,	size_t *k)
 			j++;
 		j++;
 		while (in->envp[in->env_n][j])
+		{
+			dynamic_command(in, *k);
 			in->command[(*k)++] = in->envp[in->env_n][j++];
+		}
 	}
 	else
 	{
 		while (in->input_split[w][*i] && in->input_split[w][(*i) + 1] != ' ')
 		{
 			(*i)++;
+			dynamic_command(in, *k);
 			in->command[(*k)++] = in->input_split[w][(*i)];
 		}
 	}
@@ -53,6 +57,7 @@ void	save_env_if_even_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 			j++;
 		while (in->envp[in->env_n][j])
 		{
+			dynamic_command(in, *k);
 			in->command[(*k)++] = in->envp[in->env_n][j++];
 			if (in->envp[in->env_n][j] == ' ')
 				break ;
@@ -63,6 +68,7 @@ void	save_env_if_even_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 		while (in->input_split[w][*i] && in->input_split[w][(*i) + 1] != ' ')
 		{
 			(*i)++;
+			dynamic_command(in, *k);
 			in->command[(*k)++] = in->input_split[w][(*i)];
 		}
 	}
@@ -108,7 +114,10 @@ void	save_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k)
 			j--;
 		}
 		if (str[j] != '$')
+		{
+			dynamic_command(in, *k);
 			in->command[(*k)++] = in->input_split[w][(*i)];
+		}
 	}
 }
 
@@ -124,10 +133,12 @@ void	save_rare_cases(t_input *in, size_t w, size_t *i, size_t *k)
 	str = in->input_split[w];
 	if (in->dollars % 2)
 	{
+		dynamic_command(in, *k);
 		in->command[(*k)++] = str[id];
 		(*i) = id;
 		return ;
 	}
+	dynamic_command(in, *k);
 	if (!str[id] && in->input_split[w][*i])
 		in->command[(*k)++] = '$';
 	else if ((ft_isdigit(str[id]) || ft_strrchr(N_ODDCHAR, str[id])
@@ -138,6 +149,7 @@ void	save_rare_cases(t_input *in, size_t w, size_t *i, size_t *k)
 		if (ft_strrchr(D_Y_ODDCHAR, str[id]))
 		{
 			in->command[(*k)++] = '$';
+			dynamic_command(in, *k);
 			in->command[(*k)++] = str[id];
 		}
 		(*i) = id;

@@ -3,40 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_matrix_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:09:14 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/20 20:14:32 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:55:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "../inc/minishell_j.h"
 
-void	ft_matrix_free(char **matrix)
+void	ft_matrix_free(char ***matrix)
 {
 	int	i;
 
 	i = 0;
-	while (matrix && matrix[i])
+	if (!matrix || !*matrix)
+		return;
+	while ((*matrix)[i])
 	{
-		free(matrix[i]);
-		matrix[i] = NULL;
+		free((*matrix)[i]);
+		(*matrix)[i] = NULL;
 		i++;
 	}
-	if (matrix)
-		free(matrix);
+	free((*matrix));
+	*matrix = NULL;
 }
 
 void	ft_input_free(t_input *input)
 {
-	ft_matrix_free(input->input_split);
-	input->input_split = NULL;
-	ft_matrix_free(input->split_exp);
-	input->split_exp = NULL;
+	ft_matrix_free(&input->input_split);
+	ft_matrix_free(&input->split_exp);
 	if (input->status)
 		free(input->status);
 	input->status = NULL;
+	if (input->token)
+		free(input->token);
+	input->token = NULL;
+	if (input->command)
+		free(input->command);
+	input->command = NULL;
 	if (input->filename)
 		free(input->filename);
 	input->filename = NULL;

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 08:58:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 14:21:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:13:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void	copy_to_split_expanded(t_input *in, char *token, char ***split_exp)
 	{
 		new_token[i] = ft_strdup((*split_exp)[i]);
 		if (!new_token[i++])
-			return (ft_matrix_free(new_token));
+			return (ft_matrix_free(&new_token));
 	}
 	new_token[i] = ft_strdup(token);
 	if (!new_token[i])
-		return (ft_matrix_free(new_token));
-	ft_matrix_free(*split_exp);
+		return (ft_matrix_free(&new_token));
+	ft_matrix_free(split_exp);
 	*split_exp = new_token;
 }
 
@@ -123,7 +123,8 @@ void	compose_token(t_input *in)
 			ft_bzero(in->token, ft_strlen(in->token));
 		quoted = (is_quoted(in, i) == 2 || is_quoted(in, i) == 1);
 		copy_to_token(in, &i, &j, &k);
-		in->status_exp[counter] = quoted;
+		if (counter < 100)
+			in->status_exp[counter] = quoted;
 		counter++;
 		copy_to_split_expanded(in, in->token, &in->split_exp);
 	}
