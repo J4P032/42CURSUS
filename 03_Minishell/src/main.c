@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/20 14:24:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:55:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	init_input_struct(t_input *input)
 	input->idollar = 0;
 	input->env_len = 0;
 	input->last_exit_code = 0;
+	input->realloc_counter = 0;
+	input->token = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -70,9 +72,11 @@ int	main(int argc, char **argv, char **envp)
 		//compose_command_args(&input);
 		/* printf("============\nPARSEADO:%s\n==========\n", input.parsed);
 		printf("command:%s\n", input.command);
-		printf("arg:%s\n-----SALIDA-----\n", input.args);
+		printf("arg:%s\n", input.args);
 		for (size_t i = 0; input.split_exp[i]; i++)
-			ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]); */
+			ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);
+		printf("-----SALIDA-----\n"); */
+		
 		ft_manage_pipes(&input);
 		free(input.input);
 	}

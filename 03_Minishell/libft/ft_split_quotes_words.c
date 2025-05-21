@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quotes_words.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:45:25 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/20 11:37:27 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:36:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,10 @@ int	ft_count_quotes_words(t_split *squotes, t_input *input)
 	if (squotes->quotes % 2)
 		return (squotes->error = 1, 0);
 	squotes->quotes = 0;
-	if (input->status)////////////
-		free(input->status);////////////
+	if (input->status)
+		free(input->status);
 	input->status = (int *)ft_calloc(squotes->words, sizeof(int));
 	if (!input->status)
 		squotes->error = 1;
-	input->input_words = squotes->words;
-	return (squotes->words);
+	return (input->input_words = squotes->words, squotes->words);
 }

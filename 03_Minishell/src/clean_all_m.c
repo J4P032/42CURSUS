@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_all_m.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:05:48 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/20 13:43:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 03:52:51 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ void	clean_all(t_input *input, int error)
 	if (input->envp) //si error = 0 deberia eliminarlo?
 		ft_matrix_free(input->envp);
 	input->envp = NULL; //hacer ft_matrix_free *** y asi podre asignar ahi el NULL
+	if (input->local_envp)
+		ft_matrix_free(input->local_envp);
+	input->local_envp = NULL;
 	if (input->split_exp)
 		ft_matrix_free(input->split_exp);
 	input->split_exp = NULL; //hacer ft_matrix_free *** y asi podre asignar ahi el NULL

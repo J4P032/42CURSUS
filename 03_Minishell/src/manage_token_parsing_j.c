@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 08:58:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/20 17:27:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:21:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	copy_to_split_expanded(t_input *in, char *token, char ***split_exp)
 }
 
 
-void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
+/* void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 {
 	int	print_as_env;
 
@@ -52,8 +52,20 @@ void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 	{
 		in->token[(*k)++] = in->input_split[*i][(*j)++];
 	}
-}
+} */
+void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
+{
+	int	print_as_env;
 
+	print_as_env = (is_quoted(in, *i) == 2 || !is_quoted(in, *i));
+	if (ft_strrchr(in->input_split[*i], '$') && print_as_env)
+		expand_token_dollar(in, i, j, k);
+	else
+	{
+		dynamic_input(in, *k);
+		in->token[(*k)++] = in->input_split[*i][(*j)++];
+	}
+}
 
 /*first if will stop copy when find a '' or "" that is previously spaced...*/
 /*...if that token is not the first one as the first one will be always...*/
@@ -107,7 +119,8 @@ void	compose_token(t_input *in)
 		in->word = i;
 		in->spaced = 0;
 		in->status_checked = 0;
-		ft_bzero(in->token, 100000);
+		if (in->token)
+			ft_bzero(in->token, ft_strlen(in->token));
 		quoted = (is_quoted(in, i) == 2 || is_quoted(in, i) == 1);
 		copy_to_token(in, &i, &j, &k);
 		in->status_exp[counter] = quoted;

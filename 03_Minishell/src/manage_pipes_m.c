@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_inputs_m.c                                  :+:      :+:    :+:   */
+/*   manage_pipes_m.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:32:40 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/20 11:32:40 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:59:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	ft_manage_pipes(t_input *input)
 	pid_t	pid;
 	int		status;
 	t_input	sub_input;
+	int		sig; //señales de javi
 
 	i = 0;
 	in_fd = 0;
@@ -52,6 +53,13 @@ void	ft_manage_pipes(t_input *input)
 
 		if (pid == 0)
 		{
+			// ====== SEÑALES DE JAVI ======
+
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+
+			// =============================
+			
 			if (in_fd != 0)
 			{
 				dup2(in_fd, STDIN_FILENO);
@@ -74,6 +82,20 @@ void	ft_manage_pipes(t_input *input)
 		else
 		{
 			waitpid(pid, &status, 0);
+
+			// ====== SEÑALES DE JAVI ======
+			
+			if (WIFSIGNALED(status))
+			{
+				sig = WTERMSIG(status);
+				if (sig == SIGINT)
+					write(1, "\n", 1);
+				else if (sig == SIGQUIT)
+					write(1, "Quit (core dumped)\n", 19);
+				input->last_exit_code = 128 + sig;//128 es el codigo de terminacion por señal. Todas empiezan desde ahi. Por eso la suma. SIGINT (controlC = 2 asi que 130) y SIGQUIT (cont\ 3 -> 131)
+			}
+
+			// =============================
 
 			if (cmds[i + 1] == NULL)
 			{
