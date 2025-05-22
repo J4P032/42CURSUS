@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 01:26:18 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/19 13:14:29 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:16:13 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	handle_all_redirections(t_input *input)
 	bool	single_quote = false;
 	bool	double_quote = false;
 
+	printf("hello1");
 	while (input->input[i])
 	{
 		if (input->input[i] == '\'' && !double_quote)
@@ -91,6 +92,7 @@ void	handle_all_redirections(t_input *input)
 			}
 			else if (input->input[i] == '<' && input->input[i + 1] == '<')
 			{
+				printf("hello");
 				handle_heredoc_redirection(input, &input->input[i]);
 				i++;
 			}
@@ -102,7 +104,7 @@ void	handle_all_redirections(t_input *input)
 		i++;
 	}
 }
-void	handle_redirection(t_input *input)
+bool	handle_redirection(t_input *input)
 {
 	size_t	i = 0;
 	bool	single_quote = false;
@@ -125,6 +127,7 @@ void	handle_redirection(t_input *input)
 			{
 				handle_heredoc_redirection(input, &input->input[i]);
 				i++;
+				return (1);
 			}
 			else if (input->input[i] == '>')
 				handle_output_redirection(input, &input->input[i]);
@@ -133,5 +136,6 @@ void	handle_redirection(t_input *input)
 		}
 		i++;
 	}
+	return (0);
 }
 

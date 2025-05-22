@@ -6,39 +6,62 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:07:20 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/20 00:16:28 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:05:56 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-bool	ft_cd(t_input *input)
+void	ft_cd(t_input *input)
 {
 	char		*path;
 	static char	oldpwd[4096] = "";
 	char		prev[4096];
 
+	if (input->split_exp[1] && input->split_exp[2])
+	{
+		printf("cd: too many arguments\n");
+		input->last_exit_code = 1;
+		return ;
+	}
 	if (!input->parsed[0])
 	{
 		path = getenv("HOME");
 		if (!path)
-			return (printf("cd: HOME not set\n"), 1);
+		{
+			printf("cd: HOME not set\n");
+			input->last_exit_code = 1;
+			return ;
+		}
 	}
 	else if (ft_strcmp(input->parsed, "-") == 0)
 	{
 		if (ft_strlen(oldpwd) == 0)
-			return (printf("cd: OLDPWD not set\n"), 1);
+		{
+			printf("cd: OLDPWD not set\n");
+			input->last_exit_code = 1;
+			return ;
+		}
 		printf("%s\n", oldpwd);
 		path = oldpwd;
 	}
 	else
 		path = input->parsed;
+
 	if (getcwd(prev, sizeof(prev)) == NULL)
-		return (perror("getcwd"), 1);
+		{
+			printf("getcwd");
+			input->last_exit_code = 1;
+			return ;
+		}
 	if (chdir(path) != 0)
-		return (perror("cd"), 1);
+		{
+			perror("cd");
+			input->last_exit_code = 1;
+			return ;
+		}
 	ft_strlcpy(oldpwd, prev, sizeof(oldpwd));
-	return (0);
+	input->last_exit_code = 0;
 }
 

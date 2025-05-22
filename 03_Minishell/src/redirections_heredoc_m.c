@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_heredoc_m.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 23:32:52 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 11:25:16 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:11:46 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	handle_heredoc_redirection(t_input *input, char *redir)
 	struct	sigaction sa; //señales javi
 	struct sigaction sa_old_int;//señales javi
 	struct sigaction sa_old_quit;//señales javi
-
 
 	// ====== SEÑALES DE JAVI ======
 	
@@ -68,7 +67,6 @@ void	handle_heredoc_redirection(t_input *input, char *redir)
 		*cmd = '\0';
 		cmd++;
 	}
-
 	end = delim + ft_strlen(delim) - 1;
 	while (end > delim && (*end == ' ' || *end == '\n'))
 		*end-- = '\0';
@@ -81,7 +79,6 @@ void	handle_heredoc_redirection(t_input *input, char *redir)
 		sigaction(SIGQUIT, &sa_old_quit, NULL);//javi signals
 		return ;
 	}
-
 	buffer = malloc(8192);
 	if (!buffer)
 	{

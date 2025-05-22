@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 09:13:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 14:47:16 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:14:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ void	token_env_question(t_input *in, size_t w, size_t *i, size_t *k)
 		dynamic_input(in, *k);
 		in->token[(*k)++] = '?';
 	}
-	while (in->input_split[w][*i] && in->input_split[w][(*i) + 1] != ' '
-		&& in->input_split[w][*i] != '$')
+	while (in->input_split[w][*i] && in->input_split[w][*i] != '$') //&& in->input_split[w][(*i) + 1] != ' '//por un error en echo "$?p " o "$? p"
 	{
 		dynamic_input(in, *k);
 		in->token[(*k)++] = in->input_split[w][(*i)++];

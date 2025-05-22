@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 12:59:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 16:43:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:43:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,12 @@ void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 			save_invalid_envs(in, *i, j, k);
 		}
 		if (in->input_split[*i][*j] && in->input_split[*i][*j] != '$')
+		{
+			dynamic_command(in, *k);
+			if (*j > 0 && in->input_split[*i][*j] == ' ' 
+				&& in->input_split[*i][(*j) - 1] == '$')
+				in->command[(*k)++] = in->input_split[*i][(*j)];	
 			(*j)++;
+		}
 	}
 }

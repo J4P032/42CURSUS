@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 17:13:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:28:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,10 @@ bool	exec_child(t_input *input, pid_t pid, char *executable)
 			dup2(input->inputfd, STDIN_FILENO);
 		if (input->outputfd != STDOUT_FILENO)
 			dup2(input->outputfd, STDOUT_FILENO);
+
+		signal(SIGINT, SIG_DFL);
+    	signal(SIGQUIT, SIG_DFL); //javi signals
+			
 		execve(executable, command_union, input->envp);
 		if (command_union)
 			free (command_union);
@@ -183,6 +187,7 @@ bool	execute_command(t_input *input)
 	char	*executable;
 	pid_t	pid;
 	int		status;
+	int		sig;
 
 	if (!input->input_split || !input->input_split[0])
 		return (false);
@@ -196,7 +201,27 @@ bool	execute_command(t_input *input)
 	pid = fork();
 	if (exec_child(input, pid, executable) == 0)
 		return (free(executable), false);
+	
+	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
+	
+	if (WIFSIGNALED(status))
+    {
+        sig = WTERMSIG(status);
+        if (sig == SIGINT)
+            write(1, "\n", 1);
+        else if (sig == SIGQUIT)
+            write(1, "Quit (core dumped)\n", 19);
+        update_exit_code_env(input, 128 + sig);
+    }
+	else if (WIFEXITED(status))
+		update_exit_code_env(input, WEXITSTATUS(status));
+	else
+		update_exit_code_env(input, 1);	
+	
+	signal(SIGINT, ctrlc_handler);
+	
 	free(executable);
-	return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
+	//return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
+	return (input->last_exit_code == 0);
 }
