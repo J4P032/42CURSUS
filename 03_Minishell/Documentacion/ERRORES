@@ -13,9 +13,6 @@ identificador valido, cuando deberia pararse cuando ha llegado al =. de todas fo
 <Makefile<obj>file>file2>>append echo hola deberia hacer un file file 2... 
 no se si es mio. ya que hay que separar los < y >
 
-export solo deberia soltar y todas las variables de entorno aparecen en orden
-alfabetico con un declear -x
-
 IMPORTANTE: el heardoc si haces
 << $USER cat el terminador ya no se expandira.. es decir no sera jrollon-, sino que sera el literal
 $USER.
@@ -36,7 +33,12 @@ cuando se hace sin export esa variable existirá PERO SOLO en el proceso que est
 echo patata | echo $VAR NO SOLTARA EL ECHO DE VAR ya que no existe en otro proceso hijo. Solo 
 existirá si se hace export VAR (eso tambien lo tienes que mirar)
 
-
+hay que hacer $_ actualizado. Para ello he creado una variable en la estructura llamada char *last_dollar_;
+que no ha de reservar memoria sino asignarle el ultimo input->split_exp de la secuencia.
+luego habra que exportarla en cada ciclo del while(1) (supongo que ahi). por ahora la he metido en input...
+he creado una funcion en la libft que se llama char	*ft_last_str(char **str) que te devuelve el ultimo
+string de el **str que se le pase... Cuidado que puede ser NULL y habra que asignar \0 a $_ para que no imprima (null)
+en el export o donde sea.. hay que export _=input->last_dollar_;
 
 1. haz un script llamado "script":
 #!/bin/bash
@@ -91,17 +93,22 @@ export kk=patata cebolla deberia ser kk = patata solo. pero es patata cebolla...
 	2. Si se encuentra, se coge qué palabra es la que corresponde del split. Imaginemos la 3.
 	3. is_quoted(input, 3) devolvera un numero. 0 no entrecomillado. 1 comillas simples. 2 comillas dobles.
 
+CORREGIDO 	
+export solo deberia soltar y todas las variables de entorno aparecen en orden
+alfabetico con un declear -x
 ===============================================================================================================
 
 
 (JAVI)
 
+echo < fichero tiene que devolver un valor especifico.. pero ahora no esta haciendo nada mas que < fichero
+
 SEÑALRES: ejecutar otra minishell en miniyo... el control c debe aparecer una linea de prompt aparecen
 dos.. es porque hay que dormir al padre.
 
 
-export kk=-n
-echo $kk patata falla. pone -n patata
+CORREGIDO - export kk=-n
+			echo $kk patata falla. pone -n patata
 
 CORREGIDO - echo $a deberia dejar un salto de linea. No lo
 

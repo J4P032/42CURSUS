@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 18:16:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:28:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ typedef struct s_input
 	int		*status;
 	char	*token;
 	char	*command;
+	char	*args;
 	int		status_exp[100];
-	char	args[100000];
 	size_t	realloc_counter;
 	size_t	word_after_command;
 	size_t	word_after_arg;
@@ -59,6 +59,7 @@ typedef struct s_input
 	int		outputfd;
 	int		status_checked;
 	int		env_n;
+	char	*last_dollar_;
 	pid_t	last_exit_code;
 	bool	is_script;
 }			t_input;
@@ -81,6 +82,7 @@ void	compose_token(t_input *in);
 
 void	dynamic_input(t_input *in, size_t k);
 void	dynamic_command(t_input *in, size_t k);
+void	dynamic_arg(t_input *in, size_t k);
 
 //BUILT INS
 void	echo_short(t_input *in);
