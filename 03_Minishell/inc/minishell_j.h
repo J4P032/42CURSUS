@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/22 10:28:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:29:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,6 @@ void	space_after_first_invalid_env(t_input *in, size_t w);
 
 //SIGNALS
 void	init_sigaction(struct sigaction *sa);
+void	ctrlc_handler(int sig);
 
 #endif

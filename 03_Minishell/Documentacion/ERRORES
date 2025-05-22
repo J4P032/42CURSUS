@@ -28,10 +28,7 @@ debe imprimir $USER (HAY QUE MATAR AL QUE HIZO EL BASH)
 
 export $a hara lo mismo que en export solo si $a no existe
 
-VAR=patata deberia hacer que echo $VAR soltara patata. (o sin echo). No declara dicha variable
-cuando se hace sin export esa variable existirá PERO SOLO en el proceso que este. 
-echo patata | echo $VAR NO SOLTARA EL ECHO DE VAR ya que no existe en otro proceso hijo. Solo 
-existirá si se hace export VAR (eso tambien lo tienes que mirar)
+echo < fichero tiene que devolver un valor especifico.. pero ahora no esta haciendo nada mas que < fichero
 
 hay que hacer $_ actualizado. Para ello he creado una variable en la estructura llamada char *last_dollar_;
 que no ha de reservar memoria sino asignarle el ultimo input->split_exp de la secuencia.
@@ -96,16 +93,28 @@ export kk=patata cebolla deberia ser kk = patata solo. pero es patata cebolla...
 CORREGIDO 	
 export solo deberia soltar y todas las variables de entorno aparecen en orden
 alfabetico con un declear -x
+
+
+VAR=patata deberia hacer que echo $VAR soltara patata. (o sin echo). No declara dicha variable
+cuando se hace sin export esa variable existirá PERO SOLO en el proceso que este. 
+echo patata | echo $VAR NO SOLTARA EL ECHO DE VAR ya que no existe en otro proceso hijo. Solo 
+existirá si se hace export VAR (eso tambien lo tienes que mirar)
+
+
 ===============================================================================================================
 
 
 (JAVI)
 
-echo < fichero tiene que devolver un valor especifico.. pero ahora no esta haciendo nada mas que < fichero
+echo "$ a " no me sale la a.
 
-SEÑALRES: ejecutar otra minishell en miniyo... el control c debe aparecer una linea de prompt aparecen
-dos.. es porque hay que dormir al padre.
+CORREGIDO - echo "$  a" en vez de dos espacios me sale 1.
 
+CORREGIDO - echo "$?u " Me sale 0 cuando deberia ser 0 u
+CORREGIDO - echo "$? us " me sale 0 u cuando deberia ser $? us. es por el espacio al final.
+
+CORREGIDO - SEÑALRES: ejecutar otra minishell en miniyo... el control c debe aparecer una linea de prompt aparecen
+			dos.. es porque hay que dormir al padre.
 
 CORREGIDO - export kk=-n
 			echo $kk patata falla. pone -n patata
