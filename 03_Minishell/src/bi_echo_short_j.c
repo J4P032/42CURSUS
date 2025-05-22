@@ -6,12 +6,28 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 17:24:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/20 21:15:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:30:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
+
+int	is_valid_arg_(char *str)
+{
+	size_t	i;
+
+	i = 1;
+	if (!str)
+		return (0);
+	if (str[0] != '-')
+		return (0);
+	while (str[i] == 'n')
+		i++;
+	if (str[i] != '\0')
+		return (0);
+	return (1);
+}
 
 size_t	check_more_n(t_input *in)
 {
@@ -80,6 +96,14 @@ void	echo_short(t_input *in)
 		i++;
 	if (in->input[i] == '$')
 		parsed_n = 1;
+	else if (in->args && in->args[0] == '$')
+	{
+		if (in->split_exp && in->split_exp[0] && in->split_exp[1])
+		{
+			if (is_valid_arg_(in->split_exp[1]))
+				parsed_n = 1;
+		}
+	}
 	if (parsed_n)
 		in->echo_error_n_arg = 1;
 	start = check_argument(in, parsed_n);

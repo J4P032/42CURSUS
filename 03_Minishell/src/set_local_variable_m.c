@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_local_variable_m.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 03:46:38 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 03:48:43 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/22 08:54:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool is_variable_assignment(char *str)
     return str[i] == '=';
 }
 
-void set_local_variable(t_input *input, char *assignment)
+void set_local_variable(t_input *input, char *assignment) //se va a usar?
 {
 	int		i;
 	char	*key;
@@ -47,6 +47,8 @@ void set_local_variable(t_input *input, char *assignment)
 		{
 			free(input->local_envp[i]);
 			input->local_envp[i] = ft_strdup(assignment);
+			if (!input->local_envp[i])
+				clean_all(input, 1);
 			free(key);
 			return ;
 		}

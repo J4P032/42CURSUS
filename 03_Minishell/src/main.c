@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 18:04:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:39:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	init_input_struct(t_input *input)
 	input->last_exit_code = 0;
 	input->realloc_counter = 0;
 	input->token = NULL;
+	input->command = NULL;
+	input->args = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -69,11 +71,11 @@ int	main(int argc, char **argv, char **envp)
 		}
 		compose_command_args(&input);
 		parsing(&input);
-	/* 	printf("============\nPARSEADO:%s\n==========\n", input.parsed);
+		/* printf("============\nPARSEADO:%s\n==========\n", input.parsed);
 		printf("command:%s\n", input.command);
 		printf("arg:%s\n", input.args);
-		for (size_t i = 0; input.split_exp[i]; i++)
-			ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);
+		for (size_t i = 0; input.split_exp[i]; i++)//
+			ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
 		printf("-----SALIDA-----\n"); */
 		
 		ft_manage_pipes(&input);

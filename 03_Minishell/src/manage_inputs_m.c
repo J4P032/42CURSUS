@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 19:28:00 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 21:18:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:47:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 		ft_cd(input);
 	else if (ft_strcmp(input->command, "echo") == 0)
 		echo_short(input);
-	else if (ft_strcmp(input->command, "export") == 0 && input->input_split[1])//mirar cambiar a && input->args[0] (es decir que no sea \0). Pero!! export sin mas lo que hace es poner "declare -x " delante de todas las variables de entorno
-		ft_export(input, &input->envp);
+	else if (ft_strcmp(input->command, "export") == 0)//mirar cambiar a && input->args[0] (es decir que no sea \0). Pero!! export sin mas lo que hace es poner "declare -x " delante de todas las variables de entorno
+		//ft_export(input, &input->envp);
+		ft_export(input->parsed, &input->envp);//este funciona
 	else if (ft_strcmp(input->command, "env") == 0)
 		ft_env(input, input->envp);
 	else if (ft_strcmp(input->command, "unset") == 0)//mirar cambiar a && input->args[0] (es decir que no sea \0). Pero!! unset sin mas lo que hace es poner una nueva linea de prompt
@@ -36,5 +37,6 @@ void	ft_manage_input(t_input *input, int in_fd, int out_fd)
 		ft_exit(input);
 	else
 		execute_command(input);
+	input->last_dollar_ = ft_last_str(input->split_exp);
 	ft_input_free(input);
 }

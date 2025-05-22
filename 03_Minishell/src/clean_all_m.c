@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:05:48 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/21 17:12:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 08:58:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	clean_all(t_input *input, int error)
 	if (input->envp) //si error = 0 deberia eliminarlo?
 		ft_matrix_free(&input->envp);
 
-	if (input->local_envp)
-		ft_matrix_free(&input->local_envp);
+	/* if (input->local_envp)
+		ft_matrix_free(&input->local_envp); */ //no esta creado y hace doble free
 
 	if (input->split_exp)
 		ft_matrix_free(&input->split_exp);

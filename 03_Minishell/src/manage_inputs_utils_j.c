@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:31:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 16:50:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 08:40:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	copy_to_arg(t_input *in, size_t *i, size_t *j, size_t *k)
 		while ((in->input_split[*i][*j] != ' ' || is_quoted(in, *i))
 			&& in->input_split[*i][*j] != '\0' && !in->spaced)
 		{
+			dynamic_arg(in, *k);
 			if ((*i > in->word && (in->status[*i] == EPTY_SP
 						|| in->status[*i] == SQUO_SP
 						|| in->status[*i] == DQUO_SP)
@@ -103,7 +104,15 @@ void	compose_arg(t_input *in, size_t word)
 	in->word = word;
 	in->spaced = 0;
 	in->status_checked = 0;
-	ft_bzero(in->args, 100000);
+	in->realloc_counter = 0;
+	if (!in->args)
+	{
+		in->args = (char *)ft_calloc(BUFFER + 1, sizeof(char));
+		if (!in->args)
+			clean_all(in, 1);
+	}
+	else
+		ft_bzero(in->args, ft_strlen(in->args));
 	copy_to_arg(in, &i, &j, &k);
 	in->word_after_arg = i;
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:13:06 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 16:07:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/22 08:19:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,18 @@ void	dynamic_command(t_input *in, size_t k)
 		in->realloc_counter++;
 		in->command = ft_str_realloc(in->command, BUFFER);
 		if (!in->command)
+			clean_all(in, 1);
+	}
+}
+void	dynamic_arg(t_input *in, size_t k)
+{
+	if (in->args && k < in->realloc_counter * BUFFER)
+		return ;
+	else
+	{
+		in->realloc_counter++;
+		in->args = ft_str_realloc(in->args, BUFFER);
+		if (!in->args)
 			clean_all(in, 1);
 	}
 }
