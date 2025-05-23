@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 09:13:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/22 19:14:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/23 14:02:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	save_if_spaced_valid_env(t_input *in, size_t w)
 		&& (ft_isalpha(in->input_split[w][i]) || in->input_split[w][i] == '_')
 		&& !idollar
 		&& is_quoted(in, w) != 2 && in->dollars == 1)
-		space_after_first_invalid_env(in, w);
+		space_after_first_invalid_env(in, w, i, 0);
 }
 
 void	expand_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)

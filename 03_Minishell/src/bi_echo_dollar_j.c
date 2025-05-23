@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/22 19:56:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:39:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 /*This is when there is an echo $a msg that has to be without space at beggin*/
 /*...or echo -n $a msg that also has to be without space 'msg' even is spaced*/
-void	space_after_first_invalid_env(t_input *in, size_t w)
+/*Later are for cases as $a""a, echo $a"" a* or $a"$USER"*/
+void	space_after_first_invalid_env(t_input *in, size_t w, size_t i, int on)
 {
 	if (!in->echo_error_n_arg && w == in->word_after_arg)
 	{
@@ -26,6 +27,18 @@ void	space_after_first_invalid_env(t_input *in, size_t w)
 	{
 		in->word_after_command++;
 		in->spaced = 0;
+	}
+	if (on)
+	{
+		while (ft_isalnum(in->input_split[w][i]) && in->input_split[w][i])
+			i++;
+		if (in->input_split[w][i])
+			ft_printf(" ");
+		else if (in->input_split[w + 1] && in->input_split[w + 1][0] == ' ')
+			ft_printf(" ");
+		else if (in->input_split[w + 1]
+			&& in->input_split[w + 2] && !in->input_split[w + 1][0])
+			ft_printf(" ");
 	}
 }
 
@@ -56,7 +69,7 @@ void	print_if_spaced_and_valid_env(t_input *in, size_t w, int spaced)
 		&& (ft_isalpha(in->input_split[w][i]) || in->input_split[w][i] == '_')
 		&& !idollar
 		&& is_quoted(in, w) != 2 && in->dollars == 1)
-		space_after_first_invalid_env(in, w);
+		space_after_first_invalid_env(in, w, i, 1);
 	else if (spaced)
 		ft_printf(" ");
 }

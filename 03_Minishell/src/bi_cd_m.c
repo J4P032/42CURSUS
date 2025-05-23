@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:07:20 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/22 17:05:56 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/22 22:16:10 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_cd(t_input *input)
 
 	if (input->split_exp[1] && input->split_exp[2])
 	{
-		printf("cd: too many arguments\n");
+		ft_putstr_fd("miniyo: cd: too many arguments\n", 2);
 		input->last_exit_code = 1;
 		return ;
 	}

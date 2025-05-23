@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 18:04:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:00:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	write_parsed_output_from_file(t_input *in)
 		clean_all(in, 1);
 	in->parsed = get_next_line(fd);
 	aux = in->parsed;
-	while (in->parsed && in->parsed[i] && in->parsed[i] != ' ')
+	while (in->parsed && in->command && in->parsed[i] && in->command[i]
+			&& in->parsed[i] == in->command[i])
 		i++;
 	if (in->parsed && in->parsed[i] == ' ')
 		i++;
