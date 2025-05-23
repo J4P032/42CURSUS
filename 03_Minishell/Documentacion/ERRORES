@@ -108,11 +108,17 @@ existirá si se hace export VAR (eso tambien lo tienes que mirar)
 
 echo "$ a " no me sale la a.
 
-echo $USERa$HOME no sale el home y deberia. pero aparece bien en el split_exp. Falla el parsing
+CORREGIDO - echo $a""a deberia salir a y no sale nada.
+			echo $a"" a Deberia ser ( a) y me sale pegado a la izda.
+
+CORREGIDO - echo $a" $USER" deberia salir ( jrollon-) y sale (jrollon-)
+			echo $a"$USER" deberia salir (jrollon-) y no sale nada
+
+CORREGIDO - echo $USERa$HOME no sale el home y deberia. pero aparece bien en el split_exp. Falla el parsing
 
 CORREGIDO - echo "$  a" en vez de dos espacios me sale 1.
 
-CORREGIDO - echo "$?u " Me sale 0 cuando deberia ser 0 u
+CORREGIDO - echo "$?u " Me sale 0 cuando deberia ser 0u
 CORREGIDO - echo "$? us " me sale 0 u cuando deberia ser $? us. es por el espacio al final.
 
 CORREGIDO - SEÑALRES: ejecutar otra minishell en miniyo... el control c debe aparecer una linea de prompt aparecen

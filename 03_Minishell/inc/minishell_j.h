@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/22 17:29:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/23 14:01:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ size_t	validlen_env(const char *str, char c);
 size_t	invalidlen_env(const char *str);
 void	print_rare_cases(t_input *in, size_t w, size_t *i);
 void	print_rest_no_env(t_input *in, size_t w, size_t *i);
-void	space_after_first_invalid_env(t_input *in, size_t w);
+void	space_after_first_invalid_env(t_input *in, size_t w, size_t i, int on);
 
 //SIGNALS
 void	init_sigaction(struct sigaction *sa);
