@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:51:03 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/22 18:31:19 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/24 02:11:57 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include "../libft/libft.h"
 # include <sys/types.h>
 # include <sys/wait.h>
+#include <sys/stat.h>
+#include <errno.h>
 
 void	ft_manage_history(char *input, bool clean);
 void	clean_all(t_input *input, int error);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/23 14:01:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 16:38:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	dynamic_command(t_input *in, size_t k);
 void	dynamic_arg(t_input *in, size_t k);
 
 //BUILT INS
-void	echo_short(t_input *in);
+void	echo_short(t_input *in, int fd);
 void	manage_dollar(t_input *in, size_t w, int spaced);
 int		valid_env(const char *str, t_input *in, size_t w);
 void	ft_exit(t_input *in);
