@@ -106,7 +106,7 @@ existirá si se hace export VAR (eso tambien lo tienes que mirar)
 
 (JAVI)
 
-echo $a " " a me sale una posicion mas alla deberia ser (  a) no (   a)
+CORREGIDO - echo $a " " a me sale una posicion mas alla deberia ser (  a) no (   a)
 
 CORREGIDO - echo "$ a " no me sale la a.
 
