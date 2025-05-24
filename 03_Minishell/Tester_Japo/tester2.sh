@@ -51,6 +51,7 @@ run_test() {
 run_test 'echo $a""a' 'echo $a""a'
 run_test 'echo $a"" a' 'echo $a"" a'
 run_test 'echo $a" " a' 'echo $a" " a'
+run_test 'echo $a "" a' 'echo $a "" a'
 run_test 'echo $a" $USER"' 'echo $a" $USER"'
 run_test 'echo $a"$USER"' 'echo $a"$USER"'
 run_test 'echo $USERa$HOME' 'echo $USERa$HOME'

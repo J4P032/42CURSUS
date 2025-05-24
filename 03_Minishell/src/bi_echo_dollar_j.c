@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/24 22:23:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 23:00:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*This is when there is an echo $a msg that has to be without space at beggin*/
 /*...or echo -n $a msg that also has to be without space 'msg' even is spaced*/
-/*Later are for cases as $a""a, echo $a"" a* or $a"$USER"*/
+/*Later are for cases as $a""a, echo $a"" a*, $a " " a or $a"$USER"*/
 void	space_after_first_invalid_env(t_input *in, size_t w, size_t i, int on)
 {
 	if (!in->echo_error_n_arg && w == in->word_after_arg)
@@ -34,10 +34,12 @@ void	space_after_first_invalid_env(t_input *in, size_t w, size_t i, int on)
 			i++;
 		if (in->input_split[w][i])
 			ft_printf(" ");
-		else if (in->input_split[w + 1] && in->input_split[w + 1][0] == ' ')
+		else if (in->input_split[w + 1] && in->input_split[w + 1][0] == ' ' && 
+			(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP))
 			ft_printf(" ");
 		else if (in->input_split[w + 1]
-			&& in->input_split[w + 2] && !in->input_split[w + 1][0])
+			&& in->input_split[w + 2] && !in->input_split[w + 1][0]
+			&&	(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP))
 			ft_printf(" ");
 	}
 }
