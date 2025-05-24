@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 17:24:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/22 10:30:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 16:40:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,8 @@ size_t	check_argument(t_input *in, int parsed_n)
 /*I want to check if the echo comes from $VAR or not. so that is the reason...*/
 /*...of running the input to find first char appart from ' or ". If so, the...*/
 /* -n that rules is the one in in->parsed*/
-void	echo_short(t_input *in)
+void	echo_short(t_input *in, int fd)
 {
-	//char	*command;
 	int		parsed_n;
 	size_t	start;
 	size_t	i;
@@ -107,7 +106,9 @@ void	echo_short(t_input *in)
 	if (parsed_n)
 		in->echo_error_n_arg = 1;
 	start = check_argument(in, parsed_n);
-	ft_printf("%s", in->parsed + start);
+	write(fd, in->parsed + start, ft_strlen(in->parsed + start));
+	//ft_printf("%s", in->parsed + start);
 	if (in->echo_error_n_arg == 1)
-		ft_printf("\n");	
+		write(fd, "\n", 1);
+		//ft_printf("\n");	
 }

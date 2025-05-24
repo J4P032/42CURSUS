@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/23 17:39:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 22:23:31 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,11 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 			&& !ft_strrchr(N_ODDCHAR, in->input_split[w][in->idollar]))
 		{
 			in->spaced = 1;
-			ft_printf("%c", in->input_split[w][*i]);	
+			while (in->input_split[w][*i] && in->input_split[w][*i] != '?')
+				ft_printf("%c", in->input_split[w][(*i)++]);	
 		}	
-		(*i)++;
+		if (in->input_split[w][*i] && in->input_split[w][*i] != '?')
+			(*i)++;
 		j++;
 	}
 	

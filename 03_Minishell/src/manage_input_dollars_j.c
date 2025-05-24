@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 12:59:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/23 14:01:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 22:26:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ void	do_even_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 			&& !ft_strrchr(N_ODDCHAR, in->input_split[w][in->idollar]))
 		{
 			in->spaced = 1;
-			in->command[(*k)++] = in->input_split[w][(*i)];
+			while (in->input_split[w][*i] && in->input_split[w][*i] != '?')
+				in->command[(*k)++] = in->input_split[w][(*i)++];
 		}
-		(*i)++;
+		if (in->input_split[w][*i] && in->input_split[w][*i] != '?')
+			(*i)++;
 		j++;
 	}
 }

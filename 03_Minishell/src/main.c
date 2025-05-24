@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/22 10:39:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 22:28:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	main(int argc, char **argv, char **envp)
 		printf("command:%s\n", input.command);
 		printf("arg:%s\n", input.args);
 		for (size_t i = 0; input.split_exp[i]; i++)//
-			ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
+		ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
 		printf("-----SALIDA-----\n"); */
 		
 		ft_manage_pipes(&input);

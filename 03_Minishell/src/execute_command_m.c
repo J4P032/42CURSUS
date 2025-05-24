@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_m.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/22 17:28:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 02:21:23 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
-
 void	update_exit_code_env(t_input *input, int exit_code)
 {
 	char	*new_var;
@@ -103,39 +102,76 @@ char	*join_path(const char *dir, const char *command)
 }
 
 // Busca un ejecutable en los directorios de PATH.
-#include <sys/stat.h> // para stat()
 
-char	*find_executable(char *command, char **envp)
+char *find_executable(char *command, char **envp)
 {
-	char	*path;
-	char	**dirs;
-	char	*full_path;
-	int		i;
+	char *path, **dirs, *full_path;
+	int i;
 	struct stat sb;
+
+	if (!command || command[0] == '\0')
+		return (NULL);
 
 	if (ft_strchr(command, '/'))
 	{
-		if (access(command, X_OK) == 0 && stat(command, &sb) == 0 && S_ISREG(sb.st_mode))
-			return (ft_strdup(command));
-		else
-			return (NULL);
+		if (stat(command, &sb) == 0)
+		{
+			if (S_ISDIR(sb.st_mode))
+			{
+				errno = EISDIR;
+				return (NULL);
+			}
+			if (access(command, X_OK) != 0)
+			{
+				errno = EACCES;
+				return (NULL);
+			}
+			return ft_strdup(command);
+		}
+		return NULL;
 	}
+
 	path = get_path_env(envp);
 	if (!path)
-		return (NULL);
+		return NULL;
+
 	dirs = ft_split(path, ':');
 	if (!dirs)
-		return (NULL);
+		return NULL;
 	i = 0;
 	while (dirs[i])
 	{
-		full_path = join_path(dirs[i++], command);
-		if (full_path && access(full_path, X_OK) == 0 && stat(full_path, &sb) == 0 && S_ISREG(sb.st_mode))
-			return (ft_matrix_free(&dirs), full_path);
+		full_path = join_path(dirs[i], command);
+		if (!full_path)
+			continue;
+
+		if (stat(full_path, &sb) == 0)
+		{
+			if (S_ISDIR(sb.st_mode))
+			{
+				errno = EISDIR;
+				ft_matrix_free(&dirs);
+				free(full_path);
+				return NULL;
+			}
+			if (access(full_path, X_OK) == 0)
+			{
+				ft_matrix_free(&dirs);
+				return full_path;
+			}
+			else
+			{
+				errno = EACCES;
+				ft_matrix_free(&dirs);
+				free(full_path);
+				return NULL;
+			}
+		}
 		free(full_path);
+		i++;
 	}
 	ft_matrix_free(&dirs);
-	return (NULL);
+	return NULL;
 }
 
 
@@ -181,47 +217,66 @@ bool	exec_child(t_input *input, pid_t pid, char *executable)
 	return (free (command_union), true);
 }
 
-// Ejecuta un comando en un proceso hijo con redirección.
-bool	execute_command(t_input *input)
+bool execute_command(t_input *input)
 {
-	char	*executable;
-	pid_t	pid;
-	int		status;
-	int		sig;
+	char *executable;
+	pid_t pid;
+	int status, sig;
 
-	if (!input->input_split || !input->input_split[0])
-		return (false);
+	if (!input->input_split || !input->input_split[0] || !input->command || input->command[0] == '\0')
+	{
+		update_exit_code_env(input, 0);
+		return true;
+	}
+
+	errno = 0;
 	executable = find_executable(input->command, input->envp);
 	if (!executable)
 	{
-		printf("%s: command not found\n", input->command);
-		update_exit_code_env(input, 127);
-		return (false);
+		if (errno == EACCES)
+		{
+			ft_putstr_fd("miniyo: Permission denied\n", 2);
+			update_exit_code_env(input, 126);
+		}
+		else if (errno == EISDIR)
+		{
+			ft_putstr_fd("miniyo: Is a directory\n", 2);
+			update_exit_code_env(input, 126);
+		}
+		else
+		{
+			ft_putstr_fd("miniyo: command not found\n", 2);
+			update_exit_code_env(input, 127);
+		}
+		return false;
 	}
+
 	pid = fork();
-	if (exec_child(input, pid, executable) == 0)
-		return (free(executable), false);
-	
+	if (!exec_child(input, pid, executable))
+	{
+		free(executable);
+		return false;
+	}
+
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	
+
 	if (WIFSIGNALED(status))
-    {
-        sig = WTERMSIG(status);
-        if (sig == SIGINT)
-            write(1, "\n", 1);
-        else if (sig == SIGQUIT)
-            write(1, "Quit (core dumped)\n", 19);
-        update_exit_code_env(input, 128 + sig);
-    }
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			write(1, "\n", 1);
+		else if (sig == SIGQUIT)
+			write(1, "Quit (core dumped)\n", 19);
+		update_exit_code_env(input, 128 + sig);
+	}
 	else if (WIFEXITED(status))
 		update_exit_code_env(input, WEXITSTATUS(status));
 	else
-		update_exit_code_env(input, 1);	
-	
+		update_exit_code_env(input, 1);
+
 	signal(SIGINT, ctrlc_handler);
-	
+
 	free(executable);
-	//return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
-	return (input->last_exit_code == 0);
+	return input->last_exit_code == 0;
 }
