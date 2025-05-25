@@ -6,6 +6,12 @@ hay pruebas para hacer...
 
 (MARIO)
 
+export kk=hellow world (sin commillas) exporta "hello world" cuando solo deberia exportar hello. (esto probado con el antiguo export)
+
+export kk=patata
+export kk=tomate
+env mostrara dos kk. (esto probado con el antiguo export)
+
 export kk=" p" ahora no funciona, cuando antes lo hacia.
 se mete en if (!ft_is_valid_identifier(prepared_input)) la parte de " p" y claro, no es un 
 identificador valido, cuando deberia pararse cuando ha llegado al =. de todas formas esto antes funcionaba.
