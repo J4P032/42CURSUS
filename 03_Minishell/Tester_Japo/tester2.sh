@@ -168,7 +168,7 @@ run_test 'echo $a patata $a "" "" "" "" tomate' 'echo $a patata "" "" "" "" toma
 run_test 'echo patata $a "" "" "" "" tomate' 'echo patata $a "" "" "" "" tomate'
 run_test 'echo patata $a "" "" "" "" $a tomate' 'echo patata $a "" "" "" "" $a tomate'
 run_test 'echo patata $a """""""" $a tomate' 'echo patata $a """""""" $a tomate'
-
 run_test 'echo ""$a""t' 'echo ""$a""t'
 run_test 'echo ""$a"" t' 'echo ""$a"" t'
 run_test 'echo ""$a" " t' 'echo ""$a" " t'
+run_test 'echo ""$a "  " t ""$a "  " t ' 'echo ""$a "  " t ""$a "  " t '

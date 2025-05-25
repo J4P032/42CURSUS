@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/24 23:00:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:48:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@ void	space_after_first_invalid_env(t_input *in, size_t w, size_t i, int on)
 		if (in->input_split[w][i])
 			ft_printf(" ");
 		else if (in->input_split[w + 1] && in->input_split[w + 1][0] == ' ' && 
-			(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP))
+			(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP)
+			&& (w > 0 && in->input_split[w - 1][0]))
 			ft_printf(" ");
 		else if (in->input_split[w + 1]
 			&& in->input_split[w + 2] && !in->input_split[w + 1][0]
-			&&	(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP))
+			&&	(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP)
+			&& (w > 0 && in->input_split[w - 1][0]))
 			ft_printf(" ");
 	}
 }
