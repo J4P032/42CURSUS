@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 16:58:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 14:48:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:05:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ void	token_env_if_even_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 		{
 			dynamic_input(in, *k);
 			in->token[(*k)++] = in->envp[in->env_n][j++];
-			if (in->envp[in->env_n][j] == ' ')
-				break ;
+			/* if (in->envp[in->env_n][j] == ' ')
+				break ; */
 		}
+		in->from_expand = 1;
 	}
 	else
 	{

@@ -14,10 +14,10 @@
 #include "../inc/minishell_j.h"
 
 
-void	ft_manage_input(t_input *input, int in_fd, int out_fd)
+void	ft_manage_input(t_input *input)
 {
-	input->inputfd = in_fd;
-	input->outputfd = out_fd;
+	input->inputfd = STDIN_FILENO;
+	input->outputfd = STDOUT_FILENO;
 	//handle_redirection(input);
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args);

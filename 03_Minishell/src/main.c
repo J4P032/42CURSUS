@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/25 16:28:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:11:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	init_input_struct(t_input *input)
 	input->token = NULL;
 	input->command = NULL;
 	input->args = NULL;
+	input->from_expand = 0;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -78,7 +79,11 @@ int	main(int argc, char **argv, char **envp)
 		ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
 		printf("-----SALIDA-----\n"); */
 		
-		ft_manage_pipes(&input);
+		if (ft_strchr(input.parsed, '|'))
+			ft_manage_pipes(&input);
+		else
+			ft_manage_input(&input);
+
 		free(input.input);
 	}
 	

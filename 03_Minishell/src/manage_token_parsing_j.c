@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 08:58:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/21 17:13:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:34:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,6 @@ void	copy_to_split_expanded(t_input *in, char *token, char ***split_exp)
 	*split_exp = new_token;
 }
 
-
-/* void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
-{
-	int	print_as_env;
-
-	print_as_env = (is_quoted(in, *i) == 2 || !is_quoted(in, *i));
-	if (ft_strrchr(in->input_split[*i], '$') && print_as_env)
-		expand_token_dollar(in, i, j, k);
-	else
-	{
-		in->token[(*k)++] = in->input_split[*i][(*j)++];
-	}
-} */
 void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 {
 	int	print_as_env;
@@ -63,7 +50,13 @@ void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 	else
 	{
 		dynamic_input(in, *k);
+		if (is_quoted(in, *i) && *j == 0)////////////
+			in->token[(*k)++] = '\'';
+		dynamic_input(in, *k);
 		in->token[(*k)++] = in->input_split[*i][(*j)++];
+		dynamic_input(in, *k);
+		if (!in->input_split[*i][(*j)] && is_quoted(in, *i))
+			in->token[(*k)++] = '\'';
 	}
 }
 
@@ -102,6 +95,8 @@ void	copy_to_token(t_input *in, size_t *i, size_t *j, size_t *k)
 	}
 }
 
+/*I will give the in->status_exp[] 0 if not quoted or 1 if quoted...*/
+/*But when the token comes form expand ($) (in->from_expand) will be 2*/
 void	compose_token(t_input *in)
 {
 	size_t	i;
@@ -118,13 +113,16 @@ void	compose_token(t_input *in)
 		k = 0;
 		in->word = i;
 		in->spaced = 0;
+		in->from_expand = 0;
 		in->status_checked = 0;
 		if (in->token)
 			ft_bzero(in->token, ft_strlen(in->token));
 		quoted = (is_quoted(in, i) == 2 || is_quoted(in, i) == 1);
 		copy_to_token(in, &i, &j, &k);
-		if (counter < 100)
+		if (counter < 100 && in->from_expand == 0)
 			in->status_exp[counter] = quoted;
+		else if (counter < 100)
+			in->status_exp[counter] = 2;
 		counter++;
 		copy_to_split_expanded(in, in->token, &in->split_exp);
 	}
