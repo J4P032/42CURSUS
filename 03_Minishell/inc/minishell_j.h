@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/24 16:38:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:12:08 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_input
 	char	*command;
 	char	*args;
 	int		status_exp[100];
+	int		from_expand;
 	size_t	realloc_counter;
 	size_t	word_after_command;
 	size_t	word_after_arg;

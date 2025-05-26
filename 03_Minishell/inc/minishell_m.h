@@ -40,7 +40,6 @@ bool	execute_command(t_input *input);
 void	ft_manage_pipes(t_input *input);
 bool	handle_redirection(t_input *input);
 void	handle_heredoc_redirection(t_input *input, char *redir);
-void	ft_manage_input(t_input *input, int in_fd, int out_fd);
-void	set_local_variable(t_input *input, char *assignment);//se va a usar?
+void	ft_manage_input(t_input *input);
 
 #endif
