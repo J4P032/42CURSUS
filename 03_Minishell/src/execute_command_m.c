@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:49:50 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/24 02:21:23 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:17:42 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,13 @@ bool execute_command(t_input *input)
 	char *executable;
 	pid_t pid;
 	int status, sig;
+
+	// printf("============\nPARSEADO:%s\n==========\n", input->parsed);
+	// printf("command:%s\n", input->command);
+	// printf("arg:%s\n", input->args);
+	// for (size_t i = 0; input->split_exp[i]; i++)
+	// 	ft_printf("%d.%s %d\n", i, input->split_exp[i], input->status_exp[i]);
+	// printf("-----SALIDA-----\n"); 
 
 	if (!input->input_split || !input->input_split[0] || !input->command || input->command[0] == '\0')
 	{

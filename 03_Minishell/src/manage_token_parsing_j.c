@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 08:58:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/26 14:34:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:38:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	copy_to_split_expanded(t_input *in, char *token, char ***split_exp)
 	*split_exp = new_token;
 }
 
+/*to allow search of invalid > or < I put a 0x1F char to identify it. It is...*/
+/*...hidden and not used.*/
 void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 {
 	int	print_as_env;
@@ -51,12 +53,12 @@ void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 	{
 		dynamic_input(in, *k);
 		if (is_quoted(in, *i) && *j == 0)////////////
-			in->token[(*k)++] = '\'';
+			in->token[(*k)++] = 0x1F;
 		dynamic_input(in, *k);
 		in->token[(*k)++] = in->input_split[*i][(*j)++];
 		dynamic_input(in, *k);
 		if (!in->input_split[*i][(*j)] && is_quoted(in, *i))
-			in->token[(*k)++] = '\'';
+			in->token[(*k)++] = 0x1F;
 	}
 }
 

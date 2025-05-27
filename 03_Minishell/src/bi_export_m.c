@@ -3,234 +3,266 @@
 /*                                                        :::      ::::::::   */
 /*   bi_export_m.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:06:31 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/24 16:33:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/26 19:05:23 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
-static void	sort_env(char **env, int size)
+
+char	**dup_env(char **env, int extra)
+{
+	char	**new_env;
+	int		i;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	new_env = malloc(sizeof(char *) * (i + extra + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (env && env[i])
+	{
+		new_env[i] = ft_strdup(env[i]);
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}
+
+void	env_add(char ***envp, char *new_var)
+{
+	char	**new_env;
+	int		i;
+
+	new_env = dup_env(*envp, 1);
+	if (!new_env)
+		return ;
+	i = 0;
+	while (new_env[i])
+		i++;
+	new_env[i] = ft_strdup(new_var);
+	new_env[i + 1] = NULL;
+
+	i = 0;
+	while ((*envp)[i])
+	{
+		free((*envp)[i]);
+		i++;
+	}
+	free(*envp);
+	*envp = new_env;
+}
+
+static char	**env_copy(char **env)
+{
+	char	**copy;
+	int		i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	copy = malloc(sizeof(char *) * (i + 1));
+	if (!copy)
+		return (NULL);
+	i = 0;
+	while (env[i])
+	{
+		copy[i] = ft_strdup(env[i]);
+		i++;
+	}
+	copy[i] = NULL;
+	return (copy);
+}
+
+static void	env_sort(char **env)
 {
 	int		i;
-	int		j;
+	int		swapped;
 	char	*tmp;
 
-	i = 0;
-	while (i < size - 1)
+	swapped = 1;
+	while (swapped)
 	{
-		j = i + 1;
-		while (j < size)
+		i = 0;
+		swapped = 0;
+		while (env[i] && env[i + 1])
 		{
-			if (ft_strcmp(env[i], env[j]) > 0)
+			if (ft_strncmp(env[i], env[i + 1], ft_strlen(env[i]) + 1) > 0)
 			{
 				tmp = env[i];
-				env[i] = env[j];
-				env[j] = tmp;
+				env[i] = env[i + 1];
+				env[i + 1] = tmp;
+				swapped = 1;
 			}
-			j++;
+			i++;
 		}
-		i++;
 	}
 }
 
-void	print_sorted_env(char **envp)
+static void	print_declare(char *env)
 {
-	char	**sorted;
-	int		count = 0;
-	int		i = 0;
-	char	*equal;
+	int		i;
 
-	while (envp[count])
-		count++;
-	sorted = ft_calloc(sizeof(char *), count + 1);
-	if (!sorted)
-		return ;
-	while (i < count)
-	{
-		sorted[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	sort_env(sorted, count);
+	write(1, "declare -x ", 11);
 	i = 0;
-	while (i < count)
+	while (env[i] && env[i] != '=')
 	{
-		equal = ft_strchr(sorted[i], '=');
-		ft_printf("declare -x ");
-		if (equal)
-		{
-			write(1, sorted[i], equal - sorted[i]);
-			ft_printf("=\"%s\"\n", equal + 1);
-		}
-		else
-			ft_printf("%s\n", sorted[i]);
-		free(sorted[i]);
+		write(1, &env[i], 1);
 		i++;
 	}
-	free(sorted);
+	if (env[i] == '=')
+	{
+		write(1, "=\"", 2);
+		write(1, &env[i + 1], ft_strlen(env + i + 1));
+		write(1, "\"", 1);
+	}
+	write(1, "\n", 1);
 }
 
-// ✅ Solo une si el valor está entrecomillado
-char	*join_quoted_value(t_input *input, int start)
+void	export_print_sorted(char **env)
 {
-	char	*joined = NULL;
-	int		i = start;
+	char	**copy;
+	int		i;
 
-	if (!is_quoted(input, i))
-		return (ft_strdup(input->input_split[i])); // NO unir si no está entrecomillado
-
-	while (input->input_split[i])
+	copy = env_copy(env);
+	if (!copy)
+		return ;
+	env_sort(copy);
+	i = 0;
+	while (copy[i])
 	{
-		if (!joined)
-			joined = ft_strdup(input->input_split[i]);
-		else
-		{
-			char *tmp = joined;
-			joined = ft_strjoin(tmp, " ");
-			free(tmp);
-			tmp = joined;
-			joined = ft_strjoin(joined, input->input_split[i]);
-			free(tmp);
-		}
-		if (is_quoted(input, i))
-			break;
+		print_declare(copy[i]);
+		free(copy[i]);
 		i++;
 	}
-	return (joined);
+	free(copy);
 }
 
-bool	ft_manage_shlvl(char *input, char **envp, int i, int len)
+static int	is_valid_key(char *str)
 {
-	int	j = len + 1;
+	int i;
 
-	free(envp[i]);
-	while (input[j])
-	{
-		if (ft_isdigit(input[j++]))
-			continue;
-		envp[i] = ft_strdup("SHLVL=0");
-		return (1);
-	}
-	envp[i] = ft_strdup(input);
-	return (1);
-}
-
-bool	ft_is_valid_identifier(const char *str)
-{
-	int	i;
-
-	if (!str || !str[0])
-		return (false);
-	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (false);
+	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
+		return (0);
 	i = 1;
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (false);
+			return (0);
 		i++;
 	}
-	return (true);
+	// si empieza con '=' o es solo '='
+	if (str[0] == '=' || str[0] == '\0')
+		return (0);
+	return (1);
 }
 
-bool	ft_check_variables(char *input, char **envp)
+
+
+static char	*get_env_key(char *str)
 {
 	int		i;
-	int		len;
-	char	*equal;
+	char	*key;
 
-	if (!ft_is_valid_identifier(input))
-		return (1);
-	equal = ft_strchr(input, '=');
-	if (!equal)
-		return (0); // Solo un nombre, sin valor
-
-	len = equal - input;
 	i = 0;
-	while (envp[i])
+	while (str[i] && str[i] != '=')
+		i++;
+	key = (char *)malloc(sizeof(char) * (i + 1));
+	if (!key)
+		return (NULL);
+	i = 0;
+	while (str[i] && str[i] != '=')
 	{
-		if (ft_strncmp(envp[i], input, len) == 0 && envp[i][len] == '=')
-		{
-			if (ft_strncmp("SHLVL", input, len) == 0)
-				return (ft_manage_shlvl(input, envp, i, len), 1);
-			free(envp[i]);
-			envp[i] = ft_strdup(input);
-			return (!envp[i]); // return 1 on success
-		}
+		key[i] = str[i];
 		i++;
 	}
-	return (0);
+	key[i] = '\0';
+	return (key);
 }
 
-void	ft_add_to_env(char *new_var, char ***envp)
+static void	update_shlvl(char **arg)
 {
-	int		i = 0;
-	char	**new_env;
+	int		value;
 
-	while ((*envp)[i])
-		i++;
-	new_env = ft_calloc(i + 2, sizeof(char *));
-	if (!new_env)
-		return ;
-	i = 0;
-	while ((*envp)[i])
+	if (ft_strncmp(*arg, "SHLVL=", 6) == 0)
 	{
-		new_env[i] = ft_strdup((*envp)[i]);
-		if (!new_env[i])
+		value = ft_atoi(*arg + 6);
+		if (value < 0 || !ft_isdigit((*arg)[6]))
 		{
-			ft_matrix_free(&new_env);
+			free(*arg);
+			*arg = ft_strdup("SHLVL=0");
+		}
+	}
+}
+
+static void	export_var(char *arg, char ***envp)
+{
+	char	**env;
+	char	*key;
+	int		i;
+	int		len;
+
+	key = get_env_key(arg);
+	if (!key)
+		return ;
+	env = *envp;
+	i = 0;
+	len = ft_strlen(key);
+	while (env && env[i])
+	{
+		if (ft_strncmp(env[i], key, len) == 0 &&
+			(env[i][len] == '=' || env[i][len] == '\0'))
+		{
+			free(env[i]);
+			env[i] = ft_strdup(arg);
+			free(key);
 			return ;
 		}
 		i++;
 	}
-	new_env[i] = ft_strdup(new_var);
-	if (!new_env[i])
+	env_add(envp, arg); // solo lo añade si no existe
+	free(key);
+}
+
+static void	export_args(t_input *input, char ***envp)
+{
+	int		i;
+	int		error_flag;
+
+	i = 1;
+	error_flag = 0;
+	while (input->split_exp[i])
 	{
-		ft_matrix_free(&new_env);
-		return ;
+		if (is_valid_key(input->split_exp[i]))
+		{
+			if (ft_strncmp(input->split_exp[i], "SHLVL=", 6) == 0)
+				update_shlvl(&input->split_exp[i]);
+			export_var(input->split_exp[i], envp);
+		}
+		else
+		{
+			ft_putstr_fd("export: not a valid identifier\n", 2);
+			error_flag = 1;
+		}
+		i++;
 	}
-	ft_matrix_free(envp);
-	*envp = new_env;
+	input->last_exit_code = error_flag;
 }
 
 
 void	ft_export(t_input *input, char ***envp)
 {
-	int		i;
-	int		env_position;
-	char	**new_env;
-
-	if (ft_check_variables(input->parsed, *envp) == 1)
-	{
-		input->last_exit_code = 1;
-		ft_putstr_fd("miniyo: export: not a valid identifier\n", 2);
-		return ;
-	}
-	i = 0;
-	env_position = 0;
-	while ((*envp)[env_position])
-		env_position++;
-	new_env = ft_calloc(env_position + 2, sizeof(char *));
-	if (!new_env)
-		return ; //LIBERARMOS TODO Y FUERA CLEAN_ALL
-	while (i < env_position) //SI SALE DE CHECK_VARIABLE con 0 al fallar el strdup no llegara al final de todo envp ya que uno por medio sera NULL
-	{
-		new_env[i] = ft_strdup((*envp)[i]);
-		if (!new_env[i++])
-			return (ft_matrix_free(&new_env));
-	}
-	new_env[i++] = ft_strdup(input->parsed);
-	if (new_env[i])//NO LO ENTIENDO (JAVI). si fuera if (envp[i]) si por que podriamos detectar el no NULL del fallo de envp pero si por si falla este strdup aqui, si se hacho sobre una i = 2, aqui estas compararon i = 3, ya que se incrementó en el strdup
-		return (ft_matrix_free(&new_env));
-	ft_matrix_free(envp);
-	*envp = new_env;
+	input->last_exit_code = 0;
+	if (!input->split_exp[1])
+		export_print_sorted(*envp);
+	else
+		export_args(input, envp);
 }
-
-
-
-
 
 
 /* void	ft_export(t_input *input, char ***envp)

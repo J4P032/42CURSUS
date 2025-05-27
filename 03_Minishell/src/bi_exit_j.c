@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_exit_j.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 11:16:14 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/19 16:25:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/27 01:59:52 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /*"    32   " will be ok. "   32    b  " not.*/
 /*1. run all spaces. 2. run if char is digit. 3. Again all spaces if not 0 bad*/
+/*
 int	valid_exit_quoted(t_input *in)
 {
 	size_t	token;
@@ -37,6 +38,34 @@ int	valid_exit_quoted(t_input *in)
 	}
 	return (1);
 }
+*/
+
+int valid_exit_quoted(t_input *in)
+{
+    size_t token = in->word_after_arg - 1;
+    size_t i = 0;
+
+    if (is_quoted(in, token) == 0)
+        return 1;
+    while (in->parsed[i] && in->parsed[i] == ' ')
+        i++;
+    if (in->parsed[i] == '+' || in->parsed[i] == '-')
+        i++;
+    if (!ft_isdigit(in->parsed[i]))
+        return 0;
+
+    while (ft_isdigit(in->parsed[i]))
+        i++;
+
+    while (in->parsed[i] && in->parsed[i] == ' ')
+        i++;
+
+    if (in->parsed[i] != '\0')
+        return 0;
+
+    return 1;
+}
+
 
 int	more_args(char *big, char *small)
 {
@@ -60,7 +89,8 @@ void	exit_miniyo(t_input *in, int num_exit)
 	if (num_exit == 2)
 	{
 		ft_printf("exit\n");
-		ft_printf("miniyo: exit: %s: numeric argument required\n", in->args);
+		ft_putstr_fd("miniyo: exit: numeric argument required\n", 2);
+		//ft_printf("miniyo: exit: %s: numeric argument required\n", in->args);
 	}
 	clean_all(in, num_exit);
 	if (num_exit == 0)
@@ -88,7 +118,7 @@ void	ft_exit(t_input *in)
 			exit_miniyo(in, arg & 0xFF);
 		else
 		{
-			ft_printf("exit\nminiyo: exit: too many arguments\n");
+			ft_putstr_fd("miniyo: exit: too many arguments\n", 2);
 			in->last_exit_code = 1;
 		}
 	}
