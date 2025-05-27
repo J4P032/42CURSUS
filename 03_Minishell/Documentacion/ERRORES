@@ -6,6 +6,8 @@ hay pruebas para hacer...
 
 (MARIO)
 
+ls $a deberia mostrar el ls normal como bash... pero dice que no tiene ese directorio.
+
 export kk=hellow world (sin commillas) exporta "hello world" cuando solo deberia exportar hello. (esto probado con el antiguo export)
 
 export kk=patata

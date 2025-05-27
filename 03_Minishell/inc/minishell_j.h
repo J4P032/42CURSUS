@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:30:16 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/26 12:12:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:50:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ void	token_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);///
 void	token_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);///
 void	token_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);///
 void	compose_token(t_input *in);
-
 void	dynamic_input(t_input *in, size_t k);
 void	dynamic_command(t_input *in, size_t k);
 void	dynamic_arg(t_input *in, size_t k);
+void	remove_control_char(char *string);
 
 //BUILT INS
 void	echo_short(t_input *in, int fd);
