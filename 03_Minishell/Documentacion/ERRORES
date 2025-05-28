@@ -8,6 +8,9 @@ hay pruebas para hacer...
 
 ls $a deberia mostrar el ls normal como bash... pero dice que no tiene ese directorio.
 
+ls -la "|" wc muestra el listado como si se hiciera un ls -la. Deberia mostrar no such file or directory
+ls "|" wc, lo hace bien.
+
 export kk=hellow world (sin commillas) exporta "hello world" cuando solo deberia exportar hello. (esto probado con el antiguo export)
 
 export kk=patata
@@ -21,7 +24,7 @@ identificador valido, cuando deberia pararse cuando ha llegado al =. de todas fo
 <Makefile<obj>file>file2>>append echo hola deberia hacer un file file 2... 
 no se si es mio. ya que hay que separar los < y >
 
-IMPORTANTE: el heardoc si haces
+el heredoc si haces
 << $USER cat el terminador ya no se expandira.. es decir no sera jrollon-, sino que sera el literal
 $USER.
 
@@ -34,7 +37,7 @@ $USER
 end
 debe imprimir $USER (HAY QUE MATAR AL QUE HIZO EL BASH)
 
-export $a hara lo mismo que en export solo si $a no existe
+export $a hara lo mismo que en export (mostrar todos los env con "declare -x" al principio. Solo si $a no existe
 
 echo < fichero tiene que devolver un valor especifico.. pero ahora no esta haciendo nada mas que < fichero
 
