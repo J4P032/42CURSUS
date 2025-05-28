@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/27 14:20:14 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/28 22:14:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ int	main(int argc, char **argv, char **envp)
 		}
 		compose_command_args(&input);
 		parsing(&input);
-		/*
-		 printf("============\nPARSEADO:%s\n==========\n", input.parsed);
+		
+		/*  printf("============\nPARSEADO:%s\n==========\n", input.parsed);
 		printf("command:%s\n", input.command);
 		printf("arg:%s\n", input.args);
 		for (size_t i = 0; input.split_exp[i]; i++)//
 		ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
-		printf("-----SALIDA-----\n"); 
-		*/
+		printf("-----SALIDA-----\n"); */ 
+		//printf("%s\n", input.command); //para hacer mi script de commandos al hacer normi
 		ft_manage_pipes(&input);
 		free(input.input);
 	}

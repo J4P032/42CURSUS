@@ -13,6 +13,31 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
+char *join_command(char **split_exp, int start, int end) {
+    int i;
+    size_t len = 0;
+    char *joined;
+
+    // Calculate total length
+    for (i = start; i < end; i++) {
+        len += strlen(split_exp[i]) + 1;
+    }
+
+    joined = malloc(len + 1);
+    if (!joined)
+        return NULL;
+    
+    joined[0] = '\0';
+    for (i = start; i < end; i++) {
+        strcat(joined, split_exp[i]);
+        if (i < end - 1)
+            strcat(joined, " ");
+    }
+
+    return joined;
+}
+
+
 int	count_pipes(t_input *input)
 {
 	int	i;
@@ -30,86 +55,103 @@ int	count_pipes(t_input *input)
 }
 void execute_pipeline(t_input *input)
 {
-	int num_cmds = count_pipes(input) + 1;
-	int prev_fd = -1;
-	int cmd_start = 0;
-	pid_t last_pid = -1;
+    int num_cmds = count_pipes(input) + 1;
+    int prev_fd = -1;
+    int cmd_start = 0;
+    pid_t last_pid = -1;
 
-	for (int cmd = 0; cmd < num_cmds; cmd++)
-	{
-		int pipefd[2];
-		int i, cmd_end = cmd_start;
+    for (int cmd = 0; cmd < num_cmds; cmd++)
+    {
+        int pipefd[2];
+        int i, cmd_end = cmd_start;
 
-		// Localiza el fin de este comando
-		while (input->split_exp[cmd_end] &&
-			!(ft_strcmp(input->split_exp[cmd_end], "|") == 0 && input->status_exp[cmd_end] == 0))
-			cmd_end++;
+        // Localiza el fin de este comando
+        while (input->split_exp[cmd_end] &&
+               !(ft_strcmp(input->split_exp[cmd_end], "|") == 0 && input->status_exp[cmd_end] == 0))
+            cmd_end++;
 
-		// Construye args
-		int argc = cmd_end - cmd_start;
-		char **args = malloc(sizeof(char *) * (argc + 1));
-		for (i = 0; i < argc; i++)
-			args[i] = input->split_exp[cmd_start + i];
-		args[i] = NULL;
+        // Construye args con strdup para evitar punteros a memoria liberada
+        int argc = cmd_end - cmd_start;
+        char **args = malloc(sizeof(char *) * (argc + 1));
+        if (!args)
+        {
+            perror("malloc");
+            exit(EXIT_FAILURE);
+        }
+        for (i = 0; i < argc; i++)
+            args[i] = ft_strdup(input->split_exp[cmd_start + i]);
+        args[i] = NULL;
 
-		if (cmd < num_cmds - 1)
-		{
-			if (pipe(pipefd) == -1)
-			{
-				perror("pipe");
-				exit(EXIT_FAILURE);
-			}
-		}
+        // Crear pipe solo si no es el último comando
+        if (cmd < num_cmds - 1)
+        {
+            if (pipe(pipefd) == -1)
+            {
+                perror("pipe");
+                exit(EXIT_FAILURE);
+            }
+        }
 
-		pid_t pid = fork();
-		if (pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
+        pid_t pid = fork();
+        if (pid == -1)
+        {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        }
 
-		if (pid == 0) // Hijo
-		{
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, 0);
-				close(prev_fd);
-			}
-			if (cmd < num_cmds - 1)
-			{
-				close(pipefd[0]);
-				dup2(pipefd[1], 1);
-				close(pipefd[1]);
-			}
-			execvp(args[0], args);
-			exit(EXIT_FAILURE);
-		}
-		else // Padre
-		{
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (cmd < num_cmds - 1)
-			{
-				close(pipefd[1]);
-				prev_fd = pipefd[0];
-			}
-			free(args);
-			last_pid = pid; // Guardamos el último PID
-		}
+        if (pid == 0) // Hijo
+        {
+            if (prev_fd != -1)
+            {
+                dup2(prev_fd, STDIN_FILENO);
+                close(prev_fd);
+            }
+            if (cmd < num_cmds - 1)
+            {
+                close(pipefd[0]);
+                dup2(pipefd[1], STDOUT_FILENO);
+                close(pipefd[1]);
+            }
 
-		cmd_start = cmd_end + 1;
-	}
+            execvp(args[0], args);
+            perror("execvp");
+            // Liberar memoria en hijo si quieres (opcional ya que el exec reemplaza)
+            for (i = 0; args[i]; i++)
+                free(args[i]);
+            free(args);
 
-	// Espera a todos y guarda el exit code del último hijo
-	int status;
-	pid_t wpid;
-	while ((wpid = wait(&status)) > 0)
-	{
-		if (wpid == last_pid && WIFEXITED(status))
-			input->last_exit_code = WEXITSTATUS(status);
-	}
+            exit(EXIT_FAILURE);
+        }
+        else // Padre
+        {
+            if (prev_fd != -1)
+                close(prev_fd);
+            if (cmd < num_cmds - 1)
+            {
+                close(pipefd[1]);
+                prev_fd = pipefd[0];
+            }
+
+            // Liberar args (copia profunda) en padre
+            for (i = 0; args[i]; i++)
+                free(args[i]);
+            free(args);
+
+            last_pid = pid;
+        }
+
+        cmd_start = cmd_end + 1;
+    }
+
+    // Espera a todos y guarda el exit code del último hijo
+    int status;
+    pid_t wpid;
+    while ((wpid = wait(&status)) > 0)
+    {
+        if (wpid == last_pid && WIFEXITED(status))
+            input->last_exit_code = WEXITSTATUS(status);
+    }
 }
-
 
 void ft_manage_pipes(t_input *input)
 {

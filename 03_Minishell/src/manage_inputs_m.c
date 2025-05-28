@@ -16,8 +16,8 @@
 
 void	ft_manage_input(t_input *input)
 {
-	input->inputfd = STDIN_FILENO;
-	input->outputfd = STDOUT_FILENO;
+	//input->inputfd = STDIN_FILENO;
+	//input->outputfd = STDOUT_FILENO;
 	//handle_redirection(input);
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args);
@@ -36,5 +36,6 @@ void	ft_manage_input(t_input *input)
 	else
 		execute_command(input);
 	input->last_dollar_ = ft_last_str(input->split_exp);
-	ft_input_free(input);
+	//input->last_exit_code = WEXITSTATUS(*input->status);
+	//ft_input_free(input);
 }
