@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:09:14 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/22 10:44:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:31:08 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ void	ft_input_free(t_input *input)
 {
 	ft_matrix_free(&input->input_split);
 	ft_matrix_free(&input->split_exp);
+	if (input->input)
+		free(input->input);
+	input->input = NULL;
 	if (input->status)
 		free(input->status);
 	input->status = NULL;
@@ -47,6 +50,10 @@ void	ft_input_free(t_input *input)
 		free(input->filename);
 	input->filename = NULL;
 	if (input->parsed)
-		free(input->parsed);
+		free(input->parsed);	
+	if (input->args)
+		free(input->args);
+	input->args = NULL;
 	input->parsed = NULL;
 }
+
