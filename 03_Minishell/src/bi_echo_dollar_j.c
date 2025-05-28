@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 00:12:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/25 16:48:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/28 12:32:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,31 @@
 /*This is when there is an echo $a msg that has to be without space at beggin*/
 /*...or echo -n $a msg that also has to be without space 'msg' even is spaced*/
 /*Later are for cases as $a""a, echo $a"" a*, $a " " a or $a"$USER"*/
-void	space_after_first_invalid_env(t_input *in, size_t w, size_t i, int on)
+void	space_after_first_invalid_env(t_input *n, size_t w, size_t i, int on)
 {
-	if (!in->echo_error_n_arg && w == in->word_after_arg)
+	if (!n->echo_error_n_arg && w == n->word_after_arg)
 	{
-		in->word_after_arg++;
-		in->spaced = 0;
+		n->word_after_arg++;
+		n->spaced = 0;
 	}
-	else if (w == in->word_after_command)
+	else if (w == n->word_after_command)
 	{
-		in->word_after_command++;
-		in->spaced = 0;
+		n->word_after_command++;
+		n->spaced = 0;
 	}
 	if (on)
 	{
-		while (ft_isalnum(in->input_split[w][i]) && in->input_split[w][i])
+		while (ft_isalnum(n->input_split[w][i]) && n->input_split[w][i])
 			i++;
-		if (in->input_split[w][i])
+		if (n->input_split[w][i])
 			ft_printf(" ");
-		else if (in->input_split[w + 1] && in->input_split[w + 1][0] == ' ' && 
-			(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP)
-			&& (w > 0 && in->input_split[w - 1][0]))
+		else if (n->input_split[w + 1] && n->input_split[w + 1][0] == ' ' && 
+			(n->status[w + 1] == SQUO_NSP || n->status[w + 1] == DQUO_NSP)
+			&& (w > 0 && n->input_split[w - 1][0]))
 			ft_printf(" ");
-		else if (in->input_split[w + 1]
-			&& in->input_split[w + 2] && !in->input_split[w + 1][0]
-			&&	(in->status[w + 1] == SQUO_NSP || in->status[w + 1] == DQUO_NSP)
-			&& (w > 0 && in->input_split[w - 1][0]))
+		else if (n->input_split[w + 1] && (w > 0 && n->input_split[w - 1][0])
+			&& n->input_split[w + 2] && !n->input_split[w + 1][0]
+			&&	(n->status[w + 1] == SQUO_NSP || n->status[w + 1] == DQUO_NSP))
 			ft_printf(" ");
 	}
 }
@@ -208,6 +207,15 @@ void	print_invalid_envs(t_input *in, size_t w, size_t *i, int env_n)
 	}
 }
 
+/*for cases like echo "$ a". $ alone ones*/
+void	check_previous_dollar(t_input *in, size_t w, size_t *i)
+{
+	if (*i > 0 && in->input_split[w][*i] == ' ' 
+		&& in->input_split[w][(*i) - 1] == '$')
+		ft_printf("%c", in->input_split[w][*i]);
+	(*i)++;
+}
+
 /*idollar is the index of the next char after the last $ found*/
 void	manage_dollar(t_input *in, size_t w, int spaced)
 {
@@ -232,11 +240,6 @@ void	manage_dollar(t_input *in, size_t w, int spaced)
 			print_invalid_envs(in, w, &i, in->env_n);
 		}
 		if (in->input_split[w][i] && in->input_split[w][i] != '$')
-		{
-			if (i > 0 && in->input_split[w][i] == ' ' 
-				&& in->input_split[w][(i) - 1] == '$')
-				ft_printf("%c", in->input_split[w][i]);
-			i++;
-		}
+			check_previous_dollar(in, w, &i);
 	}
 }

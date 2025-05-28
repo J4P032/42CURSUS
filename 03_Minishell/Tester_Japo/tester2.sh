@@ -61,6 +61,8 @@ run_test 'echo "$?u "' 'echo "$?u "'
 run_test 'echo "$? us "' 'echo "$? us "'
 export kk=-n
 run_test 'echo $kk patata' 'echo $kk patata'
+export kk="-nnn -na patata"
+run_test 'echo $kk tomate' 'echo $kk tomate'
 run_test 'echo $a' 'echo $a'
 #run_test 'echo $"mgs"' 'echo $"mgs"'
 #run_test "echo $'msg'" "echo $'msg'"
@@ -172,3 +174,10 @@ run_test 'echo ""$a""t' 'echo ""$a""t'
 run_test 'echo ""$a"" t' 'echo ""$a"" t'
 run_test 'echo ""$a" " t' 'echo ""$a" " t'
 run_test 'echo ""$a "  " t ""$a "  " t ' 'echo ""$a "  " t ""$a "  " t '
+run_test '>kk echo patata' 'echo patata'
+run_test '> kk echo patata' 'echo patata'
+run_test '>kk echo -n patata' 'echo -n patata'
+run_test '>kk echo -nnnnn -na patata' 'echo -nnnnn -na patata'
+run_test '>kk echo -nnnnn' 'echo -nnnnn'
+run_test '>kk echo' 'echo'
+

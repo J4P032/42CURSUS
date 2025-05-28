@@ -13,132 +13,110 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-char **ft_subarray(char **array, int start, int end)
+int	count_pipes(t_input *input)
 {
-	int		len = end - start;
-	char	**new_array = malloc(sizeof(char *) * (len + 1));
-	int		i = 0;
+	int	i;
+	int	count;
 
-	if (!new_array)
-		return (NULL);
-	while (start < end && array[start])
-	{
-		new_array[i] = ft_strdup(array[start]);
-		if (!new_array[i])
-		{
-			// En caso de error, liberar lo ya duplicado
-			while (--i >= 0)
-				free(new_array[i]);
-			free(new_array);
-			return (NULL);
-		}
-		i++;
-		start++;
-	}
-	new_array[i] = NULL;
-	return (new_array);
-}
-void	copy_input_partial(t_input *src, t_input *dest)
-{
-	dest->envp = ft_matrix_dup(src->envp); // Asegúrate de tener esta función
-	dest->last_exit_code = src->last_exit_code;
-	dest->is_script = src->is_script;
-
-	dest->input = NULL;
-	dest->input_split = NULL;
-	dest->parsed = NULL;
-	dest->command = NULL;
-	dest->args = NULL;
-	dest->split_exp = NULL;
-
-	dest->inputfd = STDIN_FILENO;
-	dest->outputfd = STDOUT_FILENO;
-}
-
-
-
-
-void	ft_manage_pipes(t_input *input)
-{
-	int		num_cmds = 1;
-	int		num_pipes = 0;
-	int		i = 0;
-
-	// Contar comandos separados por pipes reales
+	i = 0;
+	count = 0;
 	while (input->split_exp[i])
 	{
 		if (ft_strcmp(input->split_exp[i], "|") == 0 && input->status_exp[i] == 0)
-			num_cmds++;
+			count++;
 		i++;
 	}
-	num_pipes = num_cmds - 1;
+	return (count);
+}
+void execute_pipeline(t_input *input)
+{
+	int num_cmds = count_pipes(input) + 1;
+	int prev_fd = -1;
+	int cmd_start = 0;
+	pid_t last_pid = -1;
 
-	int		pipefd[num_pipes][2];
-	pid_t	pids[num_cmds];
-
-	// Crear pipes
-	for (int i = 0; i < num_pipes; i++)
-		if (pipe(pipefd[i]) == -1)
-			perror("pipe");
-
-	// Ejecutar cada comando
-	int start = 0;
 	for (int cmd = 0; cmd < num_cmds; cmd++)
 	{
-		// Encontrar el fin del comando actual
-		int end = start;
-		while (input->split_exp[end] &&
-			!(ft_strcmp(input->split_exp[end], "|") == 0 && input->status_exp[end] == 0))
-			end++;
+		int pipefd[2];
+		int i, cmd_end = cmd_start;
 
-		// Crear nuevo input para el subcomando
-		t_input sub_input;
-		copy_input_partial(input, &sub_input); // Debes implementar esto para copiar solo los necesarios
-		sub_input.input_split = ft_subarray(input->split_exp, start, end); // Igual, debes implementar esto
-		compose_command_args(&sub_input);
-		parsing(&sub_input);
+		// Localiza el fin de este comando
+		while (input->split_exp[cmd_end] &&
+			!(ft_strcmp(input->split_exp[cmd_end], "|") == 0 && input->status_exp[cmd_end] == 0))
+			cmd_end++;
 
-		pids[cmd] = fork();
-		if (pids[cmd] == 0)
+		// Construye args
+		int argc = cmd_end - cmd_start;
+		char **args = malloc(sizeof(char *) * (argc + 1));
+		for (i = 0; i < argc; i++)
+			args[i] = input->split_exp[cmd_start + i];
+		args[i] = NULL;
+
+		if (cmd < num_cmds - 1)
 		{
-			// Redirecciones pipe
-			if (cmd > 0)
+			if (pipe(pipefd) == -1)
 			{
-				dup2(pipefd[cmd - 1][0], STDIN_FILENO);
+				perror("pipe");
+				exit(EXIT_FAILURE);
+			}
+		}
+
+		pid_t pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
+
+		if (pid == 0) // Hijo
+		{
+			if (prev_fd != -1)
+			{
+				dup2(prev_fd, 0);
+				close(prev_fd);
 			}
 			if (cmd < num_cmds - 1)
 			{
-				dup2(pipefd[cmd][1], STDOUT_FILENO);
+				close(pipefd[0]);
+				dup2(pipefd[1], 1);
+				close(pipefd[1]);
 			}
-			// Cerrar todos los pipes en hijo
-			for (int k = 0; k < num_pipes; k++)
-			{
-				close(pipefd[k][0]);
-				close(pipefd[k][1]);
-			}
-			ft_manage_input(&sub_input);
-			clean_all(&sub_input, 0);
-			exit(0); // O exit(sub_input.last_exit_code);
+			execvp(args[0], args);
+			exit(EXIT_FAILURE);
 		}
-		// Liberar subinput si hace falta
-		ft_input_free(&sub_input);
+		else // Padre
+		{
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (cmd < num_cmds - 1)
+			{
+				close(pipefd[1]);
+				prev_fd = pipefd[0];
+			}
+			free(args);
+			last_pid = pid; // Guardamos el último PID
+		}
 
-		start = end + 1;
+		cmd_start = cmd_end + 1;
 	}
 
-	// Cerrar todos los pipes en el padre
-	for (int i = 0; i < num_pipes; i++)
+	// Espera a todos y guarda el exit code del último hijo
+	int status;
+	pid_t wpid;
+	while ((wpid = wait(&status)) > 0)
 	{
-		close(pipefd[i][0]);
-		close(pipefd[i][1]);
-	}
-
-	// Esperar a todos los hijos
-	for (int i = 0; i < num_cmds; i++)
-	{
-		int status;
-		waitpid(pids[i], &status, 0);
-		if (i == num_cmds - 1) // Último comando define el exit status
+		if (wpid == last_pid && WIFEXITED(status))
 			input->last_exit_code = WEXITSTATUS(status);
 	}
+}
+
+
+void ft_manage_pipes(t_input *input)
+{
+	if (count_pipes(input) == 0)
+		ft_manage_input(input);  // Ya lo tenías definido
+	else
+		execute_pipeline(input);
+	if (input)
+		ft_input_free(input);
 }

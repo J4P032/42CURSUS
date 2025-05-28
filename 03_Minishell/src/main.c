@@ -80,24 +80,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
 		printf("-----SALIDA-----\n"); 
 		*/
-		int i;
-		bool pipe;
-		pipe = false;
-		i = 0;
-		while (input.split_exp[i])
-		{
-			if (ft_strcmp(input.split_exp[i], "|") == 0 && input.status_exp[i] == 0)
-			{
-				ft_manage_pipes(&input);
-				pipe = true;
-				break ;
-			}
-			i++;	
-		}
-		if (!pipe)
-		{
-			ft_manage_input(&input);
-		}
+		ft_manage_pipes(&input);
 		free(input.input);
 	}
 	
