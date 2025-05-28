@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 14:14:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/20 16:57:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:00:13 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ size_t	invalidlen_env(const char *str)
 
 	i = 1;
 	if (ft_isdigit(str[0]) || !str[0] || ft_strrchr(D_Y_ODDCHAR, str[0])
-			|| ft_strrchr(N_ODDCHAR, str[0]) || str[0] == ' ') ///cuidado con ' ' que a lo mejor esta bien si es considerado luego con comillas dobles
+		|| ft_strrchr(N_ODDCHAR, str[0]) || str[0] == ' ')
 		return (0);
 	while (str && str[i])
 	{
@@ -67,7 +67,7 @@ void	print_rest_no_env(t_input *in, size_t w, size_t *i)
 		while (str[j] != '$')
 		{
 			if (is_digit || ft_strrchr(N_ODDCHAR, str[j])
-					|| ft_strrchr(D_Y_ODDCHAR, str[j]))
+				|| ft_strrchr(D_Y_ODDCHAR, str[j]))
 				break ;
 			j--;
 		}
@@ -83,10 +83,10 @@ void	print_rare_cases(t_input *in, size_t w, size_t *i)
 {
 	char	*str;
 	size_t	index;
-	
+
 	index = in->idollar;
 	str = in->input_split[w];
-	if (in->dollars % 2)// && in->input_split[w][*i])
+	if (in->dollars % 2)
 	{
 		ft_printf("%c", str[index]);
 		(*i) = index;
@@ -95,12 +95,13 @@ void	print_rare_cases(t_input *in, size_t w, size_t *i)
 	if (!str[index] && in->input_split[w][*i])
 		ft_printf("$");
 	else if ((ft_isdigit(str[index]) || ft_strrchr(N_ODDCHAR, str[index])
-		|| ft_strrchr(D_Y_ODDCHAR, str[index])) && str[index])
+			|| ft_strrchr(D_Y_ODDCHAR, str[index])) && str[index])
 	{
-		if (str[index] && !str[index + 1] && !ft_strrchr(D_Y_ODDCHAR, str[index]))
+		if (str[index] && !str[index + 1]
+			&& !ft_strrchr(D_Y_ODDCHAR, str[index]))
 			in->spaced = 0;
 		if (ft_strrchr(D_Y_ODDCHAR, str[index]))
-			ft_printf("$%c",str[index]);
+			ft_printf("$%c", str[index]);
 		(*i) = index;
 	}
 }
@@ -129,7 +130,8 @@ int	valid_env(const char *str, t_input *in, size_t w)
 		{
 			if (dqu && (validlen_env(str, ' ') == envlen || str[envlen] == '$'))
 				return (n);
-			else if (!dqu && (validlen_env(str, '\0') == envlen || str[envlen] == '$'))
+			else if (!dqu
+				&& (validlen_env(str, '\0') == envlen || str[envlen] == '$'))
 				return (n);
 		}
 		n++;
