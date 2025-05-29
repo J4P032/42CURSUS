@@ -6,172 +6,155 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 01:26:18 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/24 01:43:50 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/29 23:26:04 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-void remove_redirections_from_input(t_input *input)
+bool ft_manage_input_redirection(t_input *input, int i, bool lonely)
 {
-	char	*clean_input;
-	size_t	i = 0, j = 0;
-	bool	sq = false, dq = false;
+    char *filename;
 
-	clean_input = malloc(ft_strlen(input->input) + 1);
-	while (input->input[i])
+    if (lonely)
+        filename = input->split_exp[i + 1];
+    else
+        filename = input->split_exp[i] + ft_strlen("<");
+    if (input->inputfd > 2)
+        close(input->inputfd);
+
+    input->inputfd = open(filename, O_RDONLY);
+    if (input->inputfd == -1)
 	{
-		if (input->input[i] == '\'' && !dq)
-			sq = !sq;
-		else if (input->input[i] == '"' && !sq)
-			dq = !dq;
-		else if (!sq && !dq && (input->input[i] == '<' || input->input[i] == '>'))
-		{
-			size_t skip = 1;
-			if (input->input[i + 1] == '<' || input->input[i + 1] == '>')
-				skip++;
-			i += skip;
-			while (input->input[i] == ' ')
-				i++;
-			while (input->input[i] && input->input[i] != ' ' && input->input[i] != '<' && input->input[i] != '>')
-			{
-				if (input->input[i] == '"' || input->input[i] == '\'')
-					break;
-				i++;
-			}
-			continue;
-		}
-		clean_input[j++] = input->input[i++];
+		input->last_exit_code = 1;
+		ft_putstr_fd("miniyo: No such file or directory\n", 2);
+		return (0);
 	}
-	clean_input[j] = '\0';
-	free(input->input);
-	input->input = clean_input;
+	update_input(input, i, lonely);
+	return (1);
 }
 
-
-static void	handle_append_redirection(t_input *input, char *redir)
+bool ft_manage_output_redirection(t_input *input, int i, bool lonely)
 {
-	char	*filename;
-	char	*end;
+    char *filename;
 
-	*redir = '\0';
-	redir += 2;
-	while (*redir == ' ')
-		redir++;
-	filename = ft_strdup(redir);
-	end = filename + ft_strlen(filename) - 1;
-	while (end > filename && (*end == ' ' || *end == '\n'))
-		*end-- = '\0';
-	input->outputfd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	free(filename);
+    if (lonely)
+        filename = input->split_exp[i + 1];
+    else
+        filename = input->split_exp[i] + ft_strlen(">");
+    if (input->outputfd > 2)
+        close(input->outputfd);
+
+    input->outputfd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (input->outputfd == -1)
+    {
+        input->last_exit_code = 1;
+        ft_putstr_fd("miniyo: Permission denied\n", 2);
+        return (0);
+    }
+    update_input(input, i, lonely);
+    return (1);
 }
 
-static void	handle_output_redirection(t_input *input, char *redir)
+bool ft_manage_append_redirection(t_input *input, int i, bool lonely)
 {
-	char	*filename;
-	char	*end;
+    char *filename;
 
-	*redir = '\0';
-	redir++;
-	while (*redir == ' ')
-		redir++;
-	filename = ft_strdup(redir);
-	end = filename + ft_strlen(filename) - 1;
-	while (end > filename && (*end == ' ' || *end == '\n'))
-		*end-- = '\0';
-	input->outputfd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	free(filename);
+    if (lonely)
+        filename = input->split_exp[i + 1];
+    else
+        filename = input->split_exp[i] + ft_strlen(">>");
+    if (input->outputfd > 2)
+        close(input->outputfd);
+
+    input->outputfd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if (input->outputfd == -1)
+    {
+        input->last_exit_code = 1;
+        ft_putstr_fd("miniyo: Permission denied\n", 2);
+        return (0);
+    }
+    update_input(input, i, lonely);
+    return (1);
 }
 
-static void	handle_input_redirection(t_input *input, char *redir)
+bool ft_manage_redirection(t_input *input, char *search, int i, bool lonely)
 {
-	char	*filename;
-	char	*end;
+	if (ft_strcmp(search, "<") == 0)
+		if (ft_manage_input_redirection(input, i, lonely) == 0)
+			return (0);
+	if (ft_strcmp(search, ">") == 0)
+		if (ft_manage_output_redirection(input, i, lonely) == 0)
+			return (0);
+	if (ft_strcmp(search, ">>") == 0)
+		if (ft_manage_append_redirection(input, i, lonely) == 0)
+			return (0);
+	return (1);
+}
 
-	*redir = '\0';
-	redir++;
-	while (*redir == ' ')
-		redir++;
-	filename = ft_strdup(redir);
-	end = filename + ft_strlen(filename) - 1;
-	if ((filename[0] == '"' && end[0] == '"') || (filename[0] == '\'' && end[0] == '\''))
-	{
-		filename++;
-		end--;
-		*end = '\0';
+int ft_check_one_redirection(t_input *input, int i, char *search)
+{
+	bool lonely;
+	
+	lonely = false;
+	if (ft_strncmp(input->split_exp[i], search, ft_strlen(search)) == 0)
+	{	
+		if (ft_strcmp(input->split_exp[i], search) == 0)
+			lonely = true;
+		if (ft_manage_redirection(input, search, i, lonely) == 0)
+			return (-1);
+		return (1);
 	}
-	while (end > filename && (*end == ' ' || *end == '\n'))
-		*end-- = '\0';
-	input->inputfd = open(filename, O_RDONLY);
-	free(filename);
+	return (0);
 }
 
-void	handle_all_redirections(t_input *input)
+bool handle_redirection(t_input *input)
 {
-	size_t	i = 0;
-	bool	single_quote = false;
-	bool	double_quote = false;
+	int i;
+	int j;
+	int result;
+	char **redirections;
+	
+	i = 0;
+	redirections = malloc(sizeof(char *) * 5);
+	redirections[0] = ft_strdup("<<");
+	redirections[1] = ft_strdup("<");
+	redirections[2] = ft_strdup(">>");
+	redirections[3] = ft_strdup(">");
+	redirections[4] = NULL;
 
-	while (input->input[i])
-	{
-		if (input->input[i] == '\'' && !double_quote)
-			single_quote = !single_quote;
-		else if (input->input[i] == '"' && !single_quote)
-			double_quote = !double_quote;
-		else if (!single_quote && !double_quote)
-		{
-			if (input->input[i] == '>' && input->input[i + 1] == '>')
-			{
-				handle_append_redirection(input, &input->input[i]);
-				i++;
-			}
-			else if (input->input[i] == '<' && input->input[i + 1] == '<')
-			{
-				handle_heredoc_redirection(input, &input->input[i]);
-				i++;
-			}
-			else if (input->input[i] == '>')
-				handle_output_redirection(input, &input->input[i]);
-			else if (input->input[i] == '<')
-				handle_input_redirection(input, &input->input[i]);
-		}
-		i++;
-	}
-}
-bool	handle_redirection(t_input *input)
-{
-	char	*last_in = NULL;
-	char	*last_out = NULL;
-	char	*last_append = NULL;
-	size_t	i = 0;
-	bool	sq = false, dq = false;
+	//for (int j = 0; input->split_exp[j]; j++)
+	//	printf("Split exp %d: %s\n", j, input->split_exp[j]);
+	//printf("input: %s\n", input->input);
+	//printf("command: %s\n", input->command);
+	//printf("args: %s\n", input->args);
+	//printf("inputfd: %d\n", input->inputfd);
+	//printf("outputfd: %d\n", input->outputfd);
 
-	while (input->input[i])
+	while (input->split_exp[i])
 	{
-		if (input->input[i] == '\'' && !dq)
-			sq = !sq;
-		else if (input->input[i] == '"' && !sq)
-			dq = !dq;
-		else if (!sq && !dq)
+		j = 0;
+		while (j < 4)
 		{
-			if (input->input[i] == '<' && input->input[i + 1] != '<')
-				last_in = &input->input[i];
-			else if (input->input[i] == '>' && input->input[i + 1] == '>')
-				last_append = &input->input[i];
-			else if (input->input[i] == '>' && input->input[i + 1] != '>')
-				last_out = &input->input[i];
+			if (input->status_exp[i] != 0)	
+			{
+				j++;
+				continue ;
+			}
+			result = ft_check_one_redirection(input, i, redirections[j]);
+			if (result == 1)
+			{
+				i = 0;
+				break ;
+			}
+			else if (result == -1)
+				return (ft_matrix_free(&redirections), 1);
+			j++;
 		}
 		i++;
 	}
 
-	if (last_in)
-		handle_input_redirection(input, last_in);
-	if (last_append)
-		handle_append_redirection(input, last_append);
-	else if (last_out)
-		handle_output_redirection(input, last_out);
-
-	remove_redirections_from_input(input);
+	ft_matrix_free(&redirections);
 	return (0);
 }

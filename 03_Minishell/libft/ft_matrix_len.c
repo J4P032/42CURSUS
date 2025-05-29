@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_matrix_len.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/13 19:52:12 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/29 14:31:17 by mpico-bu         ###   ########.fr       */
+/*   Created: 2025/04/28 17:01:07 by mpico-bu          #+#    #+#             */
+/*   Updated: 2025/05/29 14:10:34 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-/*original of libft was with different of \n*/
-size_t	ft_strlen(const char *s)
+int ft_matrix_len(char **matrix)
 {
-	size_t	i;
-
-	if (!s || !s[0])
-		return (0);
-	i = 0;
-	while (s[i])
+	int i = 0;
+	while (matrix[i])
 		i++;
-	return (i);
+	return i;
 }

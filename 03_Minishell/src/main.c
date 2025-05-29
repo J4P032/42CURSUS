@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:53:26 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/28 22:14:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:49:20 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 void	init_input_struct(t_input *input)
 {
-	input->parsed = NULL;
 	input->filename = NULL;
+	input->parsed = NULL;
 	input->input_split = NULL;
 	input->split_exp = NULL;
 	input->redir_in = NULL;
@@ -35,6 +35,8 @@ void	init_input_struct(t_input *input)
 	input->command = NULL;
 	input->args = NULL;
 	input->from_expand = 0;
+	input->inputfd = STDIN_FILENO;
+	input->outputfd = STDOUT_FILENO;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -72,14 +74,14 @@ int	main(int argc, char **argv, char **envp)
 		}
 		compose_command_args(&input);
 		parsing(&input);
-		
-		/*  printf("============\nPARSEADO:%s\n==========\n", input.parsed);
+		/*
+		 printf("============\nPARSEADO:%s\n==========\n", input.parsed);
 		printf("command:%s\n", input.command);
 		printf("arg:%s\n", input.args);
 		for (size_t i = 0; input.split_exp[i]; i++)//
 		ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
-		printf("-----SALIDA-----\n"); */ 
-		//printf("%s\n", input.command); //para hacer mi script de commandos al hacer normi
+		printf("-----SALIDA-----\n"); 
+		*/
 		ft_manage_pipes(&input);
 		free(input.input);
 	}

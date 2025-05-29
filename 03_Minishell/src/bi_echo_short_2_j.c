@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:48:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/28 16:49:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/30 01:17:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ size_t	check_more_n(t_input *in)
 			return (start);
 		if (in->parsed[i])
 			i++;
-	}	
+	}
 	return (i);
 }

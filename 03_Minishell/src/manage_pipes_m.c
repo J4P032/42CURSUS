@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:32:40 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/27 14:26:22 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/30 01:28:06 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,15 +112,46 @@ void execute_pipeline(t_input *input)
                 dup2(pipefd[1], STDOUT_FILENO);
                 close(pipefd[1]);
             }
+            t_input *input_child = malloc(sizeof(t_input));
+            init_input_struct(input_child);
+            input_child->input = join_command(input->split_exp, cmd_start, cmd_end);
+	    	input_child->input_split = ft_split_quotes(input_child->input, ' ', input_child);
+            input_child->envp = input->envp;
+            compose_command_args(input_child);
+            free(input_child->filename);
+            if (input_child->input_split[1])
+                parsing(input_child);
+            else
+            {
+                input_child->parsed = ft_strdup("");
+                input_child->split_exp = ft_matrix_dup(input_child->input_split);
+            }
+            /*
+            char *space = strchr(input_child->input, ' ');
+            if (space != NULL) {
+                // Saltar espacios adicionales después del comando
+                while (*space == ' ')
+                    space++;
+                input_child->parsed = ft_strdup(space);
+            } else {
+                // No hay argumentos, dejar parsed vacío
+                input_child->parsed = ft_strdup("");
+            }
+            */
+            
+            // input_child->split_exp = ft_matrix_dup(input_child->input_split);
+            //printf("parsed: %s\n", input_child->parsed);
+            //for(i = 0; input_child->split_exp[i]; i++)
+            //    ft_printf("input_child->split_exp[%d]: %s, status: %d\n", i, input_child->split_exp[i], input_child->status_exp[i]);
+            //ft_printf("\n\n\n");
 
-            execvp(args[0], args);
-            perror("execvp");
-            // Liberar memoria en hijo si quieres (opcional ya que el exec reemplaza)
+
+            ft_manage_input(input_child);
             for (i = 0; args[i]; i++)
                 free(args[i]);
             free(args);
-
-            exit(EXIT_FAILURE);
+            exit(input_child->last_exit_code);
+            ft_input_free(input_child);
         }
         else // Padre
         {
@@ -143,7 +174,6 @@ void execute_pipeline(t_input *input)
         cmd_start = cmd_end + 1;
     }
 
-    // Espera a todos y guarda el exit code del último hijo
     int status;
     pid_t wpid;
     while ((wpid = wait(&status)) > 0)
@@ -155,6 +185,8 @@ void execute_pipeline(t_input *input)
 
 void ft_manage_pipes(t_input *input)
 {
+    input->inputfd = STDIN_FILENO;
+    input->outputfd = STDOUT_FILENO;
 	if (count_pipes(input) == 0)
 		ft_manage_input(input);  // Ya lo tenías definido
 	else

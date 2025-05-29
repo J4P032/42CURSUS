@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_matrix_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:09:14 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/28 22:22:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/30 00:09:53 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	ft_matrix_free(char ***matrix)
 		return ;
 	while ((*matrix)[i])
 	{
-		free((*matrix)[i]);
+		if ((*matrix)[i])
+			free((*matrix)[i]);
 		(*matrix)[i] = NULL;
 		i++;
 	}
@@ -50,9 +51,17 @@ void	ft_input_free(t_input *input)
 		free(input->filename);
 	input->filename = NULL;
 	if (input->parsed)
-		free(input->parsed);
+		free(input->parsed);	
 	if (input->args)
 		free(input->args);
 	input->args = NULL;
 	input->parsed = NULL;
+	for(size_t i = 0; input->status_exp[i]; i++)
+		input->status_exp[i] = 0;
+	if (input->split_exp)
+	{
+		ft_matrix_free(&input->split_exp);
+		input->split_exp = NULL;
+	}
 }
+

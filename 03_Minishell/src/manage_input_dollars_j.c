@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 12:59:27 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/28 19:21:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/24 22:26:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,17 +132,6 @@ void	save_if_spaced_and_valid_env(t_input *in, size_t w)
 		space_after_first_invalid_env(in, w, i, 0);
 }
 
-
-/*for cases like echo "$ a". $ alone ones*/
-void	c_check_previous_dollar(t_input *in, size_t i, size_t *j, size_t *k)
-{
-	dynamic_command(in, *k);
-	if (*j > 0 && in->input_split[i][*j] == ' ' 
-		&& in->input_split[i][(*j) - 1] == '$')
-		in->command[(*k)++] = in->input_split[i][(*j)];
-	(*j)++;
-}
-
 void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 {
 	save_if_spaced_and_valid_env(in, *i);
@@ -166,6 +155,12 @@ void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 			save_invalid_envs(in, *i, j, k);
 		}
 		if (in->input_split[*i][*j] && in->input_split[*i][*j] != '$')
-			c_check_previous_dollar(in, *i, j, k);
+		{
+			dynamic_command(in, *k);
+			if (*j > 0 && in->input_split[*i][*j] == ' ' 
+				&& in->input_split[*i][(*j) - 1] == '$')
+				in->command[(*k)++] = in->input_split[*i][(*j)];	
+			(*j)++;
+		}
 	}
 }

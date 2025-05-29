@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_echo_short_j.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 17:24:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/28 16:53:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/30 00:31:24 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ size_t	check_argument(t_input *in, int parsed_n)
 	n_repeated = 1;
 	if (parsed_n)
 		in->echo_error_n_arg = 0;
-	if (!in->parsed[0])
+	if (!in->parsed || !in->parsed[0])
 		return (0);
 	while (in->parsed[i] && in->parsed[i] != ' ')
 	{

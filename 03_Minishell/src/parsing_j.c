@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_j.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:33:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/05/27 16:39:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/05/30 01:24:23 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	write_parsed_output_from_file(t_input *in)
 	i = 0;
 	file = in->filename;
 	fd = open(file, O_RDONLY);
+	//ft_printf("fd: %d\n", fd);
 	if (fd == -1)
 		clean_all(in, 1);
 	in->parsed = get_next_line(fd);
