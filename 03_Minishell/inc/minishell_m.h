@@ -6,7 +6,7 @@
 /*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:51:03 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/24 02:11:57 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:49:24 by mpico-bu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,10 @@ void	ft_manage_pipes(t_input *input);
 bool	handle_redirection(t_input *input);
 void	handle_heredoc_redirection(t_input *input, char *redir);
 void	ft_manage_input(t_input *input);
+
+
+void	init_input_struct(t_input *input);
+
+void 	update_input(t_input *input, int i, bool lonely);
 
 #endif
