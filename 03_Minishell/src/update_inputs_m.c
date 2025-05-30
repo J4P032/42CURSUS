@@ -76,9 +76,11 @@ void update_input(t_input *input, int i, bool lonely)
 	//free(input->args);
 	compose_command_args(input);
 	free(input->parsed);
-	free(input->filename);
 	for (int j = 0; input->split_exp[j] != 0 && j < 100; j++)
 		input->status_exp[j] = 0;
 	ft_matrix_free(&input->split_exp);
-	parsing(input);
+	//parsing(input);
+	ft_compose_parsed(input);
+	input->split_exp = ft_matrix_dup(input->input_split);
+
 }

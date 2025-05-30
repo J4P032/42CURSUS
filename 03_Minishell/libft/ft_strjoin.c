@@ -39,3 +39,30 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	return (dest);
 }
+
+char	*ft_strjoin_and_replace(char *s1, char const *s2)
+{
+	size_t	s1_len;
+	size_t	s2_len;
+	size_t	i;
+	char	*dest;
+
+	if (!s1 && !s2)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	i = 0;
+	dest = (char *)ft_calloc(((s1_len + s2_len) + 1), sizeof(char));
+	if (!dest)
+		return (NULL);
+	while (i < (s1_len + s2_len))
+	{
+		if (i < s1_len)
+			dest[i] = s1[i];
+		if ((i + s1_len) < (s1_len + s2_len))
+			dest[i + s1_len] = s2[i];
+		i++;
+	}
+	free(s1);
+	return (dest);
+}

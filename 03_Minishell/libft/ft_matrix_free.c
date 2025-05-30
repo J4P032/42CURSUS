@@ -51,11 +51,11 @@ void	ft_input_free(t_input *input)
 		free(input->filename);
 	input->filename = NULL;
 	if (input->parsed)
-		free(input->parsed);	
+		free(input->parsed);
+	input->parsed = NULL;
 	if (input->args)
 		free(input->args);
 	input->args = NULL;
-	input->parsed = NULL;
 	for(size_t i = 0; input->status_exp[i]; i++)
 		input->status_exp[i] = 0;
 	if (input->split_exp)

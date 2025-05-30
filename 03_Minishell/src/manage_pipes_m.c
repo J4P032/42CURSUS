@@ -37,7 +37,6 @@ char *join_command(char **split_exp, int start, int end) {
     return joined;
 }
 
-
 int	count_pipes(t_input *input)
 {
 	int	i;
@@ -53,6 +52,31 @@ int	count_pipes(t_input *input)
 	}
 	return (count);
 }
+
+void ft_compose_parsed(t_input *input)
+{
+    int i;
+    bool first;
+
+    i = 0;
+    first = true;
+    input->parsed = ft_strdup("");
+    while (input->input_split[i])
+    {
+        if (ft_strcmp(input->input_split[i], input->command) == 0)
+        {
+            i++;
+            continue;
+        }
+        if (!first)
+            input->parsed = ft_strjoin_and_replace(input->parsed, " ");
+        input->parsed = ft_strjoin_and_replace(input->parsed, input->input_split[i]);
+        first = false;
+        i++;
+    }
+    input->parsed = ft_strjoin_and_replace(input->parsed, "\0");
+}
+
 void execute_pipeline(t_input *input)
 {
     int num_cmds = count_pipes(input) + 1;
@@ -119,6 +143,9 @@ void execute_pipeline(t_input *input)
             input_child->envp = input->envp;
             compose_command_args(input_child);
             free(input_child->filename);
+            ft_compose_parsed(input_child);
+            
+            /*
             if (input_child->input_split[1])
                 parsing(input_child);
             else
@@ -126,20 +153,15 @@ void execute_pipeline(t_input *input)
                 input_child->parsed = ft_strdup("");
                 input_child->split_exp = ft_matrix_dup(input_child->input_split);
             }
-            /*
-            char *space = strchr(input_child->input, ' ');
-            if (space != NULL) {
-                // Saltar espacios adicionales después del comando
-                while (*space == ' ')
-                    space++;
-                input_child->parsed = ft_strdup(space);
-            } else {
-                // No hay argumentos, dejar parsed vacío
-                input_child->parsed = ft_strdup("");
-            }
             */
-            
-            // input_child->split_exp = ft_matrix_dup(input_child->input_split);
+            //input_child->split_exp = ft_matrix_dup(input_child->input_split);
+
+            input_child->split_exp = ft_matrix_dup(input_child->input_split);
+
+            for (int k = 0; input_child->split_exp[k]; k++)
+            {
+                input_child->status_exp[k] = input->status_exp[cmd_start + k];
+            }
             //printf("parsed: %s\n", input_child->parsed);
             //for(i = 0; input_child->split_exp[i]; i++)
             //    ft_printf("input_child->split_exp[%d]: %s, status: %d\n", i, input_child->split_exp[i], input_child->status_exp[i]);
@@ -147,11 +169,12 @@ void execute_pipeline(t_input *input)
 
 
             ft_manage_input(input_child);
+            
+            ft_input_free(input_child);
             for (i = 0; args[i]; i++)
                 free(args[i]);
             free(args);
             exit(input_child->last_exit_code);
-            ft_input_free(input_child);
         }
         else // Padre
         {
@@ -188,7 +211,7 @@ void ft_manage_pipes(t_input *input)
     input->inputfd = STDIN_FILENO;
     input->outputfd = STDOUT_FILENO;
 	if (count_pipes(input) == 0)
-		ft_manage_input(input);  // Ya lo tenías definido
+		ft_manage_input(input);
 	else
 		execute_pipeline(input);
 	if (input)

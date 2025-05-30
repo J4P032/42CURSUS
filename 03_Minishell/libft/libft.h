@@ -104,5 +104,6 @@ int			is_quoted(t_input *input, int word);
 long long	ft_atol(char *nptr, int *error);
 char		*ft_first_word(char *str, char c);
 char		*ft_last_str(char **str);
+char		*ft_strjoin_and_replace(char *s1, char const *s2);
 
 #endif

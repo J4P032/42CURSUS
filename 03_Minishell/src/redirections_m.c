@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_m.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 01:26:18 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/29 23:26:04 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/05/30 10:45:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ bool ft_manage_output_redirection(t_input *input, int i, bool lonely)
         ft_putstr_fd("miniyo: Permission denied\n", 2);
         return (0);
     }
-    update_input(input, i, lonely);
+    //update_input(input, i, lonely);
     return (1);
 }
 
@@ -102,7 +102,7 @@ int ft_check_one_redirection(t_input *input, int i, char *search)
 	{	
 		if (ft_strcmp(input->split_exp[i], search) == 0)
 			lonely = true;
-		if (ft_manage_redirection(input, search, i, lonely) == 0)
+	 if (ft_manage_redirection(input, search, i, lonely) == 0)
 			return (-1);
 		return (1);
 	}
@@ -124,13 +124,19 @@ bool handle_redirection(t_input *input)
 	redirections[3] = ft_strdup(">");
 	redirections[4] = NULL;
 
-	//for (int j = 0; input->split_exp[j]; j++)
-	//	printf("Split exp %d: %s\n", j, input->split_exp[j]);
-	//printf("input: %s\n", input->input);
-	//printf("command: %s\n", input->command);
-	//printf("args: %s\n", input->args);
+	/*
+	printf("ANTES\n");
+	for (int j = 0; input->split_exp[j]; j++)
+		printf("Split exp %d: %s\n", j, input->split_exp[j]);
+	printf("input: %s\n", input->input);
+	printf("parsed: %s\n", input->parsed);
+	printf("command: %s\n", input->command);
+	printf("args: %s\n", input->args);
+
 	//printf("inputfd: %d\n", input->inputfd);
 	//printf("outputfd: %d\n", input->outputfd);
+	printf("________\n");
+	*/
 
 	while (input->split_exp[i])
 	{
@@ -156,5 +162,18 @@ bool handle_redirection(t_input *input)
 	}
 
 	ft_matrix_free(&redirections);
+
+	/*
+	printf("DESPUES\n");
+	for (int j = 0; input->split_exp[j]; j++)
+		printf("Split exp %d: %s\n", j, input->split_exp[j]);
+	printf("input: %s\n", input->input);
+	printf("parsed: %s\n", input->parsed);
+	printf("command: %s\n", input->command);
+	printf("args: %s\n", input->args);
+	//printf("inputfd: %d\n", input->inputfd);
+	//printf("outputfd: %d\n", input->outputfd);
+	printf("________\n");
+	*/
 	return (0);
 }
