@@ -1,0 +1,9 @@
+ls manda un codigo correcto 0, PERO al salir de la minishell con exit creo que deberia mandar ese codigo 0 y sin embargo sale
+	1. esto es lo qu eme pone chatgpt:
+	echo "ls" | ../minishell (en el script)
+	estás enviando el comando por stdin a la minishell, que probablemente termina justo después de ejecutar el comando, y el $? que capturás es el código de salida de la minishell, no del comando interno.
+	Tu minishell debe propagar el código de salida del último comando ejecutado como código de salida de la shell.
+	¿Qué revisar en tu minishell?
+    Que al ejecutar un comando y luego salir, la minishell retorne el código de salida de ese comando (por ejemplo, con exit o al terminar).
+    Si tu minishell siempre retorna 1 o 0, quizás no estás guardando ni devolviendo el código de salida correcto.
+ 

@@ -47,4 +47,6 @@ void	init_input_struct(t_input *input);
 
 void 	update_input(t_input *input, int i, bool lonely);
 
+void ft_compose_parsed(t_input *input);
+
 #endif
