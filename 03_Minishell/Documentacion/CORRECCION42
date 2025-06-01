@@ -1,3 +1,19 @@
+############################################################3
+ERROR GORDO:
+
+	cd .. hasta alcanzar el home. perfecto.
+	pero se hace otro cd .. y se sale de la minishell en cuanto se pone otro comando (apareceria miniyo$ y al poner otro comando se sale)
+	es como si no existiera fuera del home.
+
+	cd /bin no mueve a bin.. que ya es error gordo.. pero al hacer ls, o pwd se sale de la minishell
+	se sale con cualquier comando tras hacer ese cd
+
+############################################################3
+
+
+cd ~ no lleva al home. pone no such file or directory.
+
+
 ls manda un codigo correcto 0, PERO al salir de la minishell con exit creo que deberia mandar ese codigo 0 y sin embargo sale
 	1. esto es lo qu eme pone chatgpt:
 	echo "ls" | ../minishell (en el script)

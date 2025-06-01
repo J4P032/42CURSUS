@@ -63,6 +63,8 @@ typedef struct s_input
 	char	*last_dollar_;
 	pid_t	last_exit_code;
 	bool	is_script;
+	int		total_pipes;
+	int		total_redirections;
 }			t_input;
 
 //CHECK INPUT
@@ -103,5 +105,6 @@ size_t	check_more_n(t_input *in);
 //SIGNALS
 void	init_sigaction(struct sigaction *sa);
 void	ctrlc_handler(int sig);
+extern 	volatile sig_atomic_t g_signal_received;
 
 #endif

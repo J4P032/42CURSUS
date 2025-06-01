@@ -10,23 +10,7 @@ funcion CD le falta:
 	actualizar PWD y OLDPWD en ENV
 	cd ~ falta por implementar
 
-funcion pwd deberia
-	actualizar input->last_exit_code a 0 cuando pwd tiene exito y 1 si hay error.
-
 ls $a deberia mostrar el ls normal como bash... pero dice que no tiene ese directorio.
-
-ls -la "|" wc muestra el listado como si se hiciera un ls -la. Deberia mostrar no such file or directory
-ls "|" wc, lo hace bien.
-
-export kk=hellow world (sin commillas) exporta "hello world" cuando solo deberia exportar hello. (esto probado con el antiguo export)
-
-export kk=patata
-export kk=tomate
-env mostrara dos kk. (esto probado con el antiguo export)
-
-export kk=" p" ahora no funciona, cuando antes lo hacia.
-se mete en if (!ft_is_valid_identifier(prepared_input)) la parte de " p" y claro, no es un 
-identificador valido, cuando deberia pararse cuando ha llegado al =. de todas formas esto antes funcionaba.
 
 <Makefile<obj>file>file2>>append echo hola deberia hacer un file file 2... 
 no se si es mio. ya que hay que separar los < y >
@@ -44,10 +28,6 @@ $USER
 end
 debe imprimir $USER (HAY QUE MATAR AL QUE HIZO EL BASH)
 
-export $a hara lo mismo que en export (mostrar todos los env con "declare -x" al principio. Solo si $a no existe
-
-echo < fichero tiene que devolver un valor especifico.. pero ahora no esta haciendo nada mas que < fichero
-
 hay que hacer $_ actualizado. Para ello he creado una variable en la estructura llamada char *last_dollar_;
 que no ha de reservar memoria sino asignarle el ultimo input->split_exp de la secuencia.
 luego habra que exportarla en cada ciclo del while(1) (supongo que ahi). por ahora la he metido en input...
@@ -62,8 +42,6 @@ echo "patata			tomate"
 3. ejecutalo como script. No como ./script -> no funcionara
 4. haz: export PATH=:$PATH, o export PATH=$PATH: o metes el : por medio del PATH...
 5. ahora haz script. En bash funciona.. en el nuestro no.
-
-NO error  pero posibilidad de hacer: historial que conserve cuando se cierre la minishell.
 
 
 CORREGIDO (JAVI) -por esto le tiraron a Amelie:
@@ -119,6 +97,25 @@ echo patata | echo $VAR NO SOLTARA EL ECHO DE VAR ya que no existe en otro proce
 existirá si se hace export VAR (eso tambien lo tienes que mirar)
 
 
+ls -la "|" wc muestra el listado como si se hiciera un ls -la. Deberia mostrar no such file or directory
+ls "|" wc, lo hace bien.
+
+export kk=patata
+export kk=tomate
+env mostrara dos kk. (esto probado con el antiguo export)
+
+
+export kk=hellow world (sin commillas) exporta "hello world" cuando solo deberia exportar hello. (esto probado con el antiguo export)
+
+funcion pwd deberia
+	actualizar input->last_exit_code a 0 cuando pwd tiene exito y 1 si hay error.
+
+export kk=" p" ahora no funciona, cuando antes lo hacia.
+se mete en if (!ft_is_valid_identifier(prepared_input)) la parte de " p" y claro, no es un 
+identificador valido, cuando deberia pararse cuando ha llegado al =. de todas formas esto antes funcionaba.
+
+
+export $a hara lo mismo que en export (mostrar todos los env con "declare -x" al principio. Solo si $a no existe
 ===============================================================================================================
 
 
