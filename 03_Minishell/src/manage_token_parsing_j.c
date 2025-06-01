@@ -13,7 +13,6 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-
 void	copy_to_split_expanded(t_input *in, char *token, char ***split_exp)
 {
 	size_t	i;
@@ -52,7 +51,7 @@ void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 	else
 	{
 		dynamic_input(in, *k);
-		if (is_quoted(in, *i) && *j == 0)////////////
+		if (is_quoted(in, *i) && *j == 0) ////////////
 			in->token[(*k)++] = 0x1F;
 		dynamic_input(in, *k);
 		in->token[(*k)++] = in->input_split[*i][(*j)++];
@@ -129,10 +128,3 @@ void	compose_token(t_input *in)
 		copy_to_split_expanded(in, in->token, &in->split_exp);
 	}
 }
-
-
-
-
-
-
-

@@ -13,59 +13,29 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-/*"    32   " will be ok. "   32    b  " not.*/
-/*1. run all spaces. 2. run if char is digit. 3. Again all spaces if not 0 bad*/
-/*
 int	valid_exit_quoted(t_input *in)
 {
 	size_t	token;
 	size_t	i;
 
-	i = 0;
 	token = in->word_after_arg - 1;
+	i = 0;
 	if (is_quoted(in, token) == 0)
 		return (1);
-	else
-	{
-		while (in->parsed[i] && in->parsed[i] == ' ')
-			i++;
-		while (ft_isdigit(in->parsed[i]))
-			i++;
-		while (in->parsed[i] && in->parsed[i] == ' ')
-			i++;
-		if (in->parsed[i] != '\0')
-			return (0);
-	}
+	while (in->parsed[i] && in->parsed[i] == ' ')
+		i++;
+	if (in->parsed[i] == '+' || in->parsed[i] == '-')
+		i++;
+	if (!ft_isdigit(in->parsed[i]))
+		return (0);
+	while (ft_isdigit(in->parsed[i]))
+		i++;
+	while (in->parsed[i] && in->parsed[i] == ' ')
+		i++;
+	if (in->parsed[i] != '\0')
+		return (0);
 	return (1);
 }
-*/
-
-int valid_exit_quoted(t_input *in)
-{
-    size_t token = in->word_after_arg - 1;
-    size_t i = 0;
-
-    if (is_quoted(in, token) == 0)
-        return 1;
-    while (in->parsed[i] && in->parsed[i] == ' ')
-        i++;
-    if (in->parsed[i] == '+' || in->parsed[i] == '-')
-        i++;
-    if (!ft_isdigit(in->parsed[i]))
-        return 0;
-
-    while (ft_isdigit(in->parsed[i]))
-        i++;
-
-    while (in->parsed[i] && in->parsed[i] == ' ')
-        i++;
-
-    if (in->parsed[i] != '\0')
-        return 0;
-
-    return 1;
-}
-
 
 int	more_args(char *big, char *small)
 {
@@ -90,7 +60,6 @@ void	exit_miniyo(t_input *in, int num_exit)
 	{
 		ft_printf("exit\n");
 		ft_putstr_fd("miniyo: exit: numeric argument required\n", 2);
-		//ft_printf("miniyo: exit: %s: numeric argument required\n", in->args);
 	}
 	clean_all(in, num_exit);
 	if (num_exit == 0)

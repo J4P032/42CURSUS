@@ -44,63 +44,34 @@ size_t	check_argument(t_input *in, int parsed_n)
 	return (i);
 }
 
-void	if_n_clean_invalid_n_from_redirect(t_input *in, size_t *i, size_t j)
+size_t	check_redirects(t_input *in, size_t i)
 {
-	if (is_valid_arg(&in->parsed[*i]))
+	size_t	j;
+
+	if (is_valid_arg(&in->parsed[i]))
 	{
 		in->echo_error_n_arg = 0;
-		while (in->parsed[*i] && (in->parsed[*i] != ' '))
-			(*i)++;
-		if (in->parsed[*i] == ' ')
-			(*i)++;
-		j = *i;
-		while (in->parsed[*i] && in->parsed[j] == '-')
+		while (in->parsed[i] && (in->parsed[i] != ' '))
+			i++;
+		if (in->parsed[i] == ' ')
+			i++;
+		j = i;
+		while (in->parsed[i] && in->parsed[j] == '-')
 		{
-			(*i)++;
-			while (in->parsed[*i] && in->parsed[*i] == 'n')
-				(*i)++;
-			if (in->parsed[*i] != ' ')
+			(i)++;
+			while (in->parsed[i] && in->parsed[i] == 'n')
+				(i)++;
+			if (in->parsed[i] != ' ')
 				break ;
-			else if (in->parsed[*i] == ' ')
-				j = ++(*i);
+			else if (in->parsed[i] == ' ')
+				j = ++(i);
 		}
-		if (in->parsed[*i])
-			*i = j;
+		if (in->parsed[i])
+			i = j;
 	}
-}
-
-/*parsed can be: >file echo msg needs to be printed from echo.*/
-/*But > or < came from exported VARS (input->status_exp = 2) will print > <*/
-/*I search for first coincidence of echo (only or if come from exported VAR)..*/
-/*...in split_aux*/
-size_t	check_redirects(t_input *in, size_t start)
-{
-	size_t	i;
-	char	*aux;
-
-	i = 0;
-	aux = NULL;
-	while (in->split_exp && in->split_exp[i])
-	{
-		if (!ft_strncmp(in->split_exp[i], "echo", 4)
-			&& (!in->split_exp[i][4] || in->status_exp[i] == 2))
-			break ;
-		i++;
-	}
-	if (!in->split_exp[i][4])
-		aux = in->split_exp[i + 1];
-	else if (in->status_exp[i] == 2)
-		aux = &in->split_exp[i][5];
-	if (aux && in->parsed)
-		aux = ft_strnstr(in->parsed, aux, ft_strlen(in->parsed));
-	i = 0;
-	while (aux && in->parsed && in->parsed[i] && &in->parsed[i] != aux)
-		i++;
-	if (start >= i)
-		return (start);
-	if_n_clean_invalid_n_from_redirect(in, &i, 0);
 	return (i);
 }
+
 
 /*if >file echo will not get inside "echo" 5, as it will the last one...*/
 /*...so in that case it dont have to print anything. other case will print it*/
@@ -122,7 +93,7 @@ void	print_final_echo(t_input *in, int fd, size_t start)
 	}
 	else
 		write(fd, in->parsed + start, ft_strlen(in->parsed + start));
-	if (in->echo_error_n_arg == 1)
+	if (in->echo_error_n_arg == 1 || in->total_pipes > 0)
 		write(fd, "\n", 1);
 }
 
@@ -148,7 +119,10 @@ void	echo_short(t_input *in, int fd)
 		parsed_n = 1;
 	if (parsed_n)
 		in->echo_error_n_arg = 1;
-	start = check_argument(in, parsed_n);
-	start = check_redirects(in, start);
+	if (in->total_redirections > 0)
+		start = check_redirects(in, 0);
+	else
+		start = check_argument(in, parsed_n);
+ 
 	print_final_echo(in, fd, start);
 }

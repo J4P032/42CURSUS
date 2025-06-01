@@ -37,6 +37,8 @@ void	init_input_struct(t_input *input)
 	input->from_expand = 0;
 	input->inputfd = STDIN_FILENO;
 	input->outputfd = STDOUT_FILENO;
+	input->total_pipes = 0;
+	input->total_redirections = 0;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -46,17 +48,17 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	
 	input.envp = ft_matrix_dup(envp);
 	if (!input.envp)
 		clean_all(&input, 1);
 	input.is_script = !isatty(STDIN_FILENO);
 	init_sigaction(&sa);
 	init_input_struct(&input);
-	
 	while (1)
 	{
 		input.input = readline("\001\033[1;32m\002miniyo$\001\033[0m\002 ");
+		if (g_signal_received == SIGQUIT)
+			clean_all(&input, 131);
 		if (!input.input)
 			break ;
 		if (!input.input[0])
@@ -74,6 +76,17 @@ int	main(int argc, char **argv, char **envp)
 		}
 		compose_command_args(&input);
 		parsing(&input);
+		if ((!input.command || !input.command[0]) && input.parsed)
+		{
+			free(input.filename);
+			free(input.input);
+			input.input = ft_strdup(input.parsed);
+			free(input.parsed);
+			ft_matrix_free(&input.input_split);
+			input.input_split = ft_split_quotes(input.input, ' ', &input);
+			compose_command_args(&input);
+			parsing(&input);
+		}
 		/*
 		 printf("============\nPARSEADO:%s\n==========\n", input.parsed);
 		printf("command:%s\n", input.command);
@@ -85,7 +98,6 @@ int	main(int argc, char **argv, char **envp)
 		ft_manage_pipes(&input);
 		free(input.input);
 	}
-	
 	clean_all(&input, 0);
 	if (input.is_script)
 		exit(input.last_exit_code != 0 ? input.last_exit_code : 1);

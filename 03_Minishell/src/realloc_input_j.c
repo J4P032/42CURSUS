@@ -25,7 +25,7 @@ char	*ft_str_realloc(char *str, size_t num)
 	while (str && str[i])
 	{
 		new[i] = str[i];
-	 	i++;
+		i++;
 	}
 	if (str)
 		free(str);
@@ -57,6 +57,7 @@ void	dynamic_command(t_input *in, size_t k)
 			clean_all(in, 1);
 	}
 }
+
 void	dynamic_arg(t_input *in, size_t k)
 {
 	if (in->args && k < in->realloc_counter * BUFFER)

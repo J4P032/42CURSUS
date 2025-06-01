@@ -40,7 +40,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (dest);
 }
 
-char	*ft_strjoin_and_replace(char *s1, char const *s2)
+char	*ft_strjoin_r(char *s1, char const *s2)
 {
 	size_t	s1_len;
 	size_t	s2_len;

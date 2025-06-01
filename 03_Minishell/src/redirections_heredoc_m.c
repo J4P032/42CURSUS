@@ -13,13 +13,10 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-// ====== SEÑALES DE JAVI ======
-volatile	sig_atomic_t heredoc_interrupted;
-
 void heredoc_sigint_handler(int sig)
 {
     (void)sig;
-    heredoc_interrupted = 1;
+    g_signal_received = 1;
 }
 // =============================
 
@@ -44,7 +41,7 @@ void	handle_heredoc_redirection(t_input *input, char *redir)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
-	heredoc_interrupted = 0;
+	g_signal_received = 0;
 	
 	// =============================
 	
@@ -96,7 +93,7 @@ void	handle_heredoc_redirection(t_input *input, char *redir)
 	{
 		
 		// ====== SEÑALES DE JAVI ======
-		if (heredoc_interrupted)
+		if (g_signal_received)
 		{
 			free(buffer);
 			free(delim);
@@ -152,3 +149,4 @@ void	handle_heredoc_redirection(t_input *input, char *redir)
 	sigaction(SIGINT, &sa_old_int, NULL);//javi signals
 	sigaction(SIGQUIT, &sa_old_quit, NULL);//javi signals
 }
+

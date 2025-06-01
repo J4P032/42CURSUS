@@ -13,73 +13,7 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-bool ft_manage_input_redirection(t_input *input, int i, bool lonely)
-{
-    char *filename;
-
-    if (lonely)
-        filename = input->split_exp[i + 1];
-    else
-        filename = input->split_exp[i] + ft_strlen("<");
-    if (input->inputfd > 2)
-        close(input->inputfd);
-
-    input->inputfd = open(filename, O_RDONLY);
-    if (input->inputfd == -1)
-	{
-		input->last_exit_code = 1;
-		ft_putstr_fd("miniyo: No such file or directory\n", 2);
-		return (0);
-	}
-	update_input(input, i, lonely);
-	return (1);
-}
-
-bool ft_manage_output_redirection(t_input *input, int i, bool lonely)
-{
-    char *filename;
-
-    if (lonely)
-        filename = input->split_exp[i + 1];
-    else
-        filename = input->split_exp[i] + ft_strlen(">");
-    if (input->outputfd > 2)
-        close(input->outputfd);
-
-    input->outputfd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (input->outputfd == -1)
-    {
-        input->last_exit_code = 1;
-        ft_putstr_fd("miniyo: Permission denied\n", 2);
-        return (0);
-    }
-    //update_input(input, i, lonely);
-    return (1);
-}
-
-bool ft_manage_append_redirection(t_input *input, int i, bool lonely)
-{
-    char *filename;
-
-    if (lonely)
-        filename = input->split_exp[i + 1];
-    else
-        filename = input->split_exp[i] + ft_strlen(">>");
-    if (input->outputfd > 2)
-        close(input->outputfd);
-
-    input->outputfd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (input->outputfd == -1)
-    {
-        input->last_exit_code = 1;
-        ft_putstr_fd("miniyo: Permission denied\n", 2);
-        return (0);
-    }
-    update_input(input, i, lonely);
-    return (1);
-}
-
-bool ft_manage_redirection(t_input *input, char *search, int i, bool lonely)
+bool	ft_manage_redirection(t_input *input, char *search, int i, bool lonely)
 {
 	if (ft_strcmp(search, "<") == 0)
 		if (ft_manage_input_redirection(input, i, lonely) == 0)
@@ -90,40 +24,70 @@ bool ft_manage_redirection(t_input *input, char *search, int i, bool lonely)
 	if (ft_strcmp(search, ">>") == 0)
 		if (ft_manage_append_redirection(input, i, lonely) == 0)
 			return (0);
+	if (ft_strcmp(search, "<<") == 0)
+		if (ft_manage_heredoc_redirection(input, i, lonely) == 0)
+			return (0);
+	input->total_redirections++;
 	return (1);
 }
 
-int ft_check_one_redirection(t_input *input, int i, char *search)
+int	ft_check_one_redirection(t_input *input, int i, char *search)
 {
-	bool lonely;
-	
+	bool	lonely;
+
 	lonely = false;
 	if (ft_strncmp(input->split_exp[i], search, ft_strlen(search)) == 0)
-	{	
+	{
 		if (ft_strcmp(input->split_exp[i], search) == 0)
 			lonely = true;
-	 if (ft_manage_redirection(input, search, i, lonely) == 0)
+		if (ft_manage_redirection(input, search, i, lonely) == 0)
 			return (-1);
 		return (1);
 	}
 	return (0);
 }
 
-bool handle_redirection(t_input *input)
+char	**ft_create_redirection(void)
 {
-	int i;
-	int j;
-	int result;
-	char **redirections;
-	
-	i = 0;
+	char	**redirections;
+
 	redirections = malloc(sizeof(char *) * 5);
 	redirections[0] = ft_strdup("<<");
 	redirections[1] = ft_strdup("<");
 	redirections[2] = ft_strdup(">>");
 	redirections[3] = ft_strdup(">");
 	redirections[4] = NULL;
+	return (redirections);
+}
 
+bool	handle_redirection(t_input *input)
+{
+	int		i;
+	int		j;
+	int		result;
+	char	**redirections;
+
+	redirections = ft_create_redirection();
+	i = -1;
+	while (input->split_exp && input->split_exp[++i])
+	{
+		j = -1;
+		while (++j < 4)
+		{
+			if (input->status_exp[i] != 0)
+				continue ;
+			result = ft_check_one_redirection(input, i, redirections[j]);
+			if (result == 1)
+			{
+				i = -1;
+				break ;
+			}
+			else if (result == -1)
+				return (ft_matrix_free(&redirections), 1);
+		}
+	}
+	return (ft_matrix_free(&redirections), 0);
+}
 	/*
 	printf("ANTES\n");
 	for (int j = 0; input->split_exp[j]; j++)
@@ -137,43 +101,3 @@ bool handle_redirection(t_input *input)
 	//printf("outputfd: %d\n", input->outputfd);
 	printf("________\n");
 	*/
-
-	while (input->split_exp[i])
-	{
-		j = 0;
-		while (j < 4)
-		{
-			if (input->status_exp[i] != 0)	
-			{
-				j++;
-				continue ;
-			}
-			result = ft_check_one_redirection(input, i, redirections[j]);
-			if (result == 1)
-			{
-				i = 0;
-				break ;
-			}
-			else if (result == -1)
-				return (ft_matrix_free(&redirections), 1);
-			j++;
-		}
-		i++;
-	}
-
-	ft_matrix_free(&redirections);
-
-	/*
-	printf("DESPUES\n");
-	for (int j = 0; input->split_exp[j]; j++)
-		printf("Split exp %d: %s\n", j, input->split_exp[j]);
-	printf("input: %s\n", input->input);
-	printf("parsed: %s\n", input->parsed);
-	printf("command: %s\n", input->command);
-	printf("args: %s\n", input->args);
-	//printf("inputfd: %d\n", input->inputfd);
-	//printf("outputfd: %d\n", input->outputfd);
-	printf("________\n");
-	*/
-	return (0);
-}

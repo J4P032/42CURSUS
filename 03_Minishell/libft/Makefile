@@ -15,7 +15,7 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 	ft_split_quotes.c ft_split_quotes_separator.c ft_split_quotes_words.c \
 	ft_split_quotes_utils.c ft_split_quotes_separator2.c ft_strchr_quotes.c \
 	ft_strcat.c ft_strcspn.c ft_atol.c ft_first_word.c ft_last_str.c \
-	ft_matrix_len.c
+	ft_matrix_len.c ft_input_free.c
 
 OBJS	= ${SRCS:.c=.o}
 

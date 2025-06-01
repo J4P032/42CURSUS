@@ -157,9 +157,9 @@ void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 		if (in->input_split[*i][*j] && in->input_split[*i][*j] != '$')
 		{
 			dynamic_command(in, *k);
-			if (*j > 0 && in->input_split[*i][*j] == ' ' 
+			if (*j > 0 && in->input_split[*i][*j] == ' '
 				&& in->input_split[*i][(*j) - 1] == '$')
-				in->command[(*k)++] = in->input_split[*i][(*j)];	
+				in->command[(*k)++] = in->input_split[*i][(*j)];
 			(*j)++;
 		}
 	}

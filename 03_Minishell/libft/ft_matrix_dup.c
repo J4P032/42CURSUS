@@ -39,3 +39,24 @@ char	**ft_matrix_dup(char **matrix)
 	matrix2[i] = NULL;
 	return (matrix2);
 }
+
+char	**ft_matrix_dup_plus(char **env, int extra)
+{
+	char	**new_env;
+	int		i;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	new_env = malloc(sizeof(char *) * (i + extra + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (env && env[i])
+	{
+		new_env[i] = ft_strdup(env[i]);
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}

@@ -23,18 +23,17 @@ void	up_to_space(char *str)
 	str[i] = '\0';
 }
 
-
 /*When < tk1 tk2 tk3 command will be tk2 and arg tk3."<" is not valid*/
 /*char 0x1F is to ignore kk'>' token. So I write in compose token the 0x1F char*/
 /*...that is not used, to control that is like a quoted < or >*/
 void	compose_command(t_input *in)
-{	
+{
 	size_t	i;
 	size_t	final_redir;
 	size_t	quotes;
 	char	*str;
 	char	c;
-	
+
 	i = 0;
 	quotes = 0;
 	if (!in->split_exp)
@@ -51,7 +50,7 @@ void	compose_command(t_input *in)
 				quotes++;
 			}
 			else if ((str[i] == 0x1F) && c == str[i])
-			{		
+			{	
 				c = ' ';
 				quotes++;
 			}
@@ -67,7 +66,7 @@ void	compose_command(t_input *in)
 				in->command = ft_strdup(in->split_exp[1]);
 			}
 			if (!in->command)
-					clean_all(in, 1);
+				clean_all(in, 1);
 		}
 		else
 		{
@@ -83,7 +82,6 @@ void	compose_command(t_input *in)
 		up_to_space(in->command);
 	}
 }
-
 
 /*parsed returns with the command included. I need this to make expand env...*/
 /*...with echo, So I need to clean the command from parsed and take the rest.*/
@@ -105,7 +103,7 @@ void	write_parsed_output_from_file(t_input *in)
 	in->parsed = get_next_line(fd);
 	aux = in->parsed;
 	while (in->parsed && in->command && in->parsed[i] && in->command[i]
-			&& in->parsed[i] == in->command[i])
+		&& in->parsed[i] == in->command[i])
 		i++;
 	if (in->parsed && in->parsed[i] == ' ')
 		i++;

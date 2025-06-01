@@ -84,16 +84,15 @@ void	save_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k)
 		save_env_if_even_dollars(n, w, i, k);
 	else if (n->env_n > -1 && is_quoted(n, w) == 2)
 		save_env_even_dollars_quo(n, w, i, k);
-	
 	if (n->input_split[w][*i])
 	{
 		if (n->dollars % 2 == 0 && is_quoted(n, w) != 1 && n->env_n == -1
 			&& (!n->input_split[w][n->idollar]
 			|| n->input_split[w][n->idollar] == ' '))
-			{
-				dynamic_command(n, *k);
-				n->command[(*k)++] = '$';
-			}
+		{
+			dynamic_command(n, *k);
+			n->command[(*k)++] = '$';
+		}
 		(*i)++;
 	}
 }
