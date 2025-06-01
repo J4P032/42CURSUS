@@ -86,18 +86,61 @@ run()
 	INPUT="$1"
 	EXPECTED="$2"
 
-	clean_output "$INPUT" > redirs/temp1 2>&1
-	bash -c "$EXPECTED" > redirs/temp2 2>&1
-	if diff -q redirs/temp1 redirs/temp2 >/dev/null; then
+    rm -rf ../redirs
+    mkdir ../redirs
+	clean_output "$INPUT" > ../redirs/temp1 2>&1
+	bash -c "$EXPECTED" > ../redirs/temp2 2>&1
+	if diff -q ../redirs/temp1 ../redirs/temp2 >/dev/null; then
         echo -e "${GREEN}✔️${RESET}  $INPUT"
     else
         echo -e "${RED}❌${RESET}  $INPUT"
         echo "     Diferencias:"
-        cat redirs/temp1
-        cat redirs/temp2
+        cat ../redirs/temp1
+        cat ../redirs/temp2
     fi
-    rm redirs/temp1 redirs/temp2
+    rm -rf ../redirs
 }
+
+run_command_invalid()
+{
+	INPUT="$1"
+	EXPECTED="$2"
+
+    rm -rf ../redirs
+    mkdir ../redirs
+	clean_output "$INPUT" > ../redirs/temp1 2>&1
+	bash -c "$EXPECTED" > ../redirs/temp2 2>&1
+	if grep -q "command not found" ../redirs/temp1 && grep -q "command not found" ../redirs/temp2; then
+        echo -e "${GREEN}✔️${RESET}  $INPUT"
+    else
+        echo -e "${RED}❌${RESET}  $INPUT"
+        echo "     Diferencias:"
+        cat ../redirs/temp1
+        cat ../redirs/temp2
+    fi
+    rm -rf ../redirs
+}
+
+run_directory_invalid()
+{
+	INPUT="$1"
+	EXPECTED="$2"
+
+    rm -rf ../redirs
+    mkdir ../redirs
+	clean_output "$INPUT" > ../redirs/temp1 2>&1
+	bash -c "$EXPECTED" > ../redirs/temp2 2>&1
+	if grep -q "No such file or directory" ../redirs/temp1 && grep -q "No such file or directory" ../redirs/temp2; then
+        echo -e "${GREEN}✔️${RESET}  $INPUT"
+    else
+        echo -e "${RED}❌${RESET}  $INPUT"
+        echo "     Diferencias:"
+        cat ../redirs/temp1
+        cat ../redirs/temp2
+    fi
+    rm -rf ../redirs
+}
+
 
 run_command_return_value()
 {
@@ -118,6 +161,7 @@ run_command_return_value()
 
 
 
+clear
 
 echo "##########################"
 echo "# COMANDS con ruta       #"
@@ -279,6 +323,7 @@ run_redir '>kk echo -n patata' 'echo -n patata'
 run_redir '>kk echo -nnnnn -na patata' 'echo -nnnnn -na patata'
 run_redir '>kk echo -nnnnn' 'echo -nnnnn'
 run_redir '>kk echo' 'echo'
+run 'echo con redireccion "normal"' 'echo con redireccion "normal"'
 
 echo -e "\n"
 echo "############"
@@ -322,6 +367,109 @@ run_command_return_value '/bin/diff redirs/a redirs/a' 0
 run_command_return_value '/bin/diff redirs/a redirs/c' 2
 run_command_return_value '/bin/test -f redirs/a' 0
 run_command_return_value '/bin/test -f redirs/c' 1
+run_command_return_value '/bin/test 5 -gt 3' 0
+run_command_return_value '/bin/test 1 -gt 3' 1
+run_command_return_value '/bin/test 3 -eq 3' 0
+SHLVL_VAL=$SHLVL
+run "expr $SHLVL_VAL + $SHLVL_VAL" "expr $SHLVL_VAL + $SHLVL_VAL"
+run 'expr $SHLVL + $SHLVL' 'expr $SHLVL + $SHLVL - 2'
+
+echo -e "\n"
+echo "######################"
+echo "# COMILLAS DOBLES    #"
+echo "######################"
+echo -e "\n"
+
+
+run '"/bin/ls"' '"/bin/ls"'
+run '"/bin/pwd"' '"/bin/pwd"'
+run '"/bin/echo" patata' '"/bin/echo" patata'
+run '"/bin/echo" -n patata' '"/bin/echo" -n patata'
+run '"/bin/printf" patata' '"/bin/printf" patata'
+run '"/bin/cat" redirs/a' '"/bin/cat" redirs/a'
+run '"whoami"' '"whoami"'
+run_command_invalid '""' '""'
+run_command_invalid '   ""    ' '   ""    '
+run '"/bin/ls" -la' '"/bin/ls" -la'
+run '"/bin/ls" -l' '"/bin/ls" -l'
+run '"echo" uno dos tres cuatro' '"echo" uno dos tres cuatro'
+run '"/bin/ls" -l -a -h' '"/bin/ls" -l -a -h'
+run '"/bin/ls" -lhS' '"/bin/ls" -lhS'
+run '"/bin/cat" redirs/a redirs/b' '"/bin/cat" redirs/a redirs/b'
+run '"head" -n 5 redirs/a' '"head" -n 5 redirs/a'
+run '"""p"w"d"""' '"""p"w"d"""'
+run_command_invalid '"pwd "' '"pwd "'
+run_command_invalid '"patata"' '"patata"'
+run 'echo "cat lol.c | cat > lol.c"' 'echo "cat lol.c | cat > lol.c"'
+run 'echo "-n" "cat lol.c | cat > lol.c"' 'echo "-n" "cat lol.c | cat > lol.c"'
+run_command_invalid '"ls "' '"ls "'
+run_command_invalid '"abc def"' '"abc def"'
+run_command_invalid '"echoo"' '"echoo"'
+run_directory_invalid '"/noexiste"' '"/noexiste"'
+
+
+echo -e "\n"
+echo "#######################"
+echo "# COMILLAS SIMPLES    #"
+echo "#######################"
+echo -e "\n"
+
+run "'/bin/ls'" "'/bin/ls'"
+run "'/bin/pwd'" "'/bin/pwd'"
+run "'/bin/echo' patata" "'/bin/echo' patata"
+run "'/bin/echo' -n patata" "'/bin/echo' -n patata"
+run "'/bin/printf' patata" "'/bin/printf' patata"
+run "'/bin/cat' redirs/a" "'/bin/cat' redirs/a"
+run "'whoami'" "'whoami'"
+run_command_invalid "''" "''"
+run_command_invalid "   ''    " "   ''    "
+run "'/bin/ls' -la" "'/bin/ls' -la"
+run "'/bin/ls' -l" "'/bin/ls' -l"
+run "'echo' uno dos tres cuatro" "'echo' uno dos tres cuatro"
+run "'/bin/ls' -l -a -h" "'/bin/ls' -l -a -h"
+run "'/bin/ls' -lhS" "'/bin/ls' -lhS"
+run "'/bin/cat' redirs/a redirs/b" "'/bin/cat' redirs/a redirs/b"
+run "'head' -n 5 redirs/a" "'head' -n 5 redirs/a"
+run "'''p'w'd'''" "'''p'w'd'''"
+run_command_invalid "'pwd '" "'pwd '"
+run_command_invalid "'patata'" "'patata'"
+run "echo 'cat lol.c | cat > lol.c'" "echo 'cat lol.c | cat > lol.c'"
+run "echo '-n' 'cat lol.c | cat > lol.c'" "echo '-n' 'cat lol.c | cat > lol.c'"
+run_command_invalid "'ls '" "'ls '"
+run_command_invalid "'abc def'" "'abc def'"
+run_command_invalid "'echoo'" "'echoo'"
+run_directory_invalid "'/noexiste'" "'/noexiste'"
+run "'echo' '\$HOME'" "'echo' '\$HOME'"
+run "'/bin/echo' '\$PATH'" "'/bin/echo' '\$PATH'"
+run "'printenv' 'USER'" "'printenv' 'USER'"
+run "'echo' '   uno   dos   tres   '" "'echo' '   uno   dos   tres   '"
+run "'/bin/echo' '   '" "'/bin/echo' '   '"
+run "'cat' '   redirs/a   '" "'cat' '   redirs/a   '"
+run "'/bin/echo' patata '|' 'cat'" "'/bin/echo' patata '|' 'cat'"
+run "'/bin/ls' '-l' '|' 'wc' '-l'" "'/bin/ls' '-l' '|' 'wc' '-l'"
+run_directory_invalid "'cat' redirs/a '|' 'grep' hola" "'cat' redirs/a '|' 'grep' hola"
+run "'echo' hola '>' redirs/salida.txt" "'echo' hola '>' redirs/salida.txt"
+run "'cat' '<' redirs/a" "'cat' '<' redirs/a"
+run_directory_invalid "'grep' hola '<' redirs/a '>' redirs/out" "'grep' hola '<' redirs/a '>' redirs/out"
+run 'echo '\''$USER'\''' 'echo '\''$USER'\'''
+run_directory_invalid 'cd '\''~'\''' 'cd '\''~'\'''
+
+echo -e "\n"
+echo "###############################"
+echo "# ENV VARIABLES DE ENTORNO    #"
+echo "###############################"
+echo -e "\n"
+
+#run 'env' 'env'
+
+echo -e "\n"
+echo "#############"
+echo "# EXPORT    #"
+echo "#############"
+echo -e "\n"
+
+test_export "export a=patata" "echo \$a" "patata"
+
 
 
 
