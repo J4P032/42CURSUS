@@ -63,7 +63,7 @@ void	ft_compose_parsed(t_input *input)
 	i = 0;
 	first = true;
 	input->parsed = ft_strdup("");
-	while (input->input_split[i])
+	while (input->input_split && input->input_split[i])
 	{
 		if (ft_strcmp(input->input_split[i], input->command) == 0)
 		{

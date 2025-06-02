@@ -169,6 +169,91 @@ run_command_return_value()
 	rm redirs/temp1
 }
 
+run_redirects()
+{
+	INPUT="$1"
+	EXPECTED="$2"
+
+    
+    mkdir -p ../redirs
+    FILENAME=$(echo "$INPUT" |  awk -F '>' '{print $NF}' | xargs)
+
+    clean_output "$INPUT"
+    cp ./$FILENAME ../redirs/$FILENAME
+
+	bash -c "$EXPECTED" > ../redirs/temp2 2>&1
+	if diff -q ../redirs/$FILENAME ../redirs/temp2 >/dev/null; then
+        echo -e "${GREEN}✔️${RESET}  $INPUT"
+    else
+        echo -e "${RED}❌${RESET}  $INPUT"
+        echo "     Diferencias:"
+        cat ../redirs/$FILENAME
+        cat ../redirs/temp2
+    fi
+    find . -type f -name "*.txt" -delete
+    rm ./$FILENAME
+    rm -rf ../redirs
+}
+
+run_rare_redirects()
+{
+	INPUT="$1"
+	EXPECTED="$2"
+
+    
+    mkdir -p ../redirs
+    FILENAME=$(echo "$INPUT" | awk -F '>' '{print $NF}' | xargs | cut -d ' ' -f1)
+
+
+    clean_output "$INPUT"
+    cp ./$FILENAME ../redirs/$FILENAME
+
+	bash -c "$EXPECTED" > ../redirs/temp2 2>&1
+	if diff -q ../redirs/$FILENAME ../redirs/temp2 >/dev/null; then
+        echo -e "${GREEN}✔️${RESET}  $INPUT"
+    else
+        echo -e "${RED}❌${RESET}  $INPUT"
+        echo "     Diferencias:"
+        cat ../redirs/$FILENAME
+        cat ../redirs/temp2
+    fi
+    find . -type f -name "*.txt" -delete
+    rm ./$FILENAME
+    rm -rf ../redirs
+}
+
+run_appends()
+{
+    INPUT="$1"
+    EXPECTED="$2"
+
+    mkdir -p ../redirs
+
+    cp ./redirs/a ../redirs/a
+    cp ./redirs/b ../redirs/b
+
+    FILENAME=$(echo "$INPUT" | sed -E 's/.*>>?\s*([^ >]+)\s*$/\1/')
+
+    clean_output "$INPUT"  # Ejecuta minishell
+
+    cp ./redirs/b ../redirs/c  # Prepara el archivo base para bash
+    bash -c "$EXPECTED"        # Bash modifica ../redirs/c
+
+    # Compara lo que hizo la minishell con lo que hizo bash
+    if diff -q ./$FILENAME ../redirs/c >/dev/null; then
+        echo -e "${GREEN}✔️${RESET}  $INPUT"
+    else
+        echo -e "${RED}❌${RESET}  $INPUT"
+        echo "     Diferencias:"
+        diff ./$FILENAME ../redirs/c
+    fi
+
+    find . -type f -name "*.txt" -delete
+    rm -f ./$FILENAME
+    rm -rf ../redirs
+}
+
+
 
 clear
 
@@ -224,6 +309,8 @@ export kk="echo -nnnnn -n -nnnann msg1"
 run_test '$kk msg2' '$kk msg2'
 export kk="echo msg1"
 run_test '$kk -n msg2' '$kk -n msg2'
+run_test 'echo ""-n patata' 'echo ""-n patata'
+run_test 'echo "" -n patata' 'echo "" -n patata'
 run_test 'echo "-n" patata' 'echo "-n" patata'
 run_test "echo '-n' patata" "echo '-n' patata"
 run_test 'echo "-n patata"' 'echo "-n patata"'
@@ -464,7 +551,23 @@ run 'echo '\''$USER'\''' 'echo '\''$USER'\'''
 run_directory_invalid 'cd '\''~'\''' 'cd '\''~'\'''
 
 
+echo -e "\n"
+echo "####################"
+echo "# REDIRECCIONES    #"
+echo "####################"
+echo -e "\n"
 
+
+run_redirects '> salida' ''
+run_redirects 'ls > salida' 'ls'
+run_rare_redirects '> salida ls' 'ls'
+run_redirects 'ls > kk.txt > salida' 'ls'
+run_redirects '> kk.txt ls > salida' 'ls'
+run_redirects 'ls > kk.txt > kk2.txt > kk3.txt > salida' 'ls'
+run_redirects '> kk.txt ls > kk2.txt > kk3.txt > salida' 'ls'
+run_redirects 'cat < ./redirs/a > salida' 'cat < ./redirs/a'
+run_redirects '< ./redirs/a cat > salida' 'cat < ./redirs/a'
+run_appends 'cat < ../redirs/a >> ../redirs/b' 'cat < ../redirs/a >> ../redirs/c'
 
 
 

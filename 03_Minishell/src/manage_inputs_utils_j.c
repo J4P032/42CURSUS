@@ -72,10 +72,11 @@ void	copy_to_command(t_input *in, size_t *i, size_t *j, size_t *k)
 	{
 		*j = 0;
 		in->status_checked = 0;
-		if (*i > 0 && in->input_split[*i][0] == '\0'
+		if (*i > 0 && in->input_split && in->input_split[*i][0] == '\0'
 			&& (in->status[*i] == SQUO_SP || in->status[*i] == DQUO_SP))
 			break ;
-		while ((in->input_split[*i][*j] != ' ' || is_quoted(in, *i))
+		while (in->input_split && in->input_split[*i]
+			&& (in->input_split[*i][*j] != ' ' || is_quoted(in, *i))
 			&& (in->input_split[*i][*j] != '\0') && !in->spaced)
 		{
 			if (*i > 0 && (in->status[*i] == EPTY_SP
@@ -87,7 +88,8 @@ void	copy_to_command(t_input *in, size_t *i, size_t *j, size_t *k)
 				search_dollar(in, i, j, k);
 			in->status_checked = 1;
 		}
-		if (in->input_split[*i][*j] == ' ' || in->spaced)
+		if (in->input_split && in->input_split[*i]
+			&& (in->input_split[*i][*j] == ' ' || in->spaced))
 			break ;
 		(*i)++;
 	}
