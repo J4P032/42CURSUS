@@ -53,7 +53,7 @@ char	*next_file(char *file, char **num, int *i, int *fd)
 	*num = ft_itoa(*i);
 	if (!(*num))
 		return (close(*fd), NULL);
-	file = ft_strjoin("temp", *num);
+	file = ft_strjoin("/tmp/temp", *num);
 	if (!file)
 		return (close(*fd), free(*num), NULL);
 	close(*fd);
@@ -69,12 +69,12 @@ char	*choose_name(void)
 	char	*filename;
 
 	i = 0;
-	if (access(".", W_OK | R_OK) == -1)
+	if (access("/tmp", W_OK | R_OK) == -1)
 		return (NULL);
 	number = ft_itoa(i);
 	if (!number)
 		return (NULL);
-	filename = ft_strjoin("temp", number);
+	filename = ft_strjoin("/tmp/temp", number);
 	if (!filename)
 		return (NULL);
 	fd = open(filename, O_RDONLY);

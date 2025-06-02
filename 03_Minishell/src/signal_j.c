@@ -46,5 +46,4 @@ void	init_sigaction(struct sigaction *sa)
 	sa->sa_flags = SA_RESTART;
 	sigaction(SIGINT, sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
-	disable_echoctl();
 }

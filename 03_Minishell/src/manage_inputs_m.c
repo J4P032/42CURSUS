@@ -17,6 +17,7 @@ void	ft_manage_input(t_input *input)
 {
 	if (handle_redirection(input) == 1)
 		return ;
+	input->last_dollar_ = ft_last_str(input->split_exp);
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args, input);
 	else if (ft_strcmp(input->command, "cd") == 0)
@@ -33,7 +34,6 @@ void	ft_manage_input(t_input *input)
 		ft_exit(input);
 	else if (!(ft_strcmp(input->command, "") == 0 || input->command == NULL))
 		execute_command(input);
-	input->last_dollar_ = ft_last_str(input->split_exp);
 }
 
 /*
