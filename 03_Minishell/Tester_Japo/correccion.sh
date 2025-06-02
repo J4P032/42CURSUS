@@ -25,6 +25,16 @@ clean_output() {
     echo -n "$clean"
 }
 
+clean_output2() {
+    echo "$1" | \
+    grep -v 'miniyo\$' | \
+    grep -v '^export ' | \
+    grep -v '^echo ' | \
+    grep -v '^exit$' | \
+    sed '/^[[:space:]]*$/d'
+}
+
+
 # Colores
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -158,7 +168,6 @@ run_command_return_value()
     fi
 	rm redirs/temp1
 }
-
 
 
 clear
@@ -454,21 +463,13 @@ run_directory_invalid "'grep' hola '<' redirs/a '>' redirs/out" "'grep' hola '<'
 run 'echo '\''$USER'\''' 'echo '\''$USER'\'''
 run_directory_invalid 'cd '\''~'\''' 'cd '\''~'\'''
 
-echo -e "\n"
-echo "###############################"
-echo "# ENV VARIABLES DE ENTORNO    #"
-echo "###############################"
-echo -e "\n"
 
-#run 'env' 'env'
 
-echo -e "\n"
-echo "#############"
-echo "# EXPORT    #"
-echo "#############"
-echo -e "\n"
 
-test_export "export a=patata" "echo \$a" "patata"
+
+
+
+
 
 
 

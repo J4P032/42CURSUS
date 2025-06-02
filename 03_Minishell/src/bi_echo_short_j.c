@@ -72,7 +72,6 @@ size_t	check_redirects(t_input *in, size_t i)
 	return (i);
 }
 
-
 /*if >file echo will not get inside "echo" 5, as it will the last one...*/
 /*...so in that case it dont have to print anything. other case will print it*/
 /*wont do it if ''>file or ">"file*/
@@ -123,6 +122,5 @@ void	echo_short(t_input *in, int fd)
 		start = check_redirects(in, 0);
 	else
 		start = check_argument(in, parsed_n);
- 
 	print_final_echo(in, fd, start);
 }

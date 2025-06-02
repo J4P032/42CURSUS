@@ -76,10 +76,31 @@ bool	ft_manage_append_redirection(t_input *input, int i, bool lonely)
 	return (1);
 }
 
+static bool	ft_handle_heredoc_input(char *delimiter, int pipefd[2])
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			break ;
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
+			&& ft_strlen(line) == ft_strlen(delimiter))
+		{
+			free(line);
+			break ;
+		}
+		write(pipefd[1], line, ft_strlen(line));
+		write(pipefd[1], "\n", 1);
+		free(line);
+	}
+	return (true);
+}
+
 bool	ft_manage_heredoc_redirection(t_input *input, int i, bool lonely)
 {
 	char	*delimiter;
-	char	*line;
 	int		pipefd[2];
 
 	if (lonely)
@@ -90,26 +111,13 @@ bool	ft_manage_heredoc_redirection(t_input *input, int i, bool lonely)
 	{
 		ft_putstr_fd("miniyo: pipe error\n", 2);
 		input->last_exit_code = 1;
-		return (0);
+		return (false);
 	}
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-			break;
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(pipefd[1], line, strlen(line));
-		write(pipefd[1], "\n", 1);
-		free(line);
-	}
+	ft_handle_heredoc_input(delimiter, pipefd);
 	close(pipefd[1]);
 	if (input->inputfd > 2)
 		close(input->inputfd);
 	input->inputfd = pipefd[0];
 	update_input(input, i, lonely);
-	return (1);
+	return (true);
 }

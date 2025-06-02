@@ -13,91 +13,18 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-void	up_to_space(char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] && str[i] != ' ')
-		i++;
-	str[i] = '\0';
-}
-
-/*When < tk1 tk2 tk3 command will be tk2 and arg tk3."<" is not valid*/
-/*char 0x1F is to ignore kk'>' token. So I write in compose token the 0x1F char*/
-/*...that is not used, to control that is like a quoted < or >*/
-void	compose_command(t_input *in)
-{
-	size_t	i;
-	size_t	final_redir;
-	size_t	quotes;
-	char	*str;
-	char	c;
-
-	i = 0;
-	quotes = 0;
-	if (!in->split_exp)
-		return ;
-	c = ' ';
-	str = in->split_exp[0];
-	if ((str[0] == '<' || str[0] == '>') && in->status_exp[0] == 0)
-	{
-		while (str[i])
-		{
-			if ((str[i] == 0x1F) && !(quotes % 2))
-			{
-				c = str[i];
-				quotes++;
-			}
-			else if ((str[i] == 0x1F) && c == str[i])
-			{	
-				c = ' ';
-				quotes++;
-			}
-			if ((str[i] == '<' || str[i] == '>') && !(quotes % 2))
-				final_redir = i;
-			i++;
-		}
-		if (str[final_redir] && str[final_redir + 1])
-		{
-			if (in->split_exp[0] && in->split_exp[1])
-			{
-				free(in->command);
-				in->command = ft_strdup(in->split_exp[1]);
-			}
-			if (!in->command)
-				clean_all(in, 1);
-		}
-		else
-		{
-			if (in->split_exp[0] && in->split_exp[1] && in->split_exp[2])
-			{
-				free(in->command);
-				in->command = ft_strdup(in->split_exp[2]);
-			}
-			if (!in->command)
-				clean_all(in, 1);
-		}
-		remove_control_char(in->command);
-		up_to_space(in->command);
-	}
-}
-
 /*parsed returns with the command included. I need this to make expand env...*/
 /*...with echo, So I need to clean the command from parsed and take the rest.*/
 /*be carefull of spaces as we must include them in parsed I sustituted...*/
 /*...while (in->parsed && in->parsed[i] == ' ') by an if to just run one space*/
-void	write_parsed_output_from_file(t_input *in)
+void	write_parsed_output_from_file(t_input *in, size_t i)
 {
 	char	*file;
 	int		fd;
 	char	*aux;
-	size_t	i;
 
-	i = 0;
 	file = in->filename;
 	fd = open(file, O_RDONLY);
-	//ft_printf("fd: %d\n", fd);
 	if (fd == -1)
 		clean_all(in, 1);
 	in->parsed = get_next_line(fd);
@@ -202,10 +129,7 @@ void	parsing(t_input *in)
 	}
 	fd = open(in->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-	{
-		close(stdout_save);
-		clean_all(in, 1);
-	}
+		quit_parsing(in, stdout_save);
 	write_file(in, fd, stdout_save);
-	write_parsed_output_from_file(in);
+	write_parsed_output_from_file(in, 0);
 }

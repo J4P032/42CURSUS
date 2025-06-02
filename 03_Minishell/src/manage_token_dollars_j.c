@@ -45,11 +45,7 @@ void	do_even_token_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 			&& !ft_isdigit(in->input_split[w][in->idollar])
 			&& !ft_strrchr(D_Y_ODDCHAR, in->input_split[w][in->idollar])
 			&& !ft_strrchr(N_ODDCHAR, in->input_split[w][in->idollar]))
-		{
-			in->spaced = 1;
-			while (in->input_split[w][*i] && in->input_split[w][*i] != '?')
-				in->token[(*k)++] = in->input_split[w][(*i)++];
-		}
+			do_even_token_dollars2(in, w, i, k);
 		if (in->input_split[w][*i] && in->input_split[w][*i] != '?')
 			(*i)++;
 		j++;
@@ -83,11 +79,7 @@ void	token_env_question(t_input *in, size_t w, size_t *i, size_t *k)
 		dynamic_input(in, *k);
 		in->token[(*k)++] = '?';
 	}
-	while (in->input_split[w][*i] && in->input_split[w][*i] != '$') //&& in->input_split[w][(*i) + 1] != ' '//por un error en echo "$?p " o "$? p"
-	{
-		dynamic_input(in, *k);
-		in->token[(*k)++] = in->input_split[w][(*i)++];
-	}
+	token_env_question2(in, w, i, k);
 }
 
 void	token_invalid_envs(t_input *in, size_t w, size_t *i, size_t *k)

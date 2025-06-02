@@ -17,19 +17,6 @@ void	ft_manage_input(t_input *input)
 {
 	if (handle_redirection(input) == 1)
 		return ;
-/*
-printf("============\nENTRADA\n==========\n");
-printf("input:%s\n", input->input);
-printf("command:%s\n", input->command);
-printf("arg:%s\n", input->args);
-printf("parsed:%s\n", input->parsed);
-
-for (int i = 0; input->input_split[i]; i++)//
-	printf("I_split %d:%s %d\n", i, input->input_split[i], input->status_exp[i]);
-for (int i = 0; input->split_exp[i]; i++)//
-	printf("S_exp %d:%s %d\n", i, input->split_exp[i], input->status_exp[i]);
-printf("-----SALIDA-----\n"); 
-*/		
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args, input);
 	else if (ft_strcmp(input->command, "cd") == 0)

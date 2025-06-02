@@ -39,49 +39,47 @@ static char	*get_cd_path(t_input *input, char *oldpwd)
 	return (input->parsed);
 }
 
-char	*make_env_var(const char *name, const char *value)
+static void	ft_update_pwd_env(t_input *input, char *prev, char *oldpwd)
 {
-	char	*temp;
-	char	*result;
+	char	newpwd[4096];
 
-	temp = ft_strjoin(name, "=");
-	if (!temp)
-		return (NULL);
-	result = ft_strjoin(temp, value);
-	free(temp);
-	return (result);
+	if (!getcwd(newpwd, sizeof(newpwd)))
+	{
+		perror("getcwd");
+		input->last_exit_code = 1;
+		return ;
+	}
+	update_env(input, "PWD", newpwd);
+	update_env(input, "OLDPWD", prev);
+	ft_strlcpy(oldpwd, prev, sizeof(oldpwd));
+	input->last_exit_code = 0;
 }
 
 void	ft_cd(t_input *input)
 {
-	char			*path;
-	static char		oldpwd[4096] = "";
-	char			prev[4096];
-	//char			newpwd[4096];
+	char		*path;
+	static char	oldpwd[4096];
+	char		prev[4096];
 
 	if (input->split_exp[1] && input->split_exp[2])
 	{
-		ft_putstr_fd("miniyo: cd: too many arguments\n", 2);
+		write(2, "miniyo: cd: too many arguments\n", 32);
 		input->last_exit_code = 1;
 		return ;
 	}
-	if (getcwd(prev, sizeof(prev)) == NULL)
+	if (!getcwd(prev, sizeof(prev)))
 	{
 		perror("getcwd");
 		input->last_exit_code = 1;
 		return ;
 	}
 	path = get_cd_path(input, oldpwd);
-	if (!path)
-		return ;
-	if (chdir(path) != 0)
+	if (!path || chdir(path) != 0)
 	{
-		perror("cd");
+		if (!path || errno)
+			perror("cd");
 		input->last_exit_code = 1;
 		return ;
 	}
-	ft_strlcpy(oldpwd, prev, sizeof(oldpwd));
-	//if (getcwd(newpwd, sizeof(newpwd)) != NULL)
-	//	update_env_pwd(input, oldpwd, newpwd);
-	input->last_exit_code = 0;
+	ft_update_pwd_env(input, prev, oldpwd);
 }

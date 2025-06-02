@@ -51,7 +51,7 @@ void	search_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 	else
 	{
 		dynamic_input(in, *k);
-		if (is_quoted(in, *i) && *j == 0) ////////////
+		if (is_quoted(in, *i) && *j == 0)
 			in->token[(*k)++] = 0x1F;
 		dynamic_input(in, *k);
 		in->token[(*k)++] = in->input_split[*i][(*j)++];
@@ -96,6 +96,14 @@ void	copy_to_token(t_input *in, size_t *i, size_t *j, size_t *k)
 	}
 }
 
+void	compose_token2(t_input *in, size_t counter, int quoted)
+{
+	if (counter < 100 && in->from_expand == 0)
+		in->status_exp[counter] = quoted;
+	else if (counter < 100)
+		in->status_exp[counter] = 2;
+}
+
 /*I will give the in->status_exp[] 0 if not quoted or 1 if quoted...*/
 /*But when the token comes form expand ($) (in->from_expand) will be 2*/
 void	compose_token(t_input *in)
@@ -120,10 +128,7 @@ void	compose_token(t_input *in)
 			ft_bzero(in->token, ft_strlen(in->token));
 		quoted = (is_quoted(in, i) == 2 || is_quoted(in, i) == 1);
 		copy_to_token(in, &i, &j, &k);
-		if (counter < 100 && in->from_expand == 0)
-			in->status_exp[counter] = quoted;
-		else if (counter < 100)
-			in->status_exp[counter] = 2;
+		compose_token2(in, counter, quoted);
 		counter++;
 		copy_to_split_expanded(in, in->token, &in->split_exp);
 	}

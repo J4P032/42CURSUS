@@ -45,11 +45,7 @@ void	do_even_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 			&& !ft_isdigit(in->input_split[w][in->idollar])
 			&& !ft_strrchr(D_Y_ODDCHAR, in->input_split[w][in->idollar])
 			&& !ft_strrchr(N_ODDCHAR, in->input_split[w][in->idollar]))
-		{
-			in->spaced = 1;
-			while (in->input_split[w][*i] && in->input_split[w][*i] != '?')
-				in->command[(*k)++] = in->input_split[w][(*i)++];
-		}
+			do_even_dollars2(in, w, i, k);
 		if (in->input_split[w][*i] && in->input_split[w][*i] != '?')
 			(*i)++;
 		j++;
@@ -83,12 +79,7 @@ void	env_question(t_input *in, size_t w, size_t *i, size_t *k)
 		dynamic_command(in, *k);
 		in->command[(*k)++] = '?';
 	}
-	while (in->input_split[w][*i] && in->input_split[w][(*i) + 1] != ' '
-		&& in->input_split[w][*i] != '$')
-	{
-		dynamic_command(in, *k);
-		in->command[(*k)++] = in->input_split[w][(*i)++];
-	}
+	env_question2(in, w, i, k);
 }
 
 void	save_invalid_envs(t_input *in, size_t w, size_t *i, size_t *k)
@@ -154,13 +145,6 @@ void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k)
 			save_valid_env_variable(in, *i, j, k);
 			save_invalid_envs(in, *i, j, k);
 		}
-		if (in->input_split[*i][*j] && in->input_split[*i][*j] != '$')
-		{
-			dynamic_command(in, *k);
-			if (*j > 0 && in->input_split[*i][*j] == ' '
-				&& in->input_split[*i][(*j) - 1] == '$')
-				in->command[(*k)++] = in->input_split[*i][(*j)];
-			(*j)++;
-		}
+		input_check_prev_dollar(in, i, j, k);
 	}
 }

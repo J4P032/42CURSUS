@@ -14,7 +14,7 @@
 #include "../inc/minishell_j.h"
 #include <termios.h>
 
-volatile sig_atomic_t g_signal_received = 0;
+volatile sig_atomic_t	g_signal_received = 0;
 
 void	disable_echoctl(void)
 {

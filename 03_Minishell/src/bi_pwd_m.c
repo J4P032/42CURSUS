@@ -19,12 +19,12 @@ void	ft_pwd(char *args, t_input *input)
 	int		len;
 
 	len = ft_strlen(args);
-	if ((args[0] == '-' && args[1] != '-' && args[1]) ||
-		(args[0] == '-' && args[1] == '-' && len > 2))
+	if ((args[0] == '-' && args[1] != '-' && args[1])
+		|| (args[0] == '-' && args[1] == '-' && len > 2))
 	{
 		printf("pwd: usage: pwd\n");
 		input->last_exit_code = 1;
-		return;
+		return ;
 	}
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
@@ -37,4 +37,3 @@ void	ft_pwd(char *args, t_input *input)
 		input->last_exit_code = 1;
 	}
 }
-

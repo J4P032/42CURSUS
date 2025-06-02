@@ -64,14 +64,7 @@ void	save_env_if_even_dollars(t_input *in, size_t w, size_t *i, size_t *k)
 		}
 	}
 	else
-	{
-		while (in->input_split[w][*i] && in->input_split[w][(*i) + 1] != ' ')
-		{
-			(*i)++;
-			dynamic_command(in, *k);
-			in->command[(*k)++] = in->input_split[w][(*i)];
-		}
-	}
+		save_env_if_even_dollars2(in, w, i, k);
 }
 
 /*the second if is for cases like "$ a", $, where we are after the $ but...*/
@@ -149,11 +142,7 @@ void	save_rare_cases(t_input *in, size_t w, size_t *i, size_t *k)
 		if (str[id] && !str[id + 1] && !ft_strrchr(D_Y_ODDCHAR, str[id]))
 			in->spaced = 0;
 		if (ft_strrchr(D_Y_ODDCHAR, str[id]))
-		{
-			in->command[(*k)++] = '$';
-			dynamic_command(in, *k);
-			in->command[(*k)++] = str[id];
-		}
+			save_rare_cases2(in, k, str, id);
 		(*i) = id;
 	}
 }
