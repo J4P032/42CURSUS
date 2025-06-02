@@ -29,6 +29,8 @@
 # define N_ODDCHAR "!@*-#`(){["
 # define BUFFER 100
 
+extern volatile sig_atomic_t	g_signal_received;
+
 typedef struct s_input
 {
 	char	*input;
@@ -77,15 +79,26 @@ void	expand_dollar(t_input *in, size_t *i, size_t *j, size_t *k);
 void	save_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);
 void	save_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);
 void	save_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);
-void	expand_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k);////
-void	token_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);///
-void	token_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);///
-void	token_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);///
+void	expand_token_dollar(t_input *in, size_t *i, size_t *j, size_t *k);
+void	token_valid_env_variable(t_input *n, size_t w, size_t *i, size_t *k);
+void	token_rest_no_env(t_input *in, size_t w, size_t *i, size_t *k);
+void	token_rare_cases(t_input *in, size_t w, size_t *i, size_t *k);
 void	compose_token(t_input *in);
 void	dynamic_input(t_input *in, size_t k);
 void	dynamic_command(t_input *in, size_t k);
 void	dynamic_arg(t_input *in, size_t k);
 void	remove_control_char(char *string);
+void	do_even_dollars2(t_input *in, size_t w, size_t *i, size_t *k);
+void	env_question2(t_input *in, size_t w, size_t *i, size_t *k);
+void	input_check_prev_dollar(t_input *in, size_t *i, size_t *j, size_t *k);
+void	save_env_if_even_dollars2(t_input *in, size_t w, size_t *i, size_t *k);
+void	save_rare_cases2(t_input *in, size_t *k, char *str, size_t id);
+void	do_even_token_dollars2(t_input *in, size_t w, size_t *i, size_t *k);
+void	token_env_question2(t_input *in, size_t w, size_t *i, size_t *k);
+void	token_env_if_even_dollars2(t_input *in, size_t w, size_t *i, size_t *k);
+void	token_rare_cases2(t_input *in, size_t *k, char *str, size_t id);
+void	compose_command(t_input *in);
+void	quit_parsing(t_input *in, int stdout_save);
 
 //BUILT INS
 void	echo_short(t_input *in, int fd);
@@ -105,6 +118,5 @@ size_t	check_more_n(t_input *in);
 //SIGNALS
 void	init_sigaction(struct sigaction *sa);
 void	ctrlc_handler(int sig);
-extern 	volatile sig_atomic_t g_signal_received;
 
 #endif

@@ -51,5 +51,7 @@ void	update_shlvl(char **arg);
 void	env_add(char ***envp, char *new_var);
 
 bool	ft_manage_heredoc_redirection(t_input *input, int i, bool lonely);
+void	update_env(t_input *input, char *key, char *value);
+char	*get_cmd_path_from_env(t_input *input, char **envp, char *cmd);
 
 #endif
