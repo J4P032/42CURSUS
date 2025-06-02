@@ -18,13 +18,13 @@ char	**ft_matrix_dup(char **matrix)
 	char	**matrix2;
 
 	i = 0;
-	while (matrix[i])
+	while (matrix && matrix[i])
 		i++;
 	matrix2 = malloc(sizeof(char *) * (i + 1));
 	if (!matrix2)
 		return (NULL);
 	i = 0;
-	while (matrix[i])
+	while (matrix && matrix[i])
 	{
 		matrix2[i] = ft_strdup(matrix[i]);
 		if (!matrix2[i])

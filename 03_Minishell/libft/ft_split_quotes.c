@@ -24,7 +24,7 @@ void	init_struct(t_split *squotes, char const *s, char c, size_t *i)
 	squotes->c = c;
 }
 
-char	**ft_split_quotes(char const *s, char c, t_input *input)
+char	**ft_split_quotes2(char const *s, char c, t_input *input)
 {
 	size_t	i;
 	char	**split;
@@ -50,4 +50,12 @@ char	**ft_split_quotes(char const *s, char c, t_input *input)
 		i++;
 	}
 	return (split);
+}
+
+char	**ft_split_quotes(char const *s, char c, t_input *input)
+{
+	if (!s)
+		return (NULL);
+	else
+		return (ft_split_quotes2(s, c, input));
 }
