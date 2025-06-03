@@ -18,6 +18,7 @@
 # include "../ft_printf/ft_printf.h"
 # include "../inc/get_next_line.h"
 # include <stdbool.h>
+# include <sys/ioctl.h>
 
 # define EPTY_NSP 0
 # define EPTY_SP 1
@@ -40,8 +41,6 @@ typedef struct s_input
 	char	**split_exp;
 	char	**envp;
 	char	**local_envp;
-	char	*redir_in;///
-	char	*redir_out;///
 	int		*status;
 	char	*token;
 	char	*command;
@@ -67,6 +66,10 @@ typedef struct s_input
 	bool	is_script;
 	int		total_pipes;
 	int		total_redirections;
+	int		cmd;
+	int		cmd_start;
+	int		cmd_end;
+	int		num_cmds;
 }			t_input;
 
 //CHECK INPUT
@@ -114,9 +117,16 @@ void	print_valid_env_variable(t_input *n, size_t w, size_t *i);
 void	space_after_first_invalid_env(t_input *in, size_t w, size_t i, int on);
 int		is_valid_arg(char *str);
 size_t	check_more_n(t_input *in);
+void	print_heredoc(char *line, int pipefd);
 
 //SIGNALS
 void	init_sigaction(struct sigaction *sa);
 void	ctrlc_handler(int sig);
+void	heredoc_sigint_handler(int sig);
+void	disable_echoctl(void);
+void	heredoc_signals(struct sigaction *sa, struct sigaction *sa_old_int,
+			struct sigaction *sa_old_quit);
+void	restore_signals(struct sigaction *sa_old_int,
+			struct sigaction *sa_old_quit);
 
 #endif

@@ -3,12 +3,44 @@ hay pruebas para hacer...
 
 =============================================================================================================
 
+NUEVOS
+
+CORREGIDO - al hacer echo $? despues de un comando fallido deberia ser 127 y lo es
+	pero al volver a hacer de nuevo echo $? deberia ser 0 pero sigue siendo 127
+
+CORREGIDO - la señal controlC en cat deberia dar un salto de linea.. sin embargo no 	lo hace.
+
+CORREGIDO - haciendo cd a un directorio no existente solo muestra un salto de linea.
+Deberia mostrar NO SUCH FILE OR DIRECTORY.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 (MARIO)
 
+cd -> CUANDO se hace un unset de HOME, en bash, si se hace
+	cd, pone: cd: HOME not set.. Y NO SE MUEVE AL HOME
+	en ZSH, no pone nada PERO NO SE MUEVE AL HOME
+	lo que mas rabia te de.
+	cd ~ no hace falta hacerlo ya que aunque se borrara el HOME iría al home y segun
+	Michelangello eso es un extra. como cd -
+
+
+
 funcion CD le falta:
 	actualizar PWD y OLDPWD en ENV
-	cd ~ falta por implementar
+	//cd ~ falta por implementar
 
 ls $a deberia mostrar el ls normal como bash... pero dice que no tiene ese directorio.
 

@@ -54,4 +54,16 @@ bool	ft_manage_heredoc_redirection(t_input *input, int i, bool lonely);
 void	update_env(t_input *input, char *key, char *value);
 char	*get_cmd_path_from_env(t_input *input, char **envp, char *cmd);
 
+char	*join_command(char **split_exp, int start, int end);
+int		count_pipes(t_input *input);
+void	ft_compose_parsed(t_input *input);
+void	setup_pipe(int *pipefd, int cmd, int num_cmds);
+void	handle_fork_error(void);
+char	**get_command_args(char **split_exp, int start, int end);
+void	child_p_2(t_input *input, t_input *child, int cmd_start, int cmd_end);
+void	child_p(int prev_fd, int *pipefd, t_input *input);
+void	parent_p(int *prev_fd, int *pipefd, int is_last, char **args);
+void	wait_for_children(pid_t last_pid, t_input *input);
+char	*get_env_value(char **envp, const char *name);
+
 #endif
