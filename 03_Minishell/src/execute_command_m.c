@@ -79,12 +79,23 @@ void	child_process(t_input *input)
 	handle_exec_error(input, cmd_path);
 }
 
+void	signal_interrupt(t_input *in, int status)
+{
+	int	sig;
+
+	sig = WTERMSIG(status);
+	if (sig == SIGINT)
+		write(1, "\n", 1);
+	if (sig == SIGQUIT)
+		write(2, "Quit (core dumped)\n", 19);
+	in->last_exit_code = 128 + sig;
+}
+
 bool	execute_command(t_input *input)
 {
 	pid_t				pid;
 	int					status;
 	struct sigaction	sa;
-	int					sig;
 
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
@@ -99,27 +110,6 @@ bool	execute_command(t_input *input)
 	if (WIFEXITED(status))
 		input->last_exit_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		if (sig == SIGQUIT)
-			write(2, "Quit (core dumped)\n", 19);
-		input->last_exit_code = 128 + sig;
-	}
+		signal_interrupt(input, status);
 	return (true);
 }
-
-/*
-ft_printf("-----START-----\n"); 
-ft_printf("command:%s\n", input->command);
-ft_printf("arg:%s\n", input->args);
-ft_printf("parsed:%s\n", input->parsed);
-for (size_t i = 0; input->input_split[i]; i++)
-	ft_printf("Input_split%d:%s %d\n", i, input->input_split[i],
-		 input->status_exp[i]);
-for (size_t i = 0; input->split_exp[i]; i++)
-	ft_printf("Split_exp%d:%s %d\n", i, input->split_exp[i],
-		 input->status_exp[i]);
-ft_printf("inputfd:%d\n", input->inputfd);
-ft_printf("outputfd:%d\n", input->outputfd);
-ft_printf("-----END-----\n"); 
-*/

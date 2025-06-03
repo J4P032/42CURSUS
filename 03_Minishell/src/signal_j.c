@@ -16,6 +16,19 @@
 
 volatile sig_atomic_t	g_signal_received = 0;
 
+void	heredoc_sigint_handler(int sig)
+{
+	char	enter;
+
+	enter = '\n';
+	(void)sig;
+	g_signal_received = 1;
+	write(STDOUT_FILENO, ">^C", 3);
+	ioctl(STDIN_FILENO, TIOCSTI, &enter);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+}
+
 void	disable_echoctl(void)
 {
 	struct termios	term;
@@ -46,5 +59,4 @@ void	init_sigaction(struct sigaction *sa)
 	sa->sa_flags = SA_RESTART;
 	sigaction(SIGINT, sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
-	disable_echoctl();
 }

@@ -123,4 +123,5 @@ void	echo_short(t_input *in, int fd)
 	else
 		start = check_argument(in, parsed_n);
 	print_final_echo(in, fd, start);
+	in->last_exit_code = 0;
 }

@@ -13,17 +13,38 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
+char	*get_env_value(char **envp, const char *name)
+{
+	int		i;
+	size_t	len;
+
+	if (!envp || !name)
+		return (NULL);
+	len = ft_strlen(name);
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+			return (&envp[i][len + 1]);
+		i++;
+	}
+	return (NULL);
+}
+
 static char	*get_cd_path(t_input *input, char *oldpwd)
 {
+	char	*home;
+
 	if (!input->parsed[0])
 	{
-		if (!getenv("HOME"))
+		home = get_env_value(input->envp, "HOME");
+		if (!home)
 		{
 			printf("cd: HOME not set\n");
 			input->last_exit_code = 1;
 			return (NULL);
 		}
-		return (getenv("HOME"));
+		return (home);
 	}
 	if (ft_strcmp(input->parsed, "-") == 0)
 	{
@@ -76,8 +97,8 @@ void	ft_cd(t_input *input)
 	path = get_cd_path(input, oldpwd);
 	if (!path || chdir(path) != 0)
 	{
-		if (!path || errno)
-			perror("cd");
+		if (path)
+			ft_printf("%s: No such file or directory\n", path);
 		input->last_exit_code = 1;
 		return ;
 	}

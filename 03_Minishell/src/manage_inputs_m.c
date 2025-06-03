@@ -34,6 +34,12 @@ void	ft_manage_input(t_input *input)
 		ft_exit(input);
 	else if (!(ft_strcmp(input->command, "") == 0 || input->command == NULL))
 		execute_command(input);
+	else if (input->input_split && input->input_split[0]
+		&& !input->input_split[0][0])
+	{
+		ft_printf("minishell: command not found\n");
+		input->last_exit_code = 127;
+	}
 }
 
 /*
