@@ -32,6 +32,9 @@ void	ft_input_null(t_input *input)
 	input->split_exp = NULL;
 	while (i++ < 100)
 		input->status_exp[i] = 0;
+	input->cmd = 0;
+	input->cmd_start = 0;
+	input->cmd_end = 0;
 }
 
 void	ft_input_free(t_input *input)

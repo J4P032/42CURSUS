@@ -27,7 +27,6 @@ SRC = 	src/main.c \
 		src/manage_input_dollars3_j.c \
 		src/redirections_m.c \
 		src/bi_exit_j.c \
-		src/redirections_heredoc_m.c \
 		src/get_next_line.c \
 		src/get_next_line_utils.c \
 		src/parsing_j.c \
@@ -41,9 +40,13 @@ SRC = 	src/main.c \
 		src/split_exp_utils_j.c \
 		src/update_inputs_m.c \
 		src/redirections_solve_m.c \
+		src/redirections_solve_j.c \
 		src/bi_export_utils_m.c \
 		src/update_env_m.c \
-		src/execute_command_path_m.c
+		src/execute_command_path_m.c \
+		src/manage_pipes_utils_m.c \
+		src/manage_pipes_utils2_m.c \
+		src/init_struct_m.c
 OBJDIR = obj
 OBJS = $(SRC:src/%.c=$(OBJDIR)/%.o)
 RM	= rm -rf
