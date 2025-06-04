@@ -37,7 +37,7 @@ static void	handle_exec_error(t_input *input, char *cmd_path)
 {
 	if (errno == ENOEXEC || errno == ENOENT)
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("miniyo: ", 2);
 		ft_putstr_fd(input->command, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		free(cmd_path);
@@ -47,7 +47,7 @@ static void	handle_exec_error(t_input *input, char *cmd_path)
 	}
 	if (errno == EACCES)
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("miniyo: ", 2);
 		ft_putstr_fd(input->command, 2);
 		ft_putstr_fd(": Permission denied\n", 2);
 		free(cmd_path);
@@ -65,7 +65,7 @@ void	child_process(t_input *input)
 	cmd_path = get_cmd_path_from_env(input, input->envp, input->command);
 	if (!cmd_path)
 	{
-		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putstr_fd("miniyo: command not found: ", 2);
 		ft_putstr_fd(input->command, 2);
 		ft_putchar_fd('\n', 2);
 		exit(127);
@@ -85,9 +85,9 @@ void	signal_interrupt(t_input *in, int status)
 
 	sig = WTERMSIG(status);
 	if (sig == SIGINT)
-		write(1, "\n", 1);
+		one_hundred_thirty(in);
 	if (sig == SIGQUIT)
-		write(2, "Quit (core dumped)\n", 19);
+		one_hundred_thirtyone(in);
 	in->last_exit_code = 128 + sig;
 }
 

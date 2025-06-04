@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_pipes_m.c                                   :+:      :+:    :+:   */
+/*   manage_pipes_utils_m.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:32:40 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/30 01:28:06 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/06/04 08:55:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ int	count_pipes(t_input *input)
 	count = 0;
 	while (input->split_exp && input->split_exp[i])
 	{
+		if (i > 99)
+		{
+			perror("count_pipes: Force Exit. Too many arguments");
+			clean_all(input, 1);
+		}
 		if (ft_strcmp(input->split_exp[i], "|") == 0
 			&& input->status_exp[i] == 0)
 			count++;

@@ -114,18 +114,18 @@ bool	ft_manage_heredoc_redirection(t_input *input, int i, bool lonely)
 		delimiter = input->split_exp[i + 1];
 	else
 		delimiter = input->split_exp[i] + ft_strlen("<<");
+	if (!delimiter)
+		return (input->last_exit_code = 2, false);
 	if (pipe(pipefd) == -1)
 	{
 		ft_putstr_fd("miniyo: pipe error\n", 2);
-		input->last_exit_code = 1;
-		return (false);
+		return (input->last_exit_code = 1, false);
 	}
 	if (!ft_handle_heredoc_input(delimiter, pipefd))
 	{
 		close(pipefd[0]);
 		close(pipefd[1]);
-		input->last_exit_code = 130;
-		return (false);
+		return (input->last_exit_code = 130, false);
 	}
 	close(pipefd[1]);
 	if (input->inputfd > 2)

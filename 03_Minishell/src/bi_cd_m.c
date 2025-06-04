@@ -98,7 +98,7 @@ void	ft_cd(t_input *input)
 	if (!path || chdir(path) != 0)
 	{
 		if (path)
-			ft_printf("%s: No such file or directory\n", path);
+			ft_putstr_fd("miniyo: No such file or directory\n", 2);
 		input->last_exit_code = 1;
 		return ;
 	}

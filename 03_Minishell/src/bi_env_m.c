@@ -34,6 +34,7 @@ void	print_env(t_input *in, char **envp)
 
 void	ft_env(t_input *in, char **envp)
 {
+	update_env(in, "_", "/usr/bin/env");
 	if (in->args[0] == '-' && in->args[1] && in->args[1] != '-')
 		printf("env: invalid option -- '%c'\n", in->args[1]);
 	else if (in->args[0] != '\0' && in->args[0] != '-')

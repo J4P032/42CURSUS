@@ -17,7 +17,6 @@ void	ft_manage_input(t_input *input)
 {
 	if (handle_redirection(input) == 1)
 		return ;
-	input->last_dollar_ = ft_last_str(input->split_exp);
 	if (ft_strcmp(input->command, "pwd") == 0)
 		ft_pwd(input->args, input);
 	else if (ft_strcmp(input->command, "cd") == 0)
@@ -37,21 +36,8 @@ void	ft_manage_input(t_input *input)
 	else if (input->input_split && input->input_split[0]
 		&& !input->input_split[0][0])
 	{
-		ft_printf("minishell: command not found\n");
+		ft_printf("miniyo: command not found\n");
 		input->last_exit_code = 127;
 	}
+	input->last_dollar_ = ft_last_str(input, input->split_exp);
 }
-
-/*
-printf("============\nENTRADA\n==========\n");
-printf("input:%s\n", input->input);
-printf("command:%s\n", input->command);
-printf("arg:%s\n", input->args);
-printf("parsed:%s\n", input->parsed);
-
-for (size_t i = 0; input->input_split[i]; i++)//
-	printf("I_split %d:%s %d\n", i, input->input_split[i], input->status_exp[i]);
-for (size_t i = 0; input->split_exp[i]; i++)//
-	printf("S_exp %d:%s %d\n", i, input->split_exp[i], input->status_exp[i]);
-printf("-----SALIDA-----\n"); 
-*/

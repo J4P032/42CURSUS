@@ -13,7 +13,24 @@
 #include "../inc/minishell_m.h"
 #include "../inc/minishell_j.h"
 
-void	ft_search_env(int len, char *input, char ***envp, char **new_env)
+int	is_unset_var(char *env_entry, char **unset_vars)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	while (unset_vars[i])
+	{
+		len = ft_strlen(unset_vars[i]);
+		if (ft_strncmp(env_entry, unset_vars[i], len) == 0
+			&& env_entry[len] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	ft_search_env(char ***envp, char **unset_vars, char **new_env)
 {
 	int	i;
 	int	j;
@@ -22,7 +39,7 @@ void	ft_search_env(int len, char *input, char ***envp, char **new_env)
 	j = 0;
 	while ((*envp)[i])
 	{
-		if (ft_strncmp((*envp)[i], input, len) == 0 && (*envp)[i][len] == '=')
+		if (is_unset_var((*envp)[i], unset_vars))
 			free((*envp)[i]);
 		else
 			new_env[j++] = (*envp)[i];
@@ -33,19 +50,17 @@ void	ft_search_env(int len, char *input, char ***envp, char **new_env)
 void	ft_unset(t_input *input)
 {
 	int		i;
-	int		len;
 	char	**new_env;
 
-	if (!input->parsed)
+	if (!input->split_exp)
 		return ;
 	i = 0;
-	len = ft_strlen(input->parsed);
 	while (input->envp[i])
 		i++;
 	new_env = ft_calloc(i + 1, sizeof(char *));
 	if (!new_env)
 		return ;
-	ft_search_env(len, input->parsed, &input->envp, new_env);
+	ft_search_env(&input->envp, input->split_exp, new_env);
 	free(input->envp);
 	input->envp = new_env;
 }

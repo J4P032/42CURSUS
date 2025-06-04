@@ -87,7 +87,7 @@ void	update_input(t_input *input, int i, bool lonely)
 	{
 		if (i == j || (lonely && i + 1 == j))
 			continue ;
-		if (input->status_exp[j] == 0)
+		if (j < 100 && k < 100 && input->status_exp[j] == 0)
 		{
 			input->status_exp[k] = input->status_exp[j];
 			k++;

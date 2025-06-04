@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_pipes_m.c                                   :+:      :+:    :+:   */
+/*   manage_pipes_utils2_m.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpico-bu <mpico-bu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:32:40 by mpico-bu          #+#    #+#             */
-/*   Updated: 2025/05/30 01:28:06 by mpico-bu         ###   ########.fr       */
+/*   Updated: 2025/06/04 09:53:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ void	child_p_2(t_input *input, t_input *child, int cmd_start, int cmd_end)
 	child->split_exp = ft_matrix_dup(child->input_split);
 	while (child->split_exp[k])
 	{
+		if (cmd_start + k > 99)
+		{
+			perror("child_p_2: Force Exit. Too many arguments");
+			clean_all(input, 1);
+		}
 		child->status_exp[k] = input->status_exp[cmd_start + k];
 		k++;
 	}
@@ -117,12 +122,14 @@ void	wait_for_children(pid_t last_pid, t_input *input)
 			{
 				sig = WTERMSIG(status);
 				if (sig == SIGINT)
-					write(1, "\n", 1);
+					one_hundred_thirty(input);
 				else if (sig == SIGQUIT)
-					write(1, "Quit (core dumped)\n", 19);
+					one_hundred_thirtyone(input);
 				input->last_exit_code = 128 + sig;
 			}
 		}
 		wpid = wait(&status);
+		if (g_signal_received == SIGINT || g_signal_received == SIGQUIT)
+			write(1, "\r", 1);
 	}
 }

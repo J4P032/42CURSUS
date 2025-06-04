@@ -74,7 +74,7 @@ bool	handle_redirection(t_input *input)
 		j = -1;
 		while (++j < 4)
 		{
-			if (input->status_exp[i] != 0)
+			if (i < 100 && input->status_exp[i] != 0)
 				continue ;
 			result = ft_check_one_redirection(input, i, redirections[j]);
 			if (result == 1)
@@ -88,16 +88,3 @@ bool	handle_redirection(t_input *input)
 	}
 	return (ft_matrix_free(&redirections), 0);
 }
-	/*
-	printf("ANTES\n");
-	for (int j = 0; input->split_exp[j]; j++)
-		printf("Split exp %d: %s\n", j, input->split_exp[j]);
-	printf("input: %s\n", input->input);
-	printf("parsed: %s\n", input->parsed);
-	printf("command: %s\n", input->command);
-	printf("args: %s\n", input->args);
-
-	//printf("inputfd: %d\n", input->inputfd);
-	//printf("outputfd: %d\n", input->outputfd);
-	printf("________\n");
-	*/

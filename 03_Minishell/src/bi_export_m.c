@@ -26,6 +26,8 @@ static int	is_valid_key(char *str)
 			return (0);
 		i++;
 	}
+	if (!str[i])
+		return (-1);
 	if (str[0] == '=' || str[0] == '\0')
 		return (0);
 	return (1);
@@ -90,13 +92,13 @@ static void	export_args(t_input *input, char ***envp)
 	error_flag = 0;
 	while (input->split_exp[i])
 	{
-		if (is_valid_key(input->split_exp[i]))
+		if (is_valid_key(input->split_exp[i]) == 1)
 		{
 			if (ft_strncmp(input->split_exp[i], "SHLVL=", 6) == 0)
 				update_shlvl(&input->split_exp[i]);
 			export_var(input->split_exp[i], envp);
 		}
-		else
+		else if (is_valid_key(input->split_exp[i]) == 0)
 		{
 			ft_putstr_fd("export: not a valid identifier\n", 2);
 			error_flag = 1;

@@ -59,7 +59,7 @@ static void	exit_if_invalid_cmd(char *cmd)
 {
 	if (!cmd || *cmd == '\0')
 	{
-		ft_putstr_fd("minishell: Permission denied\n", 2);
+		ft_putstr_fd("miniyo: Permission denied\n", 2);
 		exit(1);
 	}
 }
@@ -75,7 +75,7 @@ static void	handle_slash_path(t_input *input, char *cmd)
 	}
 	if (stat(cmd, &st) == 0 && S_ISDIR(st.st_mode))
 	{
-		ft_putstr_fd("minishell: Is a directory\n", 2);
+		ft_putstr_fd("miniyo: Is a directory\n", 2);
 		exit(126);
 	}
 	if (access(cmd, X_OK) != 0)
@@ -98,7 +98,7 @@ char	*get_cmd_path_from_env(t_input *input, char **envp, char *cmd)
 	path = search_path(cmd, envp);
 	if (!path)
 	{
-		ft_putstr_fd("minishell: command not found\n", 2);
+		ft_putstr_fd("miniyo: command not found\n", 2);
 		exit(127);
 	}
 	return (path);

@@ -98,9 +98,14 @@ void	copy_to_token(t_input *in, size_t *i, size_t *j, size_t *k)
 
 void	compose_token2(t_input *in, size_t counter, int quoted)
 {
-	if (counter < 100 && in->from_expand == 0)
+	if (counter > 99)
+	{
+		perror("compose_token2: Force Exit. Too many arguments");
+		clean_all(in, 1);
+	}
+	if (in->from_expand == 0)
 		in->status_exp[counter] = quoted;
-	else if (counter < 100)
+	else
 		in->status_exp[counter] = 2;
 }
 

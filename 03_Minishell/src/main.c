@@ -18,6 +18,9 @@ static int	handle_input(t_input *input)
 	input->input = readline("\001\033[1;32m\002miniyo$\001\033[0m\002 ");
 	if (g_signal_received == SIGQUIT)
 		clean_all(input, 131);
+	else if (g_signal_received == SIGINT)
+		input->last_exit_code = 130;
+	g_signal_received = 0;
 	if (!input->input)
 		return (0);
 	if (!input->input[0])
@@ -112,12 +115,3 @@ int	main(int argc, char **argv, char **envp)
 	else
 		exit(input.last_exit_code);
 }
-
-		/*
-		 printf("============\nPARSEADO:%s\n==========\n", input.parsed);
-		printf("command:%s\n", input.command);
-		printf("arg:%s\n", input.args);
-		for (size_t i = 0; input.split_exp[i]; i++)//
-		ft_printf("%d.%s %d\n", i, input.split_exp[i], input.status_exp[i]);//
-		printf("-----SALIDA-----\n"); 
-		*/

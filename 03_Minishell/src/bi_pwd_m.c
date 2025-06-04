@@ -33,7 +33,7 @@ void	ft_pwd(char *args, t_input *input)
 	}
 	else
 	{
-		perror("minishell: pwd");
+		perror("miniyo: pwd");
 		input->last_exit_code = 1;
 	}
 }
