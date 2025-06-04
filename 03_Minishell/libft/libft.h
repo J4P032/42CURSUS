@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include "../inc/minishell_j.h"
+# include "../inc/minishell_m.h"
 
 typedef struct s_lists
 {
@@ -105,5 +106,5 @@ int			is_spaced(t_split *sq, size_t i);
 int			is_quoted(t_input *input, int word);
 long long	ft_atol(char *nptr, int *error);
 char		*ft_first_word(char *str, char c);
-char		*ft_last_str(char **str);
+char		*ft_last_str(t_input *input, char **str);
 #endif

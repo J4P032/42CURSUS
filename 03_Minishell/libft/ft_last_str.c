@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_last_str(char **str)
+char	*ft_last_str(t_input *input, char **str)
 {
 	size_t	i;
 
@@ -21,5 +21,11 @@ char	*ft_last_str(char **str)
 		return (NULL);
 	while (str[i])
 		i++;
-	return (str[i]);
+	if (i > 0)
+	{
+		update_env(input, "_", str[i - 1]);
+		return (str[i - 1]);
+	}
+	update_env(input, "_", NULL);
+	return (NULL);
 }
