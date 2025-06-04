@@ -128,5 +128,7 @@ void	heredoc_signals(struct sigaction *sa, struct sigaction *sa_old_int,
 			struct sigaction *sa_old_quit);
 void	restore_signals(struct sigaction *sa_old_int,
 			struct sigaction *sa_old_quit);
+void	one_hundred_thirty(t_input *input);
+void	one_hundred_thirtyone(t_input *input);
 
 #endif

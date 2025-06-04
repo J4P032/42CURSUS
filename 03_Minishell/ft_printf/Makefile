@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 NAME = libftprintf.a
 LIBRARY = ../libft/libft.a
 SRC = ft_printf.c ft_printf_flag_type.c ft_printf_other_flags.c
