@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+// Declaración de la función
+void funcion(void) {
+    printf("hola\n");
+}
+
+// Definición de una estructura con un puntero a función
+typedef s_struct {
+    void (*ptr_funcion)(void);
+} t_struct;
+
+int main(void) {
+    t_struct s;
+
+    s.ptr_funcion = funcion; // asignar la función al puntero
+
+    s.ptr_funcion(); // llamada a la función a través del puntero
+
+    return 0;
+}
