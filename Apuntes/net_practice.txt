@@ -1,0 +1,4 @@
+convertir un numero de decimal a binario
+echo "obase=2; 255" | bc
+y para convertirlo en decimal
+echo "ibase=2; 11110010" | bc
