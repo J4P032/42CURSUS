@@ -1,9 +1,10 @@
 CXX = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
-NAME = 
-HEADERS = 	
-SRC =	
+NAME = bank
+HDR =	Account.hpp
+SRC =	tests.cpp \
+		Account.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
 RM	= rm -rf
@@ -14,7 +15,7 @@ $(OBJDIR)/%.o: %.cpp
 	@mkdir -p $(OBJDIR)
 	@$(CXX) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS) $(HEADERS)
+$(NAME): $(OBJS) $(HDR)
 	@$(CXX) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
