@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 11:45:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/06/15 17:43:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:20:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,47 @@ void	printFieldTittles(void)
 	std::cout << "\033[0m"; // Reset Stile
 }
 
+/*ñ is a 2 bytes char so I have to find the continuation bytes "10xxxxxx"
+That way we count only the bytes for the char (1byte)*/
+static size_t visibleLength(const std::string &str)
+{
+	size_t			len = 0;
+	unsigned char	c;
+	
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		c = static_cast<unsigned char>(str[i]);
+		if ((c & 0xC0) != 0x80) //0xC0=11000000 detects continue byte for UTF8 (10xxxxxx)
+			++len;
+	}
+	return (len);	
+}
+
+static std::string padLeft(const std::string &str, size_t width)
+{
+	size_t vis = visibleLength(str);
+    if (vis >= width)
+        return str;
+    return std::string(width - vis, ' ') + str;
+}
+
 void	printContactsTable(Contact contact, std::string (Contact::*getter)(void) const, bool last)
 {
 	std::string	str = (contact.*getter)();
 	if (!str.empty())
 	{
-		if (str.length() > 10)
+		if (visibleLength(str) > 10)
 			str = str.substr(0, 9) + "."; //substr 0->index to start copy; 9->num chars to copy
-		std::cout << std::setw(10) << str;
+		std::cout << padLeft(str, 10);
 		if (!last)
 			std::cout << "|";
 	}
 }
 
+
 void	printContactData(Contact contact)
 {
-	std::string	trash;
+	std::string	pause;
 	
 	std::cout << "First name: " << contact.getFirstName() << std::endl;
 	std::cout << "Last name: " << contact.getLastName() << std::endl;
@@ -47,7 +72,8 @@ void	printContactData(Contact contact)
 	std::cout << "Phone number: " << contact.getPhoneNumber() << std::endl;
 	std::cout << "Darkest Secret: " << contact.getDarkestSecret() << std::endl;
 	std::cout << "Press enter to exit";
-	std::getline(std::cin, trash);
+	if (!std::getline(std::cin, pause))
+		return ;
 }
 
 	
@@ -56,17 +82,19 @@ void	showContactData(size_t num_contacts, PhoneBook *phonebook)
 {
 	int	index;
 	std::string	input;
-	std::string	trash;
+	std::string	pause;
 	
 	if (num_contacts == 0)
 	{
 		std::cout << "Press enter to exit";
-		std::getline(std::cin, trash);
+		if (!std::getline(std::cin, pause))
+			return ;
 		return ;
 	}
 	do	{
 		std::cout << "Contact index: ";
-		std::getline(std::cin, input);
+		if (!std::getline(std::cin, input))
+			return ;
 		index = std::atol(input.c_str());
 		if (index > static_cast<int>(num_contacts) || index < 1)
 			std::cout << "invalid index, please try again" << std::endl;

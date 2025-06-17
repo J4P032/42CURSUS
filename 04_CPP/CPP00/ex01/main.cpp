@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 17:21:12 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/06/15 12:35:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:03:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	main(void)
 	while(1)
 	{
 		std::cout << "Command (ADD, SEARCH, EXIT): ";
-		std::getline(std::cin, command);	
+		if(!std::getline(std::cin, command)) //CtrlD protection
+			break ;	
 		if (command == "ADD")
 			enterContact(&phonebook, &contact);
 		else if (command == "SEARCH")
@@ -33,8 +34,6 @@ int	main(void)
 		else
 			std::cout << "Not a valid command: " << std::endl;
 		std::cout << "\033[2J\033[H";
-
-	
 	}
 	return (0);
 }
