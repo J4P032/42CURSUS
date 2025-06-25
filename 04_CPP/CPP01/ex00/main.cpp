@@ -6,12 +6,17 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 09:18:26 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/06/25 09:20:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:24:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
 
 int main(void){
+    Zombie *z;
+
+    z = newZombie("Paco");
+    randomChump("Zacarias");
     
+    delete z;
 }
