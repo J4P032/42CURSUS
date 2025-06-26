@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:17:46 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/06/25 10:24:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:32:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,4 +14,6 @@
 
 void    randomChump(std::string name){
     Zombie z(name);
+
+    z.announce();
 }
