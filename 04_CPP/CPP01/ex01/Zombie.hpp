@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Zombie.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/25 09:18:26 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/06/27 23:05:06 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/06/27 22:13:11 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/06/27 22:46:45 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#include <iostream>
 
-int main(void){
-    Zombie *z;
+class Zombie {
+    public:
+		Zombie(void);
+		~Zombie(void);
 
-    z = newZombie("Paco");
-    z->announce();
-    randomChump("Zacarias");
-    
-    delete z;
-    return (0);
-}
+		void setName(std::string my_name);
+		void announce(void) const;
+	private:
+		std::string name;	
+};
+
+Zombie *zombieHorde(int N, std::string name);

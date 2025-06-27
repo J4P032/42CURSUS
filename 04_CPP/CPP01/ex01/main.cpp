@@ -5,20 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/25 09:18:26 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/06/27 23:05:06 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/06/27 22:57:49 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/06/27 23:05:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
 
-int main(void){
-    Zombie *z;
+int main(void)
+{
+    Zombie  	*horde;
+    int     	num_zombies = 8;
+    std::string	zombie_name = "Paco";
 
-    z = newZombie("Paco");
-    z->announce();
-    randomChump("Zacarias");
-    
-    delete z;
+    horde = zombieHorde(num_zombies, zombie_name);
+    for (int i = 0; i < num_zombies; i++)
+		horde[i].announce();
+    delete[] horde;
     return (0);
 }
