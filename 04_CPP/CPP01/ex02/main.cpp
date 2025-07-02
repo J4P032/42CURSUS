@@ -5,23 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/27 22:57:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/01 12:58:44 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/07/01 14:31:27 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/07/01 14:45:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#include <iostream>
 
-int main(void)
+int	main(void)
 {
-	Zombie		*horde;
-	int			num_zombies = 10;
-	std::string	zombie_name = "Paco";
+	std::string	var1 = "HI THIS IS BRAIN";
+	std::string	*stringPTR = &var1;
+	std::string	&stringREF = var1;
 
-	horde = zombieHorde(num_zombies, zombie_name);
-	for (int i = 0; i < num_zombies; i++){
-		horde[i].announce();
-	}
-	delete[] horde;
+	std::cout << "address of string:\t\t" << &var1 << std::endl;
+	std::cout << "address held by stringPTR:\t" << stringPTR << std::endl;
+	std::cout << "address held by stringREF:\t" << &stringREF << std::endl;
+	std::cout << "value of string var:\t\t" << var1 << std::endl;
+	std::cout << "value pointed by stringPTR:\t" << *stringPTR << std::endl;
+	std::cout << "value pointed by stringREF:\t" << stringREF << std::endl;
+	
 	return (0);
 }
