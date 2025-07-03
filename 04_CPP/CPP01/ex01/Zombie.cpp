@@ -6,14 +6,18 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 22:19:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/02 10:59:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/03 11:07:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
 
-Zombie::Zombie(void){}
-Zombie::~Zombie(void){}
+Zombie::Zombie(void){
+    std::cout << "Constructor of zombies called" << std::endl;
+}
+Zombie::~Zombie(void){
+    std::cout << "Destructor of zombies called" << std::endl;
+}
 
 void Zombie::setName(std::string my_name)
 {

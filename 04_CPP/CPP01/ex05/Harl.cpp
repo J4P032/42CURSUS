@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:33:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/02 20:19:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/03 12:42:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,12 @@ void	Harl::complain(std::string level)
 	
 	while (i < 4){
 		if (matrix[i] == level){
+			(this->*functions[i])();
 			break ;
 		}
 		i++;
 	}
-	if (i < 4){
-		(this->*functions[i])();
-	}
-	else{
+	if (i >= 4){
 		std::cout << "I am not calling any function" << std::endl;
 	}
 }
