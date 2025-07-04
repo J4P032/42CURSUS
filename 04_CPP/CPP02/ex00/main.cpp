@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 16:32:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/03 16:44:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:48:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int main(void) {
 Fixed a;
 Fixed b( a );
 Fixed c;
+
 c = b;
 
 std::cout << a.getRawBits() << std::endl;
