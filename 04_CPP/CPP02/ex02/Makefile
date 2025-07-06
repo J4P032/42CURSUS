@@ -1,9 +1,10 @@
 CXX = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
-NAME = 
-HEADERS =
-SRC =		
+NAME = a.out
+HEADERS =	Fixed.hpp
+SRC =		main.cpp \
+			Fixed.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
 RM	= rm -rf
