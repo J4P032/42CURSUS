@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 16:33:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/05 18:29:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/06 21:31:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FIXED_HPP
 
 #include <iostream>
+#include <climits>
 #include <cmath>
 
 #define RESET "\033[0m"

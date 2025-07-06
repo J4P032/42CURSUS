@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:52:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/05 18:45:01 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/06 22:00:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,26 @@ Fixed::~Fixed(void){
 
 Fixed::Fixed(const int num){
 	std::cout << GREEN "Int constructor called" RESET << std::endl;
-	_fixedPointNum = roundf(num * (1 << _fractionBits));
+	float	aux = static_cast<float>(num) * (1 << _fractionBits); //si no cast a float el resultado puede overflow de INT, ya que num es INT y 256 es int
+	if (aux > INT_MAX || aux < INT_MIN){
+		std::cerr << "Error: Number Overflow" << std::endl;
+		_fixedPointNum = 0;
+	}
+	else{
+		_fixedPointNum = static_cast<int>(roundf(aux));
+	}	
 }
 
 Fixed::Fixed(const float fnum){
 	std::cout << GREEN "Float constructor called" RESET << std::endl;
-	_fixedPointNum = roundf(fnum * (1 << _fractionBits));
+	float	aux = fnum * (1 << _fractionBits);
+	if (aux > INT_MAX || aux < INT_MIN){
+		std::cerr << "Error: Number Overflow" << std::endl;
+		_fixedPointNum = 0;
+	}
+	else{
+		_fixedPointNum = static_cast<int>(roundf(aux));
+	}
 }
 
 

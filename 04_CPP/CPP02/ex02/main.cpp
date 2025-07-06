@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 16:32:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/06 13:57:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/06 23:54:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 #include <iostream>
 int main( void ) {
 Fixed a;
+
+Fixed const c(5.05f);
+Fixed const d(2);
+
 Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
 std::cout << a << std::endl;
 std::cout << ++a << std::endl;

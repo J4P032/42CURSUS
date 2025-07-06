@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:52:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/06 13:54:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/07 00:53:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ OFUUUUUUUUUUUUUUU!!!
 
 /************ CANONICAL ***********/
 Fixed::Fixed(void){
-	std::cout << GREEN "Default constructor called" RESET << std::endl;
+	//std::cout << GREEN "Default constructor called" RESET << std::endl;
 	_fixedPointNum = 0;
 }
 
 Fixed::Fixed(const Fixed &other){
-	std::cout << YELLOW "Copy constructor called" RESET << std::endl;
+	//std::cout << YELLOW "Copy constructor called" RESET << std::endl;
 	*this = other; 
 }
 
@@ -98,7 +98,7 @@ Fixed::Fixed(const Fixed &other){
 /*...de la funcion o asignaciones complejas a = a puede causar problemas como doble liberacion...*/
 /*...corrupcion o comportamiento indefinido. Mejor proteger.*/
 Fixed &Fixed::operator=(const Fixed &other){
-	std::cout << CYAN "Copy assignment operator called" RESET << std::endl;
+	//std::cout << CYAN "Copy assignment operator called" RESET << std::endl;
 	if (this != &other){
 		_fixedPointNum = other._fixedPointNum;
 	}
@@ -106,32 +106,46 @@ Fixed &Fixed::operator=(const Fixed &other){
 }
 
 Fixed::~Fixed(void){
-	std::cout << RED "Destructor called" RESET << std::endl;
+	//std::cout << RED "Destructor called" RESET << std::endl;
 }
 
 /************ OTHER CONSTRUCTORS ***********/
 
 
 Fixed::Fixed(const int num){
-	std::cout << GREEN "Int constructor called" RESET << std::endl;
-	_fixedPointNum = roundf(num * (1 << _fractionBits));
+	//std::cout << GREEN "Int constructor called" RESET << std::endl;
+	float aux = static_cast<float>(num) * (1 << _fractionBits);
+	if (aux > INT_MAX || aux < INT_MIN){
+		std::cerr << "Error: Number Overflow" << std::endl;
+		_fixedPointNum = 0;
+	}
+	else{
+		_fixedPointNum = static_cast<int>(roundf(aux));
+	}	
 }
 
 Fixed::Fixed(const float fnum){
-	std::cout << GREEN "Float constructor called" RESET << std::endl;
-	_fixedPointNum = roundf(fnum * (1 << _fractionBits));
+	//std::cout << GREEN "Float constructor called" RESET << std::endl;
+	float	aux = fnum * (1 << _fractionBits);
+	if (aux > INT_MAX || aux < INT_MIN){
+		std::cerr << "Error: Number Overflow" << std::endl;
+		_fixedPointNum = 0;
+	}
+	else{
+		_fixedPointNum = static_cast<int>(roundf(aux));
+	}
 }
 
 
 /************ GETTER SETTERS ***********/
 
 int	Fixed::getRawBits(void) const{
-	std::cout << BLUE "getRawbits member function called" RESET << std::endl;
+	//std::cout << BLUE "getRawbits member function called" RESET << std::endl;
 	return (_fixedPointNum);
 }
 
 void	Fixed::setRawBits(int const raw){
-	std::cout << MAGENTA "setRawBits member function called" RESET << std::endl;
+	//std::cout << MAGENTA "setRawBits member function called" RESET << std::endl;
 	_fixedPointNum = raw;
 }
 
@@ -144,26 +158,195 @@ int		Fixed::toInt(void) const{
 	return (static_cast<int>(_fixedPointNum >> _fractionBits));
 }
 
-Fixed 		&Fixed::min(Fixed &lFixed, Fixed &rFixed){}
-const Fixed &Fixed::min(const Fixed &lFixed, const Fixed &rFixed){}
-Fixed 		&Fixed::max(Fixed &lFixed, Fixed &rFixed){}
-const Fixed &Fixed::max(const Fixed &lFixed, const Fixed &rFixed){}
+Fixed 		&Fixed::min(Fixed &lFixed, Fixed &rFixed){
+	if (lFixed._fixedPointNum <= rFixed._fixedPointNum){
+		return (lFixed);
+	}
+	return (rFixed);
+}
+const Fixed &Fixed::min(const Fixed &lFixed, const Fixed &rFixed){
+	if (lFixed._fixedPointNum <= rFixed._fixedPointNum){
+		return (lFixed);
+	}
+	return (rFixed);
+}
+Fixed 		&Fixed::max(Fixed &lFixed, Fixed &rFixed){
+	if (lFixed._fixedPointNum >= rFixed._fixedPointNum){
+		return (lFixed);
+	}
+	return (rFixed);
+}
+const Fixed &Fixed::max(const Fixed &lFixed, const Fixed &rFixed){
+	if (lFixed._fixedPointNum >= rFixed._fixedPointNum){
+		return (lFixed);
+	}
+	return (rFixed);
+}
 
 /************ MEMBER OVERLOAD OPERATORS ***********/
-bool	Fixed::operator>(const Fixed &rightFixed) const{}
-bool	Fixed::operator<(const Fixed &rightFixed) const{}
-bool	Fixed::operator>=(const Fixed &rightFixed) const{}
-bool	Fixed::operator<=(const Fixed &rightFixed) const{}
-bool	Fixed::operator==(const Fixed &rightFixed) const{}
-bool	Fixed::operator!=(const Fixed &rightFixed) const{}
-Fixed	Fixed::operator+(const Fixed &rightFixed) const{}
-Fixed	Fixed::operator-(const Fixed &rightFixed) const{}
-Fixed	Fixed::operator*(const Fixed &rightFixed) const{}
-Fixed	Fixed::operator/(const Fixed &rightFixed) const{}
-Fixed	&Fixed::operator++(void){}
-Fixed	Fixed::operator++(int){}
-Fixed	&Fixed::operator--(void){}
-Fixed	Fixed::operator--(int){} 
+bool	Fixed::operator>(const Fixed &rightFixed) const{
+	if (this->_fixedPointNum > rightFixed._fixedPointNum){
+		return (true);
+	}
+	return (false);
+}
+
+bool	Fixed::operator<(const Fixed &rightFixed) const{
+	return(this->_fixedPointNum < rightFixed._fixedPointNum);
+}
+
+bool	Fixed::operator>=(const Fixed &rightFixed) const{
+	return(this->_fixedPointNum >= rightFixed._fixedPointNum);
+}
+
+bool	Fixed::operator<=(const Fixed &rightFixed) const{
+	return(this->_fixedPointNum <= rightFixed._fixedPointNum);
+}
+
+bool	Fixed::operator==(const Fixed &rightFixed) const{
+	return(this->_fixedPointNum == rightFixed._fixedPointNum);
+}
+
+bool	Fixed::operator!=(const Fixed &rightFixed) const{
+	return(this->_fixedPointNum != rightFixed._fixedPointNum);
+}
+
+Fixed	Fixed::operator+(const Fixed &rightFixed) const{
+	Fixed		aux;
+	long long	auxNum = static_cast<long long>(this->_fixedPointNum) + rightFixed._fixedPointNum;
+	
+	if (auxNum > INT_MAX || auxNum < INT_MIN){
+		std::cerr << "Error: Number Overflow in addition" << std::endl;
+		aux._fixedPointNum = 0;
+	}
+	else{
+		aux._fixedPointNum = static_cast<int>(auxNum);
+	}
+	return (aux);
+}
+
+Fixed	Fixed::operator-(const Fixed &rightFixed) const{
+	Fixed		aux;
+	long long	auxNum = static_cast<long long>(this->_fixedPointNum) - rightFixed._fixedPointNum;
+	
+	if (auxNum > INT_MAX || auxNum < INT_MIN){
+		std::cerr << "Error: Number Overflow in substraction" << std::endl;
+		aux._fixedPointNum = 0;
+	}
+	else{
+		aux._fixedPointNum = static_cast<int>(auxNum);
+	}
+	return (aux);
+}
+
+Fixed	Fixed::operator*(const Fixed &rightFixed) const{
+	Fixed		aux;
+	long long	auxNum = static_cast<long long>(this->_fixedPointNum) * rightFixed._fixedPointNum;
+	
+	if (auxNum > INT_MAX || auxNum < INT_MIN){
+		std::cerr << "Error: Number Overflow in addition" << std::endl;
+		aux._fixedPointNum = 0;
+	}
+	else{
+		aux._fixedPointNum = static_cast<int>((auxNum) >> _fractionBits); // divide por 256 porque...
+		//...al multiplicar dos números en fixed point (cada uno ya multiplicado por 256)...
+		//...el resultado queda multiplicado por 256², no por 256¹. Para mantener la escala...
+		//...correcta de fixed point, dividimos por 256 para volver a la escala original.
+	}
+	return (aux);
+}
+
+Fixed	Fixed::operator/(const Fixed &rightFixed) const{
+	Fixed	aux;
+	
+	if (rightFixed._fixedPointNum == 0){
+		if (this->_fixedPointNum > 0){
+			std::cout << "Warning: The fixedPoint is infinite. It will be reset to zero" << std::endl;
+		}
+		else if (this->_fixedPointNum < 0){
+			std::cout << "Warning: The fixedPoint is minus infinite. It will be reset to zero" << std::endl;
+		}
+		else if (this->_fixedPointNum == 0){
+			std::cout << "Warning: The fixedPoint NaN. It will be reset to zero" << std::endl;
+		}
+		aux._fixedPointNum = 0;
+	}
+	else{ 
+		//aux = Fixed (this->toFloat() / rightFixed.toFloat()); //se ha de hacer conversion a float porque...
+		//...al haber convertido el numero a fixedPoint lo multiplicamos por 256. Si ahora dividimos...
+		//...esos dos 256 en cada division se anulan y por lo tanto quedan como si fuera una división...
+		//...de los enteros o floats del que venian, perdiendo datos. Hay que convertir a float dividir...
+		//...y que el float resultante se convierta a fixed_point no perdiendo asi datos.
+		//...pero si se pasa a float se pierde eficiencia, por lo que se multiplica por 256 (<< _fractionBits)...
+		//...y asi el resultado sigue siendo una multiplicacion por 256 y no se anulan.
+		long long	auxNum = (static_cast<long long>(this->_fixedPointNum) << _fractionBits) / rightFixed._fixedPointNum;	
+		if (auxNum > INT_MAX || auxNum < INT_MIN){
+			std::cerr << "Error division overflow" << std::endl;
+			aux._fixedPointNum = 0;
+		}
+		else{
+			aux._fixedPointNum = static_cast<int>(auxNum);
+		}
+	}
+	return (aux);
+}
+
+Fixed	&Fixed::operator++(void){
+	long long	auxNum;
+	
+	auxNum = static_cast<long long>(this->_fixedPointNum) + 1;
+	if (auxNum > INT_MAX || auxNum < INT_MIN){
+		std::cerr << "Error: ++Fixed is overflow" << std::endl;
+	}
+	else{
+		this->_fixedPointNum = static_cast<int>(auxNum);
+	}
+	return (*this);
+}
+
+Fixed	Fixed::operator++(int){
+	long long	auxNum;
+	Fixed		temp = *this;
+	
+	auxNum = static_cast<long long>(this->_fixedPointNum) + 1;
+	if (auxNum > INT_MAX || auxNum < INT_MIN)
+	{
+		std::cerr << "Error: Fixed++ is overflow" << std::endl;
+	}
+	else{
+		this->_fixedPointNum = static_cast<int>(auxNum);
+	}
+	return (temp); //debe devolver el valor anterior por que el incremento se hace despues.
+	//...de todas formas queda cambiado en this->_fixedPointNum b = a++, b recibe el valor anterior (temp)
+}
+
+Fixed	&Fixed::operator--(void){
+	long long	auxNum;
+	
+	auxNum = static_cast<long long>(this->_fixedPointNum) - 1;
+	if (auxNum > INT_MAX || auxNum < INT_MIN){
+		std::cerr << "Error: --Fixed is overflow" << std::endl;
+	}
+	else{
+		this->_fixedPointNum = static_cast<int>(auxNum);
+	}
+	return (*this);
+}
+
+Fixed	Fixed::operator--(int){
+	long long	auxNum;
+	Fixed		temp = *this;
+	
+	auxNum = static_cast<long long>(this->_fixedPointNum) - 1;
+	if (auxNum > INT_MAX || auxNum < INT_MIN)
+	{
+		std::cerr << "Error: Fixed-- is overflow" << std::endl;
+	}
+	else{
+		this->_fixedPointNum = static_cast<int>(auxNum);
+	}
+	return (temp); //b = a--, be recibe el valor anterior de a y a se actualiza.
+} 
 
 
 /************ OTHER FUNCTIONS ***********/
