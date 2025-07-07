@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:52:44 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/06 22:00:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:07:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ Fixed::~Fixed(void){
 Fixed::Fixed(const int num){
 	std::cout << GREEN "Int constructor called" RESET << std::endl;
 	float	aux = static_cast<float>(num) * (1 << _fractionBits); //si no cast a float el resultado puede overflow de INT, ya que num es INT y 256 es int
-	if (aux > INT_MAX || aux < INT_MIN){
-		std::cerr << "Error: Number Overflow" << std::endl;
+	if (aux > static_cast<float>(INT_MAX) || aux < static_cast<float>(INT_MIN)){
+		std::cerr << "Error: Number Overflow. It will be assigned cero" << std::endl;
 		_fixedPointNum = 0;
 	}
 	else{
@@ -127,8 +127,8 @@ Fixed::Fixed(const int num){
 Fixed::Fixed(const float fnum){
 	std::cout << GREEN "Float constructor called" RESET << std::endl;
 	float	aux = fnum * (1 << _fractionBits);
-	if (aux > INT_MAX || aux < INT_MIN){
-		std::cerr << "Error: Number Overflow" << std::endl;
+	if (aux > static_cast<float>(INT_MAX)|| aux < static_cast<float>(INT_MIN)){
+		std::cerr << "Error: Number Overflow. It will assigned cero" << std::endl;
 		_fixedPointNum = 0;
 	}
 	else{
