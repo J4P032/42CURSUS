@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:11:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/09 16:38:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:50:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdlib> //system("clear")
 
 #define RESET "\033[0m"
 #define BLACK "\033[30m"
@@ -35,9 +36,10 @@ class	ClapTrap{
 		ClapTrap &operator=(const ClapTrap &other);
 		~ClapTrap(void);
 	
-		void	attack(const std::string &target);
-		void	takeDamage(unsigned int amount);
-		void	beRepaired(unsigned int amount);
+		void			attack(const std::string &target);
+		void			takeDamage(unsigned int amount);
+		void			beRepaired(unsigned int amount);
+		unsigned int	getDamage(void) const;
 	
 	protected:
 		std::string		_name;

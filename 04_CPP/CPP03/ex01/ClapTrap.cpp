@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 18:26:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/09 17:52:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:44:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 //CONSTRUCTORES
 
 ClapTrap::ClapTrap(void) : _name(""), _hitPt(10), _maxHitPt(10), _energyPt(10), _attackDmg(0){
-	std::cout << GREEN "Default constructor called" RESET << std::endl;
+	std::cout << GREEN "🔧🥷	Default constructor called" RESET << std::endl;
 }
 
 ClapTrap::ClapTrap(std::string name) : _name(name), _hitPt(10), _maxHitPt(10), _energyPt(10), _attackDmg(0){
-	std::cout << GREEN "Constructor called for " RESET << name << std::endl;
+	std::cout << GREEN "🔧🥷	Constructor called for " RESET << name << std::endl;
 }
 
 ClapTrap::ClapTrap(std::string name, unsigned int hitPt, unsigned int maxHitPt, unsigned int energyPt, unsigned int attackDmg){
@@ -28,11 +28,11 @@ ClapTrap::ClapTrap(std::string name, unsigned int hitPt, unsigned int maxHitPt, 
 	_maxHitPt = maxHitPt;
 	_energyPt = energyPt;
 	_attackDmg = attackDmg;
-	std::cout << CYAN "ClapTrap constructor called for ScavTrap " RESET << name << std::endl;
+	std::cout << CYAN "🔧🥷	ClapTrap constructor called for ScavTrap " RESET << name << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &other){
-	std::cout << GREEN "Copy constructor called for " RESET << other._name << std::endl;
+	std::cout << GREEN "🐑🥷	Copy constructor called for " RESET << other._name << std::endl;
 	_name		= other._name;
 	_hitPt		= other._hitPt;
 	_maxHitPt	= other._maxHitPt;
@@ -41,7 +41,7 @@ ClapTrap::ClapTrap(const ClapTrap &other){
 }
 
 ClapTrap	&ClapTrap::operator=(const ClapTrap &other){
-	std::cout << YELLOW "Equal operator called for " RESET << other._name << std::endl;
+	std::cout << YELLOW "🟰🥷	Equal operator called for " RESET << other._name << std::endl;
 	if (this != &other){
 		_name		= other._name;
 		_hitPt		= other._hitPt;
@@ -54,44 +54,51 @@ ClapTrap	&ClapTrap::operator=(const ClapTrap &other){
 
 //DESTRUCTOR
 ClapTrap::~ClapTrap(void){
-	std::cout << RED "Destructor called for " RESET << this->_name << std::endl;
+	std::cout << RED "🧨🥷	Destructor called for " RESET << this->_name << std::endl;
 }
 
 
 //METODOS PUBLICOS
 void	ClapTrap::attack(const std::string &target){
 	if (!_hitPt){
-		std::cout << RED "Unless you believe in life after death ClapTrap " RESET;
-		std::cout << _name << RED " won't be able to do anything. RIP" RESET << std::endl; 
+		std::cout << RED "💀🥷	Unless you believe in life after death ClapTrap " RESET;
+		std::cout << _name << "(" << _hitPt << ")" << RED " won't be able to do anything. RIP" RESET << std::endl; 
 		return ;
 	}
 	
 	if (_energyPt){
-		std::cout << CYAN "ClapTrap " RESET << _name << CYAN " attacks ";
+		std::cout << CYAN "⚔️🥷	ClapTrap " RESET << _name << "(" << _hitPt << ")" << CYAN " attacks ";
 		std::cout << YELLOW << target << CYAN ", causing " RESET << _attackDmg;
 		std::cout << CYAN " points of damage!" RESET << std::endl;
 		_energyPt--;
 	}
 	else{
-		std::cout << "ClapTrap " << _name << " cannot make the attack to ";
+		std::cout << "💤🥷	ClapTrap " << _name << "(" << _hitPt << ")" << " cannot make the attack to ";
 		std::cout << target << " because has 0 energy points." << std::endl;
 	}
 }
 
 void	ClapTrap::takeDamage(unsigned int amount){
+	if (static_cast<int>(amount) < 0){
+		std::cout << "------" << std::endl;
+		std::cerr << "Error: Negative takeDamage value. Please input in main function positive values. Thanks!" << std::endl;
+		std::cout << "------" << std::endl;
+		return;
+	}
+	
 	if (!_hitPt){
-		std::cout << _name << RED " Don't feel any hit received as it is already DEAD" RESET;
+		std::cout << "💀	"<< _name << "(" << _hitPt << ")" << RED " Don't feel any hit received as it is already DEAD" RESET;
 		std::cout << std::endl;
 	}
 	else{
 		if (amount >= _hitPt){
-			std::cout << _name << RED " receives a final attack of " YELLOW;
+			std::cout << "💀	" << _name << "(" << _hitPt << ")" << RED " receives a final attack of " YELLOW;
 			std::cout << amount << RED " points of damage";
 			std::cout << " falling dead" RESET << std::endl;
 			_hitPt = 0;
 		}
 		else{
-			std::cout << _name << MAGENTA " receives " YELLOW;
+			std::cout << "🤕	" << _name << "(" << _hitPt << ")" << MAGENTA " receives " YELLOW;
 			std::cout << amount << MAGENTA " points of damage, leaving him with " GREEN;
 			std::cout << _hitPt - amount << MAGENTA " points of life." RESET << std::endl;
 			_hitPt -= amount;
@@ -100,13 +107,20 @@ void	ClapTrap::takeDamage(unsigned int amount){
 }
 	
 void	ClapTrap::beRepaired(unsigned int amount){
+	if (static_cast<int>(amount) < 0){
+		std::cout << "------" << std::endl;
+		std::cerr << "Error: Negative healing value. Please input in main function positive values. Thanks!" << std::endl;
+		std::cout << "------" << std::endl;
+		return;
+	}
+	
 	if (!_hitPt){
-		std::cout << RED "Could be nice if " RESET << _name;
+		std::cout << RED "💀	Could be nice if " RESET << _name << "(" << _hitPt << ")";
 		std::cout << RED " could resurrect but, no way!" RESET << std::endl;
 		return;
 	}
 	if (_energyPt){
-		std::cout << _name << GREEN " regain " YELLOW << amount;
+		std::cout << "⛑️	" << _name << "(" << _hitPt << ")" << GREEN " regain " YELLOW << amount;
 		std::cout << GREEN " of points, making him to be at ";
 		if (amount + _hitPt >= _maxHitPt){
 			_hitPt = _maxHitPt;
@@ -119,8 +133,10 @@ void	ClapTrap::beRepaired(unsigned int amount){
 		_energyPt--;
 	}
 	else{
-		std::cout << _name << " wish he could heal himself but... no energy points to spend" << std::endl;
+		std::cout << "💤	" << _name << " wish he could heal himself but... no energy points to spend" << std::endl;
 	}
 }
 
-
+unsigned int	ClapTrap::getDamage(void) const{
+	return(_attackDmg);
+}

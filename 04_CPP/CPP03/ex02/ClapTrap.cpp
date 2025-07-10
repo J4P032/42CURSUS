@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 18:26:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/10 12:45:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:44:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,28 @@
 
 //CONSTRUCTORES
 
-ClapTrap::ClapTrap(void){
+ClapTrap::ClapTrap(void) : _name(""), _hitPt(10), _maxHitPt(10), _energyPt(10), _attackDmg(0){
 	std::cout << GREEN "🔧🥷	Default constructor called" RESET << std::endl;
-	_name		= "";
-	_hitPt		= 10;
-	_energyPt	= 10;
-	_attackDmg	= 0;
 }
 
-ClapTrap::ClapTrap(std::string name){
+ClapTrap::ClapTrap(std::string name) : _name(name), _hitPt(10), _maxHitPt(10), _energyPt(10), _attackDmg(0){
 	std::cout << GREEN "🔧🥷	Constructor called for " RESET << name << std::endl;
-	this->_name = name;
-	_hitPt		= 10;
-	_energyPt	= 10;
-	_attackDmg	= 0;
+}
+
+ClapTrap::ClapTrap(std::string name, unsigned int hitPt, unsigned int maxHitPt, unsigned int energyPt, unsigned int attackDmg){
+	_name = name;
+	_hitPt = hitPt;
+	_maxHitPt = maxHitPt;
+	_energyPt = energyPt;
+	_attackDmg = attackDmg;
+	std::cout << CYAN "🔧🥷	ClapTrap constructor called for 'child' " RESET << name << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &other){
 	std::cout << GREEN "🐑🥷	Copy constructor called for " RESET << other._name << std::endl;
 	_name		= other._name;
 	_hitPt		= other._hitPt;
+	_maxHitPt	= other._maxHitPt;
 	_energyPt	= other._energyPt;
 	_attackDmg	= other._attackDmg;
 }
@@ -43,6 +45,7 @@ ClapTrap	&ClapTrap::operator=(const ClapTrap &other){
 	if (this != &other){
 		_name		= other._name;
 		_hitPt		= other._hitPt;
+		_maxHitPt	= other._maxHitPt;
 		_energyPt	= other._energyPt;
 		_attackDmg	= other._attackDmg;
 	}
@@ -70,32 +73,32 @@ void	ClapTrap::attack(const std::string &target){
 		_energyPt--;
 	}
 	else{
-		std::cout << "💤🥷	ClapTrap " << _name << "(" << _hitPt << ")" << " haven't got energy at all, and look at ";
-		std::cout << target << " with stupid eyes, waiting for his counter attack." << std::endl;
+		std::cout << "💤🥷	ClapTrap " << _name << "(" << _hitPt << ")" << " cannot make the attack to ";
+		std::cout << target << " because has 0 energy points." << std::endl;
 	}
 }
 
 void	ClapTrap::takeDamage(unsigned int amount){
 	if (static_cast<int>(amount) < 0){
 		std::cout << "------" << std::endl;
-		std::cerr << "Error: Negative takeDamage input. Please enter positive values. Thanks!" << std::endl;
+		std::cerr << "Error: Negative takeDamage value. Please input in main function positive values. Thanks!" << std::endl;
 		std::cout << "------" << std::endl;
 		return;
 	}
 	
 	if (!_hitPt){
-		std::cout << "💀🥷	" << _name << "(" << _hitPt << ")" << RED " receives vicious hits but don't feel anything as it is dead." RESET;
+		std::cout << "💀	"<< _name << "(" << _hitPt << ")" << RED " Don't feel any hit received as it is already DEAD" RESET;
 		std::cout << std::endl;
 	}
 	else{
 		if (amount >= _hitPt){
-			std::cout << RED "💀🥷	The enemy makes his final attack, causing " YELLOW;
-			std::cout << amount << RED " points of damage to " RESET << _name << "(" << _hitPt << ")";
-			std::cout << RED " that falls dead with his blank eyes." RESET << std::endl;
+			std::cout << "💀	" << _name << "(" << _hitPt << ")" << RED " receives a final attack of " YELLOW;
+			std::cout << amount << RED " points of damage";
+			std::cout << " falling dead" RESET << std::endl;
 			_hitPt = 0;
 		}
 		else{
-			std::cout << MAGENTA "🤕🥷	ClapTrap " RESET << _name << "(" << _hitPt << ")" << MAGENTA " receives " YELLOW;
+			std::cout << "🤕	" << _name << "(" << _hitPt << ")" << MAGENTA " receives " YELLOW;
 			std::cout << amount << MAGENTA " points of damage, leaving him with " GREEN;
 			std::cout << _hitPt - amount << MAGENTA " points of life." RESET << std::endl;
 			_hitPt -= amount;
@@ -112,16 +115,16 @@ void	ClapTrap::beRepaired(unsigned int amount){
 	}
 	
 	if (!_hitPt){
-		std::cout << RED "💀👼	Guardian Angel of " RESET << _name << "(" << _hitPt << ")";
-		std::cout << RED " tries to resurrect his client but fairy tales occurs other places." RESET << std::endl;
+		std::cout << RED "💀	Could be nice if " RESET << _name << "(" << _hitPt << ")";
+		std::cout << RED " could resurrect but, no way!" RESET << std::endl;
 		return;
 	}
 	if (_energyPt){
-		std::cout << GREEN "⛑️🥷	ClapTrap " RESET << _name << "(" << _hitPt << ")" << GREEN " regain " YELLOW << amount;
+		std::cout << "⛑️	" << _name << "(" << _hitPt << ")" << GREEN " regain " YELLOW << amount;
 		std::cout << GREEN " of points, making him to be at ";
-		if (amount + _hitPt >= 10){
-			std::cout << "full life again (10)" RESET << std::endl;
-			_hitPt = 10;
+		if (amount + _hitPt >= _maxHitPt){
+			_hitPt = _maxHitPt;
+			std::cout << "full life again (" << _hitPt << ")" RESET << std::endl;
 		}
 		else{
 			_hitPt += amount;
@@ -130,12 +133,10 @@ void	ClapTrap::beRepaired(unsigned int amount){
 		_energyPt--;
 	}
 	else{
-		std::cout << "💤🥷	ClapTrap " << _name << "(" << _hitPt << ")" << " wish he could heal himself but... no way" << std::endl;
+		std::cout << "💤	" << _name << " wish he could heal himself but... no energy points to spend" << std::endl;
 	}
 }
 
 unsigned int	ClapTrap::getDamage(void) const{
 	return(_attackDmg);
 }
-
-	
