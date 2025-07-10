@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:20:03 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/10 19:22:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:50:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int main(void)
 	std::cout << "FIGHT!!" << std::endl;
 
 	d1.attack("Manolo");
-	d2.attack("pepito");
 	d2.takeDamage(d1.getDamage());
 	d2.highFivesGuys();
 	d2.guardGate();

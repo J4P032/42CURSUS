@@ -6,36 +6,36 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:41:48 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/10 20:06:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:47:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "DiamondTrap.hpp"
 
 
-DiamondTrap::DiamondTrap(void) : ClapTrap("_clap_name"), FragTrap(), ScavTrap(){
+DiamondTrap::DiamondTrap(void) : ClapTrap("_clap_name"), ScavTrap() {
 	_name = "";
-	_hitPt = FragTrap::_hitPt;
-	_maxHitPt = FragTrap::_maxHitPt;
-	_energyPt = ScavTrap::_energyPt;
-	_attackDmg = FragTrap::_attackDmg;
+	_hitPt = 100;
+	_maxHitPt = 100;
+	_energyPt = 50;
+	_attackDmg = 20;
 	std::cout << GREEN "⚙️💎	DiamondTrap void constructor called" RESET << std::endl;
 }
 
 DiamondTrap::DiamondTrap(std::string name) : ClapTrap(name + "_clap_name"){
 	_name = name;
-	_hitPt = FragTrap::_hitPt;
-	_maxHitPt = FragTrap::_maxHitPt;
-	_energyPt = ScavTrap::_energyPt;
-	_attackDmg = FragTrap::_attackDmg;
+	_hitPt = 100;
+	_maxHitPt = 100;
+	_energyPt = 50;
+	_attackDmg = 20;
 	std::cout << GREEN "⚙️💎	DiamondTrap name constructor called" RESET << std::endl;
 }
 DiamondTrap::DiamondTrap(const DiamondTrap &other) : ClapTrap(other._name + "_clap_name"){
 	_name = other._name;
-	_hitPt = FragTrap::_hitPt;
-	_maxHitPt = FragTrap::_maxHitPt;
-	_energyPt = ScavTrap::_energyPt;
-	_attackDmg = FragTrap::_attackDmg;
+	_hitPt = 100;
+	_maxHitPt = 100;
+	_energyPt = 50;
+	_attackDmg = 20;
 	std::cout << GREEN "🐑💎	DiamondTrap Copy constructor called" RESET << std::endl;
 }
 DiamondTrap::~DiamondTrap(void){
@@ -45,10 +45,10 @@ DiamondTrap	&DiamondTrap::operator=(const DiamondTrap &other){
 	if (this != &other){
 	ClapTrap::_name = other.ClapTrap::_name;
 		_name = other._name;
-		_hitPt = FragTrap::_hitPt;
-		_maxHitPt = FragTrap::_maxHitPt;
-		_energyPt = ScavTrap::_energyPt;
-		_attackDmg = FragTrap::_attackDmg;
+		_hitPt = 100;
+		_maxHitPt = 100;
+		_energyPt = 50;
+		_attackDmg = 20;
 	}
 	std::cout << GREEN "🟰💎	DiamondTrap equal operator called" RESET << std::endl;
 	return (*this);
