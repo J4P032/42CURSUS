@@ -6,13 +6,17 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 09:27:03 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/10 10:49:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/10 19:51:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScavTrap.hpp"
 
-ScavTrap::ScavTrap(void) : ClapTrap("", 100, 100, 50, 20) {
+ScavTrap::ScavTrap(void) {
+	_hitPt = 100;
+	_maxHitPt = 100;
+	_energyPt = 50;
+	_attackDmg = 20;
 	std::cout << GREEN "⚙️🤖	ScavTrap constructor called" RESET << std::endl;
 }
 

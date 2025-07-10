@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 18:26:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/10 16:21:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:29:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ unsigned int	ClapTrap::getDamage(void) const{
 	return(_attackDmg);
 }
 
-std::string		ClapTrap::getClapName(void) const{
+std::string		ClapTrap::getName(void) const{
 	return (_name);
 }
 

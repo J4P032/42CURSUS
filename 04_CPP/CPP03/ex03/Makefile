@@ -1,7 +1,7 @@
 CXX = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g -Wshadow
 
-NAME = diamontrap
+NAME = diamondtrap
 HEADERS =	ClapTrap.hpp \
 			ScavTrap.hpp \
 			FragTrap.hpp \
