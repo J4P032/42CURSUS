@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 17:05:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/11 20:48:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/11 21:08:08 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Cat::Cat(void){
 
 Cat::Cat(const Cat &other) : Animal(other){
  	//_type = other._type;
-	std::cout << "🐑 😸	" << GREEN"Cat Copy Constructor Called" RESET << std::endl;
+	std::cout << "🐑😸	" << GREEN"Cat Copy Constructor Called" RESET << std::endl;
 }
 
 Cat::~Cat(void){
@@ -27,6 +27,7 @@ Cat::~Cat(void){
 }
 
 Cat	&Cat::operator=(const Cat &other){
+	std::cout << "🟰😸	" << BLUE"Cat = Called" RESET << std::endl;
 	_type = other._type;
 	return (*this);
 }

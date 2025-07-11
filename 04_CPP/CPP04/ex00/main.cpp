@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:54:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/11 20:52:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/11 21:08:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,14 @@ void	myTests(void){
 	Dog			*perro2 = new Dog(*perro);
 	Cat			g1;
 	Cat			g2;
+	Animal		a1;
+	Animal		a2;
+	Animal		a3(a1);
 	
 	
 	gato = gato2;
 	g1 = g2;
+	a1 = a2;
 	std::cout << meta->getType() << " " << std::endl;
 	std::cout << meta2->getType() << " " << std::endl;
 	std::cout << gato->getType() << " " << std::endl;

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 17:24:01 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/11 20:49:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/11 21:03:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ WrongCat	&WrongCat::operator=(const WrongCat &other){
 	if (this != &other){
 		_type = other._type;
 	}
+	std::cout << "🟰 😸	" << BLUE"Cat = Called" RESET << std::endl;
 	return (*this);
 }
 
