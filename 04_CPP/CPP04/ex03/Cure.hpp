@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.hpp                                            :+:      :+:    :+:   */
+/*   Cure.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 14:56:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 12:29:24 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/07/12 16:39:17 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/07/12 17:54:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CAT_HPP
-# define CAT_HPP
+#ifndef CURE_HPP
+# define CURE_HPP
 
-# include "Animal.hpp"
-# include "Brain.hpp"
+# include "AMateria.hpp"
 
-class Brain; //necesario por inclusion circular al estar Brain.hpp incluyendo Cat y Dog
-
-class	Cat : public Animal{
-	private:
-		Brain *_brain;
+class	Cure : public AMateria{
 	
 	public:
-		Cat(void);
-		Cat(const Cat &other);
-		Cat	&operator=(const Cat &other);
-		~Cat(void);
+		Cure(void);
+		Cure(const Cure &other);
+		~Cure(void);
+		Cure	&operator=(const Cure &other);
 
-		void	makeSound(void) const;
-		Brain	*getBrain(void) const;		
+		AMateria	*clone(void) const;
+		void 		use(ICharacter &target);
 };
 
 #endif

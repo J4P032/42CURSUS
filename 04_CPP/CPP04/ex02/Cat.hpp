@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 14:56:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 12:29:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/12 14:53:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 class Brain; //necesario por inclusion circular al estar Brain.hpp incluyendo Cat y Dog
 
-class	Cat : public Animal{
+class	Cat : public AAnimal{
 	private:
 		Brain *_brain;
 	

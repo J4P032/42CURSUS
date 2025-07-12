@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 14:40:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 00:10:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/12 12:50:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "Animal.hpp"
 # include "Brain.hpp"
+
+class Brain; //necesario por inclusion circular aunque este Brain.hpp
 
 class	Dog : public Animal{
 	private:
@@ -26,7 +28,8 @@ class	Dog : public Animal{
 		Dog	&operator=(const Dog &other);
 		~Dog(void);
 
-		void makeSound(void) const;
+		void	makeSound(void) const;
+		Brain	*getBrain(void) const;
 };
 
 #endif

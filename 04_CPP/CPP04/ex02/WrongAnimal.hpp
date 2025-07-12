@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animal.hpp                                         :+:      :+:    :+:   */
+/*   WrongAnimal.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 14:27:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 14:14:03 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/07/11 15:48:52 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/07/12 15:00:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ANIMAL_HPP
-# define ANIMAL_HPP
+#ifndef WRONGANIMAL_HPP
+# define WRONGANIMAL_HPP
 
 #include <string>
 #include <iostream>
@@ -27,19 +27,19 @@
 #define CYAN "\033[38;2;0;200;255m"
 #define WHITE "\033[37m"
 
-class	Animal{
+class	WrongAnimal{
 	protected:
 		std::string _type;
 	
 	public:
-		Animal(void);
-		Animal(const Animal &other);
-		Animal	&operator=(const Animal &other);
-		virtual ~Animal(void);
+		WrongAnimal(void);
+		WrongAnimal(const WrongAnimal &other);
+		WrongAnimal	&operator=(const WrongAnimal &other);
+		virtual ~WrongAnimal(void); //si quiero que llame al destructor de WrongCat
+									//...es necesario que sea virtual.
 
-		std::string		getType(void) const; 	//ha de ser const por main pasado
-		virtual void	makeSound(void) const; 	//No puede ser pura (=0) por que en el main tenemos 
-												//const Animal* meta = new Animal(); Y ESO es IMPOSIBLE en abstracto
+		std::string		getType(void) const; 	
+		void			makeSound(void) const;
 };
 
 #endif

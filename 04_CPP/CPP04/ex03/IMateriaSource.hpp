@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.hpp                                            :+:      :+:    :+:   */
+/*   IMateriaSource.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 14:56:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 12:29:24 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/07/12 20:10:30 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/07/12 20:15:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CAT_HPP
-# define CAT_HPP
+#ifndef IMATERIASOURCE_HPP
+# define IMAGERIASOURCE_HPP
 
-# include "Animal.hpp"
-# include "Brain.hpp"
+# include <iostream>
 
-class Brain; //necesario por inclusion circular al estar Brain.hpp incluyendo Cat y Dog
+class AMateria;
 
-class	Cat : public Animal{
-	private:
-		Brain *_brain;
-	
+class IMateriaSource
+{
 	public:
-		Cat(void);
-		Cat(const Cat &other);
-		Cat	&operator=(const Cat &other);
-		~Cat(void);
-
-		void	makeSound(void) const;
-		Brain	*getBrain(void) const;		
+		virtual ~IMateriaSource();
+		virtual void learnMateria(AMateria*) = 0;
+		virtual AMateria *createMateria(std::string const & type) = 0;
 };
 
 #endif

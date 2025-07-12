@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.hpp                                            :+:      :+:    :+:   */
+/*   ICharacter.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 14:56:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 12:29:24 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/07/12 15:21:53 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/07/12 17:36:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CAT_HPP
-# define CAT_HPP
+#ifndef ICHARACTER_HPP
+# define ICHARACTER_HPP
 
-# include "Animal.hpp"
-# include "Brain.hpp"
+class AMateria; //circular dependencia rota al declararla
 
-class Brain; //necesario por inclusion circular al estar Brain.hpp incluyendo Cat y Dog
-
-class	Cat : public Animal{
-	private:
-		Brain *_brain;
-	
+class ICharacter{ //interface
 	public:
-		Cat(void);
-		Cat(const Cat &other);
-		Cat	&operator=(const Cat &other);
-		~Cat(void);
-
-		void	makeSound(void) const;
-		Brain	*getBrain(void) const;		
+		virtual ~ICharacter();
+		virtual std::string const &getName() const = 0;
+		virtual void equip(AMateria *m) = 0;
+		virtual void unequip(int idx) = 0;
+		virtual void use(int idx, ICharacter &target) = 0;
 };
+
+
 
 #endif

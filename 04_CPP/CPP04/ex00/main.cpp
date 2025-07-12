@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:54:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/11 21:08:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/12 14:43:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,17 @@ void	test42Default(void){
 void	test42Wrong(void){
 	const WrongAnimal* meta = new WrongAnimal();
 	const WrongAnimal* i = new WrongCat();
+	const WrongCat	*wCat = new WrongCat();
 	std::cout << i->getType() << " " << std::endl;
-	i->makeSound(); //will output the cat sound!
+	std::cout << wCat->getType() << " " << std::endl;
+	i->makeSound(); //esta vez suelta el Animal sound ya que no es virtual
 	meta->makeSound();
+	std::cout << "WrongCat as WrongCat sound: ";
+	wCat->makeSound();
+	std::cout << std::endl;
 	delete meta;
 	delete i;
+	delete wCat;
 }
 
 void	myTests(void){

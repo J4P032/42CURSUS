@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:54:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 14:44:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/12 15:03:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@
 #include "WrongCat.hpp"
 
 void	test42Default(void){
-	const Animal* meta = new Animal();
-	const Animal* j = new Dog();
-	const Animal* i = new Cat();
+	//const AAnimal* meta = new AAnimal(); //No se puede en clase Abstracta
+	const AAnimal* j = new Dog();
+	const AAnimal* i = new Cat();
 	std::cout << j->getType() << " " << std::endl;
 	std::cout << i->getType() << " " << std::endl;
 	i->makeSound(); //will output the cat sound!
 	j->makeSound();
-	meta->makeSound();
-	delete meta;
+	//meta->makeSound();
 	delete j;
 	delete i;
 }
@@ -49,48 +48,36 @@ void	test42Wrong(void){
 }
 
 void	myTests(void){
-	Animal		*meta = new Animal();
-	Animal		*meta2 = new Animal(*meta);
-	Animal		*gato = NULL;
+	AAnimal		*gato = NULL;
 	Cat			*gato2 = new Cat();
 	const Dog	*perro = new Dog();
 	Dog			*perro2 = new Dog(*perro);
 	Cat			g1;
 	Cat			g2;
-	Animal		a1;
-	Animal		a2;
-	Animal		a3(a1);
 	
 	
 	gato = gato2;
 	g1 = g2;
-	a1 = a2;
-	std::cout << meta->getType() << " " << std::endl;
-	std::cout << meta2->getType() << " " << std::endl;
 	std::cout << gato->getType() << " " << std::endl;
 	std::cout << gato2->getType() << " " << std::endl;
 	std::cout << perro->getType() << " " << std::endl;
 	std::cout << perro2->getType() << " " << std::endl;
 	std::cout << g1.getType() << " " << std::endl;
 	std::cout << g2.getType() << " " << std::endl;
-	meta->makeSound();
-	meta2->makeSound();
 	gato->makeSound();
 	gato2->makeSound();
 	perro->makeSound();
 	perro2->makeSound();
 	g1.makeSound();
 	g2.makeSound();
-	delete meta;
-	delete meta2;
 	delete gato;
 	delete perro;
 	delete perro2;
 }
 
 void	ex01_42Tester(void){
-	const 	Animal* j = new Dog();
-	const 	Animal* i = new Cat();
+	const 	AAnimal* j = new Dog();
+	const 	AAnimal* i = new Cat();
 	Cat		*catAux;
 	Dog		*dogAux;
 
@@ -170,7 +157,7 @@ void	ex01_42Tester(void){
 	std::cout << std::endl;
 	std::cout << "ARRAY ANIMALS 50/50" << std::endl;
 	std::cout << std::endl;
-	Animal	*beasts[10];
+	AAnimal	*beasts[10];
 	for (size_t k = 0; k < 10; k++){
 		if (k < 5){
 			beasts[k] = new Cat(); 

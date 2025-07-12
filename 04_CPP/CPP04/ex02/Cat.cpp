@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 17:05:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 12:29:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/12 14:53:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Cat::Cat(void){
 	std::cout << "🛠️ 😸	" << GREEN"Cat Default Constructor Called" RESET << std::endl;
 }
 
-Cat::Cat(const Cat &other) : Animal(other), _brain(new Brain(*other._brain)){
+Cat::Cat(const Cat &other) : AAnimal(other), _brain(new Brain(*other._brain)){
  	std::cout << "🐑😸	" << GREEN"Cat Copy Constructor Called" RESET << std::endl;
 }
 

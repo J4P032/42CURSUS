@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.hpp                                            :+:      :+:    :+:   */
+/*   WrongCat.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 14:56:15 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 12:29:24 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/07/11 15:46:04 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/07/11 18:15:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CAT_HPP
-# define CAT_HPP
+#ifndef WRONGCAT_HPP
+# define WRONGCAT_HPP
 
-# include "Animal.hpp"
-# include "Brain.hpp"
+#include "WrongAnimal.hpp"
 
-class Brain; //necesario por inclusion circular al estar Brain.hpp incluyendo Cat y Dog
-
-class	Cat : public Animal{
-	private:
-		Brain *_brain;
-	
+class	WrongCat : public WrongAnimal{
 	public:
-		Cat(void);
-		Cat(const Cat &other);
-		Cat	&operator=(const Cat &other);
-		~Cat(void);
+		WrongCat(void);
+		WrongCat(const WrongCat &other);
+		WrongCat	&operator=(const WrongCat &other);
+		~WrongCat(void);
 
-		void	makeSound(void) const;
-		Brain	*getBrain(void) const;		
+		void makeSound(void) const;
 };
 
 #endif

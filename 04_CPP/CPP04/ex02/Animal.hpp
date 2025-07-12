@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 14:27:24 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 14:14:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/12 15:02:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,18 @@
 #define CYAN "\033[38;2;0;200;255m"
 #define WHITE "\033[37m"
 
-class	Animal{
+class	AAnimal{
 	protected:
 		std::string _type;
 	
 	public:
-		Animal(void);
-		Animal(const Animal &other);
-		Animal	&operator=(const Animal &other);
-		virtual ~Animal(void);
+		AAnimal(void);
+		AAnimal(const AAnimal &other);
+		AAnimal	&operator=(const AAnimal &other);
+		virtual ~AAnimal(void);
 
 		std::string		getType(void) const; 	//ha de ser const por main pasado
-		virtual void	makeSound(void) const; 	//No puede ser pura (=0) por que en el main tenemos 
-												//const Animal* meta = new Animal(); Y ESO es IMPOSIBLE en abstracto
+		virtual void	makeSound(void) const = 0; //abstracta (virtual pura)
 };
 
 #endif
