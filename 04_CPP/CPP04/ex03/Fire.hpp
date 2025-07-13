@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICharacter.hpp                                     :+:      :+:    :+:   */
+/*   Fire.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/12 15:21:53 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/13 13:44:27 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/07/13 14:10:10 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/07/13 14:12:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ICHARACTER_HPP
-# define ICHARACTER_HPP
+#ifndef FIRE_HPP
+# define FIRE_HPP
 
-# include <iostream>
+# include "AMateria.hpp"
 
-class AMateria; //circular dependencia rota al declararla
-
-class ICharacter{ //interface
+class	Fire : public AMateria{
+	
 	public:
-		virtual ~ICharacter();
-		virtual std::string const &getName() const = 0;
-		virtual void equip(AMateria *m) = 0;
-		virtual void unequip(int idx) = 0;
-		virtual void use(int idx, ICharacter &target) = 0;
+		Fire(void);
+		Fire(const Fire &other);
+		~Fire(void);
+		Fire	&operator=(const Fire &other);
+
+		AMateria	*clone(void) const;
+		void 		use(ICharacter &target);
 };
-
-
 
 #endif

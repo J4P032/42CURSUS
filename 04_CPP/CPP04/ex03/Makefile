@@ -8,7 +8,8 @@ HEADERS =	AMateria.hpp \
 			ICharacter.hpp \
 			Character.hpp \
 			Cure.hpp \
-			Ice.cpp
+			Ice.hpp \
+			Fire.hpp
 SRC =		main.cpp \
 			AMateria.cpp \
 			IMateriaSource.cpp \
@@ -16,7 +17,8 @@ SRC =		main.cpp \
 			ICharacter.cpp \
 			Character.cpp \
 			Cure.cpp \
-			Ice.cpp 
+			Ice.cpp \
+			Fire.cpp
 			
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)

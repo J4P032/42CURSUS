@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 18:04:22 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 18:42:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/13 13:38:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@
 # include <iostream>
 # include "ICharacter.hpp"
 
+
+
 class	Character : public ICharacter{
 
 	private:
 		std::string	_name;
 		AMateria	*_inventory[4];
+		size_t		_groundCapacity; //ground dinamico para almacenar punteros objetos soltados
+		AMateria	**_ground; //para almacenar los objetos soltados
 		
 	public:
 		Character(void);
