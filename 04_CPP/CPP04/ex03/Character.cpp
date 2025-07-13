@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 18:35:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/13 21:08:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/14 00:28:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,40 +116,72 @@ std::string const &Character::getName() const{
 	return (_name);
 }
 
-void	Character::equip(AMateria *m){
-	size_t	i = 0;
-	size_t	j = 0;
-	
-	while (i < 4){
-		if (!_inventory[i]){
-			break;
+void Character::equip(AMateria *m) {
+	if (!m)
+		return;
+
+	// ¿Ya está en inventario?
+	for (size_t j = 0; j < 4; j++) {
+		if (_inventory[j] == m)
+			return; // Ya está, no hacemos nada
+	}
+
+	// Buscar hueco para meterlo
+	for (size_t i = 0; i < 4; i++) {
+		if (!_inventory[i]) {
+			_inventory[i] = m;
+			return;
+		}
+	}
+
+	// No había hueco y no estaba ya -> borrar
+	size_t i = 0;
+	//ver si esta ya m en el suelo
+	while (i < _groundCapacity){
+		if (m == _ground[i]){
+			return; //salir si esta
 		}
 		i++;
 	}
-	if (m && i < 4){
-		while (j < 4 && m != _inventory[j]){
-			j++;
-		}
-		if (j > 3){
-			_inventory[i] = m;
-		}
+	//busqueda de hueco en el suelo para dejar el objeto
+	i = 0;
+	while (i < _groundCapacity && _ground[i]){
+		i++;
+	}
+	if (i < _groundCapacity){
+		_ground[i] = m;
 	}
 	else{
-		j = 0;
-		while (j < 4 && m != _inventory[j]){
-			j++;
-		}
+		AMateria	**aux;
+		size_t oldCap = _groundCapacity;
+		_groundCapacity += 10;
+		aux = new AMateria*[_groundCapacity]; //nueva capacidad aumentada
 		
-		if (j > 3){
-			delete m;
+		//copia a aux de _ground y reasignacion
+		for (size_t j = 0; j < oldCap; j++){
+			aux[j] = _ground[j];
+		}
+		for (size_t j = oldCap; j < _groundCapacity; j++){
+			aux[j] = NULL;
+		}
+		delete[] _ground;
+		_ground = aux;
+
+		//encontrar hueco para el valor no almacenado m
+		for (size_t k = 0; k < _groundCapacity; k++) {
+        	if (!_ground[k]) {
+            	_ground[k] = m;
+        		break;
+       		}
 		}
 	}
 }
 
+
 void	Character::unequip(int idx){
 	size_t	i = 0;
 	
-	if (idx < 0 || idx > 3){
+	if (idx < 0 || idx > 3 || !_inventory[idx]){
 		return;
 	}
 	//busqueda de hueco en el suelo para dejar el objeto
@@ -162,23 +194,22 @@ void	Character::unequip(int idx){
 	}
 	else{
 		AMateria	**aux;
+		size_t oldCap = _groundCapacity;
 		_groundCapacity += 10;
 		aux = new AMateria*[_groundCapacity]; //nueva capacidad aumentada
 		
 		//copia a aux de _ground y reasignacion
-		for (size_t j = 0; j < _groundCapacity; j++){
-			if ((j < _groundCapacity - 10) && _ground[j]){
-				aux[j] = _ground[j]; //no necesito hacer clone ya que deseo conservar el puntero antiguo
-			}
-			else{
-				aux[j] = NULL;
-			}
+		for (size_t j = 0; j < oldCap; j++){
+			aux[j] = _ground[j];
+		}
+		for (size_t j = oldCap; j < _groundCapacity; j++){
+        	aux[j] = NULL;
 		}
 		delete[] _ground;
 		_ground = aux;
 
 		//ahora vaciar el inventario de ese objeto
-		i = 0; //el i seria uno mas que la capacidad antigua.. pero mejor buscar el NULL
+		i = 0;// busco hueco
 		while (i < _groundCapacity && _ground[i]){
 			i++;
 		}

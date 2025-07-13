@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 15:09:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/13 21:18:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/14 00:10:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,11 @@ int main()
 		javi->use(1, *pepe); 
 		javi->use(2, *pepe); 
 		javi->use(3, *pepe); 
+		
+		javi->equip(tmp);
+		javi->equip(tmp);
+		javi->equip(tmp);
+		javi->equip(tmp);
 		
 		//test liberacion ground
 		for(size_t i = 0; i < 101; i++){
