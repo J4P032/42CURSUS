@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:54:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/12 15:03:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:29:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,15 +163,19 @@ void	ex01_42Tester(void){
 			beasts[k] = new Cat(); 
 			catAux = dynamic_cast<Cat*>(beasts[k]); //lo necesita por que si no no puedo acceder a getBrain() ya que es de la clase Cat y Animal no lo tiene. 
 												//Casteo dinamico por que asi asegura en ejecucion de que clase es realmente (mira si Beast[k] es Cat, como lo es. Sino seria NULL)
-			for (size_t	index = 0; index < 99; index++){
-				catAux->getBrain()->setIdeas(index, "Eat jam");//set _ideas[100]
+			if (catAux){
+				for (size_t	index = 0; index < 99; index++){
+					catAux->getBrain()->setIdeas(index, "Eat jam");//set _ideas[100]
+				}
 			}
 		}
 		else{
 			beasts[k] = new Dog();
 			dogAux = dynamic_cast<Dog*>(beasts[k]);
-			for (size_t	index = 0; index < 99; index++){
-				dogAux->getBrain()->setIdeas(index, "Play!!");//set _ideas[100]
+			if (dogAux){
+				for (size_t	index = 0; index < 99; index++){
+					dogAux->getBrain()->setIdeas(index, "Play!!");//set _ideas[100]
+				}
 			}
 		}
 	}
@@ -180,12 +184,14 @@ void	ex01_42Tester(void){
 	size_t	randomNum;
 	randomNum = std::rand() % 100; //de 0 a 99
 	catAux = dynamic_cast<Cat*>(beasts[3]);
-	std::cout << "🧠😸	Cat random idea number: " << randomNum << " " << catAux->getBrain()->getIdeas(randomNum) << std::endl;
-
-	randomNum = std::rand() % 100; //de 0 a 99
+	if (catAux){
+		std::cout << "🧠😸	Cat random idea number: " << randomNum << " " << catAux->getBrain()->getIdeas(randomNum) << std::endl;
+		randomNum = std::rand() % 100; //de 0 a 99
+	}
 	dogAux = dynamic_cast<Dog*>(beasts[6]);
-	std::cout << "🧠🐶	Dog random idea number: " << randomNum << " " << dogAux->getBrain()->getIdeas(randomNum) << std::endl;
-	
+	if (dogAux){
+		std::cout << "🧠🐶	Dog random idea number: " << randomNum << " " << dogAux->getBrain()->getIdeas(randomNum) << std::endl;
+	}
 	//Liberacion Memoria
 	for (size_t k = 0; k < 10; k++){
 		delete beasts[k];
