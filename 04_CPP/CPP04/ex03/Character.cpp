@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 18:35:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/14 00:28:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/07/14 08:44:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void Character::equip(AMateria *m) {
 	if (i < _groundCapacity){
 		_ground[i] = m;
 	}
-	else{
+	else{//si no hacer hueco nuevo
 		AMateria	**aux;
 		size_t oldCap = _groundCapacity;
 		_groundCapacity += 10;
@@ -176,7 +176,6 @@ void Character::equip(AMateria *m) {
 		}
 	}
 }
-
 
 void	Character::unequip(int idx){
 	size_t	i = 0;
