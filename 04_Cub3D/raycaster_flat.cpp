@@ -95,6 +95,20 @@ int main(int /*argc*/, char */*argv*/[])
       double sideDistX;
       double sideDistY;
 
+      //añadido mio (japo)> pitagoras es: hipotenusa = sqtr(x2 + y2)
+      //donde x = 1 por que es un bloque, e y = (x * tan(θ))
+      //la normalizacion a |rayDir| viene de que:
+      /*
+        (hipotenusa)deltaDistX = sqrt(1 + tan²(θ)) que es lo mismo que:
+        deltaDistX² = 1 + tan²(θ), que es 
+        deltaDistX² = (rayDirX²/rayDirX²) + (rayDirY²/rayDirX²)
+        deltaDistX² = (rayDirX² + rayDirY²) / rayDirX²
+        deltaDistX² = |rayDir|² / rayDirX² //la longitud del vector es |rayDir| = sqrt(deltaX² + deltaY²)
+        deltaDistX = sqrt(|rayDir|² / rayDirX²) = |rayDir| / |rayDirX| siendo este ultimo no la longitud sino el valor absoluto 
+        al final esto se puede traducir a:
+        deltaDistX = 1 / |rayDirX| por que es proporcional a la distancia y no importa dicha distancia, sino la proporcion.
+      */
+
       //length of ray from one x or y-side to next x or y-side
       //these are derived as:
       //deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX))

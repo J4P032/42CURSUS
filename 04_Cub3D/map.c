@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:02:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/02 11:44:11 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:31:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 			|| line[i] == 'W')
 		{
 			map->num_p++;
-			map->p_x = i * TEXTURE_W + (TEXTURE_W / 2);
-			map->p_y = (ln - 1) * TEXTURE_H + (TEXTURE_H / 2);
+			map->p_x = i + 0.5;
+			map->p_y = (ln - 1) + 0.5;
+			init_looking_direction(map, line[i]);
 		}
 		i++;
 	}
@@ -104,8 +105,8 @@ int	check_map_errors(t_map *map)
 
 	error = 0;
 	closed_walls = map->columns * 2 + (map->lines - 2) * 2;
-	if (closed_walls != map->num_walls || map->no_rectangle || map->num_c < 1
-		|| map->num_e != 1 || map->num_p != 1 || map->no_valid_char == 1)
+	if (closed_walls != map->num_walls || map->no_rectangle
+		|| map->num_p != 1 || map->no_valid_char == 1)
 	{
 		write(1, "Error\n", 6);
 		error = 1;
@@ -114,10 +115,6 @@ int	check_map_errors(t_map *map)
 		write(1, "Map not fully closed by walls\n", 30);
 	if (map->no_rectangle)
 		write(1, "Not a rectangular map\n", 22);
-	if (map->num_c < 1)
-		write(1, "There are no collectibles\n", 26);
-	if (map->num_e != 1)
-		write(1, "There is no exit, or more than one\n", 35);
 	if (map->num_p != 1)
 		write(1, "There is no char start position, or more than one\n", 50);
 	if (map->no_valid_char)

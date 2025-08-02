@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 12:00:38 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/02 11:42:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:42:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 
 # define TEXTURE_W 512
 # define TEXTURE_H 512
+# define PI 3.14159265358979323846
+# define FOV 66 //degrees
 # define NUM_SPRITES 0
 # define VALID_MAP_CHARS "NSEW01\n"
 
@@ -72,12 +74,17 @@ typedef struct s_map
 	size_t	columns;
 	size_t	lines;
 	int		num_p;
-	int		p_x;
-	int		p_y;
-	int		num_c;
-	int		check_c;
-	int		num_e;
-	int		check_e;
+	double	p_x;
+	double	p_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+	
+	//int		num_c;
+	//int		check_c;
+	//int		num_e;
+	//int		check_e;
 	int		num_walls;
 	int		no_rectangle;
 	int		no_valid_char;
@@ -94,6 +101,7 @@ int		close_win(t_game *game);
 void	draw_window(t_game *game);
 t_map	*process_map(char *map_dir);
 void	load_map(t_map *map, char *map_dir);
+void	init_looking_direction(t_map *map, char c);
 
 //# define SPRITES_ANIM 3
 //# define VALID_MAP_CHARS "CPE01\n"
