@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/07/22 12:40:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:05:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ int	main(int argc, char **argv)
 	game->win->mlx = mlx_init();
 	if (!game->win->mlx)
 		return (free(game->win), free(game), 1);
-	//game->map = process_map(argv[1]);
-	//if (!game->map)
-	//	return (clean_up_memory(game), 1);
+	game->map = process_map(argv[1]);
+	if (!game->map)
+		return (clean_up_memory(game), 1);
 	draw_window(game);
 	//load_sprites(game);
 	//mlx_loop_hook(game->win->mlx, update_frame, game);
