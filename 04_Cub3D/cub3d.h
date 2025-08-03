@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/03 15:43:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/03 16:22:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,16 @@
 //# include <stdlib.h>
 //# include <stdlib.h>
 
+# define WIN_W 1024
+# define WIN_H 768
 # define TEXTURE_W 512
 # define TEXTURE_H 512
 # define PI 3.14159265358979323846
 # define FOV 66 //degrees
 # define NUM_SPRITES 0
 # define VALID_MAP_CHARS "NSEW01\n"
+# define RAY (game->win->ray)
+# define MAP (game->map)
 
 typedef struct s_data
 {
@@ -96,11 +100,11 @@ typedef struct s_map
 	size_t	columns;
 	size_t	lines;
 	int		num_p;
-	double	p_x;
+	double	p_x; //position of the player in X component
 	double	p_y;
-	double	dir_x;
+	double	dir_x; //direction in X, main character is looking
 	double	dir_y;
-	double	plane_x;
+	double	plane_x; //Plane perpendicular to looking direction
 	double	plane_y;
 	
 	int		num_walls;

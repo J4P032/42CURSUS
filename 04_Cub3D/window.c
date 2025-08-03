@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 12:15:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/03 14:51:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/03 16:06:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,16 @@ int	close_win(t_game *game)
 
 void	draw_window(t_game *game)
 {
-	int	width;
-	int	height;
-
-	game->win->width = 1024; //game->map->columns * SPRITE_WIDTH;
-	game->win->height = 768; //game->map->lines * SPRITE_HEIGHT;
+	game->win->width = WIN_W; //game->map->columns * SPRITE_WIDTH;
+	game->win->height = WIN_H; //game->map->lines * SPRITE_HEIGHT;
 	//check_size(game);
-	width = game->win->width;
-	height = game->win->height;
 	if (!game->win->win)
 	{
-		game->win->win = mlx_new_window(game->win->mlx, width, height,
-				"Cube3D");
+		game->win->win = mlx_new_window(game->win->mlx, WIN_W, WIN_H, "Cub3D");
 		if (!game->win->win)
 			error_window(game, 0);
 	}
-	game->win->canvas.img = mlx_new_image(game->win->mlx, width, height);
+	game->win->canvas.img = mlx_new_image(game->win->mlx, WIN_W, WIN_H);
 	if (!game->win->canvas.img)
 		error_window(game, 1);
 	game->win->canvas.addr = mlx_get_data_addr(game->win->canvas.img,
