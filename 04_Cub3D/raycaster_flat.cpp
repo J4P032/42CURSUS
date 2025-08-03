@@ -126,6 +126,17 @@ int main(int /*argc*/, char */*argv*/[])
       double perpWallDist;
 
       //what direction to step in x or y-direction (either +1 or -1)
+      /* añadido Japo:
+        stepX y stepY indican hacia donde va el rayo visto desde arriba (NSEW)
+        si rayDirX > 0 -> stepX = 1 (este);
+        rayDirX < 0 -> stepX = -1 (oeste);
+        rayDirY > 0 -> stepY = 1; (sur)
+        rayDirY < 0 -> stepY = -1; (sur)
+        Pero como se ve son ENTEROS asi que se evita pillar la coma flotante y cada 'paso'
+        es un avance en dicha direccion que siempre sera el mismo deltaDistX/Y
+        sideDistX/Y es la distancia desde el jugador al primer grid, que no tiene por que ser
+        la misma que deltaDistX/Y. Normalmente sera menor.
+      */
       int stepX;
       int stepY;
 
@@ -156,6 +167,11 @@ int main(int /*argc*/, char */*argv*/[])
       while(hit == 0)
       {
         //jump to next map square, either in x-direction, or in y-direction
+        /*japo: puedo priorizar el desplazamiento en X cuando son iguales las distancias:
+        sideDistX <= sideDistY, para evitar fallos de dibujo en las esquinas.
+        side 0 es se cruza una linea grid vertical (X) el impacto es en izda o derecha
+        side 1 se cruza una linea grid horizontal (Y) el impacto es arriba o abajo 
+        */
         if(sideDistX < sideDistY)
         {
           sideDistX += deltaDistX;
@@ -181,15 +197,34 @@ int main(int /*argc*/, char */*argv*/[])
       else          perpWallDist = (sideDistY - deltaDistY);
 
       //Calculate height of line to draw on screen
+      /*japo:
+        se divide por perWallDist por que a mas distancia que este, mas pequeño proporcionalmente debe
+        estar. Y si la distancia es menor de 1, entonces mas grande debe parecer en altura el cubo de pared.
+      */
       int lineHeight = (int)(h / perpWallDist);
 
       //calculate lowest and highest pixel to fill in current stripe
+      /*japo:
+        Como se calcula que el centro de la pared esta en el horizonte de vision, la formula para 
+        empezar a dibujar se calcula asi para ser equidistantes de los bordes (dividir entre dos las secciones
+        mas alla del horizonte artificial)
+      
+      */
       int drawStart = -lineHeight / 2 + h / 2;
       if(drawStart < 0) drawStart = 0;
       int drawEnd = lineHeight / 2 + h / 2;
       if(drawEnd >= h) drawEnd = h - 1;
 
       //choose wall color
+      /*japo:
+        En cub3D todas las paredes han de ser 1. Por lo que para distinguir de que lado se impacta
+        NSEW, recurrimos al 'side' y al StepX/Y
+        side 0 && stepX 1 -> pared vertical lado Oeste golpeado
+        side 0 && stepX -1 -> pared vertical lado Este golpeado
+        side 1 && StepY 1 -> pared horizontal lado Norte Golpeado
+        side 1 && StepY -1 -> pared horizontal lado Sur Golpeado
+      */
+
       ColorRGB color;
       switch(worldMap[mapX][mapY])
       {
