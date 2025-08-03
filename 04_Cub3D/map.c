@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:02:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/02 17:31:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/03 15:45:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "cub3d.h"
 #include "get_next_line.h"
 
 void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
@@ -126,9 +126,9 @@ int	check_map_errors(t_map *map)
 t_map	*process_map(char *map_dir)
 {
 	t_map	*map;
-	size_t	i;
+	//size_t	i;
 
-	i = 0;
+	//i = 0;
 	map = (t_map *)ft_calloc(1, sizeof(t_map));
 	if (!map)
 		return (NULL);

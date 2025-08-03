@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/02 16:57:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/03 14:51:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "cub3d.h"
 #include "get_next_line.h"
 
 /* plane_x/y is a rotation vector from dirx/y 90deg or π/2 so applying the...

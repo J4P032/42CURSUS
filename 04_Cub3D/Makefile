@@ -9,7 +9,9 @@ SRC = 	main.c \
 		map.c \
 		map_2.c \
 		get_next_line.c \
-		get_next_line_utils.c
+		get_next_line_utils.c \
+		frame.c \
+		raycast.c
 #SRCS_BONUS = 
 OBJS = $(SRC:.c=.o)
 #OBJS_BONUS = ${SRCS_BONUS:.c=.o}

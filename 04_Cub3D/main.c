@@ -6,11 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/02 11:05:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/03 14:59:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "cub3d.h"
 
 void	free_map(t_game *game)
 {
@@ -94,7 +94,7 @@ int	main(int argc, char **argv)
 		return (clean_up_memory(game), 1);
 	draw_window(game);
 	//load_sprites(game);
-	//mlx_loop_hook(game->win->mlx, update_frame, game);
+	mlx_loop_hook(game->win->mlx, update_frame, game);
 	//mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
 	mlx_hook(game->win->win, 17, 0, close_win, game);
 	mlx_loop(game->win->mlx);
