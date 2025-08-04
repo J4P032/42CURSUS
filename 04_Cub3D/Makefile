@@ -14,6 +14,7 @@ SRC = 	main.c \
 		raycast.c \
 		raycast_2.c \
 		pixels.c \
+		movement.c 
 #SRCS_BONUS = 
 OBJS = $(SRC:.c=.o)
 #OBJS_BONUS = ${SRCS_BONUS:.c=.o}

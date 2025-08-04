@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 15:45:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:03:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,9 @@ int	main(int argc, char **argv)
 {
 	t_game	*game;
 
-	//if (argc != 2)
-	//	return (1);
+	if (argc != 2)
+		return (1);
 	(void)argc;
-	(void)argv;
 	//check_ber(argv[1]);
 	game = (t_game *)ft_calloc(1, sizeof(t_game));
 	if (!game)
@@ -95,7 +94,7 @@ int	main(int argc, char **argv)
 	draw_window(game);
 	//load_sprites(game);
 	mlx_loop_hook(game->win->mlx, update_frame, game);
-	//mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
+	mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
 	mlx_hook(game->win->win, 17, 0, close_win, game);
 	mlx_loop(game->win->mlx);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 15:50:16 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:02:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@
 # define TEXTURE_W 512
 # define TEXTURE_H 512
 # define PI 3.14159265358979323846
-# define FOV 66 //degrees
-# define FACTOR_HEIGHT 1
+# define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
+# define WALL_HEIGHT 1
 # define NUM_SPRITES 0
+# define MOVE_SPEED 0.05
 # define VALID_MAP_CHARS "NSEW01\n"
 # define RAY (game->win->ray)
 # define MAP (game->map)
@@ -133,6 +134,7 @@ int		update_frame(t_game *game);
 void	raycaster(t_game *game, int x);
 void	choose_color(t_game *game);
 void	put_pixel(t_data *img, int x, int y, int color);
+int		key_press(int key, t_game *game);
 
 //# define SPRITES_ANIM 3
 //# define VALID_MAP_CHARS "CPE01\n"
