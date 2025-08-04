@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 14:37:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:15:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,10 @@ void	set_draw_length_without_fish_fx(t_game *game)
 	else
 		RAY.perp_wall_dist = RAY.dist_y - RAY.delta_dist_y;
 	RAY.line_height = (int)((WIN_H / RAY.perp_wall_dist) * FACTOR_HEIGHT);
-	RAY.draw_start = (-RAY.line_height / 2) + (WIN_H / 2);
+	RAY.draw_start = (-RAY.line_height / 2) + (WIN_H / 2) + RAY.walking_height;
 	if (RAY.draw_start < 0)
 		RAY.draw_start = 0;
-	RAY.draw_end = (RAY.line_height / 2) + (WIN_H / 2);
+	RAY.draw_end = (RAY.line_height / 2) + (WIN_H / 2) + RAY.walking_height;
 	if (RAY.draw_end >= WIN_H)
 		RAY.draw_end = WIN_H - 1;
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 14:41:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:50:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define VALID_MAP_CHARS "NSEW01\n"
 # define RAY (game->win->ray)
 # define MAP (game->map)
+# define CANVAS (game->win->canvas)
 
 typedef struct s_data
 {
@@ -81,6 +82,8 @@ typedef struct s_ray
 	int		draw_start; //start of pixel draw in Y above the horizont (width/2)
 	int		draw_end; //end of pixel draw in vertical Y.
 	int		color;
+	int		walking_height;
+	double	i_walking;
 } 			t_ray;
 
 typedef struct s_window
