@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/03 15:43:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:24:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,9 @@ int	update_frame(t_game *game)
 	x = 0;
 	while (x < game->win->width)
 		raycaster(game, x++);
-
-
+	mlx_put_image_to_window(game->win->mlx, game->win->win, game->win->canvas.img, 0, 0);
+	if (!game->win->running)
+		return (0);
 
 
 	
@@ -59,5 +60,5 @@ int	update_frame(t_game *game)
 	//pacman_sprite_anim(game->win);
 	//delay_time(game, time);
 	//count_movements(game);
-	return (0);
+	return (1);
 }

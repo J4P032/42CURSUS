@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/03 19:36:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 14:37:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,9 @@ void	run_dda(t_game *game)
 			RAY.map_y += RAY.step_y;
 			RAY.side = 1;
 		}
-		if (MAP->map[RAY.map_x][RAY.map_y] == '1')
+		if (RAY.map_y >= 0 && RAY.map_y < (int)MAP->lines &&
+			RAY.map_x >= 0 && RAY.map_x < (int)MAP->columns &&
+			MAP->map[RAY.map_y][RAY.map_x] == '1')
 			RAY.hit = 1;
 	}
 }
@@ -156,7 +158,7 @@ void	set_draw_length_without_fish_fx(t_game *game)
 		RAY.perp_wall_dist = RAY.dist_x - RAY.delta_dist_x;
 	else
 		RAY.perp_wall_dist = RAY.dist_y - RAY.delta_dist_y;
-	RAY.line_height = (int)(WIN_H / RAY.perp_wall_dist);
+	RAY.line_height = (int)((WIN_H / RAY.perp_wall_dist) * FACTOR_HEIGHT);
 	RAY.draw_start = (-RAY.line_height / 2) + (WIN_H / 2);
 	if (RAY.draw_start < 0)
 		RAY.draw_start = 0;
@@ -179,6 +181,9 @@ void	set_draw_length_without_fish_fx(t_game *game)
 4. RAY.map_x/y is the grid of the map we are.*/
 void	raycaster(t_game *game, int x)
 {
+	int	y;
+	
+	RAY.hit = 0;
 	RAY.camera_x = 2 * x / (double)WIN_W - 1;
 	RAY.dir_x = MAP->dir_x + MAP->plane_x * RAY.camera_x;
 	RAY.dir_y = MAP->dir_y + MAP->plane_y * RAY.camera_x;
@@ -188,4 +193,11 @@ void	raycaster(t_game *game, int x)
 	set_direction_of_ray(game);
 	run_dda(game);
 	set_draw_length_without_fish_fx(game);
+	choose_color(game);
+	y = RAY.draw_start;
+	while (y < RAY.draw_end)
+	{
+		put_pixel(&game->win->canvas, x, y, RAY.color);
+		y++;
+	}
 }
