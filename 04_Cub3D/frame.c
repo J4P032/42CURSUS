@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 19:22:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:07:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,25 @@
 
 void	walking_breathing(t_game *game)
 {
-	int		breathing;
-	//double	new_x;
-	//double	new_y;	
-	
-	breathing = 3;
+	int	breathing;
+	int	move_speed;
+
+	breathing = 2;
+	move_speed = 1;
+	if (PLAYER.running && PLAYER.moving)
+		move_speed = 2;
 	ft_memset(CANVAS.addr, 0, WIN_W * WIN_H * (CANVAS.bits_x_pixel / 8));
 	if (RAY.i_walking >= 2.0)
 		RAY.i_walking = 0;
-	if (game->moving == 1)
-	{
-		breathing = 15;
-	}
-	RAY.walking_height = breathing * sin(PI * RAY.i_walking);
-	RAY.walking_wave = 7 * fabs(cos(PI * RAY.i_walking));
+	if (PLAYER.moving)
+		breathing = 7;
+	if (PLAYER.running && PLAYER.moving)
+		breathing = 12;
+	RAY.walking_height = breathing * sin(PI * RAY.i_walking * move_speed); 
+	RAY.walking_wave = 4 * (-cos(PI * PLAYER.i_wave_walk * move_speed));
 	RAY.i_walking += 0.025;
+	PLAYER.i_wave_walk += 0.02;
+
 }
 
 /*We send a ray per pixel in WIDTH of the screen*/

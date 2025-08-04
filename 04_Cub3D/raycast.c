@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 19:10:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:39:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,10 @@ void	raycaster(t_game *game, int x)
 	double	factor;
 	
 	factor = 0;
-	if (game->moving == 1)
+	if (PLAYER.moving)
 		factor = 0.005;
+	if (PLAYER.running && PLAYER.moving)
+		factor = 0.01;
 	RAY.hit = 0;
 	RAY.camera_x = 2 * x / (double)WIN_W - 1 + RAY.walking_wave * factor;
 	RAY.dir_x = MAP->dir_x + MAP->plane_x * RAY.camera_x;

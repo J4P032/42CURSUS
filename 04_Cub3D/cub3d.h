@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 19:25:46 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:03:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define MAP (game->map)
 # define CANVAS (game->win->canvas)
 # define KEY (game->keys)
+# define PLAYER (game->player)
 
 typedef struct s_data
 {
@@ -132,14 +133,20 @@ typedef	struct s_keys
 	int	shift;
 }		t_keys;
 
+typedef struct s_player
+{
+	int		moving;
+	int		running;
+	double	i_wave_walk;
+}			t_player;
+
 
 typedef struct s_game
 {
 	t_window	*win;
 	t_map		*map;
 	t_keys		keys;
-	int			moving;
-	int			running;
+	t_player	player;
 }				t_game;
 
 void	clean_up_memory(t_game *game);

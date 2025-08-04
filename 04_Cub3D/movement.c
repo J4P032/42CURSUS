@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 16:34:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 19:28:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:03:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	translate(t_game *game, int movement)
 	double	new_y;
 
 	move_speed = MOVE_SPEED;
+	if (PLAYER.running && PLAYER.moving)
+		move_speed *= 2;
 	new_x = MAP->p_x + movement * MAP->dir_x * move_speed;
 	new_y = MAP->p_y + movement * MAP->dir_y * move_speed;
 	if (MAP->map[(int)new_y][(int)MAP->p_x] != '1')
@@ -35,6 +37,8 @@ void	strafing(t_game *game, int movement)
 	double	new_y;
 	
 	move_speed = MOVE_SPEED;
+	if (PLAYER.running && PLAYER.moving)
+		move_speed *= 2;
 	new_x = MAP->p_x + movement * MAP->plane_x * move_speed;
 	new_y = MAP->p_y + movement * MAP->plane_y * move_speed;
 	if (MAP->map[(int)new_y][(int)MAP->p_x] != '1')
@@ -45,29 +49,9 @@ void	strafing(t_game *game, int movement)
 
 
 /*key 65307 is ESC key*/
-/* int	key_press(int key, t_game *game)
-{
-	if (key == 65307)
-	{
-		clean_up_memory(game);
-		exit (0);
-	}
-	if (key == 'D' || key == 'd') // || key == 65363 flecha dcha)
-		strafing(game, 1);
-	else if (key == 'A' || key == 'a') // || key == 65361 flecha izda)
-		strafing(game, -1);
-	else if (key == 'W' || key == 'w') //  || key == 65362 flecha arriba)
-		translate(game, 1);
-	else if (key == 'S' || key == 's') // || key == 65364 flecha abajo)
-		translate(game, -1);
-	return (0);
-} */
-
-
-/*key 65307 is ESC key*/
 int	key_press(int key, t_game *game)
 {
-	game->moving = 1;
+	PLAYER.moving = 1;
 	if (key == 65307)
 	{
 		clean_up_memory(game);
@@ -87,7 +71,7 @@ int	key_press(int key, t_game *game)
 		KEY.left = 1;
 	if (key == 32)
 		KEY.space = 1;
-	if (key == 32)
+	if (key == 65505)
 		KEY.shift = 1;
 	return (0);
 }
@@ -109,12 +93,12 @@ int	key_release(int key, t_game *game)
 		KEY.left = 0;
 	if (key == 32)
 		KEY.space = 0;
-	if (key == 32)
+	if (key == 65505)
 		KEY.shift = 0;
 	if (KEY.a || KEY.s || KEY.d || KEY.w)
-		game->moving = 1;
+		PLAYER.moving = 1;
 	else
-		game->moving = 0;
+		PLAYER.moving = 0;
 	return (0);
 }
 
@@ -128,5 +112,8 @@ void	keys_movement(t_game *game)
 		strafing(game, 1);
 	if (game->keys.a == 1)
 		strafing(game, -1);
-
+	if (KEY.shift && PLAYER.moving)
+		PLAYER.running = 1;
+	if (KEY.shift == 0)
+		PLAYER.running = 0;
 }
