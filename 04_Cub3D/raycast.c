@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 16:42:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:10:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,14 @@ void	set_draw_length_without_fish_fx(t_game *game)
 4. RAY.map_x/y is the grid of the map we are.*/
 void	raycaster(t_game *game, int x)
 {
-	int	y;
+	int		y;
+	double	factor;
 	
+	factor = 0;
+	if (game->moving == 1)
+		factor = 0.005;
 	RAY.hit = 0;
-	RAY.camera_x = 2 * x / (double)WIN_W - 1;
+	RAY.camera_x = 2 * x / (double)WIN_W - 1 + RAY.walking_wave * factor;
 	RAY.dir_x = MAP->dir_x + MAP->plane_x * RAY.camera_x;
 	RAY.dir_y = MAP->dir_y + MAP->plane_y * RAY.camera_x;
 	RAY.map_x = (int)MAP->p_x;

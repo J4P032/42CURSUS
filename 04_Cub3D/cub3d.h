@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 17:02:11 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:25:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@
 # define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1
 # define NUM_SPRITES 0
-# define MOVE_SPEED 0.05
+# define MOVE_SPEED 0.02
 # define VALID_MAP_CHARS "NSEW01\n"
 # define RAY (game->win->ray)
 # define MAP (game->map)
 # define CANVAS (game->win->canvas)
+# define KEY (game->keys)
 
 typedef struct s_data
 {
@@ -84,6 +85,7 @@ typedef struct s_ray
 	int		draw_end; //end of pixel draw in vertical Y.
 	int		color;
 	int		walking_height;
+	int		walking_wave;//
 	double	i_walking;
 } 			t_ray;
 
@@ -118,10 +120,26 @@ typedef struct s_map
 	int		no_valid_char;
 }			t_map;
 
+typedef	struct s_keys
+{
+	int w;
+	int	s;
+	int	a;
+	int	d;
+	int left;
+	int right;
+	int space;
+	int	shift;
+}		t_keys;
+
+
 typedef struct s_game
 {
 	t_window	*win;
 	t_map		*map;
+	t_keys		keys;
+	int			moving;
+	int			running;
 }				t_game;
 
 void	clean_up_memory(t_game *game);
@@ -134,7 +152,9 @@ int		update_frame(t_game *game);
 void	raycaster(t_game *game, int x);
 void	choose_color(t_game *game);
 void	put_pixel(t_data *img, int x, int y, int color);
+void	keys_movement(t_game *game);
 int		key_press(int key, t_game *game);
+int		key_release(int key, t_game *game);
 
 //# define SPRITES_ANIM 3
 //# define VALID_MAP_CHARS "CPE01\n"

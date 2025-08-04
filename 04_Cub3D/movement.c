@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 16:34:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 17:30:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:28:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	strafing(t_game *game, int movement)
 
 
 /*key 65307 is ESC key*/
-int	key_press(int key, t_game *game)
+/* int	key_press(int key, t_game *game)
 {
 	if (key == 65307)
 	{
@@ -61,4 +61,72 @@ int	key_press(int key, t_game *game)
 	else if (key == 'S' || key == 's') // || key == 65364 flecha abajo)
 		translate(game, -1);
 	return (0);
+} */
+
+
+/*key 65307 is ESC key*/
+int	key_press(int key, t_game *game)
+{
+	game->moving = 1;
+	if (key == 65307)
+	{
+		clean_up_memory(game);
+		exit (0);
+	}
+	if (key == 'D' || key == 'd')
+		KEY.d = 1;
+	if (key == 'A' || key == 'a')
+		KEY.a = 1;
+	if (key == 'W' || key == 'w')
+		KEY.w = 1;
+	if (key == 'S' || key == 's') 
+		KEY.s = 1;
+	if (key == 65363)
+		KEY.right = 1;
+	if (key == 65361)
+		KEY.left = 1;
+	if (key == 32)
+		KEY.space = 1;
+	if (key == 32)
+		KEY.shift = 1;
+	return (0);
+}
+
+/*key 65307 is ESC key*/
+int	key_release(int key, t_game *game)
+{
+	if (key == 'D' || key == 'd')
+		KEY.d = 0;
+	if (key == 'A' || key == 'a')
+		KEY.a = 0;
+	if (key == 'W' || key == 'w')
+		KEY.w = 0;
+	if (key == 'S' || key == 's') 
+		KEY.s = 0;
+	if (key == 65363)
+		KEY.right = 0;
+	if (key == 65361)
+		KEY.left = 0;
+	if (key == 32)
+		KEY.space = 0;
+	if (key == 32)
+		KEY.shift = 0;
+	if (KEY.a || KEY.s || KEY.d || KEY.w)
+		game->moving = 1;
+	else
+		game->moving = 0;
+	return (0);
+}
+
+void	keys_movement(t_game *game)
+{
+	if (game->keys.w == 1)
+		translate(game, 1);
+	if (game->keys.s == 1)
+		translate(game, -1);
+	if (game->keys.d == 1)
+		strafing(game, 1);
+	if (game->keys.a == 1)
+		strafing(game, -1);
+
 }
