@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 20:03:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 09:21:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define WALL_HEIGHT 1
 # define NUM_SPRITES 0
 # define MOVE_SPEED 0.02
+# define ROTATION_SPEED 2
 # define VALID_MAP_CHARS "NSEW01\n"
 # define RAY (game->win->ray)
 # define MAP (game->map)
@@ -88,6 +89,7 @@ typedef struct s_ray
 	int		walking_height;
 	int		walking_wave;//
 	double	i_walking;
+	double	fov_factor;
 } 			t_ray;
 
 typedef struct s_window
@@ -162,6 +164,7 @@ void	put_pixel(t_data *img, int x, int y, int color);
 void	keys_movement(t_game *game);
 int		key_press(int key, t_game *game);
 int		key_release(int key, t_game *game);
+void	rotate_camera(t_game *game, int direction);
 
 //# define SPRITES_ANIM 3
 //# define VALID_MAP_CHARS "CPE01\n"

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 12:15:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/03 16:06:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 09:26:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,5 @@ void	draw_window(t_game *game)
 			&game->win->canvas.endian);
 	if (!game->win->canvas.addr)
 		error_window(game, 1);
+	RAY.fov_factor = ((FOV * PI / 180.0) / 2);
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 16:34:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 21:03:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 10:07:31 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,16 +104,20 @@ int	key_release(int key, t_game *game)
 
 void	keys_movement(t_game *game)
 {
-	if (game->keys.w == 1)
+	if (KEY.w == 1)
 		translate(game, 1);
-	if (game->keys.s == 1)
+	if (KEY.s == 1)
 		translate(game, -1);
-	if (game->keys.d == 1)
+	if (KEY.d == 1)
 		strafing(game, 1);
-	if (game->keys.a == 1)
+	if (KEY.a == 1)
 		strafing(game, -1);
 	if (KEY.shift && PLAYER.moving)
 		PLAYER.running = 1;
 	if (KEY.shift == 0)
 		PLAYER.running = 0;
+	if (KEY.right)
+		rotate_camera(game, 1);
+	if (KEY.left)
+		rotate_camera(game, -1);
 }
