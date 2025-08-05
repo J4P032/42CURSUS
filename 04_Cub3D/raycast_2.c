@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 12:27:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 10:17:55 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ side 1 && step_y 1 -> horizontal walls, NORTH side hit (ray goes up to down)
 side 1 && step_y -1 -> horizontal walls, SOUTH side hit (ray goes down to up)
 
 color format is hex. 0x[A][R][G][B] where in minilibx Alpha is not used
-0x00FF0000 -> RED
-0x0000FF00 -> GREEN
-0x000000FF -> BLUE 
-0x00FFFF00 -> YELLOW */
+0x00FF0000 -> RED - WEST
+0x0000FF00 -> GREEN - NORTH
+0x000000FF -> BLUE - SOUTH
+0x00FFFF00 -> YELLOW - EAST*/
 void	choose_color(t_game *game)
 {
 	if (RAY.side == 0)
