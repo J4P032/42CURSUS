@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 20:39:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:18:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,9 +181,10 @@ void	set_draw_length_without_fish_fx(t_game *game)
 4. RAY.map_x/y is the grid of the map we are.*/
 void	raycaster(t_game *game, int x)
 {
-	int		y;
 	double	factor;
+	int		y;
 	
+	y = 0;
 	factor = 0;
 	if (PLAYER.moving)
 		factor = 0.005;
@@ -200,10 +201,5 @@ void	raycaster(t_game *game, int x)
 	run_dda(game);
 	set_draw_length_without_fish_fx(game);
 	choose_color(game);
-	y = RAY.draw_start;
-	while (y < RAY.draw_end)
-	{
-		put_pixel(&game->win->canvas, x, y, RAY.color);
-		y++;
-	}
+	paint_ray(game, x);
 }

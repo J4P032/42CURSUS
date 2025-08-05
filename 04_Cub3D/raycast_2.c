@@ -6,13 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 13:00:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 18:04:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 /*modify the color with distance. More distance darker*/
+/*LIGHT default is 2. Higher number brighter will be*/
 void	modify_color_with_distance(t_game *game)
 {
 	float	factor;
@@ -22,7 +23,7 @@ void	modify_color_with_distance(t_game *game)
 
 	if (RAY.perp_wall_dist == 0)
 		RAY.perp_wall_dist = 1e-32;
-	factor = 2 * 1.0f / (float)RAY.perp_wall_dist;
+	factor = LIGHT * 1.0f / (float)RAY.perp_wall_dist;
 	if (factor > 1.0f)
 		factor = 1.0f;
 	red = (int)(((RAY.color >> 16) & 0xFF) * factor);
@@ -61,4 +62,16 @@ void	choose_color(t_game *game)
 		RAY.color = 0x000000FF;
 	}
 	modify_color_with_distance(game);
+}
+
+void	paint_ray(t_game *game, int x)
+{
+	int	y;
+
+	y = RAY.draw_start;
+	while (y < RAY.draw_end)
+	{
+		put_pixel(&game->win->canvas, x, y, RAY.color);
+		y++;
+	}
 }

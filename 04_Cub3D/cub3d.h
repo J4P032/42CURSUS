@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 16:08:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:17:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define PI 3.14159265358979323846
 # define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1
+# define LIGHT 2
 # define NUM_SPRITES 4
 # define SPRITES_ANIM 1
 # define MOVE_SPEED 0.02
@@ -92,6 +93,8 @@ typedef struct s_ray
 	int		draw_start; //start of pixel draw in Y above the horizont (width/2)
 	int		draw_end; //end of pixel draw in vertical Y.
 	int		color;
+	int		ceiling_color;
+	int		floor_color;
 	int		walking_height;
 	int		walking_wave;//
 	double	i_walking;
@@ -124,7 +127,6 @@ typedef struct s_map
 	double	dir_y;
 	double	plane_x; //Plane perpendicular to looking direction
 	double	plane_y;
-	
 	int		num_walls;
 	int		no_rectangle;
 	int		no_valid_char;
@@ -177,6 +179,7 @@ void	rotate_camera(t_game *game, int direction);
 int		mouse_rotation(int x, int y, t_game *game);
 void	jump(t_game *game);
 void	load_sprites(t_game *game);
+void	paint_ray(t_game *game, int x);
 
 //# define SPRITES_ANIM 3
 //# define VALID_MAP_CHARS "CPE01\n"
