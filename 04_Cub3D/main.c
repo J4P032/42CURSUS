@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 11:35:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:03:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	free_map(t_game *game)
 	free(game->map);
 }
 
-/* void	free_sprites(t_sprite *sprite, void *mlx)
+void	free_sprites(t_sprite *sprite, void *mlx)
 {
 	size_t	i;
 
@@ -38,15 +38,15 @@ void	free_map(t_game *game)
 			mlx_destroy_image(mlx, sprite->img[i].img);
 		i++;
 	}
-} */
+}
 
 void	clean_up_memory(t_game *game)
 {
-	//size_t	i;
+	size_t	i;
 
-	//i = 0;
-	//while (i < NUM_SPRITES)
-	//	free_sprites(&game->win->sprite[i++], game->win->mlx);
+	i = 0;
+	while (i < NUM_SPRITES)
+		free_sprites(&game->win->sprite[i++], game->win->mlx);
 	if (game->win->canvas.img)
 		mlx_destroy_image(game->win->mlx, game->win->canvas.img);
 	if (game->win->buffer.img)
@@ -105,7 +105,7 @@ int	main(int argc, char **argv)
 	if (!game->map)
 		return (clean_up_memory(game), 1);
 	draw_window(game);
-	//load_sprites(game);
+	load_sprites(game);
 	hooks(game);
 	return (0);
 }

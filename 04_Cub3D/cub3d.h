@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 12:44:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:33:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 # define PI 3.14159265358979323846
 # define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1
-# define NUM_SPRITES 0
+# define NUM_SPRITES 4
+# define SPRITES_ANIM 1
 # define MOVE_SPEED 0.02
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 2
@@ -40,6 +41,7 @@
 # define CANVAS (game->win->canvas)
 # define KEY (game->keys)
 # define PLAYER (game->player)
+# define SPRITE (game->win->sprite)
 
 typedef struct s_data
 {
@@ -50,25 +52,25 @@ typedef struct s_data
 	int		endian;
 }			t_data;
 
-/* typedef struct s_sprite
+typedef struct s_sprite
 {
 	t_data	img[SPRITES_ANIM];
 	int		x;
 	int		y;
 	int		i;
 	int		j;
-	int		prev_i;
-	int		prev_j;
-	int		go_right;
-	int		go_down;
-	int		go_left;
-	int		go_up;
-	int		desired_dir;
+	//int		prev_i;
+	//int		prev_j;
+	//int		go_right;
+	//int		go_down;
+	//int		go_left;
+	//int		go_up;
+	//int		desired_dir;
 	size_t	distance;
 	int		width;
 	int		height;
 	char	*bitmap[SPRITES_ANIM];
-}			t_sprite; */
+}			t_sprite;
 
 typedef struct s_ray
 {
@@ -107,7 +109,7 @@ typedef struct s_window
 	int			height;
 	int			running;
 	t_ray		ray;
-	//t_sprite	sprite[NUM_SPRITES];
+	t_sprite	sprite[NUM_SPRITES];
 }				t_window;
 
 typedef struct s_map
@@ -173,6 +175,7 @@ int		key_release(int key, t_game *game);
 void	rotate_camera(t_game *game, int direction);
 int		mouse_rotation(int x, int y, t_game *game);
 void	jump(t_game *game);
+void	load_sprites(t_game *game);
 
 //# define SPRITES_ANIM 3
 //# define VALID_MAP_CHARS "CPE01\n"
