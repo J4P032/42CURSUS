@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 15:03:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 19:44:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int	main(int argc, char **argv)
 		return (clean_up_memory(game), 1);
 	draw_window(game);
 	load_sprites(game);
+	render_static_background(game);
 	hooks(game);
 	return (0);
 }

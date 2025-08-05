@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 17:17:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:10:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define NUM_SPRITES 4
 # define SPRITES_ANIM 1
 # define MOVE_SPEED 0.02
+# define JUMPING 300
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 2
 # define VALID_MAP_CHARS "NSEW01\n"
@@ -113,6 +114,7 @@ typedef struct s_window
 	int			running;
 	t_ray		ray;
 	t_sprite	sprite[NUM_SPRITES];
+	t_data		background;
 }				t_window;
 
 typedef struct s_map
@@ -180,35 +182,6 @@ int		mouse_rotation(int x, int y, t_game *game);
 void	jump(t_game *game);
 void	load_sprites(t_game *game);
 void	paint_ray(t_game *game, int x);
-
-//# define SPRITES_ANIM 3
-//# define VALID_MAP_CHARS "CPE01\n"
-
-/* 
-int		key_press(int key, t_game *game);
-int		update_frame(t_game *game);
-void	load_sprites(t_game *game);
-void	load_pacman(t_game *game);
-void	load_collect(t_game *game);
-void	load_exit(t_game *game);
-void	pacman_iddle(t_game *game);
-void	pacman_eat(t_game *game);
-void	pre_movement(t_game *game);
-void	draw_map(t_game *game);
-void	frame_map(t_game *game);
-void	frame_collect(t_game *game);
-void	frame_exit(t_game *game);
-int		scale_time(int *num, int time);
-int		only_once(int *num, int time);
-t_map	*process_map(char *map);
-int		check_map_solution(t_map *map);
-void	load_map(t_map *map, char *map_dir);
-char	*get_next_line(int fd);
-void	draw_sprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
-void	collect_sprite_anim(t_game *game, int x, int y);
-void	delay_time(t_game *game, double time);
-void	where_is_pacman(t_game *game);
-void	count_movements(t_game *game);
-void	check_ber(char *map_dir); */
+void	render_static_background(t_game *game);
 
 #endif
