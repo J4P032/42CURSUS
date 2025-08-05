@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 21:07:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 12:33:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	walking_breathing(t_game *game)
 	RAY.walking_wave = 4 * (-cos(PI * PLAYER.i_wave_walk * move_speed));
 	RAY.i_walking += 0.025;
 	PLAYER.i_wave_walk += 0.02;
-
 }
 
 /*We send a ray per pixel in WIDTH of the screen*/

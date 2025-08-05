@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 16:34:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 11:57:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 12:58:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,4 +130,6 @@ void	keys_movement(t_game *game)
 		rotate_camera(game, 1);
 	if (KEY.left)
 		rotate_camera(game, -1);
+	if (KEY.space)
+		jump(game);
 }

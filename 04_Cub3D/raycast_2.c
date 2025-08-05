@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 10:17:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 13:00:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	modify_color_with_distance(t_game *game)
 
 	if (RAY.perp_wall_dist == 0)
 		RAY.perp_wall_dist = 1e-32;
-	factor = 1.0f / (float)RAY.perp_wall_dist;
+	factor = 2 * 1.0f / (float)RAY.perp_wall_dist;
 	if (factor > 1.0f)
 		factor = 1.0f;
 	red = (int)(((RAY.color >> 16) & 0xFF) * factor);

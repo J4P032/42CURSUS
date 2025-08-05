@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 11:51:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 12:44:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ typedef struct s_player
 {
 	int		moving;
 	int		running;
+	int		jumping;
 	double	i_wave_walk;
 }			t_player;
 
@@ -171,6 +172,7 @@ int		key_press(int key, t_game *game);
 int		key_release(int key, t_game *game);
 void	rotate_camera(t_game *game, int direction);
 int		mouse_rotation(int x, int y, t_game *game);
+void	jump(t_game *game);
 
 //# define SPRITES_ANIM 3
 //# define VALID_MAP_CHARS "CPE01\n"
