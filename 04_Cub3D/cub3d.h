@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 11:25:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 11:51:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define WALL_HEIGHT 1
 # define NUM_SPRITES 0
 # define MOVE_SPEED 0.02
+# define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 2
 # define VALID_MAP_CHARS "NSEW01\n"
 # define RAY (game->win->ray)

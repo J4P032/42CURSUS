@@ -6,27 +6,33 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 16:34:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 10:07:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 11:57:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 /*movement 1 for forward, -1 for backwards*/
+/*COLLITION_DISTANCE garantee that there is no wall in that distance measured*/
 void	translate(t_game *game, int movement)
 {
 	double	move_speed;
 	double	new_x;
 	double	new_y;
+	double	col_x;
+	double	col_y;
 
 	move_speed = MOVE_SPEED;
 	if (PLAYER.running && PLAYER.moving)
 		move_speed *= 2;
 	new_x = MAP->p_x + movement * MAP->dir_x * move_speed;
 	new_y = MAP->p_y + movement * MAP->dir_y * move_speed;
-	if (MAP->map[(int)new_y][(int)MAP->p_x] != '1')
+	col_x = MAP->p_x + movement * MAP->dir_x * COLLISION_DISTANCE;
+	col_y = MAP->p_y + movement * MAP->dir_y * COLLISION_DISTANCE;
+	
+	if (MAP->map[(int)col_y][(int)MAP->p_x] != '1')
 		MAP->p_y = new_y;
-	if (MAP->map[(int)MAP->p_y][(int)new_x] != '1')
+	if (MAP->map[(int)MAP->p_y][(int)col_x] != '1')
 		MAP->p_x = new_x;
 }
 
@@ -35,15 +41,19 @@ void	strafing(t_game *game, int movement)
 	double	move_speed;
 	double	new_x;
 	double	new_y;
+	double	col_x;
+	double	col_y;
 	
 	move_speed = MOVE_SPEED;
 	if (PLAYER.running && PLAYER.moving)
 		move_speed *= 2;
 	new_x = MAP->p_x + movement * MAP->plane_x * move_speed;
 	new_y = MAP->p_y + movement * MAP->plane_y * move_speed;
-	if (MAP->map[(int)new_y][(int)MAP->p_x] != '1')
+	col_x = MAP->p_x + movement * MAP->plane_x * COLLISION_DISTANCE;
+	col_y = MAP->p_y + movement * MAP->plane_y * COLLISION_DISTANCE;
+	if (MAP->map[(int)(col_y)][(int)MAP->p_x] != '1')
 		MAP->p_y = new_y;
-	if (MAP->map[(int)MAP->p_y][(int)new_x] != '1')
+	if (MAP->map[(int)MAP->p_y][(int)(col_x)] != '1')
 		MAP->p_x = new_x;
 }
 
