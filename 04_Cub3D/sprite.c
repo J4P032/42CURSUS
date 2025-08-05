@@ -6,18 +6,26 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 15:13:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:50:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	load_walls_in_memory(t_game *game)
+void	load_walls(t_game *game)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < 3)
+	SPRITE[0].bitmap[0] = "./textures/NO.xpm";
+	SPRITE[1].bitmap[0] = "./textures/SO.xpm";
+	SPRITE[2].bitmap[0] = "./textures/EA.xpm";
+	SPRITE[3].bitmap[0] = "./textures/WE.xpm";
+	SPRITE[0].width = 512;
+	SPRITE[0].height = 512;
+	//SPRITE[0].x = game->map->p_x;
+	//SPRITE[0].y = game->map->p_y;
+	while (i < 4)
 	{
 		SPRITE[i].img[0].img = mlx_xpm_file_to_image(game->win->mlx,
 			SPRITE[i].bitmap[0], &SPRITE[i].width, &SPRITE[i].height);
@@ -28,19 +36,6 @@ void	load_walls_in_memory(t_game *game)
 		}
 		i++;
 	}
-}
-
-void	load_walls(t_game *game)
-{
-	SPRITE[0].bitmap[0] = "./textures/NO.xpm";
-	SPRITE[1].bitmap[0] = "./textures/SO.xpm";
-	SPRITE[2].bitmap[0] = "./textures/EA.xpm";
-	SPRITE[3].bitmap[0] = "./textures/WE.xpm";
-	SPRITE[0].width = 512;
-	SPRITE[0].height = 512;
-	//SPRITE[0].x = game->map->p_x;
-	//SPRITE[0].y = game->map->p_y;
-	load_walls_in_memory(game);
 }
 
 void	load_sprites(t_game *game)

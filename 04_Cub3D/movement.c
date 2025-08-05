@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 16:34:23 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 12:58:49 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 16:25:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	key_release(int key, t_game *game)
 	return (0);
 }
 
+/*condition space not pressed has to be here and not in key_release to only
+have one jump per space press*/
 void	keys_movement(t_game *game)
 {
 	if (KEY.w == 1)
@@ -130,6 +132,12 @@ void	keys_movement(t_game *game)
 		rotate_camera(game, 1);
 	if (KEY.left)
 		rotate_camera(game, -1);
-	if (KEY.space)
-		jump(game);
+	if (KEY.space && !PLAYER.space_was_pressed && !PLAYER.jumping)
+	{
+		PLAYER.jumping = 1;
+		PLAYER.space_was_pressed = 1;
+		RAY.i_walking = 0;
+	}
+	else if (!KEY.space)
+		PLAYER.space_was_pressed = 0;
 }

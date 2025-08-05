@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 14:33:50 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 16:08:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ typedef struct s_player
 	int		moving;
 	int		running;
 	int		jumping;
+	int		space_was_pressed;
 	double	i_wave_walk;
 }			t_player;
 

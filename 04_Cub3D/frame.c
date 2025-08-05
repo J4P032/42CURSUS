@@ -6,12 +6,13 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 12:33:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 16:23:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+/*jumping condition has to be here to produce only one jump per space press*/
 void	walking_breathing(t_game *game)
 {
 	int	breathing;
@@ -32,6 +33,8 @@ void	walking_breathing(t_game *game)
 	RAY.walking_wave = 4 * (-cos(PI * PLAYER.i_wave_walk * move_speed));
 	RAY.i_walking += 0.025;
 	PLAYER.i_wave_walk += 0.02;
+	if (PLAYER.jumping)
+		jump(game);
 }
 
 /*We send a ray per pixel in WIDTH of the screen*/
@@ -42,6 +45,7 @@ int	update_frame(t_game *game)
 
 	x = 0;
 	walking_breathing(game);
+		
 	keys_movement(game);
 	while (x < game->win->width)
 		raycaster(game, x++);
