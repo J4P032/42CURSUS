@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 20:09:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:47:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	render_static_background(t_game *game)
 		&game->win->background.bits_x_pixel,
 		&game->win->background.line_length,
 		&game->win->background.endian);
-	if (!game->win->background.addr)
+	if (!game->win->background.addr) //free esto que hay perdida!!!
 		error_window2(game, 1);
 	y = 0;
 	while (y < back_h)

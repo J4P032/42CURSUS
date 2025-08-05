@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 19:44:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:50:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	clean_up_memory(t_game *game)
 		free_sprites(&game->win->sprite[i++], game->win->mlx);
 	if (game->win->canvas.img)
 		mlx_destroy_image(game->win->mlx, game->win->canvas.img);
+	if (game->win->background.img)
+		mlx_destroy_image(game->win->mlx, game->win->background.img);
 	if (game->win->buffer.img)
 		mlx_destroy_image(game->win->mlx, game->win->buffer.img);
 	if (game->win->win)
@@ -71,7 +73,7 @@ void	clean_up_memory(t_game *game)
 
 void	hooks(t_game *game)
 {
-	mlx_mouse_hide(game->win->mlx, game->win->win);
+	mlx_mouse_hide(game->win->mlx, game->win->win); //tiene fuga de memoria
 	mlx_mouse_move(game->win->mlx, game->win->win, WIN_W / 2, WIN_H / 2);
 	mlx_loop_hook(game->win->mlx, update_frame, game);
 	mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
