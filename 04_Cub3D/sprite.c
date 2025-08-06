@@ -6,11 +6,22 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 17:13:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 21:02:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	load_texture_address(t_data *img, t_game *game)
+{
+	img->addr = mlx_get_data_addr(img->img, &img->bits_x_pixel,
+		&img->line_length, &img->endian);
+	if (!img->addr)
+	{
+		clean_up_memory(game, 0);
+		exit (1);
+	}
+}
 
 void	load_walls(t_game *game)
 {
@@ -25,8 +36,6 @@ void	load_walls(t_game *game)
 	sprite[3].bitmap[0] = "./textures/WE.xpm";
 	sprite[0].width = 512;
 	sprite[0].height = 512;
-	//sprite[0].x = game->map->p_x;
-	//sprite[0].y = game->map->p_y;
 	while (i < 4)
 	{
 		sprite[i].img[0].img = mlx_xpm_file_to_image(game->win->mlx,
@@ -36,6 +45,7 @@ void	load_walls(t_game *game)
 			clean_up_memory(game, 0);
 			exit (1);
 		}
+		load_texture_address(&sprite[i].img[0], game);
 		i++;
 	}
 }

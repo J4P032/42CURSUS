@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 17:20:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 20:22:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,10 @@ typedef struct s_ray
 	int		draw_start; //start of pixel draw in Y above the horizont (width/2)
 	int		draw_end; //end of pixel draw in vertical Y.
 	int		color;
+	int		colors[WIN_H];
+	int		tex_x;
+	int		tex_y;
+	int		tex_y_init;
 	int		num_texture; //index of the texture to use depending on side step
 	int		walking_height;
 	int		walking_wave;
