@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 12:15:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 10:14:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:13:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ void	error_window(t_game *game, int option)
 		perror("Error creating window");
 	else
 		perror("Error creating canvas window");
-	clean_up_memory(game);
+	clean_up_memory(game, 0);
 	exit (1);
 }
 
 int	close_win(t_game *game)
 {
-	clean_up_memory(game);
+	clean_up_memory(game, 0);
 	exit (0);
 }
 
@@ -44,7 +44,7 @@ int	close_win(t_game *game)
 	{
 		write(1, "Error\n", 6);
 		write(1, "Map too big for the screen\n", 27);
-		clean_up_memory(game);
+		clean_up_memory(game, 0);
 		exit (1);
 	}
 } */
@@ -69,6 +69,6 @@ void	draw_window(t_game *game)
 			&game->win->canvas.endian);
 	if (!game->win->canvas.addr)
 		error_window(game, 1);
-	RAY.fov_factor = ((FOV * PI / 180.0) / 2);
-	RAY.rotation_speed = (2 * PI * ROTATION_SPEED / 360);
+	game->win->ray.fov_factor = ((FOV * PI / 180.0) / 2);
+	game->win->ray.rotation_speed = (2 * PI * ROTATION_SPEED / 360);
 }

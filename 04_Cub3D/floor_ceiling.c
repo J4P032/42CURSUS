@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 09:57:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 12:31:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:18:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	error_window2(t_game *game, int option)
 		perror("Error creating window");
 	else
 		perror("Error creating background window");
-	clean_up_memory(game);
+	clean_up_memory(game, 0);
 	exit (1);
 }
 
@@ -56,7 +56,7 @@ n is the factor that will multiply the color to obtain darker one and a...
 gradient in all of it so in each middle n will be 1.0 to 0.0 in ceiling from...
 ...top to botton and from 0.0 to 1.0 in floor with each 'y'. 1.3f is brightness
 multiplier.*/
-void	paint_sky_floor(t_game *game, int x, int y, int back_h)
+void	paint_sky_floor(t_game *g, int x, int y, int back_h)
 {
 	float	n;
 
@@ -69,7 +69,7 @@ void	paint_sky_floor(t_game *game, int x, int y, int back_h)
 				n = 1.0f;
 			if (n < 0.0f)
 				n = 0.0f;
-			put_pixel(&WIN->background, x, y, gradient(MAP->sky_color, n));
+			put_pixel(&g->win->bg, x, y, gradient(g->map->sky_color, n));
 		}
 		else
 		{
@@ -78,7 +78,7 @@ void	paint_sky_floor(t_game *game, int x, int y, int back_h)
 				n = 1.0f;
 			if (n < 0.0f)
 				n = 0.0f;
-			put_pixel(&WIN->background, x, y, gradient(MAP->floor_color, n));
+			put_pixel(&g->win->bg, x, y, gradient(g->map->floor_color, n));
 		}
 		x++;
 	}
@@ -92,16 +92,16 @@ void	render_jumping_background(t_game *game)
 	int		y;
 	int		back_h;
 
-	MAP->floor_color = 0x00664400;
-	MAP->sky_color = 0x00664444;
+	game->map->floor_color = 0x00664400;
+	game->map->sky_color = 0x00664444;
 	back_h = WIN_H + 2 * JUMPING;
-	WIN->background.img = mlx_new_image(WIN->mlx, WIN_W, back_h);
-	if (!WIN->background.img)
+	game->win->bg.img = mlx_new_image(game->win->mlx, WIN_W, back_h);
+	if (!game->win->bg.img)
 		error_window2(game, 1);
-	WIN->background.addr = mlx_get_data_addr(WIN->background.img,
-			&WIN->background.bits_x_pixel, &WIN->background.line_length,
-			&WIN->background.endian);
-	if (!WIN->background.addr)
+	game->win->bg.addr = mlx_get_data_addr(game->win->bg.img,
+			&game->win->bg.bits_x_pixel, &game->win->bg.line_length,
+			&game->win->bg.endian);
+	if (!game->win->bg.addr)
 		error_window2(game, 1);
 	y = 0;
 	while (y < back_h)
@@ -110,4 +110,3 @@ void	render_jumping_background(t_game *game)
 		y++;
 	}
 }
-

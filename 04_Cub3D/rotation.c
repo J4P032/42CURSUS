@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 09:08:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 11:25:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:06:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@ void	rotate_camera(t_game *game, int direction)
 	double	old_dir_x;
 	double	old_dir_y;
 
-	old_dir_x = MAP->dir_x;
-	old_dir_y = MAP->dir_y;
-	angle = direction * RAY.rotation_speed;
-	MAP->dir_x = old_dir_x * cos(angle) - old_dir_y * sin(angle);
-	MAP->dir_y = old_dir_x * sin(angle) + old_dir_y * cos(angle);
-	MAP->plane_x = -MAP->dir_y * RAY.fov_factor;
-	MAP->plane_y = MAP->dir_x * RAY.fov_factor;
+	old_dir_x = game->map->dir_x;
+	old_dir_y = game->map->dir_y;
+	angle = direction * game->win->ray.rotation_speed;
+	game->map->dir_x = old_dir_x * cos(angle) - old_dir_y * sin(angle);
+	game->map->dir_y = old_dir_x * sin(angle) + old_dir_y * cos(angle);
+	game->map->plane_x = -game->map->dir_y * game->win->ray.fov_factor;
+	game->map->plane_y = game->map->dir_x * game->win->ray.fov_factor;
 }
 
 int	mouse_rotation(int x, int y, t_game *game)
 {
 	static int	skip = 0;
 	double		sensitivity;
-	int 		center_x;
+	int			center_x;
 	int			delta;
 
 	(void)y;

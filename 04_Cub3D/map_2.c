@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 10:13:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:22:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ We multiply by fov_factor to control the length of the plane vector,
 which determines the field of view (FOV) width.*/
 void	init_looking_direction(t_map *map, char c)
 {
-	double fov_factor;
+	double	fov_factor;
 
 	fov_factor = tan((FOV * PI / 180.0) / 2);
 	if (c == 'N')

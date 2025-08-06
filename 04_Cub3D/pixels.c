@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:11:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/04 12:23:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:37:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@ void	put_pixel(t_data *img, int x, int y, int color)
 	char	*pxl_adr;
 
 	pxl_adr = img->addr + (y * img->line_length + x * (img->bits_x_pixel / 8));
-	*(unsigned int*)pxl_adr = color;
+	*(unsigned int *)pxl_adr = color;
 }

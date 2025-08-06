@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 12:31:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:20:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 2
 # define VALID_MAP_CHARS "NSEW01\n"
-# define RAY (game->win->ray)
-# define MAP (game->map)
-# define WIN (game->win)
-# define CANVAS (game->win->canvas)
-# define KEY (game->keys)
-# define PLAYER (game->player)
-# define SPRITE (game->win->sprite)
+//# define RAY (game->win->ray)
+//# define MAP (game->map)
+//# define WIN (game->win)
+//# define CANVAS (game->win->canvas)
+//# define KEY (game->keys)
+//# define PLAYER (game->player)
+//# define SPRITE (game->win->sprite)
+//# define COLOR_ARRAY[WIN_H]
 
 typedef struct s_data
 {
@@ -96,12 +97,14 @@ typedef struct s_ray
 	int		draw_start; //start of pixel draw in Y above the horizont (width/2)
 	int		draw_end; //end of pixel draw in vertical Y.
 	int		color;
+	int		num_texture; //index of the texture to use depending on side step
 	int		walking_height;
-	int		walking_wave;//
+	int		walking_wave;
 	double	i_walking;
 	double	rotation_speed;
 	double	fov_factor;
-} 			t_ray;
+	double	wallx;
+}			t_ray;
 
 typedef struct s_window
 {
@@ -114,8 +117,7 @@ typedef struct s_window
 	int			running;
 	t_ray		ray;
 	t_sprite	sprite[NUM_SPRITES];
-	t_data		background;
-	t_data      fixedbackg;
+	t_data		bg; //background
 }				t_window;
 
 typedef struct s_map
@@ -137,15 +139,15 @@ typedef struct s_map
 	int		floor_color;
 }			t_map;
 
-typedef	struct s_keys
+typedef struct s_keys
 {
-	int w;
+	int	w;
 	int	s;
 	int	a;
 	int	d;
-	int left;
-	int right;
-	int space;
+	int	left;
+	int	right;
+	int	space;
 	int	shift;
 }		t_keys;
 
@@ -158,7 +160,6 @@ typedef struct s_player
 	double	i_wave_walk;
 }			t_player;
 
-
 typedef struct s_game
 {
 	t_window	*win;
@@ -167,7 +168,7 @@ typedef struct s_game
 	t_player	player;
 }				t_game;
 
-void	clean_up_memory(t_game *game);
+void	clean_up_memory(t_game *game, size_t i);
 int		close_win(t_game *game);
 void	draw_window(t_game *game);
 t_map	*process_map(char *map_dir);
@@ -186,6 +187,5 @@ void	jump(t_game *game);
 void	paint_ray(t_game *game, int x);
 void	load_sprites_and_background(t_game *game);
 void	render_jumping_background(t_game *game);
-
 
 #endif

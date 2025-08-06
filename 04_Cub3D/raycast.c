@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 17:18:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:03:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ As can be seen there is a possible division by 0, so we set a practical
 infinite = 1e32 = 1 x 10³²*/
 void	set_const_ray_dist_between_grids(t_game *game)
 {
-	if (RAY.dir_x == 0)
-		RAY.delta_dist_x = 1e32;
+	if (game->win->ray.dir_x == 0)
+		game->win->ray.delta_dist_x = 1e32;
 	else
-		RAY.delta_dist_x = fabs(1 / RAY.dir_x);
-	if (RAY.dir_y == 0)
-		RAY.delta_dist_y = 1e32;
+		game->win->ray.delta_dist_x = fabs(1 / game->win->ray.dir_x);
+	if (game->win->ray.dir_y == 0)
+		game->win->ray.delta_dist_y = 1e32;
 	else
-		RAY.delta_dist_y = fabs(1 / RAY.dir_y);
+		game->win->ray.delta_dist_y = fabs(1 / game->win->ray.dir_y);
 }
 
 /*
@@ -75,25 +75,28 @@ RAY.dist_x/y is the distance of the full ray already, BUT the first time is not
 the delta one, it is shorter.  */
 void	set_direction_of_ray(t_game *game)
 {
-	if (RAY.dir_x < 0)
+	t_ray	*ray;
+
+	ray = &game->win->ray;
+	if (ray->dir_x < 0)
 	{
-		RAY.step_x = -1;
-		RAY.dist_x = (MAP->p_x - RAY.map_x) * RAY.delta_dist_x;
+		ray->step_x = -1;
+		ray->dist_x = (game->map->p_x - ray->map_x) * ray->delta_dist_x;
 	}
 	else
 	{
-		RAY.step_x = 1;
-		RAY.dist_x = (RAY.map_x + 1.0 - MAP->p_x) * RAY.delta_dist_x;
+		ray->step_x = 1;
+		ray->dist_x = (ray->map_x + 1.0 - game->map->p_x) * ray->delta_dist_x;
 	}
-	if (RAY.dir_y < 0)
+	if (ray->dir_y < 0)
 	{
-		RAY.step_y = -1;
-		RAY.dist_y = (MAP->p_y - RAY.map_y) * RAY.delta_dist_y;
+		ray->step_y = -1;
+		ray->dist_y = (game->map->p_y - ray->map_y) * ray->delta_dist_y;
 	}
 	else
 	{
-		RAY.step_y = 1;
-		RAY.dist_y = (RAY.map_y + 1.0 - MAP->p_y) * RAY.delta_dist_y;
+		ray->step_y = 1;
+		ray->dist_y = (ray->map_y + 1.0 - game->map->p_y) * ray->delta_dist_y;
 	}
 }
 
@@ -107,24 +110,27 @@ side 0 -> the ray crosses vertical grid (X lines) and impact is EAST or WEST
 side 1 -> Ray crosses horizontal grid lines (Y) impact is NORTH or SOUTH */
 void	run_dda(t_game *game)
 {
-	while (RAY.hit == 0)
+	t_ray	*ray;
+
+	ray = &game->win->ray;
+	while (ray->hit == 0)
 	{
-		if (RAY.dist_x <= RAY.dist_y)
+		if (ray->dist_x <= ray->dist_y)
 		{
-			RAY.dist_x += RAY.delta_dist_x;
-			RAY.map_x += RAY.step_x;
-			RAY.side = 0;
+			ray->dist_x += ray->delta_dist_x;
+			ray->map_x += ray->step_x;
+			ray->side = 0;
 		}
 		else
 		{
-			RAY.dist_y += RAY.delta_dist_y;
-			RAY.map_y += RAY.step_y;
-			RAY.side = 1;
+			ray->dist_y += ray->delta_dist_y;
+			ray->map_y += ray->step_y;
+			ray->side = 1;
 		}
-		if (RAY.map_y >= 0 && RAY.map_y < (int)MAP->lines &&
-			RAY.map_x >= 0 && RAY.map_x < (int)MAP->columns &&
-			MAP->map[RAY.map_y][RAY.map_x] == '1')
-			RAY.hit = 1;
+		if (ray->map_y >= 0 && ray->map_y < (int)game->map->lines
+			&& ray->map_x >= 0 && ray->map_x < (int)game->map->columns
+			&& game->map->map[ray->map_y][ray->map_x] == '1')
+			ray->hit = 1;
 	}
 }
 
@@ -151,20 +157,40 @@ We can multiply x factor to make taller objects. Right now is for 1:1
 
 To calculate the init drawing pixel and end of that line:
 Because the center of the wall is in the middle of the horizont line vision
-the formula is as the code below to be equal distance of borders. */
+the formula is as the code below to be equal distance of borders.
+
+To calculate the pixels of the texture we need to know where impact the 
+ray in U coordinates of the texture 0.0 to 1.0. So...
+when we are side 0 (hit vertical walls), the X of the wall will be int as
+it is over the same grid, but the Y not, so from the player add the 
+distance to the collision (perp_wall_dist) through the ray sent (dir_y)
+Same if side = 1 (horizontal walls) where we need to calculate in the Xs 
+To have the fraction we use floor from math.h so for example if we have:
+wallx = 3.75 -> floor(3.75) = 3.0 -> 3.75 - 3.0 = 0.75*/
 void	set_draw_length_without_fish_fx(t_game *game)
 {
-	if (RAY.side == 0)
-		RAY.perp_wall_dist = RAY.dist_x - RAY.delta_dist_x;
+	t_ray	*ray;
+
+	ray = &game->win->ray;
+	if (ray->side == 0)
+	{
+		ray->perp_wall_dist = ray->dist_x - ray->delta_dist_x;
+		ray->wallx = game->map->p_y + ray->perp_wall_dist * ray->dir_y;
+	}
 	else
-		RAY.perp_wall_dist = RAY.dist_y - RAY.delta_dist_y;
-	RAY.line_height = (int)((WIN_H / RAY.perp_wall_dist) * WALL_HEIGHT);
-	RAY.draw_start = (-RAY.line_height / 2) + (WIN_H / 2) + RAY.walking_height;
-	if (RAY.draw_start < 0)
-		RAY.draw_start = 0;
-	RAY.draw_end = (RAY.line_height / 2) + (WIN_H / 2) + RAY.walking_height;
-	if (RAY.draw_end >= WIN_H)
-		RAY.draw_end = WIN_H - 1;
+	{
+		ray->perp_wall_dist = ray->dist_y - ray->delta_dist_y;
+		ray->wallx = game->map->p_x + ray->perp_wall_dist * ray->dir_x;
+	}
+	ray->wallx = ray->wallx - floor(ray->wallx);
+	ray->line_height = (int)((WIN_H / ray->perp_wall_dist) * WALL_HEIGHT);
+	ray->draw_start = (-ray->line_height / 2) + (WIN_H / 2)
+		+ ray->walking_height;
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	ray->draw_end = (ray->line_height / 2) + (WIN_H / 2) + ray->walking_height;
+	if (ray->draw_end >= WIN_H)
+		ray->draw_end = WIN_H - 1;
 }
 
 /*
@@ -182,20 +208,22 @@ void	set_draw_length_without_fish_fx(t_game *game)
 void	raycaster(t_game *game, int x)
 {
 	double	factor;
+	t_ray	*ray;
 	int		y;
-	
+
 	y = 0;
 	factor = 0;
-	if (PLAYER.moving)
+	ray = &game->win->ray;
+	if (game->player.moving)
 		factor = 0.005;
-	if (PLAYER.running && PLAYER.moving)
+	if (game->player.running && game->player.moving)
 		factor = 0.01;
-	RAY.hit = 0;
-	RAY.camera_x = 2 * x / (double)WIN_W - 1 + RAY.walking_wave * factor;
-	RAY.dir_x = MAP->dir_x + MAP->plane_x * RAY.camera_x;
-	RAY.dir_y = MAP->dir_y + MAP->plane_y * RAY.camera_x;
-	RAY.map_x = (int)MAP->p_x;
-	RAY.map_y = (int)MAP->p_y;
+	ray->hit = 0;
+	ray->camera_x = 2 * x / (double)WIN_W - 1 + ray->walking_wave * factor;
+	ray->dir_x = game->map->dir_x + game->map->plane_x * ray->camera_x;
+	ray->dir_y = game->map->dir_y + game->map->plane_y * ray->camera_x;
+	ray->map_x = (int)game->map->p_x;
+	ray->map_y = (int)game->map->p_y;
 	set_const_ray_dist_between_grids(game);
 	set_direction_of_ray(game);
 	run_dda(game);

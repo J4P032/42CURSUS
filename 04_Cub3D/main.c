@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 10:00:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:21:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,14 @@ void	free_sprites(t_sprite *sprite, void *mlx)
 	}
 }
 
-void	clean_up_memory(t_game *game)
+void	clean_up_memory(t_game *game, size_t i)
 {
-	size_t	i;
-
-	i = 0;
 	while (i < NUM_SPRITES)
 		free_sprites(&game->win->sprite[i++], game->win->mlx);
 	if (game->win->canvas.img)
 		mlx_destroy_image(game->win->mlx, game->win->canvas.img);
-	if (game->win->background.img)
-		mlx_destroy_image(game->win->mlx, game->win->background.img);
+	if (game->win->bg.img)
+		mlx_destroy_image(game->win->mlx, game->win->bg.img);
 	if (game->win->buffer.img)
 		mlx_destroy_image(game->win->mlx, game->win->buffer.img);
 	if (game->win->win)
@@ -72,9 +69,9 @@ void	clean_up_memory(t_game *game)
 }
 
 /*mlx_mouse_hide has leaks*/
+//mlx_mouse_hide(game->win->mlx, game->win->win);
 void	hooks(t_game *game)
 {
-	//mlx_mouse_hide(game->win->mlx, game->win->win);
 	mlx_mouse_move(game->win->mlx, game->win->win, WIN_W / 2, WIN_H / 2);
 	mlx_loop_hook(game->win->mlx, update_frame, game);
 	mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
@@ -106,10 +103,9 @@ int	main(int argc, char **argv)
 		return (free(game->win), free(game), 1);
 	game->map = process_map(argv[1]);
 	if (!game->map)
-		return (clean_up_memory(game), 1);
+		return (clean_up_memory(game, 0), 1);
 	draw_window(game);
 	load_sprites_and_background(game);
-	
 	hooks(game);
 	return (0);
 }
