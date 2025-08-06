@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 20:50:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 10:00:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,10 @@ void	clean_up_memory(t_game *game)
 	free (game);
 }
 
+/*mlx_mouse_hide has leaks*/
 void	hooks(t_game *game)
 {
-	mlx_mouse_hide(game->win->mlx, game->win->win); //tiene fuga de memoria
+	//mlx_mouse_hide(game->win->mlx, game->win->win);
 	mlx_mouse_move(game->win->mlx, game->win->win, WIN_W / 2, WIN_H / 2);
 	mlx_loop_hook(game->win->mlx, update_frame, game);
 	mlx_hook(game->win->win, 2, 1L << 0, key_press, game);
@@ -107,8 +108,8 @@ int	main(int argc, char **argv)
 	if (!game->map)
 		return (clean_up_memory(game), 1);
 	draw_window(game);
-	load_sprites(game);
-	render_static_background(game);
+	load_sprites_and_background(game);
+	
 	hooks(game);
 	return (0);
 }

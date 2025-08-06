@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 15:50:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:31:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ void	load_walls(t_game *game)
 	}
 }
 
-void	load_sprites(t_game *game)
+void	load_sprites_and_background(t_game *game)
 {
 	//draw_map(game);
 	load_walls(game);
 	//SPRITE[0].j = game->map->p_x / TEXTURE_W;
 	//SPRITE[0].i = game->map->p_y / TEXTURE_H;
+	render_jumping_background(game);
 }

@@ -17,7 +17,8 @@ SRC = 	main.c \
 		movement.c \
 		rotation.c \
 		jump.c \
-		sprite.c
+		sprite.c \
+		floor_ceiling.c
 #SRCS_BONUS = 
 OBJS = $(SRC:.c=.o)
 #OBJS_BONUS = ${SRCS_BONUS:.c=.o}

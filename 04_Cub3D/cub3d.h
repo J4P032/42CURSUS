@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/05 20:10:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:31:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@
 
 # include <X11/X.h>
 # include <X11/keysym.h>
+
 //# include <unistd.h>
 //# include <stdlib.h>
 //# include <stdlib.h>
 
-# define WIN_W 1024
-# define WIN_H 768
+# define WIN_W 1300
+# define WIN_H 800
 # define TEXTURE_W 512
 # define TEXTURE_H 512
 # define PI 3.14159265358979323846
@@ -40,6 +41,7 @@
 # define VALID_MAP_CHARS "NSEW01\n"
 # define RAY (game->win->ray)
 # define MAP (game->map)
+# define WIN (game->win)
 # define CANVAS (game->win->canvas)
 # define KEY (game->keys)
 # define PLAYER (game->player)
@@ -94,8 +96,6 @@ typedef struct s_ray
 	int		draw_start; //start of pixel draw in Y above the horizont (width/2)
 	int		draw_end; //end of pixel draw in vertical Y.
 	int		color;
-	int		ceiling_color;
-	int		floor_color;
 	int		walking_height;
 	int		walking_wave;//
 	double	i_walking;
@@ -115,6 +115,7 @@ typedef struct s_window
 	t_ray		ray;
 	t_sprite	sprite[NUM_SPRITES];
 	t_data		background;
+	t_data      fixedbackg;
 }				t_window;
 
 typedef struct s_map
@@ -132,6 +133,8 @@ typedef struct s_map
 	int		num_walls;
 	int		no_rectangle;
 	int		no_valid_char;
+	int		sky_color;
+	int		floor_color;
 }			t_map;
 
 typedef	struct s_keys
@@ -180,8 +183,9 @@ int		key_release(int key, t_game *game);
 void	rotate_camera(t_game *game, int direction);
 int		mouse_rotation(int x, int y, t_game *game);
 void	jump(t_game *game);
-void	load_sprites(t_game *game);
 void	paint_ray(t_game *game, int x);
-void	render_static_background(t_game *game);
+void	load_sprites_and_background(t_game *game);
+void	render_jumping_background(t_game *game);
+
 
 #endif
