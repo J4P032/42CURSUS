@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 11:22:16 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 12:07:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*modify the color with distance. More distance darker*/
 /*LIGHT default is 2. Higher number brighter will be*/
 
-/* void	modify_color_with_distance(t_game *game)
+int	modify_color_with_distance(t_game *game, int color)
 {
 	float	factor;
 	int		red;
@@ -27,38 +27,14 @@
 	factor = LIGHT * 1.0f / (float)game->win->ray.perp_wall_dist;
 	if (factor > 1.0f)
 		factor = 1.0f;
-	red = (int)(((game->win->ray.color >> 16) & 0xFF) * factor);
-	green = (int)(((game->win->ray.color >> 8) & 0xFF) * factor);
-	blue = (int)((game->win->ray.color & 0xFF) * factor);
-	game->win->ray.color = (red << 16) | (green << 8) | blue;
-} */
-
-
-void	modify_color_with_distance(t_game *game)
-{
-	float	factor;
-	int		red;
-	int		green;
-	int		blue;
-	int		i;
-	
-	i = 0;
-	if (game->win->ray.perp_wall_dist == 0)
-		game->win->ray.perp_wall_dist = 1e-32;
-	factor = LIGHT * 1.0f / (float)game->win->ray.perp_wall_dist;
-	if (factor > 1.0f)
-		factor = 1.0f;
-	while ((unsigned int)game->win->ray.colors[i] != 0xFFFFFFFF && i < WIN_H)
-	{	
-		red = (int)(((game->win->ray.colors[i] >> 16) & 0xFF) * factor);
-		green = (int)(((game->win->ray.colors[i] >> 8) & 0xFF) * factor);
-		blue = (int)((game->win->ray.colors[i] & 0xFF) * factor);
-		game->win->ray.colors[i] = (red << 16) | (green << 8) | blue;
-		i++;
-	}
+	red = (int)(((color >> 16) & 0xFF) * factor);
+	green = (int)(((color >> 8) & 0xFF) * factor);
+	blue = (int)((color & 0xFF) * factor);
+	color = (red << 16) | (green << 8) | blue;
+	return (color);
 }
 
-int	search_color_in_texture(t_data *img, int x, int y)
+int	search_color_in_texture(t_data *img, int x, int y, t_game *game)
 {
 	int	color;
 	
@@ -68,10 +44,9 @@ int	search_color_in_texture(t_data *img, int x, int y)
 		return(0xFFFFFFFF);
 	color = *(unsigned int *)(img->addr + y * img->line_length + x
 		* (img->bits_x_pixel / 8));
+	color = modify_color_with_distance(game, color);
 	return (color);
 }
-
-
 
 void	color_picker(t_game *game, int y)
 {
@@ -95,15 +70,15 @@ void	color_picker(t_game *game, int y)
 		offset = y + (game->win->ray.line_height / 2)
 			- (WIN_H / 2) - game->win->ray.walking_height;
 		tex_y = (int)(offset * scale);
-		if (tex_y < 0)
+		/* if (tex_y < 0)
 			tex_y = 0;
 		else if (tex_y >= TEXTURE_H)
-			tex_y = TEXTURE_H - 1;
+			tex_y = TEXTURE_H - 1; */
 	
 		game->win->ray.colors[y] = search_color_in_texture(
 			&sprite[i].img[0],
 			game->win->ray.tex_x,
-			tex_y);
+			tex_y, game);
 		y++;
 	}
 	if (y < WIN_H)
@@ -124,26 +99,6 @@ color format is hex. 0x[A][R][G][B] where in minilibx Alpha is not used
 0x0000FF00 -> GREEN - NORTH (0)
 0x000000FF -> BLUE - SOUTH (1)
 0x00FFFF00 -> YELLOW - EAST (2)*/
-/* void	choose_color(t_game *game)
-{
-	if (game->win->ray.side == 0)
-	{
-		if (game->win->ray.step_x == 1)
-			game->win->ray.color = 0x00FF0000;
-		else
-			game->win->ray.color = 0x00FFFF00;
-	}
-	else
-	{
-		if (game->win->ray.step_y == 1)
-			game->win->ray.color = 0x0000FF00;
-		else
-			game->win->ray.color = 0x000000FF;
-	}
-	color_picker(game, game->win->ray.draw_start);
-	modify_color_with_distance(game);
-} */
-
 void	choose_color(t_game *game)
 {
 	if (game->win->ray.side == 0)
@@ -161,7 +116,6 @@ void	choose_color(t_game *game)
 			game->win->ray.num_texture = 1;
 	}
 	color_picker(game, game->win->ray.draw_start);
-	modify_color_with_distance(game);
 }
 
 void	paint_ray(t_game *game, int x)
@@ -173,7 +127,7 @@ void	paint_ray(t_game *game, int x)
 	while (y < game->win->ray.draw_end)
 	{
 		color = game->win->ray.colors[y];
-		put_pixel(&game->win->canvas, x, y, color); // game->win->ray.color);
+		put_pixel(&game->win->canvas, x, y, color);
 		y++;
 	}
 }
