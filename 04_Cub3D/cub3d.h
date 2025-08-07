@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 20:22:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 11:26:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 
 # define WIN_W 1300
 # define WIN_H 800
-# define TEXTURE_W 512
-# define TEXTURE_H 512
+# define TEXTURE_W 256
+# define TEXTURE_H 256
 # define PI 3.14159265358979323846
-# define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
+# define FOV 90 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1
 # define LIGHT 2
 # define NUM_SPRITES 4

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 09:57:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 16:18:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 11:03:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ void	render_jumping_background(t_game *game)
 	int		y;
 	int		back_h;
 
+	game->map->sky_color = 0x00664470;
 	game->map->floor_color = 0x00664400;
-	game->map->sky_color = 0x00664444;
 	back_h = WIN_H + 2 * JUMPING;
 	game->win->bg.img = mlx_new_image(game->win->mlx, WIN_W, back_h);
 	if (!game->win->bg.img)

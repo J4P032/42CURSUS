@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 21:44:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 11:22:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,25 +71,39 @@ int	search_color_in_texture(t_data *img, int x, int y)
 	return (color);
 }
 
+
+
 void	color_picker(t_game *game, int y)
 {
 	t_sprite	*sprite;
 	int			i;
-	double		step;
-	double		tex_init;
+	double		scale;
+	int			offset;
+	int			tex_y;
 	
 	i = game->win->ray.num_texture;
 	sprite = game->win->sprite;
 	game->win->ray.tex_x = (int)(game->win->ray.wallx * TEXTURE_W);
-	step = TEXTURE_H / game->win->ray.line_height;
-	tex_init = (game->win->ray.draw_start - (WIN_H / 2)
-		+ (game->win->ray.line_height / 2)) * step;
+	if ((game->win->ray.side == 0 && game->win->ray.step_x == -1)
+		|| (game->win->ray.side == 1 && game->win->ray.step_y == 1))
+		game->win->ray.tex_x = TEXTURE_W - game->win->ray.tex_x - 1;
+	
+	scale = (double)TEXTURE_H / (double)game->win->ray.line_height;
+	
 	while (y < game->win->ray.draw_end)
 	{
-		game->win->ray.tex_y = (int)tex_init;
-		game->win->ray.colors[y] = search_color_in_texture(&sprite[i].img[0],
-			game->win->ray.tex_x, game->win->ray.tex_y);
-		tex_init += step;
+		offset = y + (game->win->ray.line_height / 2)
+			- (WIN_H / 2) - game->win->ray.walking_height;
+		tex_y = (int)(offset * scale);
+		if (tex_y < 0)
+			tex_y = 0;
+		else if (tex_y >= TEXTURE_H)
+			tex_y = TEXTURE_H - 1;
+	
+		game->win->ray.colors[y] = search_color_in_texture(
+			&sprite[i].img[0],
+			game->win->ray.tex_x,
+			tex_y);
 		y++;
 	}
 	if (y < WIN_H)
@@ -153,16 +167,13 @@ void	choose_color(t_game *game)
 void	paint_ray(t_game *game, int x)
 {
 	int	y;
-	//int	i;
 	int	color;
 
-	//i = 0;
 	y = game->win->ray.draw_start;
 	while (y < game->win->ray.draw_end)
 	{
 		color = game->win->ray.colors[y];
 		put_pixel(&game->win->canvas, x, y, color); // game->win->ray.color);
 		y++;
-		//i++;
 	}
 }

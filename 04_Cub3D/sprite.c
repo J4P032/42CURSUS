@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 21:02:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 11:21:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void	load_walls(t_game *game)
 
 	i = 0;
 	sprite = game->win->sprite;
-	sprite[0].bitmap[0] = "./textures/NO.xpm";
-	sprite[1].bitmap[0] = "./textures/SO.xpm";
-	sprite[2].bitmap[0] = "./textures/EA.xpm";
-	sprite[3].bitmap[0] = "./textures/WE.xpm";
+	sprite[0].bitmap[0] = "./textures/NO_256.xpm";
+	sprite[1].bitmap[0] = "./textures/SO_256.xpm";
+	sprite[2].bitmap[0] = "./textures/EA_256.xpm";
+	sprite[3].bitmap[0] = "./textures/WE_256.xpm";
 	sprite[0].width = 512;
 	sprite[0].height = 512;
 	while (i < 4)
