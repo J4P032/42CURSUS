@@ -6,11 +6,33 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 16:11:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 15:10:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	fps(void)
+{
+	static int				frame = 0;
+	static struct timeval	last_time = {0};
+	struct timeval			current_time;
+	long					elapsed_ms;
+
+	gettimeofday(&current_time, NULL);
+	if (last_time.tv_sec == 0)
+		last_time = current_time;
+	frame++;
+	elapsed_ms = (current_time.tv_sec - last_time.tv_sec) * 1000
+		+ (current_time.tv_usec - last_time.tv_usec) / 1000;
+	if (elapsed_ms >= 1000)
+	{
+		write(1, "\rFPS: ", 6);
+		ft_putnbr_fd(frame, 1);
+		frame = 0;
+		last_time = current_time;
+	}
+}
 
 /* offset_y is vertical pixels we are going to copy. We need num bytes of each
 line. For that we need the source to be copied, 
@@ -76,9 +98,8 @@ but now I substitute it with memcpy from the background each frame in
 draw_floor_ceiling() */
 int	update_frame(t_game *game)
 {
-	int		x;
-	t_data	*canvas;
-	//const double	time = 0.03;
+	int						x;
+	t_data					*canvas;
 
 	x = 0;
 	canvas = &game->win->canvas;
@@ -88,6 +109,7 @@ int	update_frame(t_game *game)
 	while (x < game->win->width)
 		raycaster(game, x++);
 	mlx_put_image_to_window(game->win->mlx, game->win->win, canvas->img, 0, 0);
+	fps();
 	if (!game->win->running)
 		return (0);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 11:21:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 15:01:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	load_walls(t_game *game)
 	sprite[1].bitmap[0] = "./textures/SO_256.xpm";
 	sprite[2].bitmap[0] = "./textures/EA_256.xpm";
 	sprite[3].bitmap[0] = "./textures/WE_256.xpm";
-	sprite[0].width = 512;
-	sprite[0].height = 512;
+	sprite[0].width = 256;
+	sprite[0].height = 256;
 	while (i < 4)
 	{
 		sprite[i].img[0].img = mlx_xpm_file_to_image(game->win->mlx,

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 12:07:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 15:07:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	modify_color_with_distance(t_game *game, int color)
 	int		red;
 	int		green;
 	int		blue;
-	
+
 	if (game->win->ray.perp_wall_dist == 0)
 		game->win->ray.perp_wall_dist = 1e-32;
 	factor = LIGHT * 1.0f / (float)game->win->ray.perp_wall_dist;
@@ -37,48 +37,37 @@ int	modify_color_with_distance(t_game *game, int color)
 int	search_color_in_texture(t_data *img, int x, int y, t_game *game)
 {
 	int	color;
-	
+
 	if (x < 0 || x > TEXTURE_W - 1 || y < 0 || y > TEXTURE_H - 1)
-		return(0xFFFFFFFF);
+		return (0x00000000);
 	if (!img || !img->addr)
-		return(0xFFFFFFFF);
+		return (0x00000000);
 	color = *(unsigned int *)(img->addr + y * img->line_length + x
-		* (img->bits_x_pixel / 8));
+			* (img->bits_x_pixel / 8));
 	color = modify_color_with_distance(game, color);
 	return (color);
 }
 
-void	color_picker(t_game *game, int y)
+void	color_picker(t_game *game, int y, int i)
 {
 	t_sprite	*sprite;
-	int			i;
 	double		scale;
 	int			offset;
 	int			tex_y;
-	
-	i = game->win->ray.num_texture;
+
 	sprite = game->win->sprite;
 	game->win->ray.tex_x = (int)(game->win->ray.wallx * TEXTURE_W);
 	if ((game->win->ray.side == 0 && game->win->ray.step_x == -1)
 		|| (game->win->ray.side == 1 && game->win->ray.step_y == 1))
 		game->win->ray.tex_x = TEXTURE_W - game->win->ray.tex_x - 1;
-	
 	scale = (double)TEXTURE_H / (double)game->win->ray.line_height;
-	
 	while (y < game->win->ray.draw_end)
 	{
 		offset = y + (game->win->ray.line_height / 2)
 			- (WIN_H / 2) - game->win->ray.walking_height;
 		tex_y = (int)(offset * scale);
-		/* if (tex_y < 0)
-			tex_y = 0;
-		else if (tex_y >= TEXTURE_H)
-			tex_y = TEXTURE_H - 1; */
-	
 		game->win->ray.colors[y] = search_color_in_texture(
-			&sprite[i].img[0],
-			game->win->ray.tex_x,
-			tex_y, game);
+				&sprite[i].img[0], game->win->ray.tex_x, tex_y, game);
 		y++;
 	}
 	if (y < WIN_H)
@@ -115,7 +104,7 @@ void	choose_color(t_game *game)
 		else
 			game->win->ray.num_texture = 1;
 	}
-	color_picker(game, game->win->ray.draw_start);
+	color_picker(game, game->win->ray.draw_start, game->win->ray.num_texture);
 }
 
 void	paint_ray(t_game *game, int x)

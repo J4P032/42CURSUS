@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 12:18:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/07 15:01:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@
 # include "./minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdio.h>
+# include <sys/time.h>
+# include <unistd.h>
 
 # include <X11/X.h>
 # include <X11/keysym.h>
 
-//# include <unistd.h>
 //# include <stdlib.h>
 //# include <stdlib.h>
 
-# define WIN_W 1200
-# define WIN_H 703
+# define WIN_W 1200 //1200
+# define WIN_H 703 //703
 # define TEXTURE_W 256
 # define TEXTURE_H 256
 # define PI 3.14159265358979323846
