@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 12:15:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 17:13:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 09:38:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,8 @@ void	draw_window(t_game *game)
 	if (!game->win->canvas.addr)
 		error_window(game, 1);
 	game->win->ray.fov_factor = ((FOV * PI / 180.0) / 2);
-	game->win->ray.rotation_speed = (2 * PI * ROTATION_SPEED / 360);
+	if (game->player.mouse_control)
+		game->win->ray.rotation_speed = (2 * PI * ROTATION_SPEED / 360);
+	else
+		game->win->ray.rotation_speed = (4 * PI * ROTATION_SPEED / 360);
 }

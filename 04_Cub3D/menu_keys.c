@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   jump.c                                             :+:      :+:    :+:   */
+/*   menu_keys.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/05 12:12:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 09:21:05 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/08/08 10:05:46 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/08/08 10:21:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	jump(t_game *game)
+void	keys_menu(t_game *game)
 {
-	t_ray	*ray;
-
-	ray = &game->win->ray;
-	ray->walking_height = JUMPING * fabs(sin(PI * ray->i_walking));
-	ray->i_walking += 0.01;
-	if (ray->i_walking >= 1)
+	if (game->keys.m && !game->keys.m_was_pressed)
 	{
-		game->player.jumping = 0;
-		ray->walking_height = 0;
+		game->player.mouse_control = !game->player.mouse_control;
+		game->keys.m_was_pressed = 1;
 	}
+	else if (!game->keys.m)
+		game->keys.m_was_pressed = 0;
 }
+

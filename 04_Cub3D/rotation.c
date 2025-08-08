@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 09:08:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 17:06:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 09:45:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,12 @@ int	mouse_rotation(int x, int y, t_game *game)
 		mlx_mouse_move(game->win->mlx, game->win->win, WIN_W / 2, WIN_H / 2);
 	}
 	return (0);
+}
+
+void	keys_rotation(t_game *game)
+{
+	if (game->keys.right)
+		rotate_camera(game, 1);
+	if (game->keys.left)
+		rotate_camera(game, -1);
 }

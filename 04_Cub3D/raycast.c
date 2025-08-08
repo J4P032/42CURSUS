@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 12:07:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 09:13:54 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,9 +209,7 @@ void	raycaster(t_game *game, int x)
 {
 	double	factor;
 	t_ray	*ray;
-	int		y;
 
-	y = 0;
 	factor = 0;
 	ray = &game->win->ray;
 	if (game->player.moving)

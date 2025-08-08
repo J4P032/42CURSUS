@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 15:10:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 10:26:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,13 @@ int	update_frame(t_game *game)
 	x = 0;
 	canvas = &game->win->canvas;
 	breathing_walking_running_jumping(game);
-	keys_movement(game);
+	keys_action(game);
+	if (game->player.mouse_control)
+		mlx_hook(game->win->win, MotionNotify, PointerMotionMask,
+			mouse_rotation, game);
+	else
+		mlx_hook(game->win->win, MotionNotify, PointerMotionMask,
+			NULL, game);
 	draw_floor_ceiling(game);
 	while (x < game->win->width)
 		raycaster(game, x++);

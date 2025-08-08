@@ -15,6 +15,8 @@ SRC = 	main.c \
 		raycast_2.c \
 		pixels.c \
 		movement.c \
+		keys.c \
+		menu_keys.c \
 		rotation.c \
 		jump.c \
 		sprite.c \

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 15:01:20 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 10:07:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define MOVE_SPEED 0.05
 # define JUMPING 300
 # define COLLISION_DISTANCE 0.4
-# define ROTATION_SPEED 2
+# define ROTATION_SPEED 1.2
 # define VALID_MAP_CHARS "NSEW01\n"
 //# define RAY (game->win->ray)
 //# define MAP (game->map)
@@ -154,6 +154,8 @@ typedef struct s_keys
 	int	right;
 	int	space;
 	int	shift;
+	int	m;
+	int	m_was_pressed;
 }		t_keys;
 
 typedef struct s_player
@@ -162,6 +164,7 @@ typedef struct s_player
 	int		running;
 	int		jumping;
 	int		space_was_pressed;
+	int		mouse_control;
 	double	i_wave_walk;
 }			t_player;
 
@@ -183,7 +186,10 @@ int		update_frame(t_game *game);
 void	raycaster(t_game *game, int x);
 void	choose_color(t_game *game);
 void	put_pixel(t_data *img, int x, int y, int color);
+void	keys_action(t_game *game);
 void	keys_movement(t_game *game);
+void	keys_rotation(t_game *game);
+void	keys_menu(t_game *game);
 int		key_press(int key, t_game *game);
 int		key_release(int key, t_game *game);
 void	rotate_camera(t_game *game, int direction);
