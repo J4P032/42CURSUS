@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 10:07:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:42:59 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1.3
 # define LIGHT 2
-# define NUM_SPRITES 4
+# define NUM_SPRITES 5
 # define SPRITES_ANIM 1
 # define MOVE_SPEED 0.05
 # define JUMPING 300
@@ -198,5 +198,6 @@ void	jump(t_game *game);
 void	paint_ray(t_game *game, int x);
 void	load_sprites_and_background(t_game *game);
 void	render_jumping_background(t_game *game);
+void	draw_minimap(t_game *game);
 
 #endif

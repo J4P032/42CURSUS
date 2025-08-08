@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 15:01:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 10:26:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 13:41:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int	update_frame(t_game *game)
 	draw_floor_ceiling(game);
 	while (x < game->win->width)
 		raycaster(game, x++);
+	draw_minimap(game);
 	mlx_put_image_to_window(game->win->mlx, game->win->win, canvas->img, 0, 0);
 	fps();
 	if (!game->win->running)

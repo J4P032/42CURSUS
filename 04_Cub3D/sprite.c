@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 15:01:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:58:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,14 @@ void	load_texture_address(t_data *img, t_game *game)
 	}
 }
 
-void	load_walls(t_game *game)
+void	load_sprites(t_game *game)
 {
 	size_t		i;
 	t_sprite	*sprite;
-
+	
 	i = 0;
 	sprite = game->win->sprite;
-	sprite[0].bitmap[0] = "./textures/NO_256.xpm";
-	sprite[1].bitmap[0] = "./textures/SO_256.xpm";
-	sprite[2].bitmap[0] = "./textures/EA_256.xpm";
-	sprite[3].bitmap[0] = "./textures/WE_256.xpm";
-	sprite[0].width = 256;
-	sprite[0].height = 256;
-	while (i < 4)
+	while (i < NUM_SPRITES)
 	{
 		sprite[i].img[0].img = mlx_xpm_file_to_image(game->win->mlx,
 				sprite[i].bitmap[0], &sprite[i].width, &sprite[i].height);
@@ -52,9 +46,14 @@ void	load_walls(t_game *game)
 
 void	load_sprites_and_background(t_game *game)
 {
-	//draw_map(game);
-	load_walls(game);
-	//SPRITE[0].j = game->map->p_x / TEXTURE_W;
-	//SPRITE[0].i = game->map->p_y / TEXTURE_H;
+	t_sprite	*sprite;
+	
+	sprite = game->win->sprite;
+	sprite[0].bitmap[0] = "./textures/NO_256.xpm";
+	sprite[1].bitmap[0] = "./textures/SO_256.xpm";
+	sprite[2].bitmap[0] = "./textures/EA_256.xpm";
+	sprite[3].bitmap[0] = "./textures/WE_256.xpm";
+	sprite[4].bitmap[0] = "./textures/miniwall.xpm";
+	load_sprites(game);
 	render_jumping_background(game);
 }
