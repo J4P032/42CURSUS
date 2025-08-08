@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 14:42:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/08 19:00:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # define WIN_H 703 //703
 # define TEXTURE_W 256
 # define TEXTURE_H 256
+# define MINISPRITE 10
+# define MINIMAPSIZE 150
 # define PI 3.14159265358979323846
 # define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1.3
