@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 18:37:09 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/09 12:43:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,35 @@ void	load_texture_address(t_data *img, t_game *game)
 		exit (1);
 	}
 }
+
+/*-5 because we have loaded the previous 5 ones in load_sprites not animated*/
+void	load_animated(t_game *game)
+{
+	size_t		i;
+	size_t		j;
+	t_sprite	*sprite;
+
+	i = NUM_SPRITES - 1;
+	sprite = game->win->sprite;
+	while (i < (NUM_SPRITES - 5))
+	{
+		j = 0;
+		while (j < SPRITES_ANIM)
+		{
+			sprite[i].img[j].img = mlx_xpm_file_to_image(game->win->mlx,
+					sprite[i].bitmap[j], &sprite[i].width, &sprite[i].height);
+			if (!sprite[i].img[j].img)
+			{
+				clean_up_memory(game, 0);
+				exit (1);
+			}
+			load_texture_address(&sprite[i].img[j], game);
+			j++;
+		}
+		i++;
+	}
+}
+
 
 void	load_sprites(t_game *game)
 {
@@ -42,6 +71,7 @@ void	load_sprites(t_game *game)
 		load_texture_address(&sprite[i].img[0], game);
 		i++;
 	}
+	//load_animated(game);
 }
 
 void	load_sprites_and_background(t_game *game)
@@ -54,6 +84,14 @@ void	load_sprites_and_background(t_game *game)
 	sprite[2].bitmap[0] = "./textures/EA_256.xpm";
 	sprite[3].bitmap[0] = "./textures/WE_256.xpm";
 	sprite[4].bitmap[0] = "./textures/miniwall.xpm";
+	sprite[5].bitmap[0] = "./textures/MiniPlayer_N.xpm";
+	sprite[6].bitmap[0] = "./textures/MiniPlayer_NE.xpm";
+	sprite[7].bitmap[0] = "./textures/MiniPlayer_E.xpm";
+	sprite[8].bitmap[0] = "./textures/MiniPlayer_SE.xpm";
+	sprite[9].bitmap[0] = "./textures/MiniPlayer_S.xpm";
+	sprite[10].bitmap[0] = "./textures/MiniPlayer_SW.xpm";
+	sprite[11].bitmap[0] = "./textures/MiniPlayer_W.xpm";
+	sprite[12].bitmap[0] = "./textures/MiniPlayer_NW.xpm";
 	load_sprites(game);
 	render_jumping_background(game);
 }

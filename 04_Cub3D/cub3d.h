@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 19:00:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/09 12:43:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1.3
 # define LIGHT 2
-# define NUM_SPRITES 5
+# define NUM_SPRITES 13
 # define SPRITES_ANIM 1
 # define MOVE_SPEED 0.05
 # define JUMPING 300
