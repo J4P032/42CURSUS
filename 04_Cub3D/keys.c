@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 09:45:55 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 10:04:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:02:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	menu_keys(int key, t_game *game)
 {
-	if (key == XK_Escape) //65307
+	if (key == XK_Escape)
 	{
 		clean_up_memory(game, 0);
 		exit (0);
@@ -32,7 +32,6 @@ void	menu_keys_release(int key, t_game *game)
 int	key_press(int key, t_game *game)
 {
 	game->player.moving = 1;
-	
 	if (key == 'D' || key == 'd')
 		game->keys.d = 1;
 	if (key == 'A' || key == 'a')
@@ -41,13 +40,13 @@ int	key_press(int key, t_game *game)
 		game->keys.w = 1;
 	if (key == 'S' || key == 's')
 		game->keys.s = 1;
-	if (key == XK_Right) //65363
+	if (key == XK_Right)
 		game->keys.right = 1;
-	if (key == XK_Left) //65361
+	if (key == XK_Left)
 		game->keys.left = 1;
-	if (key == XK_space) //32
+	if (key == XK_space)
 		game->keys.space = 1;
-	if (key == XK_Shift_L) //65505
+	if (key == XK_Shift_L)
 		game->keys.shift = 1;
 	menu_keys(key, game);
 	return (0);
@@ -76,7 +75,7 @@ int	key_release(int key, t_game *game)
 		game->player.moving = 1;
 	else
 		game->player.moving = 0;
-	menu_keys_release(key , game);
+	menu_keys_release(key, game);
 	return (0);
 }
 

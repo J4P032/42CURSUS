@@ -20,6 +20,7 @@ SRC = 	main.c \
 		rotation.c \
 		jump.c \
 		sprite.c \
+		sprite_draw.c \
 		floor_ceiling.c \
 		minimap.c \
 #SRCS_BONUS = 

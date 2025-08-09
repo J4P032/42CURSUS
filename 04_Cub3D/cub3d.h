@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/09 12:43:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/09 13:59:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,9 @@ typedef struct s_map
 	int		no_valid_char;
 	int		sky_color;
 	int		floor_color;
+	int		minicenter;
+	int		minix;
+	int		miniy;
 }			t_map;
 
 typedef struct s_keys
@@ -201,5 +204,6 @@ void	paint_ray(t_game *game, int x);
 void	load_sprites_and_background(t_game *game);
 void	render_jumping_background(t_game *game);
 void	draw_minimap(t_game *game);
+void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
 
 #endif

@@ -1,24 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   menu_keys.c                                        :+:      :+:    :+:   */
+/*   sprite_draw.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 10:05:46 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/09 14:03:42 by jrollon-         ###   ########.fr       */
+/*   Created: 2025/08/09 13:56:38 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/08/09 13:57:06 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	keys_menu(t_game *game)
+void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y)
 {
-	if (game->keys.m && !game->keys.m_was_pressed)
+	size_t	i;
+	size_t	j;
+	int		color;
+	char	*src;
+
+	j = 0;
+	while (j < MINISPRITE)
 	{
-		game->player.mouse_control = !game->player.mouse_control;
-		game->keys.m_was_pressed = 1;
+		i = 0;
+		while (i < MINISPRITE)
+		{
+			src = sprite.img[0].addr + (j * sprite.img[0].line_length
+					+ i * (sprite.img[0].bits_x_pixel / 8));
+			color = *(unsigned int *)src;
+			put_pixel(&game->win->canvas, x + i, y + j, color);
+			i++;
+		}
+		j++;
 	}
-	else if (!game->keys.m)
-		game->keys.m_was_pressed = 0;
 }

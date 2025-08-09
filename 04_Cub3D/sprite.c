@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/09 12:43:19 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:07:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	load_texture_address(t_data *img, t_game *game)
 {
 	img->addr = mlx_get_data_addr(img->img, &img->bits_x_pixel,
-		&img->line_length, &img->endian);
+			&img->line_length, &img->endian);
 	if (!img->addr)
 	{
 		clean_up_memory(game, 0);
@@ -51,12 +51,11 @@ void	load_animated(t_game *game)
 	}
 }
 
-
 void	load_sprites(t_game *game)
 {
 	size_t		i;
 	t_sprite	*sprite;
-	
+
 	i = 0;
 	sprite = game->win->sprite;
 	while (i < NUM_SPRITES)
@@ -77,7 +76,7 @@ void	load_sprites(t_game *game)
 void	load_sprites_and_background(t_game *game)
 {
 	t_sprite	*sprite;
-	
+
 	sprite = game->win->sprite;
 	sprite[0].bitmap[0] = "./textures/NO_256.xpm";
 	sprite[1].bitmap[0] = "./textures/SO_256.xpm";

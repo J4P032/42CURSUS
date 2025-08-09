@@ -6,34 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 13:31:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/09 13:21:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:05:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y)
-{
-	size_t	i;
-	size_t	j;
-	int		color;
-	char	*src;
-
-	j = 0;
-	while (j < MINISPRITE)
-	{
-		i = 0;
-		while (i < MINISPRITE)
-		{
-			src = sprite.img[0].addr + (j * sprite.img[0].line_length
-					+ i * (sprite.img[0].bits_x_pixel / 8));
-			color = *(unsigned int *)src;
-			put_pixel(&game->win->canvas, x + i, y + j, color);
-			i++;
-		}
-		j++;
-	}
-}
 
 void	draw_minimap_frame(t_game *game)
 {
@@ -53,42 +30,47 @@ void	draw_minimap_frame(t_game *game)
 	}
 }
 
+void	check_wall_and_draw_it(t_game *game, int i, int j)
+{
+	t_map	*map;
+	int		mapx;
+	int		mapy;
+
+	map = game->map;
+	while (map->minix < MINIMAPSIZE)
+	{
+		mapx = (map->minix - i) / MINISPRITE;
+		mapy = (map->miniy - j) / MINISPRITE;
+		if (mapy >= 0 && mapy < (int)map->lines
+			&& mapx >= 0 && mapx < (int)map->columns
+			&& map->map[mapy][mapx] == '1')
+		{
+			if (map->minix >= 0 && map->minix < MINIMAPSIZE
+				&& map->miniy >= 0 && map->miniy < MINIMAPSIZE)
+				draw_minisprite_on_canvas(game, game->win->sprite[4],
+					map->minix, map->miniy);
+		}
+		map->minix += MINISPRITE;
+	}
+}
+
 void	draw_walls_around_player(t_game *game)
 {
-	int center;
-	int	iposx;
-	int	iposy;
-	
-	int	minix;
-	int	miniy;
-	int	i;
-	int	j;
-	
-	iposx = (int)game->map->p_x;
-	iposy = (int)game->map->p_y;
+	int		i;
+	int		j;
+	t_map	*map;
 
-	center = (MINIMAPSIZE / 2) - (MINISPRITE / 2);
-	
-	miniy = center - iposy * MINISPRITE;
-	j = miniy;
-	minix = center - iposx * MINISPRITE;
-	i = minix;
-	while (miniy < MINIMAPSIZE)
+	map = game->map;
+	map->minicenter = (MINIMAPSIZE / 2) - (MINISPRITE / 2);
+	map->miniy = map->minicenter - (int)(map->p_y) * MINISPRITE;
+	j = map->miniy;
+	map->minix = map->minicenter - (int)(map->p_x) * MINISPRITE;
+	i = map->minix;
+	while (map->miniy < MINIMAPSIZE)
 	{
-		minix = i;
-		while (minix < MINIMAPSIZE)
-		{
-			if ((miniy - j) / MINISPRITE >= 0 && (miniy - j) / MINISPRITE < (int)game->map->lines
-				&& (minix - i) / MINISPRITE >= 0 && (minix - i) / MINISPRITE < (int)game->map->columns
-				&& game->map->map[(miniy - j) / MINISPRITE][(minix - i) / MINISPRITE] == '1')
-			{				
-				if (minix >= 0 && minix < MINIMAPSIZE
-					&& miniy >= 0 && miniy < MINIMAPSIZE)
-					draw_minisprite_on_canvas(game, game->win->sprite[4], minix, miniy);
-			}
-			minix += MINISPRITE;
-		}
-		miniy += MINISPRITE;
+		map->minix = i;
+		check_wall_and_draw_it(game, i, j);
+		map->miniy += MINISPRITE;
 	}
 }
 
@@ -97,12 +79,12 @@ void	draw_player(t_game *game)
 {
 	int			teta;
 	t_sprite	sprite;
-	
+
 	teta = (int)((180 * atan2(game->map->dir_y, game->map->dir_x) / PI) + 90);
 	if (teta < 0)
 		teta += 360;
 	if (teta >= 337 || teta <= 23)
-		sprite = game->win->sprite[5];	
+		sprite = game->win->sprite[5];
 	else if (teta > 23 && teta <= 68)
 		sprite = game->win->sprite[6];
 	else if (teta > 68 && teta <= 113)
@@ -120,11 +102,9 @@ void	draw_player(t_game *game)
 	draw_minisprite_on_canvas(game, sprite, 70, 70);
 }
 
-
 void	draw_minimap(t_game *game)
 {
 	draw_minimap_frame(game);
 	draw_walls_around_player(game);
 	draw_player(game);
-
 }
