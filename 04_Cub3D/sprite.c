@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/09 14:07:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/08/25 13:19:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,14 @@ void	load_sprites_and_background(t_game *game)
 	t_sprite	*sprite;
 
 	sprite = game->win->sprite;
-	sprite[0].bitmap[0] = "./textures/NO_256.xpm";
-	sprite[1].bitmap[0] = "./textures/SO_256.xpm";
-	sprite[2].bitmap[0] = "./textures/EA_256.xpm";
-	sprite[3].bitmap[0] = "./textures/WE_256.xpm";
+	//sprite[0].bitmap[0] = "./textures/NO_256.xpm";
+	//sprite[1].bitmap[0] = "./textures/SO_256.xpm";
+	//sprite[2].bitmap[0] = "./textures/EA_256.xpm";
+	//sprite[3].bitmap[0] = "./textures/WE_256.xpm";
+	sprite[0].bitmap[0] = "./textures/stonewall.xpm";
+	sprite[1].bitmap[0] = "./textures/stonewall.xpm";
+	sprite[2].bitmap[0] = "./textures/stonewall_dark.xpm";
+	sprite[3].bitmap[0] = "./textures/door.xpm";
 	sprite[4].bitmap[0] = "./textures/miniwall.xpm";
 	sprite[5].bitmap[0] = "./textures/MiniPlayer_N.xpm";
 	sprite[6].bitmap[0] = "./textures/MiniPlayer_NE.xpm";
