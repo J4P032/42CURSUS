@@ -1,31 +1,32 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 NAME = cub3D
-#NAME_BONUS = cub3D_bonus
+NAME_BONUS = cub3D_bonus
 LIBRARY = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a
-SRC = 	main.c \
-		window.c \
-		map.c \
-		map_2.c \
-		get_next_line.c \
-		get_next_line_utils.c \
-		frame.c \
-		raycast.c \
-		raycast_2.c \
-		pixels.c \
-		movement.c \
-		keys.c \
-		menu_keys.c \
-		rotation.c \
-		jump.c \
-		sprite.c \
-		sprite_draw.c \
-		floor_ceiling.c \
-		minimap.c \
-#SRCS_BONUS = 
+SRC = 			main.c \
+				window.c \
+				map.c \
+				map_2.c \
+				get_next_line.c \
+				get_next_line_utils.c \
+				frame.c \
+				raycast.c \
+				raycast_2.c \
+				pixels.c \
+				movement.c \
+				keys.c \
+				menu_keys.c \
+				rotation.c \
+				jump.c \
+				sprite_draw.c \
+				floor_ceiling.c \
+				minimap.c
+SRC_NOBONUS =	sprite.c
+SRC_BONUS =		sprite_bonus.c 
 OBJS = $(SRC:.c=.o)
-#OBJS_BONUS = ${SRCS_BONUS:.c=.o}
+OBJS_NOBONUS = ${SRC_NOBONUS:.c=.o}
+OBJS_BONUS = ${SRC_BONUS:.c=.o}
 RM	= rm -rf
 all: $(NAME)
 
@@ -35,28 +36,28 @@ $(LIBRARY):
 $(MINILIBX):
 	@make -C minilibx-linux
 
-%.o: %.c so_long.h
+%.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS) $(OBJS2) $(LIBRARY) $(MINILIBX)
-	@$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -L./minilibx-linux -lmlx -lX11 -lXext -lm -o $(NAME)
+$(NAME): $(OBJS) $(OBJS_NOBONUS) $(LIBRARY) $(MINILIBX)
+	@$(CC) $(CFLAGS) $(OBJS) $(OBJS_NOBONUS) -L./libft -lft -L./minilibx-linux -lmlx -lX11 -lXext -lm -o $(NAME)
 
-#bonus: .bonus
+bonus: .bonus
 
-#.bonus: ${OBJS} ${OBJS_BONUS} $(LIBRARY) $(MINILIBX)
-#	@$(CC) $(CFLAGS) $(OBJS) $(OBJS_BONUS) -L./libft -lft -L./minilibx-linux -lmlx -lX11 -lXext -lm -o $(NAME_BONUS)
-#	touch .bonus
+.bonus: ${OBJS} ${OBJS_BONUS} $(LIBRARY) $(MINILIBX)
+	@$(CC) $(CFLAGS) $(OBJS) $(OBJS_BONUS) -L./libft -lft -L./minilibx-linux -lmlx -lX11 -lXext -lm -o $(NAME_BONUS)
+	touch .bonus
 
 clean:
-	@$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(OBJS_NOBONUS) $(OBJS_BONUS) .bonus
 	@make clean -C libft
 	@make clean -C minilibx-linux
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) $(NAME_BONUS)
 	@make fclean -C libft
 	@make clean -C minilibx-linux
 
 re: fclean all
 
-.PHONY: all re clean fclean
+.PHONY: all re clean fclean bonus
