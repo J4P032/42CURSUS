@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/01 18:51:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/02 11:39:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,6 @@
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 1.2
 # define VALID_MAP_CHARS "NSEW01\n"
-//# define RAY (game->win->ray)
-//# define MAP (game->map)
-//# define WIN (game->win)
-//# define CANVAS (game->win->canvas)
-//# define KEY (game->keys)
-//# define PLAYER (game->player)
-//# define SPRITE (game->win->sprite)
-//# define COLOR_ARRAY[WIN_H]
 
 typedef struct s_data
 {

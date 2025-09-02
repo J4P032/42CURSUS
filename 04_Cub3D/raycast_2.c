@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/07 15:07:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/02 11:38:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,23 @@
 
 /*modify the color with distance. More distance darker*/
 /*LIGHT default is 2. Higher number brighter will be*/
-
+/*to better performance instead of make float operations we make to int*/
 int	modify_color_with_distance(t_game *game, int color)
 {
-	float	factor;
+	int		factor;
 	int		red;
 	int		green;
 	int		blue;
 
-	if (game->win->ray.perp_wall_dist == 0)
-		game->win->ray.perp_wall_dist = 1e-32;
-	factor = LIGHT * 1.0f / (float)game->win->ray.perp_wall_dist;
-	if (factor > 1.0f)
-		factor = 1.0f;
-	red = (int)(((color >> 16) & 0xFF) * factor);
-	green = (int)(((color >> 8) & 0xFF) * factor);
-	blue = (int)((color & 0xFF) * factor);
-	color = (red << 16) | (green << 8) | blue;
-	return (color);
+	if (game->win->ray.perp_wall_dist < 1e-6f)
+		game->win->ray.perp_wall_dist = 1e-6f;
+	factor = (int)(LIGHT / game->win->ray.perp_wall_dist * 256.0f);
+	if (factor > 256)
+		factor = 256;
+	red = ((color >> 16) & 0xFF) * factor >> 8;
+	green = ((color >> 8) & 0xFF) * factor >> 8;
+	blue = (color & 0xFF) * factor >> 8;
+	return ((red << 16) | (green << 8) | blue);
 }
 
 int	search_color_in_texture(t_data *img, int x, int y, t_game *game)
