@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/02 12:38:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:33:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 1.2
 # define VALID_MAP_CHARS "NSEW01\n"
+# define VALID_BONUSMAP_CHARS "NSEW01d\n"
 
 typedef struct s_data
 {
@@ -197,5 +198,7 @@ void	load_sprites_and_background(t_game *game);
 void	render_jumping_background(t_game *game);
 void	draw_minimap(t_game *game);
 void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
+void	draw_door(t_game *game);
+void	raycaster_door(t_game *game, int x);
 
 #endif

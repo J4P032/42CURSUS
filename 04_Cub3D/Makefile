@@ -6,7 +6,6 @@ LIBRARY = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a
 SRC = 			main.c \
 				window.c \
-				map.c \
 				map_2.c \
 				get_next_line.c \
 				get_next_line_utils.c \
@@ -21,10 +20,14 @@ SRC = 			main.c \
 				sprite_draw.c \
 				floor_ceiling.c
 SRC_NOBONUS =	sprite.c \
-				frame.c
+				frame.c \
+				map.c
 SRC_BONUS =		sprite_bonus.c \
 				frame_bonus.c \
-				minimap_bonus.c
+				minimap_bonus.c \
+				door_bonus.c \
+				raycast_door.c \
+				map_bonus.c
 OBJS = $(SRC:.c=.o)
 OBJS_NOBONUS = ${SRC_NOBONUS:.c=.o}
 OBJS_BONUS = ${SRC_BONUS:.c=.o}
