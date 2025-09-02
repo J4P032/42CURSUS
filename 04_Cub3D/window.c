@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 12:15:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/09 14:08:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/02 11:52:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	draw_window(t_game *game)
 {
 	game->win->width = WIN_W;
 	game->win->height = WIN_H;
-	//check_size(game);
 	if (!game->win->win)
 	{
 		game->win->win = mlx_new_window(game->win->mlx, WIN_W, WIN_H, "Cub3D");
