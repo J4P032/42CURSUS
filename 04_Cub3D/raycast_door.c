@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:39:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/02 14:27:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/02 15:54:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	search_color_in_door(t_data *img, int x, int y, t_game *game)
 		return (0x00000000);
 	color = *(unsigned int *)(img->addr + y * img->line_length + x
 			* (img->bits_x_pixel / 8));
-	color = modify_color_with_distance_door(game, color);
+	if (color != 0x0000FF00)
+		color = modify_color_with_distance_door(game, color);
 	return (color);
 }
 
@@ -84,7 +85,8 @@ void	paint_ray_door(t_game *game, int x)
 	while (y < game->win->ray.draw_end)
 	{
 		color = game->win->ray.colors[y];
-		put_pixel(&game->win->canvas, x, y, color);
+		if (color != 0x0000FF00)
+			put_pixel(&game->win->canvas, x, y, color);
 		y++;
 	}
 }
