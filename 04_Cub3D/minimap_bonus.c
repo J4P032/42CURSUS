@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:30:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/02 12:30:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/03 15:21:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,7 @@ void	draw_minimap(t_game *game)
 {
 	t_sprite	sprite;
 
-	sprite.x = 0;
-	sprite.x = 0;
-	sprite.i = 0;
-	sprite.j = 0;
-	sprite.distance = 0;
-	sprite.width = 0;
-	sprite.height = 0;
-	sprite.bitmap[0] = 0;
+	ft_memset(&sprite, 0, sizeof(sprite));
 	draw_minimap_frame(game);
 	draw_walls_around_player(game);
 	draw_player(game, &sprite);
