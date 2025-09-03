@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:39:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/02 15:54:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:11:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,18 +89,6 @@ void	paint_ray_door(t_game *game, int x)
 			put_pixel(&game->win->canvas, x, y, color);
 		y++;
 	}
-}
-
-void	set_const_ray_dist_between_grids_door(t_game *game)
-{
-	if (game->win->ray.dir_x == 0)
-		game->win->ray.delta_dist_x = 1e32;
-	else
-		game->win->ray.delta_dist_x = fabs(1 / game->win->ray.dir_x);
-	if (game->win->ray.dir_y == 0)
-		game->win->ray.delta_dist_y = 1e32;
-	else
-		game->win->ray.delta_dist_y = fabs(1 / game->win->ray.dir_y);
 }
 
 void	set_direction_of_ray_door(t_game *game)
@@ -196,12 +184,12 @@ void	raycaster_door(t_game *game, int x)
 	if (game->player.running && game->player.moving)
 		factor = 0.01;
 	ray->hit = 0;
+	ray->hit_door = 0;
 	ray->camera_x = 2 * x / (double)WIN_W - 1 + ray->walking_wave * factor;
 	ray->dir_x = game->map->dir_x + game->map->plane_x * ray->camera_x;
 	ray->dir_y = game->map->dir_y + game->map->plane_y * ray->camera_x;
 	ray->map_x = (int)game->map->p_x;
 	ray->map_y = (int)game->map->p_y;
-	set_const_ray_dist_between_grids_door(game);
 	set_direction_of_ray_door(game);
 	run_dda_door(game);
 	if (game->win->ray.hit == 1)

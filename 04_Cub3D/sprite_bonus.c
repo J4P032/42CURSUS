@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:23:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/02 16:49:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:33:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	load_sprites_and_background(t_game *game)
 	sprite[10].bitmap[0] = "./textures/MiniPlayer_SW.xpm";
 	sprite[11].bitmap[0] = "./textures/MiniPlayer_W.xpm";
 	sprite[12].bitmap[0] = "./textures/MiniPlayer_NW.xpm";
-	sprite[13].bitmap[0] = "./textures/door.xpm";
+	sprite[13].bitmap[0] = "./textures/door_4.xpm";
 	load_sprites(game);
 	render_jumping_background(game);
 }

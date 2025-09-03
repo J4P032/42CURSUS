@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/02 11:38:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:01:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	search_color_in_texture(t_data *img, int x, int y, t_game *game)
 		return (0x00000000);
 	color = *(unsigned int *)(img->addr + y * img->line_length + x
 			* (img->bits_x_pixel / 8));
-	color = modify_color_with_distance(game, color);
+	if (color != 0x0000FF00)
+		color = modify_color_with_distance(game, color);
 	return (color);
 }
 
@@ -103,6 +104,8 @@ void	choose_color(t_game *game)
 		else
 			game->win->ray.num_texture = 1;
 	}
+	if (game->win->ray.hit_tile == 'd')
+		game->win->ray.num_texture = 13;
 	color_picker(game, game->win->ray.draw_start, game->win->ray.num_texture);
 }
 
@@ -115,7 +118,8 @@ void	paint_ray(t_game *game, int x)
 	while (y < game->win->ray.draw_end)
 	{
 		color = game->win->ray.colors[y];
-		put_pixel(&game->win->canvas, x, y, color);
+		if (color != 0x0000FF00)
+			put_pixel(&game->win->canvas, x, y, color);
 		y++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/02 14:33:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:02:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_ray
 	int		step_x; //direction of ray going. 1=Right, -1=Left
 	int		step_y; //direction of ray going. 1=Down(0,0 on topLeft), -1=UP
 	int		hit; //0 ray no hit, 1 hit something
+	int		hit_door;
 	int		side; //side of hit. 0=WE side, 1=NS side
 	int		line_height; //how much to render the line of wall (or enemy)
 	int		draw_start; //start of pixel draw in Y above the horizont (width/2)
@@ -104,6 +105,7 @@ typedef struct s_ray
 	double	rotation_speed;
 	double	fov_factor;
 	double	wallx;
+	char	hit_tile;
 }			t_ray;
 
 typedef struct s_window

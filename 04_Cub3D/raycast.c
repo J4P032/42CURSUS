@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/01 14:48:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:02:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,17 @@ void	run_dda(t_game *game)
 		}
 		if (ray->map_y >= 0 && ray->map_y < (int)game->map->lines
 			&& ray->map_x >= 0 && ray->map_x < (int)game->map->columns
-			&& game->map->map[ray->map_y][ray->map_x] == '1')
-			ray->hit = 1;
+			&& (game->map->map[ray->map_y][ray->map_x] == '1'
+			|| game->map->map[ray->map_y][ray->map_x] == 'd'))
+			{
+				if (game->map->map[ray->map_y][ray->map_x] == 'd' && !ray->hit_door)
+					ray->hit_door = 1;
+				else
+				{
+					ray->hit = 1;
+					ray->hit_tile = game->map->map[ray->map_y][ray->map_x];
+				}
+			}
 	}
 }
 
@@ -217,6 +226,7 @@ void	raycaster(t_game *game, int x)
 	if (game->player.running && game->player.moving)
 		factor = 0.01;
 	ray->hit = 0;
+	ray->hit_door = 0;
 	ray->camera_x = 2 * x / (double)WIN_W - 1 + ray->walking_wave * factor;
 	ray->dir_x = game->map->dir_x + game->map->plane_x * ray->camera_x;
 	ray->dir_y = game->map->dir_y + game->map->plane_y * ray->camera_x;
