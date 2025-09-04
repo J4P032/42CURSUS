@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:39:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/03 16:11:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:08:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,29 @@ void	set_draw_length_without_fish_fx_door(t_game *game)
 		ray->draw_end = WIN_H - 1;
 }
 
+
+void	state_of_the_door(t_game *game, double py, double px)
+{
+	char	n_grid;
+	char	s_grid;
+	char	e_grid;
+	char	w_grid;
+	char	grid;
+	
+	n_grid = game->map->map[(int)floor(py) - 1][(int)floor(px)];
+	s_grid = game->map->map[(int)floor(py) + 1][(int)floor(px)];
+	e_grid = game->map->map[(int)floor(py)][(int)floor(px) + 1];
+	w_grid = game->map->map[(int)floor(py)][(int)floor(px) - 1];
+	grid = game->map->map[(int)floor(py)][(int)floor(px)];
+	if (n_grid == 'd' || e_grid == 'd' || s_grid == 'd' || w_grid == 'd'
+		|| grid == 'd')
+	{
+		door_color_picker(game, game->win->ray.draw_start, 17);
+	}
+	else
+		door_color_picker(game, game->win->ray.draw_start, 13);
+}
+
 void	raycaster_door(t_game *game, int x)
 {
 	double	factor;
@@ -195,7 +218,7 @@ void	raycaster_door(t_game *game, int x)
 	if (game->win->ray.hit == 1)
 	{
 		set_draw_length_without_fish_fx_door(game);
-		door_color_picker(game, game->win->ray.draw_start, 13);
+		state_of_the_door(game, game->map->p_y, game->map->p_x);
 		paint_ray_door(game, x);
 	}
 }
