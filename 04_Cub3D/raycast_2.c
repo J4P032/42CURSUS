@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/03 20:01:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:29:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	search_color_in_texture(t_data *img, int x, int y, t_game *game)
 		return (0x00000000);
 	color = *(unsigned int *)(img->addr + y * img->line_length + x
 			* (img->bits_x_pixel / 8));
+	(void)game;
 	if (color != 0x0000FF00)
 		color = modify_color_with_distance(game, color);
 	return (color);

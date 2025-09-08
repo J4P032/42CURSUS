@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:39:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/04 13:08:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/08 15:08:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,32 @@ void	set_draw_length_without_fish_fx_door(t_game *game)
 		ray->draw_end = WIN_H - 1;
 }
 
+/*change index to make animation of it*/
+int	add_index(t_game *game, int option)
+{
+	game->player.i++;
+	if (game->player.i >= TIME_TO_ANIMATE && option == 1)
+	{
+		game->player.i = 0;
+		if (game->player.index == 17)
+			return (game->player.index);
+		else
+			return (game->player.index++);
+	}
+	if (game->player.index > 17 && option == 1)
+		game->player.index = 17;
+	if (game->player.i >= TIME_TO_ANIMATE && option == 0)
+	{
+		game->player.i = 0;
+		if (game->player.index == 13)
+			return (game->player.index);
+		else
+			return (game->player.index--);
+	}
+	if (game->player.index < 13 && option == 0)
+		game->player.index = 13;
+	return (game->player.index);
+}
 
 void	state_of_the_door(t_game *game, double py, double px)
 {
@@ -188,11 +214,9 @@ void	state_of_the_door(t_game *game, double py, double px)
 	grid = game->map->map[(int)floor(py)][(int)floor(px)];
 	if (n_grid == 'd' || e_grid == 'd' || s_grid == 'd' || w_grid == 'd'
 		|| grid == 'd')
-	{
-		door_color_picker(game, game->win->ray.draw_start, 17);
-	}
+		door_color_picker(game, game->win->ray.draw_start, add_index(game, 1));
 	else
-		door_color_picker(game, game->win->ray.draw_start, 13);
+		door_color_picker(game, game->win->ray.draw_start, add_index(game, 0));
 }
 
 void	raycaster_door(t_game *game, int x)

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/04 11:07:30 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/08 15:08:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define NUM_SPRITES 18
 # define SPRITES_ANIM 1
 # define MOVE_SPEED 0.05
+# define TIME_TO_ANIMATE 1500
 # define JUMPING 300
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 1.2
@@ -166,6 +167,8 @@ typedef struct s_player
 	int		space_was_pressed;
 	int		mouse_control;
 	double	i_wave_walk;
+	int		index;//index of door for animation starting in 14
+	int		i;//iteration for animation of door
 }			t_player;
 
 typedef struct s_game
