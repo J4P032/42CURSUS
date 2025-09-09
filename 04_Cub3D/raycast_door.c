@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:39:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/08 15:08:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:34:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	search_color_in_door(t_data *img, int x, int y, t_game *game)
 
 
 
-void	door_color_picker(t_game *game, int y, int i)
+void	door_color_picker(t_game *game, int y, int i, int x)
 {
 	t_sprite	*sprite;
 	double		scale;
@@ -66,27 +66,10 @@ void	door_color_picker(t_game *game, int y, int i)
 		offset = y + (game->win->ray.line_height / 2)
 			- (WIN_H / 2) - game->win->ray.walking_height;
 		tex_y = (int)(offset * scale);
-		game->win->ray.colors[y] = search_color_in_door(
+		game->win->ray.color = search_color_in_door(
 				&sprite[i].img[0], game->win->ray.tex_x, tex_y, game);
-		y++;
-	}
-	if (y < WIN_H)
-		game->win->ray.colors[y] = 0xFFFFFFFF;
-}
-
-
-
-void	paint_ray_door(t_game *game, int x)
-{
-	int	y;
-	int	color;
-
-	y = game->win->ray.draw_start;
-	while (y < game->win->ray.draw_end)
-	{
-		color = game->win->ray.colors[y];
-		if (color != 0x0000FF00)
-			put_pixel(&game->win->canvas, x, y, color);
+		if (game->win->ray.color != 0x0000FF00)
+			put_pixel(&game->win->canvas, x, y, game->win->ray.color);
 		y++;
 	}
 }
@@ -199,7 +182,7 @@ int	add_index(t_game *game, int option)
 	return (game->player.index);
 }
 
-void	state_of_the_door(t_game *game, double py, double px)
+void	state_of_the_door(t_game *game, double py, double px, int x)
 {
 	char	n_grid;
 	char	s_grid;
@@ -214,9 +197,9 @@ void	state_of_the_door(t_game *game, double py, double px)
 	grid = game->map->map[(int)floor(py)][(int)floor(px)];
 	if (n_grid == 'd' || e_grid == 'd' || s_grid == 'd' || w_grid == 'd'
 		|| grid == 'd')
-		door_color_picker(game, game->win->ray.draw_start, add_index(game, 1));
+		door_color_picker(game, game->win->ray.draw_start, add_index(game, 1), x);
 	else
-		door_color_picker(game, game->win->ray.draw_start, add_index(game, 0));
+		door_color_picker(game, game->win->ray.draw_start, add_index(game, 0), x);
 }
 
 void	raycaster_door(t_game *game, int x)
@@ -242,7 +225,6 @@ void	raycaster_door(t_game *game, int x)
 	if (game->win->ray.hit == 1)
 	{
 		set_draw_length_without_fish_fx_door(game);
-		state_of_the_door(game, game->map->p_y, game->map->p_x);
-		paint_ray_door(game, x);
+		state_of_the_door(game, game->map->p_y, game->map->p_x, x);
 	}
 }

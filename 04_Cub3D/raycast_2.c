@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/08 12:29:27 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:37:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	search_color_in_texture(t_data *img, int x, int y, t_game *game)
 	return (color);
 }
 
-void	color_picker(t_game *game, int y, int i)
+void	color_picker(t_game *game, int y, int i, int x)
 {
 	t_sprite	*sprite;
 	double		scale;
@@ -67,12 +67,12 @@ void	color_picker(t_game *game, int y, int i)
 		offset = y + (game->win->ray.line_height / 2)
 			- (WIN_H / 2) - game->win->ray.walking_height;
 		tex_y = (int)(offset * scale);
-		game->win->ray.colors[y] = search_color_in_texture(
+		game->win->ray.color = search_color_in_texture(
 				&sprite[i].img[0], game->win->ray.tex_x, tex_y, game);
+		if (game->win->ray.color != 0x0000FF00)
+			put_pixel(&game->win->canvas, x, y, game->win->ray.color);
 		y++;
 	}
-	if (y < WIN_H)
-		game->win->ray.colors[y] = 0xFFFFFFFF;
 }
 
 /*
@@ -89,7 +89,7 @@ color format is hex. 0x[A][R][G][B] where in minilibx Alpha is not used
 0x0000FF00 -> GREEN - NORTH (0)
 0x000000FF -> BLUE - SOUTH (1)
 0x00FFFF00 -> YELLOW - EAST (2)*/
-void	choose_color(t_game *game)
+void	choose_color(t_game *game, int x)
 {
 	if (game->win->ray.side == 0)
 	{
@@ -107,20 +107,6 @@ void	choose_color(t_game *game)
 	}
 	if (game->win->ray.hit_tile == 'd')
 		game->win->ray.num_texture = 13;
-	color_picker(game, game->win->ray.draw_start, game->win->ray.num_texture);
+	color_picker(game, game->win->ray.draw_start, game->win->ray.num_texture, x);
 }
 
-void	paint_ray(t_game *game, int x)
-{
-	int	y;
-	int	color;
-
-	y = game->win->ray.draw_start;
-	while (y < game->win->ray.draw_end)
-	{
-		color = game->win->ray.colors[y];
-		if (color != 0x0000FF00)
-			put_pixel(&game->win->canvas, x, y, color);
-		y++;
-	}
-}

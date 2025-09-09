@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/03 20:02:16 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:35:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ void	set_const_ray_dist_between_grids(t_game *game)
 		game->win->ray.delta_dist_y = fabs(1 / game->win->ray.dir_y);
 }
 
-/*
-step_x/y indicate direction the ray goes seen from up-down map (N-S-E-W)
+/*step_x/y indicate direction the ray goes seen from up-down map (N-S-E-W)
 if ray.dir_x > 0 -> step_x = 1 (goes to the EAST)
 ray.dir_x < 0 -> step_x = -1 (goes WEST);
 ray.dir_y > 0 -> step_y = 1 (goes SOUTH);
@@ -100,8 +99,7 @@ void	set_direction_of_ray(t_game *game)
 	}
 }
 
-/*
-jump to next map square, either in x-direction, or in y-direction
+/*Jump to next map square, either in x-direction, or in y-direction
 the first if(RAY.dist_x <= RAY.dist_y) I set the == also to priorize the dist_x
 distance so artifacts in corners are fixed.
 it will increase distance each time to add the length of the ray.
@@ -213,7 +211,11 @@ void	set_draw_length_without_fish_fx(t_game *game)
    RAY.dir_x = 0 + 0.66 * -1 = -0.66
    RAY.dir_y = -1 + 0 * -1 = -1
    So (-0.66, -1). Union of center of player to that point define the ray vector
-4. RAY.map_x/y is the grid of the map we are.*/
+4. RAY.map_x/y is the grid of the map we are.
+5. With hit_door we detect the direct visual door from the character. The idea
+   is to render the 'hidden' doors (behind other door) closed to allow...
+   transparancy. Those 2nd doors are drawn in first pass. Doors to open in...
+   second pass*/
 void	raycaster(t_game *game, int x)
 {
 	double	factor;
@@ -236,6 +238,5 @@ void	raycaster(t_game *game, int x)
 	set_direction_of_ray(game);
 	run_dda(game);
 	set_draw_length_without_fish_fx(game);
-	choose_color(game);
-	paint_ray(game, x);
+	choose_color(game, x);
 }

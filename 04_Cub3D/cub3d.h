@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/08 15:08:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:36:44 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ typedef struct s_ray
 	int		draw_start; //start of pixel draw in Y above the horizont (width/2)
 	int		draw_end; //end of pixel draw in vertical Y.
 	int		color;
-	int		colors[WIN_H];
 	int		tex_x;
 	int		tex_y;
 	int		tex_y_init;
@@ -187,7 +186,7 @@ void	load_map(t_map *map, char *map_dir);
 void	init_looking_direction(t_map *map, char c);
 int		update_frame(t_game *game);
 void	raycaster(t_game *game, int x);
-void	choose_color(t_game *game);
+void	choose_color(t_game *game, int x);
 void	put_pixel(t_data *img, int x, int y, int color);
 void	keys_action(t_game *game);
 void	keys_movement(t_game *game);
@@ -198,12 +197,10 @@ int		key_release(int key, t_game *game);
 void	rotate_camera(t_game *game, int direction);
 int		mouse_rotation(int x, int y, t_game *game);
 void	jump(t_game *game);
-void	paint_ray(t_game *game, int x);
 void	load_sprites_and_background(t_game *game);
 void	render_jumping_background(t_game *game);
 void	draw_minimap(t_game *game);
 void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
-void	draw_door(t_game *game);
 void	raycaster_door(t_game *game, int x);
 
 #endif
