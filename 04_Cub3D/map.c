@@ -3,15 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:02:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/06 16:26:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/10 15:38:43 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "get_next_line.h"
+
+void	free_2d(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+int	issafe(int x, int y, char **arr)
+{
+	if (x < 0 || y < 0)
+		return (0);
+	if (!arr[x])
+		return (0);
+	if (arr[x][y] == '\0' || arr[x][y] == ' ')
+		return (0);
+	return (1);
+}
+
+int	floodfill(int x, int y, char **arr)
+{
+	int	up;
+	int	down;
+	int	left;
+	int	right;
+
+	if (!issafe(x, y, arr))
+		return (0);
+	if (arr[x][y] == '1' || arr[x][y] == 'V')
+		return (1);
+	arr[x][y] = 'V';
+	up = floodfill(x, y - 1, arr);
+	down = floodfill(x, y + 1, arr);
+	left = floodfill(x - 1, y, arr);
+	right = floodfill(x + 1, y, arr);
+	return (up && down && left && right);
+}
 
 void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 {
@@ -25,7 +70,7 @@ void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 		if (i == (columns - 1) && line[columns - 1] == '1'
 			&& ft_strlen(line) == columns)
 			map->num_walls++;
-		if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E'\
+		if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E'
 			|| line[i] == 'W')
 		{
 			map->num_p++;
@@ -43,12 +88,13 @@ void	check_line(char *line, char *next_line, t_map *map, size_t columns)
 
 	i = 0;
 	map->lines++;
-	if (ft_strlen(line) != columns)
-		map->no_rectangle = 1;
 	while (line[i])
 	{
 		if (!ft_strchr(VALID_MAP_CHARS, line[i]))
-			map->no_valid_char = 1;
+		{
+			if (line[i] != ' ')
+				map->no_valid_char = 1;
+		}
 		i++;
 	}
 	i = 0;
@@ -89,7 +135,7 @@ void	check_map(t_map *map, char *map_dir)
 		free(line);
 		line = next_line;
 	}
-	close (fd);
+	close(fd);
 }
 
 /*if we have an rectangled map surrounded by all walls, we have to have a...*/
@@ -101,27 +147,39 @@ void	check_map(t_map *map, char *map_dir)
 int	check_map_errors(t_map *map)
 {
 	int	error;
-	int	closed_walls;
 
 	error = 0;
-	closed_walls = map->columns * 2 + (map->lines - 2) * 2;
-	if (closed_walls != map->num_walls || map->no_rectangle
-		|| map->num_p != 1 || map->no_valid_char == 1)
-	{
-		write(1, "Error\n", 6);
+	if (map->num_p != 1 || map->no_valid_char == 1)
 		error = 1;
-	}
-	if (closed_walls != map->num_walls)
-		write(1, "Map not fully closed by walls\n", 30);
-	if (map->no_rectangle)
-		write(1, "Not a rectangular map\n", 22);
 	if (map->num_p != 1)
-		write(1, "There is no char start position, or more than one\n", 50);
+		printf("Error\nThere is no char start position, or more than one\n");
 	if (map->no_valid_char)
-		write(1, "There is at least one invalid char in the map\n", 46);
+		printf("Error\nThere is at least one invalid char in the map\n");
 	return (error);
 }
+// debug
+//
+//
+void	print_2d_array(char **arr)
+{
+	int	x;
+	int	y;
 
+	x = 0;
+	while (arr && arr[x]) // Recorrer filas hasta NULL
+	{
+		y = 0;
+		while (arr[x][y] != '\0')
+		{
+			printf("%c", arr[x][y]);
+			y++;
+		}
+		x++;
+	}
+}
+//
+//
+//
 /*map->lines == 0 in if, is because fd = -1 in open file*/
 t_map	*process_map(char *map_dir)
 {
@@ -136,5 +194,18 @@ t_map	*process_map(char *map_dir)
 	load_map(map, map_dir);
 	if (!map->map)
 		return (free(map), NULL);
+	printf("FLOODFILL\n");
+	if (!floodfill(map->p_y, map->p_x, map->map))
+	{
+		printf("Error\nMap not fully surrounded by walls\n");
+		return (free(map), NULL);
+	}
+	printf("SALIMOS DE FLOODFILL\n");
+	free_2d(map->map);
+	load_map(map, map_dir);
+	if (!map->map)
+		return (free(map), NULL);
+	print_2d_array(map->map);
+	printf("MAPA CORRECTO, SALIMOS\n");
 	return (map);
 }

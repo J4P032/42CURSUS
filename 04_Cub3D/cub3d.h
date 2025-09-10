@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/10 12:59:39 by jrollon-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef CUB3D_H
 # define CUB3D_H
 # include "libft/libft.h"
@@ -43,7 +31,7 @@
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 1.2
 # define VALID_MAP_CHARS "NSEW01\n"
-# define VALID_BONUSMAP_CHARS "NSEW01dx\n"//d door, x enemy
+# define VALID_BONUSMAP_CHARS "NSEW01dx \n"//d door, x enemy
 
 typedef struct s_data
 {
@@ -174,7 +162,13 @@ typedef struct s_enemy
 {
 	int		e_x;
 	int		e_y;
+	int		loaded;
+	int		updated_dist;
+	int		num_enemies;
 	double	e_dist;
+	int		screen_x;
+	int		screen_y;
+	int		sprite_size;
 }			t_enemy;
 
 typedef struct s_game
@@ -211,5 +205,7 @@ void	draw_minimap(t_game *game);
 void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
 void	raycaster_door(t_game *game, int x);
 void	enemy(t_game *game, int x);
+void	draw_enemy_on_canvas(t_game *game, t_sprite sprite, int px, int py);
 
 #endif
+
