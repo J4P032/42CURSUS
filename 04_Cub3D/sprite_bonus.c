@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:23:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/08 14:44:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/10 11:18:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	load_sprites_and_background(t_game *game)
 	sprite[15].bitmap[0] = "./textures/door_2.xpm";
 	sprite[16].bitmap[0] = "./textures/door_3.xpm";
 	sprite[17].bitmap[0] = "./textures/door_4.xpm";
+	sprite[18].bitmap[0] = "./textures/EA_256.xpm"; //enemigo
 	load_sprites(game);
 	render_jumping_background(game);
 }

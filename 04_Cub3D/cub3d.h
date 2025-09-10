@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/09 19:36:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/10 12:59:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define FOV 66 //degrees. Will affect also WALL_HEIGHT perception
 # define WALL_HEIGHT 1.3
 # define LIGHT 2
-# define NUM_SPRITES 18
+# define NUM_SPRITES 19
 # define SPRITES_ANIM 1
 # define MOVE_SPEED 0.05
 # define TIME_TO_ANIMATE 1500
@@ -43,7 +43,7 @@
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 1.2
 # define VALID_MAP_CHARS "NSEW01\n"
-# define VALID_BONUSMAP_CHARS "NSEW01d\n"
+# define VALID_BONUSMAP_CHARS "NSEW01dx\n"//d door, x enemy
 
 typedef struct s_data
 {
@@ -170,12 +170,20 @@ typedef struct s_player
 	int		i;//iteration for animation of door
 }			t_player;
 
+typedef struct s_enemy
+{
+	int		e_x;
+	int		e_y;
+	double	e_dist;
+}			t_enemy;
+
 typedef struct s_game
 {
 	t_window	*win;
 	t_map		*map;
 	t_keys		keys;
 	t_player	player;
+	t_enemy		enemy;
 }				t_game;
 
 void	clean_up_memory(t_game *game, size_t i);
@@ -202,5 +210,6 @@ void	render_jumping_background(t_game *game);
 void	draw_minimap(t_game *game);
 void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
 void	raycaster_door(t_game *game, int x);
+void	enemy(t_game *game, int x);
 
 #endif

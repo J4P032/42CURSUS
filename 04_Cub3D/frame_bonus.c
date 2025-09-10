@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:24:55 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/08 12:32:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/10 12:59:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int	update_frame(t_game *game)
 	while (x < game->win->width)
 	{
 		raycaster(game, x);
+		enemy(game, x);
 		raycaster_door(game, x++);
 	}
 	draw_minimap(game);

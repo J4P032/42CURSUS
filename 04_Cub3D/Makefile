@@ -27,7 +27,8 @@ SRC_BONUS =		sprite_bonus.c \
 				minimap_bonus.c \
 				door_bonus.c \
 				raycast_door.c \
-				map_bonus.c
+				map_bonus.c \
+				enemy_bonus.c
 OBJS = $(SRC:.c=.o)
 OBJS_NOBONUS = ${SRC_NOBONUS:.c=.o}
 OBJS_BONUS = ${SRC_BONUS:.c=.o}
