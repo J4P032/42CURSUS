@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 13:56:38 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/15 15:13:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 18:05:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,11 @@ void	draw_enemy_on_canvas(t_game *game, t_sprite sprite, int px, int py)
 					color = *(unsigned int *)(sprite.img[0].addr
 						+ (tex_y * sprite.img[0].line_length
 						+ tex_x * (sprite.img[0].bits_x_pixel / 8)));
-					if (color != 0x00F8FF00 && game->win->ray.hit_dist[px + i] > game->enemy.e_dist)
-						put_pixel(&game->win->canvas, px + i, py + j, color);
+					if (color != 0x00F8FF00 && game->win->ray.hit_dist[px + i] > game->enemy.e_dist
+                        && game->win->ray.green_pixel[px + i][py + j] == 1)
+                       	put_pixel(&game->win->canvas, px + i, py + j, color);
+                    else if (color != 0x00F8FF00 && game->win->ray.door_dist[px + i] > game->enemy.e_dist)
+                        put_pixel(&game->win->canvas, px + i, py + j, color);
 				}
 				i++;
 			}

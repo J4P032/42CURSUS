@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:24:55 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/10 15:45:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:26:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	update_frame(t_game *game)
 		raycaster(game, x);
 		raycaster_door(game, x++);
 	}
-	enemy(game, x);
+	enemy(game);
 	draw_minimap(game);
 	mlx_put_image_to_window(game->win->mlx, game->win->win, canvas->img, 0, 0);
 	fps();

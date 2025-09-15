@@ -73,6 +73,8 @@ typedef struct s_ray
 	double	delta_dist_y;
 	double	perp_wall_dist; //perpendicular distance to camera plane from hit
 	double	hit_dist[WIN_W]; //array of distances to compare with sprites
+	double	door_dist[WIN_W];
+	int		green_pixel[WIN_W][WIN_H];
 	int		map_x; //where the player is in the map grid X
 	int		map_y;
 	int		step_x; //direction of ray going. 1=Right, -1=Left
@@ -205,7 +207,7 @@ void	render_jumping_background(t_game *game);
 void	draw_minimap(t_game *game);
 void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
 void	raycaster_door(t_game *game, int x);
-void	enemy(t_game *game, int x);
+void	enemy(t_game *game);
 void	draw_enemy_on_canvas(t_game *game, t_sprite sprite, int px, int py);
 
 #endif

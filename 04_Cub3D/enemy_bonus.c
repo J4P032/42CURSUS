@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:44:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/15 15:18:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:26:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void calculate_screen_position_size(t_game *game, double dx, double dy)
 I want only to load enemy position once for performance so that is for...
 ...enemy.loaded. Also once if enemy not moving calculate the distance...
 ...with updated_dist*/
-void	enemy(t_game *game, int x)
+void	enemy(t_game *game)
 {
 	double	e_dx;
 	double	e_dy;
@@ -109,12 +109,9 @@ void	enemy(t_game *game, int x)
 	}
 	game->enemy.loaded = 1;
 	game->enemy.e_dist = sqrt(e_dx * e_dx + e_dy * e_dy);
-	(void)x;
 	if (game->enemy.num_enemies == 1)
 	{
 		calculate_screen_position_size(game, e_dx, e_dy);
-		//printf("ex: %f / ey: %f, e_size: %d\n", e_dx, e_dy, game->enemy.sprite_size);
-		//if (game->enemy.sprite_size < WIN_H)
 		draw_enemy_on_canvas(game, game->win->sprite[18], foe->screen_x, foe->screen_y);
 	}	
 }
