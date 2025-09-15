@@ -72,6 +72,7 @@ typedef struct s_ray
 	double	delta_dist_x; //constant distance the ray runs to travel full X grid
 	double	delta_dist_y;
 	double	perp_wall_dist; //perpendicular distance to camera plane from hit
+	double	hit_dist[WIN_W]; //array of distances to compare with sprites
 	int		map_x; //where the player is in the map grid X
 	int		map_y;
 	int		step_x; //direction of ray going. 1=Right, -1=Left

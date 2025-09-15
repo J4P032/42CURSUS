@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:44:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/15 13:32:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 15:18:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,7 @@ void	enemy(t_game *game, int x)
 		exit (1);
 	}
 	game->enemy.loaded = 1;
-	if (!game->enemy.updated_dist)
-	{
-		game->enemy.e_dist = sqrt(e_dx * e_dx + e_dy * e_dy);
-		game->enemy.updated_dist = 1;
-	}
+	game->enemy.e_dist = sqrt(e_dx * e_dx + e_dy * e_dy);
 	(void)x;
 	if (game->enemy.num_enemies == 1)
 	{

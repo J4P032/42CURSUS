@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:39:04 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/09 19:34:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 15:22:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	run_dda_door(t_game *game)
 	}
 }
 
-void	set_draw_length_without_fish_fx_door(t_game *game)
+void	set_draw_length_without_fish_fx_door(t_game *game, int x)
 {
 	t_ray	*ray;
 
@@ -144,6 +144,7 @@ void	set_draw_length_without_fish_fx_door(t_game *game)
 		ray->perp_wall_dist = ray->dist_y - ray->delta_dist_y;
 		ray->wallx = game->map->p_x + ray->perp_wall_dist * ray->dir_x;
 	}
+	ray->hit_dist[x] = ray->perp_wall_dist;//
 	ray->wallx = ray->wallx - floor(ray->wallx);
 	ray->line_height = (int)((WIN_H / ray->perp_wall_dist) * WALL_HEIGHT);
 	ray->draw_start = (-ray->line_height / 2) + (WIN_H / 2)
@@ -224,7 +225,7 @@ void	raycaster_door(t_game *game, int x)
 	run_dda_door(game);
 	if (game->win->ray.hit == 1)
 	{
-		set_draw_length_without_fish_fx_door(game);
+		set_draw_length_without_fish_fx_door(game, x);
 		state_of_the_door(game, game->map->p_y, game->map->p_x, x);
 	}
 }

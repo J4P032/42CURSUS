@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/09 19:35:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 15:21:35 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ distance to the collision (perp_wall_dist) through the ray sent (dir_y)
 Same if side = 1 (horizontal walls) where we need to calculate in the Xs 
 To have the fraction we use floor from math.h so for example if we have:
 wallx = 3.75 -> floor(3.75) = 3.0 -> 3.75 - 3.0 = 0.75*/
-void	set_draw_length_without_fish_fx(t_game *game)
+void	set_draw_length_without_fish_fx(t_game *game, int x)
 {
 	t_ray	*ray;
 
@@ -189,6 +189,7 @@ void	set_draw_length_without_fish_fx(t_game *game)
 		ray->perp_wall_dist = ray->dist_y - ray->delta_dist_y;
 		ray->wallx = game->map->p_x + ray->perp_wall_dist * ray->dir_x;
 	}
+	ray->hit_dist[x] = ray->perp_wall_dist;//
 	ray->wallx = ray->wallx - floor(ray->wallx);
 	ray->line_height = (int)((WIN_H / ray->perp_wall_dist) * WALL_HEIGHT);
 	ray->draw_start = (-ray->line_height / 2) + (WIN_H / 2)
@@ -237,6 +238,6 @@ void	raycaster(t_game *game, int x)
 	set_const_ray_dist_between_grids(game);
 	set_direction_of_ray(game);
 	run_dda(game);
-	set_draw_length_without_fish_fx(game);
+	set_draw_length_without_fish_fx(game, x);
 	choose_color(game, x);
 }
