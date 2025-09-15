@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/15 15:21:35 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:29:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,27 @@ void	set_direction_of_ray(t_game *game)
 	}
 }
 
+void	detect_wall_or_door(t_game *game)
+{
+	t_ray	*ray;
+
+	ray = &game->win->ray;
+	if (ray->map_y >= 0 && ray->map_y < (int)game->map->lines
+			&& ray->map_x >= 0 && ray->map_x < (int)game->map->columns
+			&& (game->map->map[ray->map_y][ray->map_x] == '1'
+			|| game->map->map[ray->map_y][ray->map_x] == 'd'))
+			{
+				if (game->map->map[ray->map_y][ray->map_x] == 'd' && !ray->hit_door)
+					ray->hit_door = 1;
+				else
+				{
+					ray->hit = 1;
+					ray->hit_tile = game->map->map[ray->map_y][ray->map_x];
+				}
+			}
+}
+
+
 /*Jump to next map square, either in x-direction, or in y-direction
 the first if(RAY.dist_x <= RAY.dist_y) I set the == also to priorize the dist_x
 distance so artifacts in corners are fixed.
@@ -125,19 +146,7 @@ void	run_dda(t_game *game)
 			ray->map_y += ray->step_y;
 			ray->side = 1;
 		}
-		if (ray->map_y >= 0 && ray->map_y < (int)game->map->lines
-			&& ray->map_x >= 0 && ray->map_x < (int)game->map->columns
-			&& (game->map->map[ray->map_y][ray->map_x] == '1'
-			|| game->map->map[ray->map_y][ray->map_x] == 'd'))
-			{
-				if (game->map->map[ray->map_y][ray->map_x] == 'd' && !ray->hit_door)
-					ray->hit_door = 1;
-				else
-				{
-					ray->hit = 1;
-					ray->hit_tile = game->map->map[ray->map_y][ray->map_x];
-				}
-			}
+		detect_wall_or_door(game);
 	}
 }
 
@@ -173,7 +182,10 @@ it is over the same grid, but the Y not, so from the player add the
 distance to the collision (perp_wall_dist) through the ray sent (dir_y)
 Same if side = 1 (horizontal walls) where we need to calculate in the Xs 
 To have the fraction we use floor from math.h so for example if we have:
-wallx = 3.75 -> floor(3.75) = 3.0 -> 3.75 - 3.0 = 0.75*/
+wallx = 3.75 -> floor(3.75) = 3.0 -> 3.75 - 3.0 = 0.75
+
+I set an array of hit_dist to record the distance of each x of screen...
+... width to compare with enemy sprite to hide behind wall corners*/
 void	set_draw_length_without_fish_fx(t_game *game, int x)
 {
 	t_ray	*ray;
