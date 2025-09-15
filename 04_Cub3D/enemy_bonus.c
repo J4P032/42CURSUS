@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:44:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/15 17:26:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/15 18:21:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void calculate_screen_position_size(t_game *game, double dx, double dy)
     game->enemy.sprite_size = sprite_size;
 
     game->enemy.screen_x = (int)((WIN_W / 2) * (1 + trans_x / trans_y)) - game->enemy.sprite_size / 2;
-    game->enemy.screen_y = -game->enemy.sprite_size / 2 + WIN_H / 2;
+    game->enemy.screen_y = -game->enemy.sprite_size / 2 + WIN_H / 2 + game->win->ray.walking_height;
 
     /* NO establezcas screen_x = 0 — eso es lo que provoca que "se pegue" al borde. */
     /* Comprueba si está totalmente fuera de la pantalla y evita dibujar en ese caso. */
