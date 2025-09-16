@@ -167,6 +167,8 @@ typedef struct s_enemy
 	double	e_y;
 	int		loaded;
 	int		number_hits;
+	int		go_down;
+	double	angle;
 	int		updated_dist;
 	int		num_enemies;
 	double	e_dist;

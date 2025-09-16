@@ -6,11 +6,12 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:44:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/16 17:20:59 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/16 18:49:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <time.h>
 
 /*just one enemy 'x' allowed, if more return 1, else 0*/
 int	enemy_position(t_game *game)
@@ -20,6 +21,7 @@ int	enemy_position(t_game *game)
 
 	x = 0;
 	y = 0;
+	srand(time(NULL));
 	while (y < game->map->lines)
 	{
 		x = 0;
@@ -33,6 +35,8 @@ int	enemy_position(t_game *game)
 				game->enemy.e_x = x + 0.5;
 				game->enemy.e_y = y + 0.5;
 				game->enemy.number_hits = 0;
+				game->enemy.go_down = 0;
+				//game->enemy.angle = 0.025;
 			}
 			x++;
 		}
@@ -115,18 +119,28 @@ void	move_enemy(t_game *game)
 {
 	int	x;
 	int	y;
-
-	x = floor(game->enemy.e_x);
-	y = floor(game->enemy.e_y);
+	
+	x = (int)floor(game->enemy.e_x);
+	y = (int)floor(game->enemy.e_y);
+	game->enemy.angle = ((double)rand() / RAND_MAX) * (0.02 - 0.01) + 0.01;
 	if (game->map->map[y][x + 1] == '1' && game->enemy.number_hits % 2 == 0)
+	{
+		if (game->map->map[y + 1][x] != '1')
+			game->enemy.go_down = 1;
+		else if (game->map->map[y - 1][x] != '1')
+			game->enemy.go_down = 0;
 		game->enemy.number_hits++;
+	}
 	else if (game->map->map[y][x - 1] == '1' && game->enemy.number_hits % 2 != 0)
 		game->enemy.number_hits++;
 	if (game->enemy.number_hits % 2 == 0)
-		game->enemy.e_x += 0.05;
+		game->enemy.e_x += 0.05 - game->enemy.angle;
 	else
-		game->enemy.e_x -= 0.05;
-		
+		game->enemy.e_x -= 0.05 - game->enemy.angle;
+	if (game->enemy.go_down && game->map->map[y + 1][x] != '1')
+		game->enemy.e_y += 0.05 + game->enemy.angle;
+	else if (game->map->map[y - 1][x] != '1')
+		game->enemy.e_y -= 0.05 - game->enemy.angle;
 }
 
 /*By pythagoras we have distance from dx and dy
