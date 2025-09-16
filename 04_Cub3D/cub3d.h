@@ -163,15 +163,17 @@ typedef struct s_player
 
 typedef struct s_enemy
 {
-	int		e_x;
-	int		e_y;
+	double	e_x;
+	double	e_y;
 	int		loaded;
+	int		number_hits;
 	int		updated_dist;
 	int		num_enemies;
 	double	e_dist;
 	int		screen_x;
 	int		screen_y;
 	int		sprite_size;
+	float	float_index;
 }			t_enemy;
 
 typedef struct s_game

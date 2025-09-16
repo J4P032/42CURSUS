@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:05:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/16 13:21:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/16 17:05:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	color_picker(t_game *game, int y, int i, int x)
 				&sprite[i].img[0], game->win->ray.tex_x, tex_y, game);
 		if (game->win->ray.color != 0x0000FF00)
 			put_pixel(&game->win->canvas, x, y, game->win->ray.color);
-		//game->win->ray.green_pixel[x][y] = 1;
 		y++;
 	}
 }

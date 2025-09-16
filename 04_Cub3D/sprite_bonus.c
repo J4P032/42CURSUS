@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:23:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/10 15:46:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/16 15:42:16 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	load_sprites(t_game *game)
 		load_texture_address(&sprite[i].img[0], game);
 		i++;
 	}
-	game->player.index = 14;//
+	game->player.index = 14;
+	game->enemy.float_index = 0;
 	//load_animated(game);
 }
 
