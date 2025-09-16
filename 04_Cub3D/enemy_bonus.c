@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:44:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/15 18:21:02 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/16 13:23:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,23 @@ void calculate_screen_position_size(t_game *game, double dx, double dy)
         return;
 }
 
+void	reset_enemy_view_matrix(t_game *game)
+{
+	size_t	x;
+	size_t	y;
 
+	y = 0;
+	while (y < WIN_H)
+	{
+		x = 0;
+		while (x < WIN_W)
+		{
+			game->win->ray.green_pixel[x][y] = 1;	
+			x++;
+		}
+		y++;
+	}
+}
 
 /*By pythagoras we have distance from dx and dy
 I want only to load enemy position once for performance so that is for...
@@ -113,5 +129,6 @@ void	enemy(t_game *game)
 	{
 		calculate_screen_position_size(game, e_dx, e_dy);
 		draw_enemy_on_canvas(game, game->win->sprite[18], foe->screen_x, foe->screen_y);
+		reset_enemy_view_matrix(game);
 	}	
 }

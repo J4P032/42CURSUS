@@ -209,6 +209,7 @@ void	draw_minisprite_on_canvas(t_game *game, t_sprite sprite, int x, int y);
 void	raycaster_door(t_game *game, int x);
 void	enemy(t_game *game);
 void	draw_enemy_on_canvas(t_game *game, t_sprite sprite, int px, int py);
+void	reset_enemy_view_matrix(t_game *game);
 
 #endif
 
