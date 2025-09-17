@@ -176,6 +176,8 @@ typedef struct s_enemy
 	int		screen_y;
 	int		sprite_size;
 	float	float_index;
+	int		time;
+	int		despawn;
 }			t_enemy;
 
 typedef struct s_game

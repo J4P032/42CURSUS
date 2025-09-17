@@ -6,13 +6,15 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:24:55 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/16 13:16:45 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:38:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	fps(void)
+/*enemy.time is to make despawn and espawn of enemy in a random part of the...
+...map*/
+void	fps(t_game *game)
 {
 	static int				frame = 0;
 	static struct timeval	last_time = {0};
@@ -31,6 +33,8 @@ void	fps(void)
 		ft_putnbr_fd(frame, 1);
 		frame = 0;
 		last_time = current_time;
+		game->enemy.time++;
+		game->enemy.despawn = 0;
 	}
 }
 
@@ -120,7 +124,7 @@ int	update_frame(t_game *game)
 	enemy(game);
 	draw_minimap(game);
 	mlx_put_image_to_window(game->win->mlx, game->win->win, canvas->img, 0, 0);
-	fps();
+	fps(game);
 	if (!game->win->running)
 		return (0);
 	return (1);

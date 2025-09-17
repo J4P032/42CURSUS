@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:44:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/16 18:49:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:12:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,8 @@
 #include <time.h>
 
 /*just one enemy 'x' allowed, if more return 1, else 0*/
-int	enemy_position(t_game *game)
+int	enemy_position(t_game *game, size_t x, size_t y)
 {
-	size_t	x;
-	size_t	y;
-
-	x = 0;
-	y = 0;
 	srand(time(NULL));
 	while (y < game->map->lines)
 	{
@@ -36,7 +31,7 @@ int	enemy_position(t_game *game)
 				game->enemy.e_y = y + 0.5;
 				game->enemy.number_hits = 0;
 				game->enemy.go_down = 0;
-				//game->enemy.angle = 0.025;
+				game->enemy.time = 0;
 			}
 			x++;
 		}
@@ -115,14 +110,33 @@ void	reset_enemy_view_matrix(t_game *game)
 	}
 }
 
-void	move_enemy(t_game *game)
+/*The enemy will despawn each 5 seconds and will respawn in any random place...
+...in the map.*/
+void	reposition_enemy(t_game *game)
 {
 	int	x;
 	int	y;
 	
-	x = (int)floor(game->enemy.e_x);
-	y = (int)floor(game->enemy.e_y);
-	game->enemy.angle = ((double)rand() / RAND_MAX) * (0.02 - 0.01) + 0.01;
+	if (game->enemy.time % 5 == 0 && !game->enemy.despawn)
+	{
+		x = (int)(((double)rand() / RAND_MAX) * game->map->columns);
+		y = (int)(((double)rand() / RAND_MAX) * game->map->lines);
+		if (game->map->map[y][y] == '0') //CUIDADO QUE EL PARSEO NO PONGA 0 FUERA DEL MAPA Y POR LO TANTO SEGFAULT
+		{
+			game->enemy.e_x = x + 0.5;
+			game->enemy.e_y = y + 0.5;
+			game->enemy.despawn = 1;
+		}
+	}
+}
+
+void	move_enemy(t_game *game, size_t x, size_t y)
+{
+	x = (size_t)floor(game->enemy.e_x);
+	y = (size_t)floor(game->enemy.e_y);
+	if (x == 0 || y == 0 || x >= game->map->columns || y >= game->map->lines)
+		x = 1; //revisar si no desaparece el fantasma. antes era return; el problema era con x = 0
+	game->enemy.angle = ((double)rand() / RAND_MAX) * (0.04 - 0.01) + 0.01;
 	if (game->map->map[y][x + 1] == '1' && game->enemy.number_hits % 2 == 0)
 	{
 		if (game->map->map[y + 1][x] != '1')
@@ -134,14 +148,18 @@ void	move_enemy(t_game *game)
 	else if (game->map->map[y][x - 1] == '1' && game->enemy.number_hits % 2 != 0)
 		game->enemy.number_hits++;
 	if (game->enemy.number_hits % 2 == 0)
-		game->enemy.e_x += 0.05 - game->enemy.angle;
+		game->enemy.e_x += 0.05;
 	else
-		game->enemy.e_x -= 0.05 - game->enemy.angle;
+		game->enemy.e_x -= 0.05;
 	if (game->enemy.go_down && game->map->map[y + 1][x] != '1')
 		game->enemy.e_y += 0.05 + game->enemy.angle;
 	else if (game->map->map[y - 1][x] != '1')
 		game->enemy.e_y -= 0.05 - game->enemy.angle;
+	reposition_enemy(game);
 }
+
+
+
 
 /*By pythagoras we have distance from dx and dy
 I want only to load enemy position once for performance so that is for...
@@ -156,7 +174,7 @@ void	enemy(t_game *game)
 	foe = &game->enemy;
 	e_dx = game->enemy.e_x - game->map->p_x;
 	e_dy = game->enemy.e_y - game->map->p_y;
-	if (!game->enemy.loaded && enemy_position(game))
+	if (!game->enemy.loaded && enemy_position(game, 0, 0))
 	{
 		perror("Error: This game don't allow more than one enemy");
 		clean_up_memory(game, 0);
@@ -166,7 +184,7 @@ void	enemy(t_game *game)
 	game->enemy.e_dist = sqrt(e_dx * e_dx + e_dy * e_dy);
 	if (game->enemy.num_enemies == 1)
 	{
-		move_enemy(game);
+		move_enemy(game, 0, 0);
 		calculate_screen_pos_size(game, e_dx, e_dy, game->enemy.float_index);
 		game->enemy.float_index += 0.2f;
 		draw_enemy_on_canvas(game, game->win->sprite[18], foe->screen_x,
