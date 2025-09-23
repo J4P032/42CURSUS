@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 09:08:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 09:45:24 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:46:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	mouse_rotation(int x, int y, t_game *game)
 		skip = 0;
 		return (0);
 	}
-	if (x != center_x)
+	if (x != center_x && game->player.mouse_control)
 	{
 		delta = x - center_x;
 		rotate_camera(game, delta * sensitivity);
