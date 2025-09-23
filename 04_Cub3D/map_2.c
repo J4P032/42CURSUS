@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/23 16:13:11 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:20:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	init_looking_direction(t_map *map, char c)
 
 	map->dir_x = 0;
 	map->dir_y = 0;
+	map->plane_x = 0;
+	map->plane_y = 0;
 	fov_factor = tan((FOV * PI / 180.0) / 2);
 	if (c == 'N')
 		map->dir_y = -1;

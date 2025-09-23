@@ -29,7 +29,7 @@
 # define TIME_TO_ANIMATE 1500
 # define JUMPING 300
 # define COLLISION_DISTANCE 0.4
-# define ROTATION_SPEED 1.2
+# define ROTATION_SPEED 1
 # define VALID_MAP_CHARS "NSEW01\n"
 # define VALID_BONUSMAP_CHARS "NSEW01dx \n"//d door, x enemy
 
