@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:44:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/17 16:12:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/24 12:21:31 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,21 @@ void	reset_enemy_view_matrix(t_game *game)
 
 /*The enemy will despawn each 5 seconds and will respawn in any random place...
 ...in the map.*/
-void	reposition_enemy(t_game *game)
+void	reposition_enemy(t_game *game, int x, int y)
 {
-	int	x;
-	int	y;
-	
+	int px;
+	int	py;
+
+	x = (int)floor(game->enemy.e_x);
+	y = (int)floor(game->enemy.e_y);
+	px = (int)floor(game->map->p_x);
+	py = (int)floor(game->map->p_y);
+	if (x == px && y == py)
+	{
+		clean_up_memory(game, 0);
+		printf("\n*************** YOU DIED!!! ***************\n");
+		exit (0);
+	}
 	if (game->enemy.time % 5 == 0 && !game->enemy.despawn)
 	{
 		x = (int)(((double)rand() / RAND_MAX) * game->map->columns);
@@ -155,7 +165,7 @@ void	move_enemy(t_game *game, size_t x, size_t y)
 		game->enemy.e_y += 0.05 + game->enemy.angle;
 	else if (game->map->map[y - 1][x] != '1')
 		game->enemy.e_y -= 0.05 - game->enemy.angle;
-	reposition_enemy(game);
+	reposition_enemy(game, 0, 0);
 }
 
 
