@@ -3,28 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/08/08 10:25:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:10:14 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	free_map(t_game *game)
+void	free_map(t_map *map, int full_clean)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < game->map->lines)
+	while (i < map->lines)
 	{
-		free(game->map->map[i]);
-		game->map->map[i] = NULL;
+		free(map->map[i]);
+		map->map[i] = NULL;
 		i++;
 	}
-	free(game->map->map);
-	free(game->map);
+	free(map->map);
+	free(map->no_tex);
+	free(map->so_tex);
+	free(map->we_tex);
+	free(map->ea_tex);
+	map->no_tex = NULL;
+	map->so_tex = NULL;
+	map->we_tex = NULL;
+	map->ea_tex = NULL;
+	if (full_clean)
+		free(map);
 }
 
 void	free_sprites(t_sprite *sprite, void *mlx)
@@ -64,7 +73,7 @@ void	clean_up_memory(t_game *game, size_t i)
 	if (game->win)
 		free(game->win);
 	if (game->map)
-		free_map(game);
+		free_map(game->map, 1);
 	free (game);
 }
 
@@ -90,7 +99,6 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		return (1);
 	(void)argc;
-	//check_ber(argv[1]);
 	game = (t_game *)ft_calloc(1, sizeof(t_game));
 	if (!game)
 		return (1);

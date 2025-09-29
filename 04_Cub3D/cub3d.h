@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 12:50:50 by jrollon-          #+#    #+#             */
+/*   Updated: 2025/09/29 19:13:23 by jrollon-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 # include "libft/libft.h"
@@ -9,9 +21,6 @@
 
 # include <X11/X.h>
 # include <X11/keysym.h>
-
-//# include <stdlib.h>
-//# include <stdlib.h>
 
 # define WIN_W 1200 //1200
 # define WIN_H 703 //703
@@ -30,8 +39,8 @@
 # define JUMPING 300
 # define COLLISION_DISTANCE 0.4
 # define ROTATION_SPEED 1
-# define VALID_MAP_CHARS "NSEW01\n"
-# define VALID_BONUSMAP_CHARS "NSEW01dx \n"//d door, x enemy
+# define VALID_MAP_CHARS "NSEW01 \n\r"
+# define VALID_BONUSMAP_CHARS "NSEW01dx \n\r"//d door, x enemy
 
 typedef struct s_data
 {
@@ -49,13 +58,6 @@ typedef struct s_sprite
 	int		y;
 	int		i;
 	int		j;
-	//int		prev_i;
-	//int		prev_j;
-	//int		go_right;
-	//int		go_down;
-	//int		go_left;
-	//int		go_up;
-	//int		desired_dir;
 	size_t	distance;
 	int		width;
 	int		height;
@@ -128,6 +130,10 @@ typedef struct s_map
 	int		num_walls;
 	int		no_rectangle;
 	int		no_valid_char;
+	char	*no_tex;
+	char	*we_tex;
+	char	*ea_tex;
+	char	*so_tex;
 	int		sky_color;
 	int		floor_color;
 	int		minicenter;
@@ -178,6 +184,7 @@ typedef struct s_enemy
 	float	float_index;
 	int		time;
 	int		despawn;
+	int		visible;
 }			t_enemy;
 
 typedef struct s_game
@@ -216,6 +223,25 @@ void	raycaster_door(t_game *game, int x);
 void	enemy(t_game *game);
 void	draw_enemy_on_canvas(t_game *game, t_sprite sprite, int px, int py);
 void	reset_enemy_view_matrix(t_game *game);
+void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln);
+int		free_and_get_line(int *is_first_char, char **line, int fd);
+void	squarify_map(size_t size, t_map *map);
+char	*jump_to_map(int fd, char *line, t_map *map);
+void	save_texture_in(char *s, char **buf, int *count);
+void	save_color_in(const char *s, int *buf, int *count);
+int		contains_invalid_char(char *str, char *valid);
+void	free_map(t_map *map, int full_clean);
+int		issafe(int x, int y, char **arr);
+int		check_map_errors(t_map *map);
+int		floodfill(int x, int y, char **arr);
+void	zerify_map(t_map *map);
+int		ft_isspace(char c);
+int		enemy_position(t_game *game, size_t x, size_t y);
+void	reposition_enemy(t_game *game, int x, int y);
+void	calculate_screen_pos_size(t_game *game, double dx, double dy, int i);
+void	free_2d_array(char **arr, size_t size);
+void	set_direction_of_ray(t_game *game);
+void	set_direction_of_ray_door(t_game *game);
+void	door_color_picker(t_game *game, int y, int i, int x);
 
 #endif
-

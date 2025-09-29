@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frame_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:24:55 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/17 15:38:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:05:31 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,7 @@ int	update_frame(t_game *game)
 		mlx_hook(game->win->win, MotionNotify, PointerMotionMask,
 			mouse_rotation, game);
 	else
-		mlx_hook(game->win->win, MotionNotify, PointerMotionMask,
-			NULL, game);
+		mlx_hook(game->win->win, MotionNotify, PointerMotionMask, NULL, game);
 	draw_floor_ceiling(game);
 	while (x < game->win->width)
 	{

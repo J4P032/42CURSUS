@@ -3,114 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   map_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/23 17:20:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:18:53 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "get_next_line.h"
 
-/* plane_x/y is a rotation vector from dirx/y 90deg or π/2 so applying the...
-...matrix rotation in 2D: 
-R(a) = ⎡ cos(θ)     -sin(θ)⎤ * 	⎡x⎤ -> ⎡A B⎤ * ⎡E⎤ = ⎡AE + BF⎤
-       ⎣ sin(θ)      cos(θ)⎦	⎣y⎦ -> ⎣C D⎦   ⎣F⎦   ⎣CE + DF⎦
-so... 
-	x' = x * cos(θ) + (y * -sin(θ))
-	y' = x * sin(θ) + y * cos(θ)
-as
-	cos (π/2) = 0 // sin(π/2) = 1
-ends
-	x' = -y
-	y' = x
-We multiply by fov_factor to control the length of the plane vector,
-which determines the field of view (FOV) width.*/
-void	init_looking_direction(t_map *map, char c)
+int	free_and_get_line(int *is_first_char, char **line, int fd)
 {
-	double	fov_factor;
-
-	map->dir_x = 0;
-	map->dir_y = 0;
-	map->plane_x = 0;
-	map->plane_y = 0;
-	fov_factor = tan((FOV * PI / 180.0) / 2);
-	if (c == 'N')
-		map->dir_y = -1;
-	else if (c == 'S')
-		map->dir_y = 1;
-	else if (c == 'E')
-		map->dir_x = 1;
-	else if (c == 'W')
-		map->dir_x = -1;
-	map->plane_x = -map->dir_y * fov_factor;
-	map->plane_y = map->dir_x * fov_factor;
+	free(*line);
+	*line = get_next_line(fd);
+	*is_first_char = 1;
+	return (0);
 }
 
-// void	jump_to_map(int fd, char *line, t_map *map)
-// {
-// 	int i = 0;
-// 	while (/**line contenga invalid chars*/)
-// 	{
-// 		if(line[i] == '\0')
-// 		{
-// 			i = 0;
-// 			line = get_next_line(fd);
-// 		}
-// 		if (line[i] == 'N' && line[i + 1] == 'O')
-// 		{
-// 			//guardar textura norte!
-// 		}
-// 		if (line[i] == 'S' && line[i + 1] == 'O')
-// 		{
-// 			//guardar textura sur!
-// 		}
-// 		if (line[i] == 'W' && line[i + 1] == 'E')
-// 		{
-// 			//guardar textura oeste!
-// 		}
-// 		if (line[i] == 'E' && line[i + 1] == 'A')
-// 		{
-// 			//guardar textura este!
-// 		}
-// 		if (line[i] == 'F')
-// 		{
-// 			//guardar color suelo!
-// 		}
-// 		if (line[i] == 'C')
-// 		{
-// 			//guardar color cielo!
-// 		}
-// 		i++;
-// 	}
-// }
+void	init_textures(t_map *map)
+{
+	map->no_tex = NULL;
+	map->ea_tex = NULL;
+	map->we_tex = NULL;
+	map->so_tex = NULL;
+	map->floor_color = -1;
+	map->sky_color = -1;
+}
 
 void	load_lines(int fd, char *line, t_map *map)
 {
 	size_t	i;
 
 	i = 0;
-	// jump_to_map(fd, line, map);
+	init_textures(map);
+	line = jump_to_map(fd, line, map);
+	map->columns = 0;
 	while (line)
 	{
 		map->map[i] = line;
+		if (map->columns < ft_strlen(map->map[i]))
+			map->columns = ft_strlen(map->map[i]);
 		i++;
 		line = get_next_line(fd);
 		if (!line && i < map->lines)
 		{
-			while (i > 0)
-			{
-				i--;
-				free(map->map[i]);
-				map->map[i] = NULL;
-			}
-			free(map->map);
+			free_2d_array(map->map, i);
 			map->map = NULL;
 			return ;
 		}
 	}
 	map->map[i] = NULL;
+}
+
+int	how_many_lines(char *map_dir)
+{
+	char	*line;
+	int		cols;
+	int		fd;
+
+	cols = 0;
+	fd = open(map_dir, O_RDONLY);
+	if (fd == -1)
+		return (write(1, "Error loading map\n", 18));
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		cols++;
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	return (cols);
 }
 
 void	load_map(t_map *map, char *map_dir)
@@ -130,7 +94,7 @@ void	load_map(t_map *map, char *map_dir)
 		close(fd);
 		return ;
 	}
-	map->map = (char **)ft_calloc(map->lines + 1, sizeof(char *));
+	map->map = (char **)ft_calloc(how_many_lines(map_dir) + 1, sizeof(char *));
 	if (!map->map)
 	{
 		free(line);
@@ -138,5 +102,5 @@ void	load_map(t_map *map, char *map_dir)
 		return ;
 	}
 	load_lines(fd, line, map);
-	close (fd);
+	close(fd);
 }

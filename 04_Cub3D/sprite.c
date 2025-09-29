@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprite.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 14:19:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/10 15:46:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:35:13 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	load_sprites(t_game *game)
 		load_texture_address(&sprite[i].img[0], game);
 		i++;
 	}
-	//load_animated(game);
 }
 
 void	load_sprites_and_background(t_game *game)
@@ -78,10 +77,10 @@ void	load_sprites_and_background(t_game *game)
 	t_sprite	*sprite;
 
 	sprite = game->win->sprite;
-	sprite[0].bitmap[0] = "./textures/NO_256.xpm";
-	sprite[1].bitmap[0] = "./textures/SO_256.xpm";
-	sprite[2].bitmap[0] = "./textures/EA_256.xpm";
-	sprite[3].bitmap[0] = "./textures/WE_256.xpm";
+	sprite[0].bitmap[0] = game->map->no_tex;
+	sprite[1].bitmap[0] = game->map->so_tex;
+	sprite[2].bitmap[0] = game->map->ea_tex;
+	sprite[3].bitmap[0] = game->map->we_tex;
 	sprite[4].bitmap[0] = "./textures/miniwall.xpm";
 	sprite[5].bitmap[0] = "./textures/MiniPlayer_N.xpm";
 	sprite[6].bitmap[0] = "./textures/MiniPlayer_NE.xpm";
@@ -96,7 +95,7 @@ void	load_sprites_and_background(t_game *game)
 	sprite[15].bitmap[0] = "./textures/door_2.xpm";
 	sprite[16].bitmap[0] = "./textures/door_3.xpm";
 	sprite[17].bitmap[0] = "./textures/door_4.xpm";
-	sprite[18].bitmap[0] = "./textures/EA_256.xpm"; //enemigo
+	sprite[18].bitmap[0] = "./textures/skull.xpm";
 	load_sprites(game);
 	render_jumping_background(game);
 }

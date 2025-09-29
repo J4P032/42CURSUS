@@ -1,0 +1,12 @@
+
+NO ./textures/stonewall.xpm
+EA ./textures/stonewall.xpm
+WE ./textures/stonewall_dark.xpm
+SO ./textures/stonewall_dark.xpm
+			
+F 102,68,1
+C 102, 0,68
+
+1111111111
+1000N00001
+1111111111

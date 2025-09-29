@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:50:05 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/15 18:00:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:31:41 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,64 +61,25 @@ void	set_const_ray_dist_between_grids(t_game *game)
 		game->win->ray.delta_dist_y = fabs(1 / game->win->ray.dir_y);
 }
 
-/*step_x/y indicate direction the ray goes seen from up-down map (N-S-E-W)
-if ray.dir_x > 0 -> step_x = 1 (goes to the EAST)
-ray.dir_x < 0 -> step_x = -1 (goes WEST);
-ray.dir_y > 0 -> step_y = 1 (goes SOUTH);
-ray.dir_Y < 0 -> step_Y = -1 (goes NORTH);
-we could use then same ray.dir_x/y, BUT step_x/y are INTs so we remove the
-floating point in every 'step' that the ray make in same direction that will
-run same delta_dist_x/y 
-
-RAY.dist_x/y is the distance of the full ray already, BUT the first time is not
-the delta one, it is shorter.  */
-void	set_direction_of_ray(t_game *game)
-{
-	t_ray	*ray;
-
-	ray = &game->win->ray;
-	if (ray->dir_x < 0)
-	{
-		ray->step_x = -1;
-		ray->dist_x = (game->map->p_x - ray->map_x) * ray->delta_dist_x;
-	}
-	else
-	{
-		ray->step_x = 1;
-		ray->dist_x = (ray->map_x + 1.0 - game->map->p_x) * ray->delta_dist_x;
-	}
-	if (ray->dir_y < 0)
-	{
-		ray->step_y = -1;
-		ray->dist_y = (game->map->p_y - ray->map_y) * ray->delta_dist_y;
-	}
-	else
-	{
-		ray->step_y = 1;
-		ray->dist_y = (ray->map_y + 1.0 - game->map->p_y) * ray->delta_dist_y;
-	}
-}
-
 void	detect_wall_or_door(t_game *game)
 {
 	t_ray	*ray;
 
 	ray = &game->win->ray;
 	if (ray->map_y >= 0 && ray->map_y < (int)game->map->lines
-			&& ray->map_x >= 0 && ray->map_x < (int)game->map->columns
-			&& (game->map->map[ray->map_y][ray->map_x] == '1'
-			|| game->map->map[ray->map_y][ray->map_x] == 'd'))
-			{
-				if (game->map->map[ray->map_y][ray->map_x] == 'd' && !ray->hit_door)
-					ray->hit_door = 1;
-				else
-				{
-					ray->hit = 1;
-					ray->hit_tile = game->map->map[ray->map_y][ray->map_x];
-				}
-			}
+		&& ray->map_x >= 0 && ray->map_x < (int)game->map->columns
+		&& (game->map->map[ray->map_y][ray->map_x] == '1'
+		|| game->map->map[ray->map_y][ray->map_x] == 'd'))
+	{
+		if (game->map->map[ray->map_y][ray->map_x] == 'd' && !ray->hit_door)
+			ray->hit_door = 1;
+		else
+		{
+			ray->hit = 1;
+			ray->hit_tile = game->map->map[ray->map_y][ray->map_x];
+		}
+	}
 }
-
 
 /*Jump to next map square, either in x-direction, or in y-direction
 the first if(RAY.dist_x <= RAY.dist_y) I set the == also to priorize the dist_x
@@ -152,7 +113,7 @@ void	run_dda(t_game *game)
 
 /*
 Calculate distance projected on camera plane. This is the shortest distance from
-the point where the wall is hit to the camera plane. Euclidean to center camera\
+the point where the wall is hit to the camera plane. Euclidean to center camera
 point would give fisheye effect! 
 https://lodev.org/cgtutor/images/raycastdist.png
 This can be computed as 

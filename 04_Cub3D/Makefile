@@ -7,6 +7,10 @@ MINILIBX = ./minilibx-linux/libmlx.a
 SRC = 			main.c \
 				window.c \
 				map_2.c \
+				map_3.c \
+				map_4.c \
+				map_5.c \
+				map_6.c \
 				get_next_line.c \
 				get_next_line_utils.c \
 				raycast.c \
@@ -27,7 +31,9 @@ SRC_BONUS =		sprite_bonus.c \
 				minimap_bonus.c \
 				door_bonus.c \
 				raycast_door.c \
+				raycast_door_2.c \
 				map_bonus.c \
+				enemy_bonus2.c \
 				enemy_bonus.c
 OBJS = $(SRC:.c=.o)
 OBJS_NOBONUS = ${SRC_NOBONUS:.c=.o}

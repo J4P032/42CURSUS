@@ -1,3 +1,11 @@
+NO ./textures/NO_256.xpm
+WE ./textures/WE_256.xpm     
+EA ./textures/EA_256.xpm
+SO ./textures/SO_256.xpm
+
+                F 0,100,1
+      C 105,30,200      
+
                 111111111111
           1111111E0000000001
  11    11100110000011110111
