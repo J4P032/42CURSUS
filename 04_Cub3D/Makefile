@@ -12,6 +12,7 @@ SRC = 			main.c \
 				map_5.c \
 				map_6.c \
 				get_next_line.c \
+				error_control.c \
 				get_next_line_utils.c \
 				raycast.c \
 				raycast_2.c \

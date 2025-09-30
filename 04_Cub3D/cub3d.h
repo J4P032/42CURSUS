@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:50:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/29 19:13:23 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:07:29 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdio.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <fcntl.h>
+# include <errno.h>
 
 # include <X11/X.h>
 # include <X11/keysym.h>
@@ -139,6 +141,8 @@ typedef struct s_map
 	int		minicenter;
 	int		minix;
 	int		miniy;
+	int		useless_line;
+	int		usefull_lines;
 }			t_map;
 
 typedef struct s_keys
@@ -226,7 +230,7 @@ void	reset_enemy_view_matrix(t_game *game);
 void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln);
 int		free_and_get_line(int *is_first_char, char **line, int fd);
 void	squarify_map(size_t size, t_map *map);
-char	*jump_to_map(int fd, char *line, t_map *map);
+char	*jump_to_map(int fd, char *line, t_map *map, int i);
 void	save_texture_in(char *s, char **buf, int *count);
 void	save_color_in(const char *s, int *buf, int *count);
 int		contains_invalid_char(char *str, char *valid);
@@ -243,5 +247,7 @@ void	free_2d_array(char **arr, size_t size);
 void	set_direction_of_ray(t_game *game);
 void	set_direction_of_ray_door(t_game *game);
 void	door_color_picker(t_game *game, int y, int i, int x);
+int		isonlyspace(char *s);
+int		is_valid(const char *path);
 
 #endif

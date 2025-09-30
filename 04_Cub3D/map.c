@@ -6,7 +6,7 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 11:02:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/24 14:22:26 by marcoga2         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:07:02 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,39 +32,50 @@ void	check_line(char *line, char *next_line, t_map *map, size_t columns)
 		check_internal_lines(line, map, columns, map->lines);
 }
 
-static void	process_map_line(char *line, int *i, int *is_first_char, t_map *map)
+static int	process_map_line(char *line, int *i, int *is_first_char, t_map *map)
 {
 	if (line[*i] == 'N' && line[*i + 1] == 'O' && *is_first_char)
-		save_texture_in(&(line[*i + 2]), &(map->no_tex), i);
+		return (save_texture_in(&(line[*i + 2]), &(map->no_tex), i), 1);
 	else if (line[*i] == 'S' && line[*i + 1] == 'O' && *is_first_char)
-		save_texture_in(&(line[*i + 2]), &(map->so_tex), i);
+		return (save_texture_in(&(line[*i + 2]), &(map->so_tex), i), 1);
 	else if (line[*i] == 'W' && line[*i + 1] == 'E' && *is_first_char)
-		save_texture_in(&(line[*i + 2]), &(map->we_tex), i);
+		return (save_texture_in(&(line[*i + 2]), &(map->we_tex), i), 1);
 	else if (line[*i] == 'E' && line[*i + 1] == 'A' && *is_first_char)
-		save_texture_in(&(line[*i + 2]), &(map->ea_tex), i);
+		return (save_texture_in(&(line[*i + 2]), &(map->ea_tex), i), 1);
 	else if (line[*i] == 'F' && *is_first_char)
-		save_color_in(&(line[*i + 1]), &(map->floor_color), i);
+		return (save_color_in(&(line[*i + 1]), &(map->floor_color), i), 1);
 	else if (line[*i] == 'C' && *is_first_char)
-		save_color_in(&(line[*i + 1]), &(map->sky_color), i);
+		return (save_color_in(&(line[*i + 1]), &(map->sky_color), i), 1);
 	else if (!ft_isspace(line[*i]))
 		*is_first_char = 0;
+	return (0);
 }
 
-char	*jump_to_map(int fd, char *line, t_map *map)
+char	*jump_to_map(int fd, char *line, t_map *map, int i)
 {
-	int	i;
 	int	is_first_char;
+	int	goodline;
 
-	i = -1;
 	is_first_char = 1;
+	goodline = 0;
+	map->usefull_lines = 0;
 	while (line != NULL && contains_invalid_char(line, VALID_MAP_CHARS))
 	{
 		if (line[++i] == '\0')
+		{
+			if (goodline)
+				map->usefull_lines++;
+			if (!isonlyspace(line) && goodline == 0)
+				return (free(line), map->useless_line = 1, NULL);
 			i = free_and_get_line(&is_first_char, &line, fd);
+			goodline = 0;
+		}
 		if (!line)
 			return (NULL);
-		process_map_line(line, &i, &is_first_char, map);
+		goodline += process_map_line(line, &i, &is_first_char, map);
 	}
+	if (map->usefull_lines != 6)
+		return (free(line), map->useless_line = 1, NULL);
 	return (line);
 }
 
@@ -96,13 +107,13 @@ t_map	*process_map(char *map_dir)
 	load_map(map, map_dir);
 	check_map(map);
 	if (check_map_errors(map) || map->lines == 0)
-		return (free(map), NULL);
+		return (free_map(map, 1), NULL);
 	if (!map->map)
 		return (free(map), NULL);
 	if (!floodfill(map->p_y, map->p_x, map->map))
 	{
 		printf("Error\nMap not fully surrounded by walls\n");
-		return (free(map), NULL);
+		return (free_map(map, 1), NULL);
 	}
 	free_map(map, 0);
 	load_map(map, map_dir);

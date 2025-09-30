@@ -6,7 +6,7 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/24 15:18:53 by marcoga2         ###   ########.fr       */
+/*   Updated: 2025/09/30 13:21:37 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,10 @@ void	check_internal_lines(char *line, t_map *map, size_t columns, size_t ln)
 {
 	size_t	i;
 
+	(void)columns;
 	i = 0;
 	while (line[i])
 	{
-		if (i == 0 && line[0] == '1' && ft_strlen(line) == columns)
-			map->num_walls++;
-		if (i == (columns - 1) && line[columns - 1] == '1'
-			&& ft_strlen(line) == columns)
-			map->num_walls++;
 		if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E'
 			|| line[i] == 'W')
 		{

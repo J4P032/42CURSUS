@@ -6,7 +6,7 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 11:59:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/24 15:10:14 by marcoga2         ###   ########.fr       */
+/*   Updated: 2025/09/30 13:29:05 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ int	main(int argc, char **argv)
 	t_game	*game;
 
 	if (argc != 2)
+		return (printf("Error\nCub3D must recieve only one argum")
+			- printf("ment, which should be the .cub file \n"));
+	if (!is_valid(argv[1]))
 		return (1);
 	(void)argc;
 	game = (t_game *)ft_calloc(1, sizeof(t_game));

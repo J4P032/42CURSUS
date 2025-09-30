@@ -6,42 +6,57 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/24 15:18:53 by marcoga2         ###   ########.fr       */
+/*   Updated: 2025/09/30 13:22:47 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "get_next_line.h"
 
-int	parse_color_component(const char *s, int *i)
+int	parse_color_component(const char *s, int *i, int *colons)
 {
 	int	value;
+	int	readed_chars;
 
-	while (ft_isspace(s[*i]) || s[*i] == ',')
-		(*i)++;
+	readed_chars = 0;
+	while (s[(*i) + readed_chars] && s[(*i) + readed_chars] != '\n'
+		&& s[(*i) + readed_chars] != ',')
+	{
+		if (!ft_isdigit(s[(*i) + readed_chars]))
+			return (-1);
+		readed_chars++;
+	}
+	if (readed_chars == 0)
+		return (-1);
 	value = ft_atoi(&s[*i]);
-	if (ft_strlen(&s[*i]) == 0 || value < 0 || value > 255)
+	if (value < 0 || value > 255)
 		return (-1);
 	while (s[*i] && s[*i] != ',')
 		(*i)++;
+	if (s[*i] == ',' && s[*i + 1])
+	{
+		(*i)++;
+		(*colons)++;
+	}
 	return (value);
 }
 
-// Refactorización de tu función principal
 void	save_color_in(const char *s, int *buf, int *count)
 {
 	int	i;
 	int	r;
 	int	g;
 	int	b;
+	int	colons;
 
 	i = 0;
+	colons = 0;
 	while (ft_isspace(s[i]))
 		i++;
-	r = parse_color_component(s, &i);
-	g = parse_color_component(s, &i);
-	b = parse_color_component(s, &i);
-	if (r == -1 || g == -1 || b == -1)
+	r = parse_color_component(s, &i, &colons);
+	g = parse_color_component(s, &i, &colons);
+	b = parse_color_component(s, &i, &colons);
+	if (r == -1 || g == -1 || b == -1 || colons != 2)
 	{
 		*buf = -1;
 		return ;
@@ -69,9 +84,6 @@ void	save_texture_in(char *s, char **buf, int *count)
 	*count += i + j + 1;
 }
 
-/*
-** Pone count espacios en un string nuevo y lo devuelve
-*/
 char	*make_padding(size_t count)
 {
 	char	*padding;
@@ -91,9 +103,6 @@ char	*make_padding(size_t count)
 	return (padding);
 }
 
-/*
-** Hacw join de la línea y el padding y libera
-*/
 char	*join_and_replace(char *line, char *padding)
 {
 	char	*result;

@@ -6,7 +6,7 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/24 15:18:53 by marcoga2         ###   ########.fr       */
+/*   Updated: 2025/09/30 14:07:15 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	load_lines(int fd, char *line, t_map *map)
 
 	i = 0;
 	init_textures(map);
-	line = jump_to_map(fd, line, map);
+	line = jump_to_map(fd, line, map, -1);
 	map->columns = 0;
 	while (line)
 	{
