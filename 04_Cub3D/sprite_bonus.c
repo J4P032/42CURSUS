@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprite_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:23:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/24 15:33:48 by marcoga2         ###   ########.fr       */
+/*   Updated: 2025/10/01 10:20:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	load_sprites(t_game *game)
 		if (!sprite[i].img[0].img)
 		{
 			clean_up_memory(game, 0);
+			printf("Error\nTexture file does not exist\n");
 			exit (1);
 		}
 		load_texture_address(&sprite[i].img[0], game);

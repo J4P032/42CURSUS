@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_6.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:46:31 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/09/30 13:21:37 by marcoga2         ###   ########.fr       */
+/*   Updated: 2025/09/30 16:04:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "get_next_line.h"
 
 /*
-** Hace cuadrado todo el m apa
+** makes all the map squared
 */
 static void	remove_newline_and_truncate(char **row)
 {
