@@ -1,8 +1,9 @@
 CXX = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-NAME = 
-SRC = 
+NAME = Buro
+SRC = 	Bureaucrat.cpp \
+		main.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
 RM	= rm -rf
