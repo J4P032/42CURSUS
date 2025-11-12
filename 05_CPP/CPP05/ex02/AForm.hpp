@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 19:20:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/10 20:28:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/11 11:22:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ public: //excepciones
 	private:
 		std::string	_msg;		
 	};
+
+public:
+	virtual void execute(Bureaucrat const &executor) const = 0;
+	
 };
 
 std::ostream &operator<<(std::ostream &out, const AForm &form);
