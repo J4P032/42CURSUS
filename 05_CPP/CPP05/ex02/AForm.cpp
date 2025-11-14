@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 19:20:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/10 20:34:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/14 12:17:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ void	AForm::beSigned(const Bureaucrat &bureaucrat){
 	_signed = true; //comprobación de si puede en Bureaucrat.cpp signForm(Form &form)
 }
 
+void	AForm::copySigned(bool sign){ //para copiar en el operador= y constructor copia del hijo.
+	_signed = sign;
+};
+
 //////////////////////
 ///// EXCEPTIONS /////
 //////////////////////
@@ -84,6 +88,9 @@ AForm::GradeTooLowException::GradeTooLowException(const std::string &name)
 	: _msg("The form " + name + " grade is too LOW.") {
 }
 
+AForm::NotSignedException::NotSignedException(const std::string &name)
+	: _msg("The form " + name + " is NOT signed"){}
+
 const char *AForm::GradeTooHighException::what() const throw(){
 	return (_msg.c_str()); //convierte a char* C++98 ok
 }
@@ -92,9 +99,15 @@ const char *AForm::GradeTooLowException::what() const throw(){
 	return (_msg.c_str());
 }
 
+const char *AForm::NotSignedException::what() const throw(){
+	return (_msg.c_str());
+}
+
 AForm::GradeTooHighException::~GradeTooHighException() throw(){}
 
 AForm::GradeTooLowException::~GradeTooLowException() throw(){}
+
+AForm::NotSignedException::~NotSignedException() throw(){}
 
 ///////////////////////
 ///// << OPERATOR /////

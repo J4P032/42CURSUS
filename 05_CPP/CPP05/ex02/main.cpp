@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:45 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/29 17:50:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/14 12:14:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,6 @@ int	main(void){
 	
 		std::cout << "-----------------" << std::endl;
 		
-		Form	form; //1
-		Form	form140("Nacimiento", 140, 132); //2
-		std::cout << form << std::endl;
-		std::cout << form140 << std::endl;
-		b140.signForm(form140);
-		std::cout << form140 << std::endl;
-		form = form140;
-		std::cout << form << std::endl;
-		Form	form_copia(form140); //3
-		std::cout << form_copia << std::endl;
-		Form ("patata", 0, 170);
 	}
 	catch(Bureaucrat::GradeTooHighException &ex){
 		std::cout << RED "⛔ ERROR: " << ex.what() << std::endl;	
@@ -45,9 +34,9 @@ int	main(void){
 		std::cout << RED "⛔ ERROR: " RESET << ex.what() << std::endl;	
 	}
 	catch(std::exception &ex){
-		if (typeid(ex) == typeid(Form::GradeTooHighException))
+		if (typeid(ex) == typeid(AForm::GradeTooHighException))
 			std::cout << RED "⛔ ERROR: " << ex.what() << RESET << std::endl;	
-		if (typeid(ex) == typeid(Form::GradeTooLowException))
+		if (typeid(ex) == typeid(AForm::GradeTooLowException))
 			std::cout << RED "⛔ ERROR: " << ex.what() << RESET << std::endl;	
 	}
 	

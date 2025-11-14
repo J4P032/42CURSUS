@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 19:20:17 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/11 11:22:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/14 12:18:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ public: //getters
 	
 public: //setter
 	void	beSigned(const Bureaucrat &bureaucrat); //no const porque modifica _signed
+	void	copySigned(bool sign);
 
 public: //excepciones
 	class GradeTooHighException : public std::exception{ //al ser heredada de exception podemos capturarla con catch(std::exception)
@@ -60,8 +61,17 @@ public: //excepciones
 		std::string	_msg;		
 	};
 
+	class NotSignedException : public std::exception{
+	public:
+		NotSignedException(const std::string &name);
+		~NotSignedException() throw();
+		const char *what() const throw();
+	private:
+		std::string _msg;
+	};
+
 public:
-	virtual void execute(Bureaucrat const &executor) const = 0;
+	virtual void execute(Bureaucrat const &executor) const = 0; //abstracta
 	
 };
 

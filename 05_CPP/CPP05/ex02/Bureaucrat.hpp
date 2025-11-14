@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/29 11:09:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/14 12:07:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define BUREAUCRAT_H
 
 #include <iostream>
-#include "Form.hpp"
+#include "AForm.hpp"
 #include <cstdlib> //system("clear")
 
 #define RESET "\033[0m"
@@ -69,7 +69,7 @@ public: //excepciones internas
 		std::string _msg;
 	};
 public:
-	void signForm(Form &form) const;
+	void signForm(AForm &form) const;
 };
 
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &person);

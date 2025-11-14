@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/29 14:21:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/14 12:09:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,21 +109,21 @@ const std::string &Bureaucrat::GradeTooLowException::what() const{
 ///// SIGN FORMS /////
 //////////////////////
 
-void noSignOut(const Form &form, const Bureaucrat &bureaucrat){
+void noSignOut(const AForm &form, const Bureaucrat &bureaucrat){
 	std::cout << "✒️​📜	"
 	<< bureaucrat.getName() << YELLOW << " couldn't sign "
 	<< form.getName()
 	<< " because ";
 }
 
-void signOut(const Form &form, const Bureaucrat &bureaucrat){
+void signOut(const AForm &form, const Bureaucrat &bureaucrat){
 	std::cout << "✒️​📜 "
 	<< bureaucrat.getName() << GREEN << " signed "
 	<< form.getName()
 	<< RESET << std::endl;
 }
 
-void Bureaucrat::signForm(Form &form) const{
+void Bureaucrat::signForm(AForm &form) const{
 	if (form.getSigned()){ //Ya está firmado
 		noSignOut(form, *this);	
 		std::cout << " it is already signed." << RESET << std::endl;

@@ -4,6 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98
 NAME = Buro
 SRC = 	AForm.cpp \
 		Bureaucrat.cpp \
+		ShrubberyCreationForm.cpp \
 		main.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
