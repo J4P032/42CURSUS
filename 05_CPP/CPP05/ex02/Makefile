@@ -5,6 +5,8 @@ NAME = Buro
 SRC = 	AForm.cpp \
 		Bureaucrat.cpp \
 		ShrubberyCreationForm.cpp \
+		RobotomyRequestForm.cpp \
+		PresidentialPardonForm.cpp \
 		main.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
