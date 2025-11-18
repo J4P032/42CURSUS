@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 12:59:50 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/14 13:04:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/18 14:18:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,5 @@ void PresidentialPardonForm::execute(Bureaucrat const &executor) const{
 		throw NotSignedException(getName());
 	if (executor.getGrade() > getExecGrade())
 		throw GradeTooHighException(getName());
-	//hacer cosas
+	std::cout << CYAN << _target << " has been pardoned by Zaphod Beeblebroxj." RESET << std::endl; 
 }

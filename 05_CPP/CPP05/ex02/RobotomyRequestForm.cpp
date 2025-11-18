@@ -6,16 +6,17 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 12:33:06 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/14 12:49:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/18 14:11:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstdlib> //para meter el rand de C
 #include "RobotomyRequestForm.hpp"
 #include "Bureaucrat.hpp"
 
 RobotomyRequestForm::RobotomyRequestForm(void) 
 	: AForm("nothing", 72, 45), _target("none"){
-	std::cout << GREEN "🤖	Default RobotomyForm constructor called." RESET << std::endl;		
+	std::cout << GREEN "🤖	Default RobotomyForm constructor called." RESET << std::endl;
 }
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string &target)
@@ -52,5 +53,9 @@ void RobotomyRequestForm::execute(Bureaucrat const &executor) const{
 		throw NotSignedException(getName());
 	if (executor.getGrade() > getExecGrade())
 		throw GradeTooHighException(getName());
-	//hacer cosas
+	std::cout << YELLOW " !ZASH...BUFFFFF...BRRRRRR..IIIIIMMMM!!" RESET << std::endl;
+	if (std::rand() % 2 == 0) //50% como pide el ejercicio.
+		std::cout << GREEN << _target << " has been robotomized successfully" RESET << std::endl;
+	else
+		std::cout << RED << _target << " was not able to be Robotomize." RESET << std::endl;
 }

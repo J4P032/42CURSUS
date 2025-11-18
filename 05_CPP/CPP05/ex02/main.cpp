@@ -6,15 +6,18 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:45 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/14 12:14:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/18 14:14:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
-#include <typeinfo>
+#include <typeinfo> //para typeid valor de la excepción
+#include <ctime> //para meter el time de C
+
 
 int	main(void){
 	system("clear");
+	std::srand(std::time(NULL));//inicializa la semilla para el rand() de Robotomy
 	try{
 		Bureaucrat b; //1
 		Bureaucrat b140("Manuel", 140); //2

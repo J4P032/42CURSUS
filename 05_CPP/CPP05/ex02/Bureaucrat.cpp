@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/14 12:09:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/18 13:40:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,17 @@ void Bureaucrat::signForm(AForm &form) const{
 			form.beSigned(*this); //firmamos
 			signOut(form, *this);
 		}	
+	}
+}
+
+void Bureaucrat::executeForm(AForm const &form) const{
+	try{
+		form.execute(*this);
+		std::cout << GREEN << _name << " executed " << form.getName() << RESET << std::endl;
+	}
+	catch (std::exception &e){
+		std::cout << RED << _name << " couldn't execute " << form.getName()
+			<< " because " << e.what() << RESET << std::endl;
 	}
 }
 

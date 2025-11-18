@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/14 12:39:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:30:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ public: //excepciones internas
 		std::string _msg;
 	};
 public:
-	void signForm(AForm &form) const;
+	void	signForm(AForm &form) const;
+	void	executeForm(AForm const &form) const;
 };
 
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &person);
