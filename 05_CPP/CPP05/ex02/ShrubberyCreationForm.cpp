@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 10:59:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/18 13:33:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:35:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ ShrubberyCreationForm::ShrubberyCreationForm(void)
 }
 
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target)
-	: AForm("nothing", 145, 137), _target(target){
+	: AForm(target, 145, 137), _target(target){
 	std::cout << GREEN "🌱	ShrubberyForm constructor called." RESET << std::endl;		
 }
 

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 12:33:06 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/18 14:11:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:35:51 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ RobotomyRequestForm::RobotomyRequestForm(void)
 }
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string &target)
-	: AForm("nothing", 72, 45), _target(target){
+	: AForm(target, 72, 45), _target(target){
 	std::cout << GREEN "🤖	RobotomyForm constructor called." RESET << std::endl;		
 }
 

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 19:20:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/14 12:17:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:38:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ void	AForm::copySigned(bool sign){ //para copiar en el operador= y constructor c
 ///// EXCEPTIONS /////
 //////////////////////
 AForm::GradeTooHighException::GradeTooHighException(const std::string &name)
-	: _msg("The form " + name + " grade is too HIGH.") {
+	: _msg("The form " + name + " grade is too HIGH for him.") {
 }
 
 AForm::GradeTooLowException::GradeTooLowException(const std::string &name)
-	: _msg("The form " + name + " grade is too LOW.") {
+	: _msg("The form " + name + " grade is too LOW for him.") {
 }
 
 AForm::NotSignedException::NotSignedException(const std::string &name)
