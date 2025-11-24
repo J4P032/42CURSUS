@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 11:48:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/24 14:02:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/24 14:14:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ AForm *Intern::makeForm(const std::string &name, const std::string &target) cons
 		"presidential pardon"
 	};
 	
-	static AForm *(*creators[3])(const std::string &){createShrubbery, createRobotomy, createPresidential}; //es un array de funciones para comparar con el name
-	//static por la misma razón que arriba, pero además por que no compilaria en C98
+	static AForm *(*creators[3])(const std::string &); //es un array de funciones para comparar con el name. Static por lo mismo de arriba
+	creators[0] = createShrubbery;
+	creators[1] = createRobotomy;
+	creators[2] = createPresidential;  
 	
 	for (size_t i = 0; i < 3; i++){
 		if (name == forms_type[i]){

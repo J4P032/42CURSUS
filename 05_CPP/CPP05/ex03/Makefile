@@ -7,6 +7,7 @@ SRC = 	AForm.cpp \
 		ShrubberyCreationForm.cpp \
 		RobotomyRequestForm.cpp \
 		PresidentialPardonForm.cpp \
+		Intern.cpp \
 		main.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
