@@ -6,15 +6,11 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 11:48:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/24 14:14:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/11/26 12:57:10 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Intern.hpp"
-#include "colors.hpp"
-#include "ShrubberyCreationForm.hpp"
-#include "RobotomyRequestForm.hpp"
-#include "PresidentialPardonForm.hpp"
 
 Intern::Intern(void){
 	std::cout << GREEN "Intern class created" RESET << std::endl;
@@ -70,7 +66,7 @@ AForm *Intern::makeForm(const std::string &name, const std::string &target) cons
 			return creators[i](target); //de esta manera llama a la funcion correcta. Maravilloso!! y como es puntero ya la propia funcion lo que se devuelve, pues genial.
 		}
 	}
-	std::cout << RED "Error: Form not found." RESET << std::endl;
+	std::cout << RED "Error(Intern): Form not found." RESET << std::endl;
 	return NULL;
 }
 
