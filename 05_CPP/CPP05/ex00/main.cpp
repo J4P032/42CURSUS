@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:45 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/28 19:02:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:26:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,13 @@ int	main(void){
 		}
 		//Bureaucrat b0("Manolo", 0);
 	}
-	catch(Bureaucrat::GradeTooHighException &ex){
-		std::cout << RED "⛔ ERROR: " << ex.what() << std::endl;	
-	}
-	catch(Bureaucrat::GradeTooLowException &ex){
-		std::cout << RED "⛔ ERROR: " RESET << ex.what() << std::endl;	
-	}
-	catch(...){ //cualquier tipo de excepción lanzada. Siempre tiene que ser la última
-		std::cout << RED "⛔ Other type of Error Ocurred";
+
+	catch(std::exception &ex){
+		if (typeid(ex) == typeid(Bureaucrat::GradeTooHighException)
+			|| typeid(ex) == typeid(Bureaucrat::GradeTooLowException))
+			std::cout << RED "⛔ ERROR: " << ex.what() << std::endl;
+		else
+			std::cout << RED "⛔ Other type of Error Ocurred" << RESET << std::endl;	
 	}
 	std::cout << BLUE "END" RESET << std::endl;
 	return (0);

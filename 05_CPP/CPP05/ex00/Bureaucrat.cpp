@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/28 18:44:08 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:17:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,20 @@ Bureaucrat::GradeTooHighException::GradeTooHighException(const std::string &name
 dentro del constructor, por que si no haria un temporal std::string y eso fuera de esta
 funcion what, seria una referencia invalida borrada. Si no fuera un const std::string&
 entonces sí que podría haberlo compuesto aquí el msg como hago en la asignación de _msg*/
-const std::string &Bureaucrat::GradeTooHighException::what() const{
-	return (_msg);
+const char *Bureaucrat::GradeTooHighException::what() const throw(){
+	return (_msg.c_str());
 }
 
 Bureaucrat::GradeTooLowException::GradeTooLowException(const std::string &name)
 	: _msg("The Bureaucrat " + name + " is too LOW in degree. Min is 150."){}
 
-const std::string &Bureaucrat::GradeTooLowException::what() const{
-	return (_msg);
+const char *Bureaucrat::GradeTooLowException::what() const throw(){
+	return (_msg.c_str());
 }
+
+Bureaucrat::GradeTooHighException::~GradeTooHighException() throw(){}
+
+Bureaucrat::GradeTooLowException::~GradeTooLowException() throw(){}
 
 ///////////////////////
 ///// << OPERATOR /////
@@ -112,7 +116,7 @@ std::ostream &operator<<(std::ostream &out, const Bureaucrat &person){
 	out << CYAN
 	<< person.getName()
 	<< ", bureaucrat grade " 
-	<< person.getGrade() << RESET
+	<< person.getGrade() << "." << RESET
 	<< "\n"; 
 	return (out); //esto es para encadenar varios std::cout << clase1 << clase2 etc..
 }

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/29 11:09:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:36:50 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include "Form.hpp"
 #include <cstdlib> //system("clear")
+#include <typeinfo>
 
 #define RESET "\033[0m"
 #define BLACK "\033[30m"
@@ -53,18 +54,22 @@ public: //setter
 	int	decrementGrade(void);//sin segundo const por que queremos modificar el objeto en si.
 	
 public: //excepciones internas
-	class GradeTooHighException{ //no clase canónica segun ejercicio
+	class GradeTooHighException : public std::exception{ //no clase canónica segun ejercicio
 	public:
 		GradeTooHighException(const std::string &name); //necesita un constructor para pasarle el nombre del objeto que tiene error
-		const std::string	&what() const; //& para evitar copias de lo que devuelve
+		virtual ~GradeTooHighException() throw();
+		virtual const char *what() const throw();
+		
 	private:
 		std::string	_msg;
 	};
 
-	class GradeTooLowException{
+	class GradeTooLowException : public std::exception{
 	public:
 		GradeTooLowException(const std::string &name);
-		const std::string 	&what() const;
+		virtual ~GradeTooLowException() throw();
+		virtual const char	*what() const throw();		
+		
 	private:
 		std::string _msg;
 	};

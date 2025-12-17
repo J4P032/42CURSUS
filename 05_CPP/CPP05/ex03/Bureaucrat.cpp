@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/18 13:40:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 12:47:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,19 +125,11 @@ void signOut(const AForm &form, const Bureaucrat &bureaucrat){
 
 void Bureaucrat::signForm(AForm &form) const{
 	if (form.getSigned()){ //Ya está firmado
-		noSignOut(form, *this);	
+		noSignOut(form, *this);	  
 		std::cout << " it is already signed." << RESET << std::endl;
 	}
-	else{ //no firmado
-		if (_grade > form.getSignGrade()){ //Grado insuficiente
-			noSignOut(form, *this);
-			std::cout << " his grade is not high enough." << RESET << std::endl;
-		}
-		else{ //grado suficiente
-			form.beSigned(*this); //firmamos
-			signOut(form, *this);
-		}	
-	}
+	else //no firmado
+		form.beSigned(*this);
 }
 
 void Bureaucrat::executeForm(AForm const &form) const{

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 10:59:09 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/19 17:35:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:07:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,14 @@ void ShrubberyCreationForm::execute(Bureaucrat const &executor) const{
 	if (!getSigned())
 		throw NotSignedException(getName());
 	if (executor.getGrade() > getExecGrade())
-		throw GradeTooHighException(getName());
+		throw GradeTooHighException(" lower rank necesary to do it.");
 	std::ofstream file((_target + "_shrubbery").c_str()); //"file" es solo el nombre de la variable. Puede ser cualquier otro.
 	if (!file)
-    	throw std::runtime_error("Cannot create the file");
-	file << "   🌲\n";
-	file << "  🌲🌲\n";
-	file << " 🌲🌲🌲\n";
+    	throw std::runtime_error(" Cannot create the file");
+	file << "   /\\\n";
+	file << "  /  \\\n";
+	file << " /    \\\n";
 	file << "   ||\n";
 	file.close();
+
 }

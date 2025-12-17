@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/28 14:36:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:31:23 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <cstdlib> //system("clear")
+#include <typeinfo>
 
 #define RESET "\033[0m"
 #define BLACK "\033[30m"
@@ -26,7 +27,7 @@
 #define CYAN "\033[38;2;0;200;255m"
 #define WHITE "\033[37m"
 
-/*Recordar: El const primero es para no mofidicar la variable.
+/*Recordar: El const primero es para no modificar la variable.
 el último const para no modificar el objeto
 Y cuando el valor de retorno no es por &(referencia) no sirve de nada...
 ...poner const antes por que es una copia(devuelve por valor) y da igual...
@@ -45,25 +46,27 @@ public: //constructores destructores
 
 public: //getters
 	const std::string	&getName(void) const;
-	int					getGrade(void) const; //no hace falta & por que el tipo es muy básico
+	int					getGrade(void) const; //no hace falta & por que el tipo es muy básico y una copia no pesa tanto
 
 public: //setter
 	int	incrementGrade(void);//sin primer const por que es copia y da igual modificarlo fuera
 	int	decrementGrade(void);//sin segundo const por que queremos modificar el objeto en si.
 	
 public: //excepciones internas
-	class GradeTooHighException{ //no clase canónica segun ejercicio
-	public:
+	class GradeTooHighException : public std::exception { //debe heredar de std::exception
+	public: //no clase canónica segun ejercicio
 		GradeTooHighException(const std::string &name); //necesita un constructor para pasarle el nombre del objeto que tiene error
-		const std::string	&what() const; //& para evitar copias de lo que devuelve
+		virtual ~GradeTooHighException() throw(); //debo hacer poly tambien el destructor por que si no en compilacion se queja y es "laxo"
+		virtual const char *what() const throw(); //como debe heredar de std::exception esa es la forma de declararla para hacer polymorfismo. con char* en vez de std::string y tiene que ser noexept pero por c++98 pongo throw()
 	private:
 		std::string	_msg;
 	};
 
-	class GradeTooLowException{
+	class GradeTooLowException : public std::exception {
 	public:
 		GradeTooLowException(const std::string &name);
-		const std::string 	&what() const;
+		virtual ~GradeTooLowException() throw();
+		virtual const char	*what() const throw();
 	private:
 		std::string _msg;
 	};

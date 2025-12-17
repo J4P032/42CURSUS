@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 12:33:06 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/19 17:35:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:19:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void RobotomyRequestForm::execute(Bureaucrat const &executor) const{
 	if (!getSigned())
 		throw NotSignedException(getName());
 	if (executor.getGrade() > getExecGrade())
-		throw GradeTooHighException(getName());
+		throw GradeTooHighException(" lower rank necesary to do it.");
 	std::cout << YELLOW " !ZASH...BUFFFFF...BRRRRRR..IIIIIMMMM!!" RESET << std::endl;
 	if (std::rand() % 2 == 0) //50% como pide el ejercicio.
 		std::cout << GREEN << _target << " has been robotomized successfully" RESET << std::endl;

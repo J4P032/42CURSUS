@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:45 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/29 17:50:51 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:21:18 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,12 @@ int	main(void){
 		std::cout << form << std::endl;
 		Form	form_copia(form140); //3
 		std::cout << form_copia << std::endl;
-		Form ("patata", 0, 170);
+		//Form ("patata", 0, 170); //compondra un tipo de mensaje 
+		//y estas tres lineas compondran otra excepcion
+		Form		form2("Form2", 2, 2);
+		Bureaucrat	b4("B4", 4);
+		b4.signForm(form2);
+		
 	}
 	catch(Bureaucrat::GradeTooHighException &ex){
 		std::cout << RED "⛔ ERROR: " << ex.what() << std::endl;	

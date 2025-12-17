@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/11/18 12:30:36 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:31:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,18 @@
 
 #include <iostream>
 #include "AForm.hpp"
-#include "colors.hpp"
 #include <cstdlib> //system("clear")
+
+# define RESET "\033[0m"
+# define BLACK "\033[30m"
+# define RED "\033[38;2;255;0;0m"
+# define GREEN "\033[38;2;0;255;0m"
+# define YELLOW "\033[38;5;226m"
+# define BLUE "\033[38;2;0;100;255m"
+# define MAGENTA "\033[38;2;100;50;255m"
+# define CYAN "\033[38;2;0;200;255m"
+# define WHITE "\033[37m"
+
 
 /*Recordar: El const primero es para no mofidicar la variable.
 el último const para no modificar el objeto

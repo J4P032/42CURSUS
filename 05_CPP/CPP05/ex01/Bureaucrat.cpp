@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 11:12:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/10/29 14:21:43 by jrollon-         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:38:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,20 @@ Bureaucrat::GradeTooHighException::GradeTooHighException(const std::string &name
 dentro del constructor, por que si no haria un temporal std::string y eso fuera de esta
 funcion what, seria una referencia invalida borrada. Si no fuera un const std::string&
 entonces sí que podría haberlo compuesto aquí el msg como hago en la asignación de _msg*/
-const std::string &Bureaucrat::GradeTooHighException::what() const{
-	return (_msg);
+const char *Bureaucrat::GradeTooHighException::what() const throw(){
+	return (_msg.c_str());
 }
 
 Bureaucrat::GradeTooLowException::GradeTooLowException(const std::string &name)
 	: _msg("The Bureaucrat " + name + " is too LOW in degree. Min is 150."){}
 
-const std::string &Bureaucrat::GradeTooLowException::what() const{
-	return (_msg);
+const char *Bureaucrat::GradeTooLowException::what() const throw(){
+	return (_msg.c_str());
 }
+
+Bureaucrat::GradeTooHighException::~GradeTooHighException() throw(){}
+
+Bureaucrat::GradeTooLowException::~GradeTooLowException() throw(){}
 
 //////////////////////
 ///// SIGN FORMS /////
@@ -125,19 +129,11 @@ void signOut(const Form &form, const Bureaucrat &bureaucrat){
 
 void Bureaucrat::signForm(Form &form) const{
 	if (form.getSigned()){ //Ya está firmado
-		noSignOut(form, *this);	
+		noSignOut(form, *this);	  
 		std::cout << " it is already signed." << RESET << std::endl;
 	}
-	else{ //no firmado
-		if (_grade > form.getSignGrade()){ //Grado insuficiente
-			noSignOut(form, *this);
-			std::cout << " his grade is not high enough." << RESET << std::endl;
-		}
-		else{ //grado suficiente
-			form.beSigned(*this); //firmamos
-			signOut(form, *this);
-		}	
-	}
+	else //no firmado
+		form.beSigned(*this);
 }
 
 
@@ -148,7 +144,7 @@ std::ostream &operator<<(std::ostream &out, const Bureaucrat &person){
 	out << CYAN
 	<< person.getName()
 	<< ", bureaucrat grade " 
-	<< person.getGrade() << RESET
+	<< person.getGrade() << "." << RESET
 	<< "\n"; 
 	return (out); //esto es para encadenar varios std::cout << clase1 << clase2 etc..
 }
