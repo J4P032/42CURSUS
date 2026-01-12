@@ -6,15 +6,25 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 11:51:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2025/12/23 18:18:10 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/01/12 15:20:48 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
+#include <limits>
 
-ScalarConverter::ScalarConverter(void){
-	std::cout << "ScalarConverter object instanced, and it should not!!" << std::endl;
-};
+ScalarConverter::ScalarConverter(void){};
+
+ScalarConverter::ScalarConverter(const ScalarConverter &other){
+	(void)other;
+}
+
+ScalarConverter &ScalarConverter::operator=(const ScalarConverter &other){
+	(void)other;
+	return (*this);
+}
+
+ScalarConverter::~ScalarConverter(void){}
 
 bool	isDigit(char c){
 	if (c > 47 && c < 58)
@@ -61,7 +71,6 @@ bool	ft_isValidChar(const std::string &line, bool isValidLine){
 	return(false);
 }
 
-
 int	seeRares(const std::string &line){
 	std::string	cases[] = {"-inf", "-inff", "+inf", "+inff", "nan", "nanf"};
 	for (size_t i = 0; i < 6; i++){
@@ -96,7 +105,7 @@ void	printRare(int index){
 	}
 }
 
-void	printChar(int inum, int index, bool isValidLine, double dnum){
+void	printChar(int inum, int index, bool isValidLine, bool isIntOverflow){
 	bool	impossible = false;
 	if (index < 6) //casos extremos
 		impossible = true;
@@ -104,7 +113,7 @@ void	printChar(int inum, int index, bool isValidLine, double dnum){
 		impossible = true;
 	
 	std::cout << "char: ";
-	if (impossible || !isValidLine || static_cast<double>(inum) != dnum){  
+	if (impossible || !isValidLine || isIntOverflow){  
 		std::cout << "impossible" << std::endl;
 		return ;
 	}
@@ -115,12 +124,12 @@ void	printChar(int inum, int index, bool isValidLine, double dnum){
 	std::cout << std::endl;
 }
 
-void printInt(int inum, int index, bool isValidLine, double dnum){
+void printInt(int inum, int index, bool isValidLine, bool isIntOverflow){
 	bool	impossible = false;
 	if (index < 6) //casos extremos
 		impossible = true;
 	std::cout << "int: ";
-	if (impossible || !isValidLine || static_cast<double>(inum) != dnum){   //ultimo caso es para comprobar overflow de int
+	if (impossible || !isValidLine || isIntOverflow){
 		std::cout << "impossible" << std::endl;
 		return ;
 	}
@@ -166,14 +175,19 @@ void	printDouble(double dnum, int index, bool isValidLine){
 void ScalarConverter::convert(const std::string &line){
 	bool 	isValidLine = ft_isValidLine(line);
 	bool	isValidChar = ft_isValidChar(line, isValidLine);
+	bool	isIntOverflow = false;
 	
 	int		index = seeRares(line); //check si es nan, nanf, +inf, etc...
 	if (!isValidChar){ //si es un numero valido
-		double	dnum = std::strtod(line.c_str(), NULL);
+		double	dnum = std::strtod(line.c_str(), NULL); //to double para comparar con limites overflow
 		int		inum = std::atoi(line.c_str());
 		float	fnum = std::atof(line.c_str());
-		printChar(inum, index, isValidLine, dnum);
-		printInt(inum, index, isValidLine, dnum);
+		
+		if (dnum > std::numeric_limits<int>::max() || dnum < std::numeric_limits<int>::min())
+			isIntOverflow = true;
+		
+		printChar(inum, index, isValidLine, isIntOverflow);
+		printInt(inum, index, isValidLine, isIntOverflow);
 		printFloat(fnum, index, isValidLine);
 		printDouble(dnum, index, isValidLine);
 	}

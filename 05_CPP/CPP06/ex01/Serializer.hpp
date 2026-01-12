@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   Serializer.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/23 11:17:18 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/01/12 13:59:20 by jrollon-         ###   ########.fr       */
+/*   Created: 2026/01/12 11:00:29 by jrollon-          #+#    #+#             */
+/*   Updated: 2026/01/12 16:32:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SCALARCONVERTER_HPP
-# define SCALARCONVERTER_HPP
+#ifndef SERIALIZER_HPP
+# define SERIALIZER_HPP
 
+# include "Data.hpp"
+# include <stdint.h> //uintptr_t. cstdint es C++11
 # include <iostream>
-# include <cstdlib> //std::atoi, etc..
 
 #define RESET "\033[0m"
 #define BLACK "\033[30m"
@@ -26,16 +27,16 @@
 #define CYAN "\033[38;2;0;200;255m"
 #define WHITE "\033[37m"
 
+class Serializer{
+private: //canonica pero no se puede instanciar al ser privada como dice el subject
+	Serializer(void);
+	Serializer(const Serializer &other);
+	Serializer &operator=(const Serializer &other);
+	~Serializer(void);
 
-class ScalarConverter{
-private:
-	ScalarConverter(void); //no se puede instanciar como indica el ejercicio
-	ScalarConverter(const ScalarConverter &other);
-	ScalarConverter &operator=(const ScalarConverter &other);
-	~ScalarConverter(void);
-	
 public:
-	void static convert(const std::string &line);
+	static uintptr_t	serialize(Data *ptr); //unsigned int pero garantiza guardar un puntero
+	static Data* 		deserialize(uintptr_t raw);
 };
 
 #endif
