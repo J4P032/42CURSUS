@@ -1,8 +1,8 @@
 CXX = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
-NAME = serialize
-SRC = 	Serializer.cpp \
+NAME = identify
+SRC = 	Base.cpp \
 		main.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
