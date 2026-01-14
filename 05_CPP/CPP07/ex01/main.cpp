@@ -36,7 +36,7 @@ int	main (void){
 	
 
 	
-	iter(&intMatrix, len, &printValues);
+	iter(intMatrix, len, &printValues); //no seria &intMatrix, pro que eso pasaria la direccion de TODA la matriz y asi ya pasa la direccion del primer elemento.
 	
 
 	return (0);
