@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 15:56:36 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/01/14 16:57:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/01/20 11:30:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ template <typename T> void iter(T *array, const size_t len, void(*f)(T const&)) 
 
 Es decir hacer overload de las dos funciones, pero es mejor lo de abajo declarado
 por que abarcas todo en uno. */
-template <typename T, typename F> void iter(T *array, const size_t len, F f);
+template <typename T, typename F>
+void iter(T*, const size_t, F);
+
+template <typename T>
+void printValues(T&);
+
+template <typename T>
+void printValues(const T&);
 
 #endif
