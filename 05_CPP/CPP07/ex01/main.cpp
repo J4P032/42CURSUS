@@ -6,30 +6,15 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:26:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/01/20 17:04:28 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/01/21 16:19:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "iter.hpp"
 
-template <typename T, typename F> void iter(T *array, const size_t len, F f){
-	for (size_t i = 0; i < len; i++)
-		f(array[i]);		
-}
-
-template <typename T>
-void printValues(T& element){
-	std::cout << GREEN << element << RESET << ", " << std::endl;
-}
-
-template <typename T>
-void printValues(const T& element){
-	std::cout << GREEN << element << RESET << ", " << std::endl;
-}
-
 int	main (void){
 
-	float		num1 = 32.1f, num2 = 0.4f;
+	float		num1 		= 32.1f, num2 = 0.4f;
 	int			intMatrix[] = {3, 423, 2, -34, 0}; //cuidado!! sin = es C++11
 	std::string	frases[] 	= {"hola mundo", "como estas ?", "yo bien", ""};
 	double		vacio[] 	= {};
@@ -40,15 +25,19 @@ int	main (void){
 	size_t	len3 = sizeof(vacio) / sizeof(vacio[0]);
 	size_t	len4 = sizeof(pFloats) / sizeof(pFloats[0]);	
 
-	iter(intMatrix, len, static_cast<void(*)(int&)>(printValues<int>)); //hay que castear, pq si no no sabe cual pillar de las funciones. Se resolveria con un lamda pero es cpp11
+	iter(intMatrix, len, static_cast<void(*)(int&)>(printValues)); //hay que castear, pq si no no sabe cual pillar de las funciones (son overload). Se resolveria con un lamda pero es cpp11
 	std::cout << std::endl;
-	iter(intMatrix, len, static_cast<void(*)(const int&)>(printValues<int>));
+	iter(intMatrix, len, static_cast<void(*)(const int&)>(printValues));
+	
+	/* iter(intMatrix, len, printValues<int>); //esta forma de llamar SOLO sirve si no hay funcion overload definida
+	iter(intMatrix, len, printValues<const int>); */
+
 	
 	std::cout << YELLOW << "-------Con Strings---------" << RESET << std::endl;
 
-	iter(frases, len2, static_cast<void(*)(std::string&)>(printValues<std::string>));
+	iter(frases, len2, static_cast<void(*)(std::string&)>(printValues));
 	std::cout << std::endl;
-	iter(frases, len2, static_cast<void(*)(const std::string&)>(printValues<std::string>));
+	iter(frases, len2, static_cast<void(*)(const std::string&)>(printValues));
 	
 	std::cout << YELLOW << "-------Con Doubles Vacios---------" << RESET << std::endl;
 
@@ -58,15 +47,19 @@ int	main (void){
 
 	std::cout << YELLOW << "-------Con punteros a float---------" << RESET << std::endl;
 
-	iter(pFloats, len4, static_cast<void(*)(float*&)>(printValues<float*>));
-	iter(pFloats, len4, static_cast<void(*)(float* const&)>(printValues<float*>)); //NOTA* DE ALGO MUY ROMPEDOR LA CABEZA ABAJO. 
+	iter(pFloats, len4, static_cast<void(*)(float*&)>(printValues));
+	iter(pFloats, len4, static_cast<void(*)(float* const&)>(printValues)); //NOTA* DE ALGO MUY ROMPEDOR LA CABEZA ABAJO.
 
-	/*NOTA*:
+	return (0);
+}
+
+
+/*NOTA*:
 	Como hemos visto, cuando usamos F f, como parametro podemos meter cualquier cosa, incluso objetos, por ello casteamos. 
 	Es como cuando haciamos 
 	
-	funcion(void parametro){\
-		(int)parametro; // o (char)parametro
+	funcion(void *parametro){\
+		(int*)parametro; // o (char*)parametro
 	}
 	
 	es decir casteábamos a cualquier tipo dentro de la función y así podíamos aceptar todo tipo de parámetros.
@@ -122,8 +115,3 @@ int	main (void){
 	así:
 	iter(pFloats, len4, static_cast<void(*)(float* const&)>(printValues<float*>)); //float* const& sí que se mantiene constante dichas direcciones de memoria.
 	*/
-		
-	return (0);
-}
-
-
