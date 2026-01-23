@@ -1,7 +1,7 @@
 CXX = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
-NAME = function
+NAME = Array
 SRC = 	main.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)

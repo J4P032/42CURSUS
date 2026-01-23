@@ -6,12 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 17:36:12 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/01/21 17:36:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/01/23 13:40:46 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Array.hpp"
 
 int main() {
-    Array<int> a;
+    Array<int>* a = new Array<int>;
+    (void)a;
+    delete a;
 }
