@@ -1,0 +1,85 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mvassall <mvassall@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/22 14:22:07 by user1             #+#    #+#             */
+/*   Updated: 2026/02/02 11:28:14 by mvassall         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "utils.hpp"
+#include <climits>
+#include <cstring>
+#include <limits>
+#include <sstream>
+#include <unistd.h>
+#include <utility>
+
+bool ft_isLetter(char c) {
+  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
+}
+
+bool ft_isDigit(char c) {
+  return ('0' <= c && c <= '9');
+}
+
+// [ ] { } \ ^ _ ` |
+bool ft_isSpecial(char c) {
+  return (0x5B <= c && c <= 0x60) || (0x7B <= c && c <= 0x7D);
+}
+
+std::string ft_itoa(int n) {
+  std::ostringstream os;
+  os << n;
+  return os.str();    
+}
+
+/** Parse a string to int value using re /' '*[-]d+/
+* @param {const std::string} input
+* @returns {std::pair<int,bool>} .second == false if conversion has failed
+* .first the int value parsed
+*/
+std::pair<int, bool> ft_atoi(const std::string& str) {
+  bool isNegative = false;
+  int digitCount = 0;
+  long l = 0;
+  std::string::const_iterator it;
+  for (it = str.begin(); it != str.end(); ++it) {
+    if (*it == ' ') continue;
+    if (ft_isDigit(*it)) {
+      digitCount++;
+      l = (l * 10) + (*it - '0');
+      if (l > std::numeric_limits<int>::max())
+        return std::pair<int, bool>(0,false);
+      continue;
+    }
+    break;
+  }
+  if (digitCount == 0) return std::pair<int,bool>(0, false);
+  if (isNegative) l *= -1;
+  return std::pair<int,bool>(static_cast<int>(l), true);
+}
+
+void ft_toUpper(std::string& str) {
+  std::string::iterator it;
+  for (it=str.begin(); it!=str.end(); ++it) {
+    if ('a' <= *it && *it <= 'z')
+      *it = (*it - 32);
+  }
+}
+
+const std::string& getLocalHostname() {
+  static std::string hostname;
+  if (hostname.empty()) {
+    char name[HOST_NAME_MAX+1];
+    std::memset(name, 0, sizeof(name));
+    if (gethostname(name, sizeof(name)) == 0)
+      hostname = name;
+    else
+      hostname = "Undefined";
+  }
+  return hostname;
+}

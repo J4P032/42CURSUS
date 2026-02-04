@@ -1,0 +1,6 @@
+-Wextra
+-Wall
+-Werror
+-Wunreachable-code
+-std=c++98
+-I./include

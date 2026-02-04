@@ -1,0 +1,17 @@
+| Comando | Comportamiento y Respuestas de Confirmación (Caso Éxito) | Comportamiento en caso de Error / Otros |
+| :--- | :--- | :--- |
+| **PASS** | **no hay respuesta** (el servidor guarda la clave internamente para el proceso de registro). | `464 * :Password incorrect`: si falla.<br>`461 * PASS :Not enough parameters`: si falta el argumento. |
+| **NICK** | (la primera vez no responde nada, simplemente guarda el nombre del usuario) Si es para cambiar el nombre responde con `:<old_nick> NICK <new_nick>\r\n` (se envía al usuario y a todos los que compartan canal con él). | `433 * <nick> :Nickname is already in use`: si ya existe.<br>`432 * <nick> :Erroneous nickname`: caracteres inválidos. |
+| **USER** | **no hay respuesta** inmediata, pero si PASS y NICK ya se recibieron, responde con el mensaje de bienvenida: `:server 001 <nick> :Welcome to the network...` | `462 <nick> :Unauthorized command`: si ya se había registrado.<br>`461 <nick> USER :Not enough parameters`: faltan campos. |
+| **QUIT** | Responde con `ERROR :Closing Link...` al cliente y envía `:<nick> QUIT :<reason>\r\n` a todos los usuarios de sus canales. | **no hay respuesta** de error (el servidor siempre acepta la salida). |
+| **JOIN** | Responde con `:<nick> JOIN <channel>\r\n` a todos en el canal. Luego envía el tema `332 <nick> <channel> :<topic>` y la lista de usuarios `353 <nick> = <channel> :<users>`. | `475 <nick> <chan> :Cannot join channel (+k)`: pass mal.<br>`471 <nick> <chan> :Cannot join channel (+l)`: canal lleno. |
+| **PART** | Responde con `:<nick> PART <channel> :<reason>\r\n` a todos los usuarios del canal (incluido el que sale). | `403 <nick> <chan> :No such channel`: no existe.<br>`442 <nick> <chan> :You're not on that channel`: no estás dentro. |
+| **PRIVMSG** | **no hay respuesta** al emisor. El servidor simplemente reenvía el mensaje al destino: `:<sender> PRIVMSG <target> :<text>\r\n`. | `401 <nick> <dest> :No such nick/channel`: destino inexistente.<br>`412 <nick> :No text to send`: mensaje vacío. |
+| **NOTICE** | **no hay respuesta** al emisor. Reenvía el mensaje: `:<sender> NOTICE <target> :<text>\r\n`. | **no hay respuesta** de error nunca (aunque el destino no exista). |
+| **KICK** | Responde con `:<operator> KICK <channel> <target> :<reason>\r\n` a todos los usuarios del canal. | `482 <nick> <chan> :You're not channel operator`: no eres @.<br>`441 <nick> <target> <chan> :They aren't on that channel`: el target no está. |
+| **INVITE** | Responde con `341 <nick> <target> <channel>\r\n` al emisor y envía `:<inviter> INVITE <target> <channel>\r\n` al invitado. | `443 <nick> <target> <chan> :is already on channel`: ya está ahí.<br>`482 <nick> <chan> :You're not channel operator`: falta @. |
+| **TOPIC** | Si cambia el tema: `:<nick> TOPIC <channel> :<new_topic>\r\n` a todos. Si solo consulta: `332 <nick> <channel> :<topic>`. | `482 <nick> <chan> :You're not channel operator`: si el canal tiene `+t`.<br>`461 <nick> TOPIC :Not enough parameters`: falta canal. |
+| **MODE** | Responde con `:<nick> MODE <channel> <modes> <args>\r\n` a todos los usuarios del canal. | `472 <nick> <char> :is unknown mode char to me`: modo inválido.<br>`467 <nick> <chan> :Channel key already set`: modo `+k` ya puesto. |
+| **PING** | Responde con `PONG <servername> :<token_recibido>\r\n` al cliente. | `461 <nick> PING :Not enough parameters`: si no hay token. |
+| **PONG** | **no hay respuesta** (el servidor simplemente actualiza el tiempo de "última actividad" del cliente para no desconectarlo). | **no hay respuesta** de error. |
+
