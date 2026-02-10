@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/22 10:45:05 by user1             #+#    #+#             */
-/*   Updated: 2026/02/04 10:09:35 by marcoga2         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2026/02/10 15:05:13 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #include <sstream>
@@ -18,8 +19,9 @@
 #include "IRCMessage.hpp"
 #include "utils.hpp"
 
-IRCClient::IRCClient() : fd(-1) {}
-IRCClient::IRCClient(int fd) : fd(fd) { 
+
+IRCClient::IRCClient() : fd(-1), last_activity(std::time(NULL)), server_ping_sent(false) {}
+IRCClient::IRCClient(int fd) : fd(fd), last_activity(std::time(NULL)), server_ping_sent(false) { 
   if (fd < 0) throw std::invalid_argument("invalid file descriptor");
 }
 IRCClient::IRCClient(const IRCClient &other):
@@ -27,17 +29,27 @@ IRCClient::IRCClient(const IRCClient &other):
     nick(other.nick), 
     username(other.username), 
     fullname(other.fullname),
+    host(other.host),
     channelNames(other.channelNames), 
-    flags(other.flags) {}
+    flags(other.flags),
+    Ibuffer(other.Ibuffer),
+    Obuffer(other.Obuffer),
+    last_activity(other.last_activity),
+    server_ping_sent(other.server_ping_sent){}
 
 IRCClient &IRCClient::operator=(const IRCClient &other) {
   if (this != &other) {
     this->nick = other.nick;
     this->username = other.username;
     this->fullname = other.fullname;
+    this->host = other.host;
     this->fd = other.fd;
     this->channelNames = other.channelNames;
     this->flags = other.flags;
+    Ibuffer = other.Ibuffer;
+    Obuffer = other.Obuffer;
+    this->last_activity = other.last_activity;
+    server_ping_sent = other.server_ping_sent;
   }
   return *this;
 }
@@ -74,6 +86,7 @@ bool IRCClient::isValidNick(const std::string &nick) {
 	}
 	return true;
 }
+
 const std::string& IRCClient::getUsername() const { return username; }
 
 bool IRCClient::setUsername(const std::string& username) {
@@ -192,6 +205,7 @@ std::string IRCClient::toString() const {
   << ", nick=\"" << nick 
   << "\", username=\"" << username
   << "\", fullname=\"" << fullname
+  << "\", host=\"" << host
   << "\", channelNames=[";
   if (!channelNames.empty()) {
     for (setOfStringsIterator it = channelNames.begin(); 
@@ -257,7 +271,7 @@ std::string & IRCClient::getObuffer()
   return Obuffer;
 }
 
-std::string & IRCClient::getHost()
+const std::string& IRCClient::getHost() const
 {
 	return host;
 }
@@ -267,4 +281,18 @@ void IRCClient::setHost(const std::string & s)
 	host = s;
 }
 
+time_t  IRCClient::getLastActivity(void) const {
+  return (last_activity);
+}
 
+void    IRCClient::updateLastActivity(void){
+  last_activity = std::time(NULL);
+}
+
+bool    IRCClient::get_server_ping_sent(void){
+  return (server_ping_sent);
+}
+  
+void    IRCClient::set_server_ping_sent(void){
+  server_ping_sent = true;
+}

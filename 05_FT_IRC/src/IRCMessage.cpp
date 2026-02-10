@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   IRCMessage.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 11:55:03 by user1             #+#    #+#             */
-/*   Updated: 2026/02/02 19:38:10 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/09 21:18:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+#include <cstddef>
 #include <stdexcept>
 #include <sstream>
 
@@ -196,4 +197,31 @@ string IRCMessage::toString() const {
     }
     buf << "]";
     return buf.str();
+}
+
+const string& IRCMessage::getParam(size_t n) const {
+  if (n >= parameters.size())
+    throw std::out_of_range("invalid index");
+  return parameters[n];
+}
+
+const string IRCMessage::ircMessage() const {
+  std::ostringstream oss;
+  if (prefix.empty())
+    oss << ':' << prefix << ' ';
+  oss << IRCCommandtoString(command);
+  if (parameters.size() >= 1) {
+    for (size_t i=0; i < parameters.size() - 1; ++i) {
+      if (i != 0) oss << ' ';
+      oss << parameters[i];
+    }
+  }
+  if (parameters.size() != 0)
+    oss << " :" << parameters.back();
+  return oss.str();
+}
+
+//for privmsg
+const std::vector<std::string>& IRCMessage::getParamsVector() const{
+  return (parameters);
 }

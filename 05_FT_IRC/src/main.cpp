@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mvassall <mvassall@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 15:17:48 by user1             #+#    #+#             */
-/*   Updated: 2026/02/03 16:50:50 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/04 15:33:48 by mvassall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRCServ.hpp"
 #include "utils.hpp"
+#include <iostream>
+
 // #include "IRCChannel.hpp"
 // #include "IRCCommand.hpp"
 

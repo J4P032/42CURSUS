@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   answers_ping.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 16:02:52 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/04 16:40:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/09 17:13:08 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "IRCCommand.hpp"
 #include "IRCServ.hpp"
+#include <sstream>
 
 void IRCServ::answer_ping(IRCMessage & msg, int fd) {
 
 	std::ostringstream ans;
-			
+
 	vectorIteratorPairType params = msg.getParameters();
 	if (params.first == params.second){ //no hay parametros
 		if (clients.count(fd)){

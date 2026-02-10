@@ -3,35 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServ.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/28 14:52:51 by user1             #+#    #+#             */
-/*   Updated: 2026/02/04 14:46:33 by jrollon-         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2026/02/10 15:03:46 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef IRCSERV_HPP
 #define IRCSERV_HPP
 
 
 #include <sys/epoll.h>
-#include <cstring>
 #include <map>
 #include <fcntl.h>
-#include <iostream>
-#include <sstream>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <stdexcept> 
 
-#include "IRCServ.hpp"
 #include "IRCChannel.hpp"
-#include "utils.hpp"
 #include "IRCClient.hpp"
 #include "IRCMessage.hpp"
 
 #define SERVER_NAME "42_irc_server"
+#define TIMEOUT	120 //seconds
 
 class IRCServ {
 public:
@@ -51,12 +47,13 @@ public:
     struct epoll_event*								getEvents();
     const struct epoll_event*					getEvents() const;
     void															setEvent(int fd, epoll_event event);
-		void															addToNicks(const string & n);
+		void															addToNicks(const string & n, int fd);
 		void															rmFromNicks(const string & n);
 		bool															nickIsUnique(const string & n);
 		int 															getFdFromNick(string s);
 		std::string												getServerName(void) const;
-
+		const std::map<const std::string, int>&	getNicks(void) const; //For privmsg
+		const std::map<const string, IRCChannel>& getChannels(void) const; //privmsg
 		
 		void			run();
 		void			process_client_buffer(int fd);
@@ -67,20 +64,29 @@ public:
 		void			queue_and_send(int fd, std::string data);
 		void			broadcast(int fd, std::string notify_msg);
 
+		void			answer_pass(IRCMessage & msg, int fd);
+		void			answer_nick(IRCMessage & msg, int fd);
+		void			answer_user(IRCMessage & msg, int fd);
+    void			answer_ping(IRCMessage & msg, int fd);
+		void 			answer_join(IRCMessage & msg, int fd);
+		void 			answer_part(IRCMessage & msg, int fd);	
+		void			answer_pong(IRCMessage & msg, int fd);
+		void			answer_privmsg(IRCMessage & msg, int fd);
+		void			answer_mode(IRCMessage & msg, int fd);
 
-		void					answer_pass(IRCMessage & msg, int fd);
-		void					answer_nick(IRCMessage & msg, int fd);
-		void					answer_user(IRCMessage & msg, int fd);
-    void					answer_ping(IRCMessage & msg, int fd);
+		//timeout checkout
+		void			send_ping_to_client(int fd);
+		void			check_clients_timeout(void);
+
 
 private:
     int listening_socket;
     std::string clientPassword;
     int epoll_fd;
-    std::map<int, IRCClient> clients;
+    std::map<int, IRCClient> clients;					// fd -> IRCClient
     struct epoll_event events[16];
-		std::set<std::string> nicks;
-		std::map<string, IRCChannel> channels;
+		std::map<const std::string, int> nicks;		// nick -> fd
+		std::map<const string, IRCChannel> channels;
 		string server_name;
 };
 #endif
