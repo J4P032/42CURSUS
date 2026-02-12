@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvassall <mvassall@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 15:05:14 by user1             #+#    #+#             */
-/*   Updated: 2026/02/08 17:11:19 by mvassall         ###   ########.fr       */
+/*   Updated: 2026/02/10 15:28:44 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,3 +41,4 @@ const string genErrUnknownCommand(const string& serverName,
 
 std::vector<string> split(string s, const string& delimiter);  
 #endif
+

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   IRCChannel.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvassall <mvassall@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 15:10:45 by user1             #+#    #+#             */
-/*   Updated: 2026/02/09 15:41:43 by mvassall         ###   ########.fr       */
+/*   Updated: 2026/02/10 16:05:37 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRCCHANNEL_HPP
 #define IRCCHANNEL_HPP
 #include "IRCMessage.hpp"
+#include <cstddef>
 #include <string>
 #include <set>
 #include <map>
@@ -23,10 +24,11 @@ using std::set;
 using std::pair;
 
 typedef enum {
+  ADD_USER_OK,  // Invalid in Mode only used as a return value in addUser
   INVITE_ONLY,
   TOPIC,
   KEY,
-  USER_LIMIT,  // MODES in subject doc
+  USER_LIMIT  // MODES in subject doc
   // ANONYMOUS,
   // MODERATED,
   // NO_EXTERNAL_USERS,
@@ -47,7 +49,7 @@ const string& channelModeToString(ChannelMode chMode);
 typedef enum {
   UNDEF,
   USER_ONLY,
-  CHANNEL_OPERATOR,
+  CHANNEL_OPERATOR
 } UserMode;
 typedef map<string,UserMode>::const_iterator UserMapIterator;
 typedef pair<UserMapIterator,UserMapIterator> PairUserMapIterators;
@@ -72,12 +74,27 @@ const static unsigned MAX_NAME_LENGTH = 50;
   const string& getName() const;
   bool setName(const string& name);
   
+  bool operator==(const IRCChannel& rhs) const;
+  bool operator<(const IRCChannel& rhs) const;
+  bool operator>(const IRCChannel& rhs) const;
+  bool operator<=(const IRCChannel& rhs) const;
+  bool operator>=(const IRCChannel& rhs) const;
+
   /** Check user belongs to this Channel */
   bool checkUser(const string& nick) const;
   
   /** Add/Del user to this channel 
-  @returns {bool} true if the operation was performed */
-  bool addUser(const string& nick, UserMode userMode = USER_ONLY);
+  @returns ADD_USER_OK if the operation was performed 
+  If channel is key protected and supplied userKey != channelKey 
+    returns KEY
+  
+  If channel has a limited number of users and the limit is reached
+    returns USER_LIMIT
+
+  If channel is invite only and user is not in the inveted list
+    return INVITE_ONLY 
+  */
+  ChannelMode addUser(const string& nick, UserMode userMode = USER_ONLY, const string& userKey = "");
   bool delUser(const string& nick);
   
   /** Delete all users from this channel, this means this 
@@ -138,11 +155,11 @@ const static unsigned MAX_NAME_LENGTH = 50;
   
   /** @returns the maximum number of users subscribed to this channel.
   Only active if this channel has USER_LIMIT mode set */
-  unsigned getUserLimit() const;
+  size_t getUserLimit() const;
 
   /** Sets the maximum number of users subscribed to this channel.
   Only active if this channel has USER_LIMIT mode set */
-  void setUserLimit(unsigned userLimit);
+  void setUserLimit(size_t userLimit);
 
   /** @returns {const string&} current topic for the channel */
   const string& getTopic() const;
@@ -157,12 +174,25 @@ const static unsigned MAX_NAME_LENGTH = 50;
   * @returns {std::string} with the contents of the object */
   string toString() const;
 
+  /** Add an invited nick, @returns false if nick already invited */
+  bool addInvitedNick(const string& nick);
+
+  /** Check if a nick was invited */
+  bool checkInvitedNick(const string& nick) const;
+
+  /** Del nick from invited list, @returns false if nick was invited */
+  bool delInvitedNick(const string& nick);
+
+  /** Del all nicks from invited list */
+  void delAllInvitedNicks();
+
 private:
   string name;     // channel name
-	map<std::string, UserMode> nicks; // nick => UserMode
+	map<string, UserMode> nicks; // nick => UserMode
   string key;                       // password to join the channel
   set<ChannelMode> channelModes;
-  unsigned userLimit;               // max number of clients
+  size_t userLimit;                 // max number of clients
   string topic;                     // current channel topic
+  set<string> invitedNicks;         // nicks invited
 };
 #endif

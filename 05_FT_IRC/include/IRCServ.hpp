@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServ.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/10 15:03:46 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/12 11:15:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ public:
 		bool															nickIsUnique(const string & n);
 		int 															getFdFromNick(string s);
 		std::string												getServerName(void) const;
-		const std::map<const std::string, int>&	getNicks(void) const; //For privmsg
-		const std::map<const string, IRCChannel>& getChannels(void) const; //privmsg
+		const std::map<const std::string, int>&	getNicks(void) const;
+		const std::map<const string, IRCChannel>& getChannels(void) const;
 		
 		void			run();
 		void			process_client_buffer(int fd);
@@ -73,6 +73,8 @@ public:
 		void			answer_pong(IRCMessage & msg, int fd);
 		void			answer_privmsg(IRCMessage & msg, int fd);
 		void			answer_mode(IRCMessage & msg, int fd);
+		void			answer_notice(IRCMessage & msg, int fd);
+		void			answer_quit(IRCMessage & msg, int fd);
 
 		//timeout checkout
 		void			send_ping_to_client(int fd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCClient.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvassall <mvassall@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 12:36:20 by user1             #+#    #+#             */
-/*   Updated: 2026/02/09 16:03:07 by mvassall         ###   ########.fr       */
+/*   Updated: 2026/02/12 16:00:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef enum {
   USER_FLAG,        // after USER command
   SERVICE_FLAG,     // after SERVICE command
   OPERATOR_FLAG,    // after OPERATOR command
-  REGISTERED_FLAG,  // after PASS, NICK, (USER || SERVICE) commands
+  REGISTERED_FLAG  // after PASS, NICK, (USER || SERVICE) commands
 } FtIRCFlag;
 
 const std::string FtIRCFlagToString(FtIRCFlag flag);
@@ -89,10 +89,15 @@ public:
 	const std::string & getHost() const;
 	void setHost(const std::string & s);
 
+  //timeout
   time_t  getLastActivity(void) const;
   void    updateLastActivity(void);
   bool    get_server_ping_sent(void);
   void    set_server_ping_sent(void);
+
+  //quit
+  bool    get_toBeEliminated(void) const;
+  void    set_toBeEliminated(bool eliminate);
 
 
 private:
@@ -107,6 +112,7 @@ private:
   std::string Obuffer;
   time_t      last_activity;
   bool        server_ping_sent;
+  bool        _toBeEliminated;
 };
 
 #endif

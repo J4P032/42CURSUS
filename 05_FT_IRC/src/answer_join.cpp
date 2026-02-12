@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   answer_join.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvassall <mvassall@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/08 12:42:05 by mvassall          #+#    #+#             */
-/*   Updated: 2026/02/09 15:49:48 by mvassall         ###   ########.fr       */
+/*   Updated: 2026/02/10 15:29:05 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,3 +110,4 @@ void  IRCServ::answer_join(IRCMessage& msg, int fd) {
   }
   
 }
+

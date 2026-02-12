@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user1 <user1@student.42.fr>                +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 12:32:04 by user1             #+#    #+#             */
-/*   Updated: 2026/01/28 15:15:47 by user1            ###   ########.fr       */
+/*   Updated: 2026/02/10 15:57:34 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,13 +227,12 @@ static void initMapStringToIRCCommand(std::map<std::string,IRCCommand>& m) {
 IRCCommand stringToIRCCommand(const std::string& str) {
   static std::map<std::string,IRCCommand> str2cmd;
   if (str2cmd.empty()) initMapStringToIRCCommand(str2cmd);
-  std::string strUppper = str.substr();
-  ft_toUpper(strUppper);
-  try {
-    return str2cmd.at(strUppper);
-  } catch(const std::out_of_range& ex) {
-      return UNDEFINED;
-  }
+  std::string strUpper = str.substr();
+  ft_toUpper(strUpper);
+  std::map<std::string,IRCCommand>::const_iterator it = str2cmd.find(strUpper);
+  if (it == str2cmd.end())
+		return UNDEFINED;
+	return it->second;
 }
 
 static void initMapIRCCommand2String(std::map<IRCCommand,std::string>& m) {
@@ -448,10 +447,10 @@ static void initMapIRCCommand2String(std::map<IRCCommand,std::string>& m) {
 const std::string& IRCCommandtoString(IRCCommand cmd) {
   static std::map<IRCCommand,std::string> cmd2String;
   static const std::string undefString = "UNDEFINED_CMD";
-  if (cmd2String.empty()) initMapIRCCommand2String(cmd2String);
-  try {
-    return cmd2String.at(cmd);
-  } catch(const std::out_of_range& ex) {
-      return undefString;
-  }
+  if (cmd2String.empty())
+		initMapIRCCommand2String(cmd2String);
+  std::map<IRCCommand,std::string>::const_iterator it = cmd2String.find(cmd);
+  if (it == cmd2String.end())
+		return undefString;
+	return it->second;
 }

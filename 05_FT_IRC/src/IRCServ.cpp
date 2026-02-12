@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServ.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/10 15:06:03 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/12 11:06:56 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,13 +170,36 @@ void IRCServ::run()
  
 void IRCServ::close_client(int fd)
 {
-	if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
-		throw std::runtime_error(std::string("epoll_ctl delete client: ")
-		+ strerror(errno));
-	close(fd);
-	clients.erase(fd);
+    // 1. Eliminar del epoll
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
+        std::cerr << "Error eliminando fd de epoll: " << strerror(errno) << std::endl;
 
-	std::cout << "Cliente [" << fd << "] desconectado" << std::endl;
+    std::map<int, IRCClient>::iterator client_it = clients.find(fd);
+    if (client_it != clients.end())
+    {
+        std::string nick = client_it->second.getNick();
+        // 3. Bucle que itera por los canales y borra el usuario de todos ellos
+        std::map<const std::string, IRCChannel>::iterator ch_it = channels.begin();
+        while (ch_it != channels.end())
+        {
+            ch_it->second.delUser(nick);
+            // Lógica estándar de IRC: Si el canal no tiene más usuarios, se borra el canal
+            if (ch_it->second.getNumberOfUsers() == 0)
+            {
+                std::map<const std::string, IRCChannel>::iterator to_erase = ch_it;
+                ++ch_it;
+                channels.erase(to_erase);
+            }
+            else
+                ++ch_it;
+        }
+        // 4. Limpieza de los mapas globales del servidor
+        nicks.erase(nick);
+        clients.erase(client_it);
+    }
+    // 5. Cierre físico del socket
+    close(fd);
+    std::cout << "Cliente [" << fd << "] desconectado" << std::endl;
 }
 
 // Acepta una nueva conexión entrante en listening_socket.
@@ -358,13 +381,13 @@ void IRCServ::answer_command(IRCMessage &msg, int fd)
         case CMD_PASS:     answer_pass(msg, fd);     break;
         case CMD_NICK:     answer_nick(msg, fd);     break;
         case CMD_USER:     answer_user(msg, fd);     break;
-        // case CMD_QUIT:     answer_quit(msg, fd);     break;
+        case CMD_QUIT:     answer_quit(msg, fd);     break;
 
         // // === extras ===
         case CMD_JOIN:     answer_join(msg, fd);     break;
         case CMD_PART:     answer_part(msg, fd);     break;
         case CMD_PRIVMSG:  answer_privmsg(msg, fd);  break;
-        // case CMD_NOTICE:   answer_notice(msg, fd);   break;
+        case CMD_NOTICE:   answer_notice(msg, fd);   break;
         case CMD_PING:     answer_ping(msg, fd);     break;
         case CMD_PONG:     answer_pong(msg, fd);     break;
 
