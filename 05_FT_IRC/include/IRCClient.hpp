@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 12:36:20 by user1             #+#    #+#             */
-/*   Updated: 2026/02/12 16:00:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/13 10:52:00 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,6 @@ public:
   bool    get_server_ping_sent(void);
   void    set_server_ping_sent(void);
 
-  //quit
-  bool    get_toBeEliminated(void) const;
-  void    set_toBeEliminated(bool eliminate);
-
-
 private:
   int fd;
   std::string nick;
@@ -112,7 +107,6 @@ private:
   std::string Obuffer;
   time_t      last_activity;
   bool        server_ping_sent;
-  bool        _toBeEliminated;
 };
 
 #endif

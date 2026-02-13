@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/12 11:06:56 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/13 10:58:33 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,6 +367,17 @@ const std::map<const std::string, int>&	IRCServ::getNicks(void) const{
 const std::map<const string, IRCChannel>& IRCServ::getChannels(void) const{
 	return (channels);
 }
+
+//quit
+std::set<int>& IRCServ::get_clientsToBeRemoved(void){
+	return (_clientsToBeRemoved);
+}
+
+//quit
+void					IRCServ::set_clientsToBeRemoved(int fd){
+	_clientsToBeRemoved.insert(fd);
+}
+
 
 
 void IRCServ::answer_command(IRCMessage &msg, int fd)

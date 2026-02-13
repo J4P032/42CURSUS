@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/12 11:15:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/13 10:57:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ public:
 		void			send_ping_to_client(int fd);
 		void			check_clients_timeout(void);
 
-
+		//QUIT or any other function to remove clients in the loop
+		std::set<int>& get_clientsToBeRemoved(void);
+		void					set_clientsToBeRemoved(int fd);
+		
 private:
     int listening_socket;
     std::string clientPassword;
@@ -89,6 +92,7 @@ private:
     struct epoll_event events[16];
 		std::map<const std::string, int> nicks;		// nick -> fd
 		std::map<const string, IRCChannel> channels;
+		std::set<int>	_clientsToBeRemoved; //FDs 
 		string server_name;
 };
 #endif

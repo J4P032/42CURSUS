@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/12 16:02:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/13 10:52:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 #include "utils.hpp"
 
 
-IRCClient::IRCClient() : fd(-1), last_activity(std::time(NULL)), server_ping_sent(false), _toBeEliminated(false) {}
-IRCClient::IRCClient(int fd) : fd(fd), last_activity(std::time(NULL)), server_ping_sent(false), _toBeEliminated(false) { 
+IRCClient::IRCClient() : fd(-1), last_activity(std::time(NULL)), server_ping_sent(false) {}
+IRCClient::IRCClient(int fd) : fd(fd), last_activity(std::time(NULL)), server_ping_sent(false) { 
   if (fd < 0) throw std::invalid_argument("invalid file descriptor");
 }
 IRCClient::IRCClient(const IRCClient &other):
@@ -35,8 +35,7 @@ IRCClient::IRCClient(const IRCClient &other):
     Ibuffer(other.Ibuffer),
     Obuffer(other.Obuffer),
     last_activity(other.last_activity),
-    server_ping_sent(other.server_ping_sent),
-    _toBeEliminated(other._toBeEliminated){}
+    server_ping_sent(other.server_ping_sent){}
 
 IRCClient &IRCClient::operator=(const IRCClient &other) {
   if (this != &other) {
@@ -51,7 +50,6 @@ IRCClient &IRCClient::operator=(const IRCClient &other) {
     Obuffer = other.Obuffer;
     this->last_activity = other.last_activity;
     server_ping_sent = other.server_ping_sent;
-    _toBeEliminated = other._toBeEliminated;
   }
   return *this;
 }
@@ -299,10 +297,3 @@ void    IRCClient::set_server_ping_sent(void){
   server_ping_sent = true;
 }
 
-bool    IRCClient::get_toBeEliminated(void) const{
-  return (_toBeEliminated);  
-}
-
-void    IRCClient::set_toBeEliminated(bool eliminate){
-  _toBeEliminated = eliminate;
-}
