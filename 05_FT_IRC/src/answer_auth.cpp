@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   answers.cpp                                        :+:      :+:    :+:   */
+/*   answer_auth.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 15:34:32 by mvassall          #+#    #+#             */
-/*   Updated: 2026/02/10 14:46:16 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/11 15:54:48 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,6 @@
 #include "IRCServ.hpp"
 #include <sstream>
 #include <iostream>
-
-// void IRCServ::answer_kick(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_invite(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_topic(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_mode(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_quit(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_join(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_part(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_privmsg(IRCMessage & msg, int fd) {}
-
-// void IRCServ::answer_notice(IRCMessage & msg, int fd) {}
-
-
-
-// void IRCServ::answer_pong(IRCMessage & msg, int fd) {}
-
 
 void IRCServ::answer_pass(IRCMessage & msg, int fd)
 {
@@ -94,11 +71,7 @@ void IRCServ::answer_nick(IRCMessage & msg, int fd)
 		broadcast(fd, msg);
 	}
 	else if (clients[fd].checkFlag(NICK_FLAG) && clients[fd].checkFlag(USER_FLAG) && clients[fd].checkFlag(PASS_FLAG)) 
-	{
-		std::string nick = clients[fd].getNick();
-		std::string welcome = ":server 001 " + nick + " :Welcome to the Internet Relay Network " + nick + "!" + clients[fd].getUsername() + "@" + clients[fd].getHost() + "\r\n";
-		queue_and_send(fd, welcome);
-	}
+		sendWelcome(fd);
 }
 
 void IRCServ::answer_user(IRCMessage & msg, int fd)
@@ -127,13 +100,8 @@ void IRCServ::answer_user(IRCMessage & msg, int fd)
 	clients[fd].setFlag(USER_FLAG);
 
 	if (clients[fd].checkFlag(NICK_FLAG) && clients[fd].checkFlag(USER_FLAG) && clients[fd].checkFlag(PASS_FLAG)) 
-	{
-		std::string nick = clients[fd].getNick();
-		std::string welcome = ":server 001 " + nick + " :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + clients[fd].getHost() + "\r\n";
-		queue_and_send(fd, welcome);
-	}
+		sendWelcome(fd);
 }
-
 
 void IRCServ::queue_and_send(int fd, std::string data)
 {
@@ -178,4 +146,27 @@ void IRCServ::broadcast(int fd, std::string notify_msg)
 		it != targets.end(); ++it) {
 		queue_and_send(*it, notify_msg);
 	}
+}
+
+void IRCServ::sendWelcome(int fd)
+{
+    std::string nick = clients[fd].getNick();
+    std::string user = clients[fd].getUsername();
+    std::string host = clients[fd].getHost();
+    std::string sName = getServerName();
+
+    std::string rpl001 = ":" + sName + " 001 " + nick + " :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host + "\r\n";
+    queue_and_send(fd, rpl001);
+
+    std::string rpl002 = ":" + sName + " 002 " + nick + " :Your host is " + sName + ", running version 1.0\r\n";
+    queue_and_send(fd, rpl002);
+
+    std::string rpl003 = ":" + sName + " 003 " + nick + " :This server was created Wed Feb 11 2026\r\n";
+    queue_and_send(fd, rpl003);
+
+    std::string rpl004 = ":" + sName + " 004 " + nick + " " + sName + " 1.0 i ntklo\r\n";
+    queue_and_send(fd, rpl004);
+
+		std::string rpl376 = ":" + sName + " 376 " + nick + " :End of /MOTD command.\r\n";
+		queue_and_send(fd, rpl376);
 }

@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   IRCChannel.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mvassall <mvassall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 15:10:45 by user1             #+#    #+#             */
-/*   Updated: 2026/02/10 16:05:37 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/11 14:27:44 by mvassall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRCCHANNEL_HPP
 #define IRCCHANNEL_HPP
+#include "IRCClient.hpp"
 #include "IRCMessage.hpp"
 #include <cstddef>
+#include <ctime>
 #include <string>
 #include <set>
 #include <map>
@@ -22,6 +24,8 @@ using std::map;
 using std::string;
 using std::set;
 using std::pair;
+
+class IRCServ;
 
 typedef enum {
   ADD_USER_OK,  // Invalid in Mode only used as a return value in addUser
@@ -63,7 +67,7 @@ public:
 const static unsigned MAX_NAME_LENGTH = 50;
 
   IRCChannel();
-	IRCChannel(const string& name);
+	IRCChannel(const string& name, const string& creatorNick);
   IRCChannel(const IRCChannel& other);
   IRCChannel& operator=(const IRCChannel& other);
   virtual ~IRCChannel();
@@ -100,6 +104,9 @@ const static unsigned MAX_NAME_LENGTH = 50;
   /** Delete all users from this channel, this means this 
   channel should cease to exist */
   void clearUsers();
+
+  /** @returns a reference to map of nicks */
+  const map<string, UserMode>& getNicksMap() const;
 
   /** Set a UserMode to a particular user in this channel, 
   if this is the first user added it is automatically made 
@@ -153,6 +160,9 @@ const static unsigned MAX_NAME_LENGTH = 50;
   */
   PairChannelModesIterators getChannelModesIterators() const;
   
+  /** @returns a const reference to the set of ChannelModes */
+  const set<ChannelMode>& getChannelModes() const;
+
   /** @returns the maximum number of users subscribed to this channel.
   Only active if this channel has USER_LIMIT mode set */
   size_t getUserLimit() const;
@@ -186,13 +196,30 @@ const static unsigned MAX_NAME_LENGTH = 50;
   /** Del all nicks from invited list */
   void delAllInvitedNicks();
 
-private:
-  string name;     // channel name
-	map<string, UserMode> nicks; // nick => UserMode
-  string key;                       // password to join the channel
+  /** @returns invited nicks set */
+  const set<string>& getInvitedNicks() const;
+
+  /** @returns {time_t} creation time stamp */
+  size_t getCreationTime() const;
+  
+  /** @return {string&} creator nick */
+  const string& getCreatorNick() const;
+
+  /** set creator nick */
+  void setCreatorNick(const string& nick);
+  
+private: 
+  string name;            // channel name, lower case
+	map<string, UserMode> nicks;    // nick => UserMode
+  string key;                     // password to join the channel
   set<ChannelMode> channelModes;
-  size_t userLimit;                 // max number of clients
-  string topic;                     // current channel topic
-  set<string> invitedNicks;         // nicks invited
+  size_t userLimit;               // max number of clients
+  string topic;                   // current channel topic
+  set<string> invitedNicks;       // nicks invited
+  std::time_t creationTime;       // creation timestamp epoch
+  string creatorNick;
 };
+
+/** Delete a client from a channel notifying all members of its exit */
+void partChannel(IRCServ& ircServer, IRCClient& client, IRCChannel& channel, const string& byeMsg);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/13 10:58:33 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/17 12:48:03 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 
 #include "IRCServ.hpp"
+#include "utils.hpp"
 #include <cerrno>
 #include <cstring>
 #include <stdexcept>
@@ -161,7 +162,10 @@ void IRCServ::run()
 				if (events[i].events & EPOLLOUT)
 					this->queue_and_send(fd, ""); 
 				if (read_from_client(clients[fd]))
+				{
 					close_client(fd);
+					continue ;
+				}
 				process_client_buffer(fd);
 			}
 		}
@@ -269,8 +273,7 @@ bool IRCServ::read_from_client(IRCClient & client)
 			else if (errno == EINTR)
 				continue;
 			else
-				throw std::runtime_error(std::string("recv(): ")
-				+ strerror(errno));
+				return false;
 		}
 	}
 }
@@ -368,6 +371,11 @@ const std::map<const string, IRCChannel>& IRCServ::getChannels(void) const{
 	return (channels);
 }
 
+//kick
+std::map<const string, IRCChannel>& IRCServ::getChannels(void){
+	return (channels);
+}
+
 //quit
 std::set<int>& IRCServ::get_clientsToBeRemoved(void){
 	return (_clientsToBeRemoved);
@@ -378,16 +386,23 @@ void					IRCServ::set_clientsToBeRemoved(int fd){
 	_clientsToBeRemoved.insert(fd);
 }
 
-
+/** Deletes an empty channel (number of users == 0) */
+void			IRCServ::delEmptyChannel(const string channelName) {
+	string lcChannelName = channelName;
+	ft_toLower(lcChannelName);
+	if (channels.find(lcChannelName) == channels.end()) return;
+	if (channels[lcChannelName].getNumberOfUsers() != 0) return;
+	channels.erase(lcChannelName);
+}
 
 void IRCServ::answer_command(IRCMessage &msg, int fd)
 {
+		std::string rpl = ":" + getServerName() + " CAP * LS :\r\n";
     switch (msg.getCommand())
     {
         // === OBLIGATORIOS por subject ===
-        // case CMD_KICK:     answer_kick(msg, fd);     break;
+        case CMD_KICK:     answer_kick(msg, fd);     break;
         // case CMD_INVITE:   answer_invite(msg, fd);   break;
-        // case CMD_TOPIC:    answer_topic(msg, fd);    break;
         case CMD_MODE:     answer_mode(msg, fd);     break;
         case CMD_PASS:     answer_pass(msg, fd);     break;
         case CMD_NICK:     answer_nick(msg, fd);     break;
@@ -398,9 +413,13 @@ void IRCServ::answer_command(IRCMessage &msg, int fd)
         case CMD_JOIN:     answer_join(msg, fd);     break;
         case CMD_PART:     answer_part(msg, fd);     break;
         case CMD_PRIVMSG:  answer_privmsg(msg, fd);  break;
+        case CMD_TOPIC:    answer_topic(msg, fd);    break;
+        case CMD_NAMES:    answer_names(msg, fd);    break;
+        case CMD_WHO:      answer_who(msg, fd);      break;
         case CMD_NOTICE:   answer_notice(msg, fd);   break;
         case CMD_PING:     answer_ping(msg, fd);     break;
         case CMD_PONG:     answer_pong(msg, fd);     break;
+				case CMD_CAP:       queue_and_send(fd, rpl); break;
 
         default:
             // (???) Enviar error ERR_UNKNOWNCOMMAND (421) al cliente

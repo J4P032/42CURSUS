@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCClient.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/13 10:52:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/16 10:25:36 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ const std::string& IRCClient::getNick() const { return nick; }
 bool IRCClient::setNick(const std::string& nick) {
   if (!isValidNick(nick)) return false;
   this->nick = nick;
+  ft_toLower(this->nick);
   return true;
 }
 
@@ -109,18 +110,21 @@ bool IRCClient::isValidUsername(const std::string &username) {
 
 const std::string& IRCClient::getFullname() const { return fullname; }
 bool IRCClient::setFullname(const std::string& fullname) {
-  if (!isValidFullname(fullname)) return false;
+  if (!isValidFullname(fullname)) {
+		return false;
+  }
   this->fullname = fullname;
   return true;
 }
 
 bool IRCClient::isValidFullname(const std::string &fullname) {
-  if (fullname.empty() || fullname.length() >= MAX_MESSAGE_LENGTH)
+  if (fullname.empty() || fullname.length() >= MAX_MESSAGE_LENGTH) {
     return false;
+  }
   std::string::const_iterator it;
   for (it = fullname.begin(); it != fullname.end(); ++it) {
       if (*it == '\0') return false;
-    }
+  }
   return true;  
 }
 
@@ -133,15 +137,21 @@ bool IRCClient::setFd(int fd) {
 }
 
 bool IRCClient::checkChannel(const std::string& channelName) const {
-  return channelNames.count(channelName) != 0;
+  string lcChannelName = channelName;
+  ft_toLower(lcChannelName);
+  return channelNames.find(lcChannelName) != channelNames.end();
 }
 
 bool IRCClient::addChannel(const std::string& channelName) {
-  return channelNames.insert(channelName).second;
+  string lcChannelName = channelName;
+  ft_toLower(lcChannelName);
+  return channelNames.insert(lcChannelName).second;
 }
 
 bool IRCClient::delChannel(const std::string& channelName) {
-  return channelNames.erase(channelName) != 0;
+  string lcChannelName = channelName;
+  ft_toLower(lcChannelName);
+  return channelNames.erase(lcChannelName) != 0;
 }
 
 void IRCClient::clearChannels() {
@@ -154,7 +164,7 @@ pairIterators IRCClient::getChannelIterators() const {
 }
 
 bool IRCClient::checkFlag(const FtIRCFlag& f) const {
-  return flags.count(f) != 0;
+  return flags.find(f) != flags.end();
 }
 
 bool IRCClient::setFlag(const FtIRCFlag& f) {
@@ -295,5 +305,9 @@ bool    IRCClient::get_server_ping_sent(void){
   
 void    IRCClient::set_server_ping_sent(void){
   server_ping_sent = true;
+}
+
+const std::set<std::string>& IRCClient::getChannelNames() const {
+  return channelNames;
 }
 

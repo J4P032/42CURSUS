@@ -33,8 +33,8 @@ void ft_toUpper(string& str);
 void ft_toLower(string& str);
 const string& getLocalHostname();
 
-const string genErrNeedMoreParams(const string& serverName,
-  const string& nickName);
+const string genSyntaxError(const string& serverName,
+  const string& nickName, const string& cmd);
 
 const string genErrUnknownCommand(const string& serverName,
   const string& commandString);

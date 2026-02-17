@@ -107,6 +107,7 @@ std::vector<string> split(string s, const string& delimiter) {
     return tokens;
 }
 
+// :ngircd.none.net 421 mvg xxxx :Unknown command
 const string genErrUnknownCommand(const string& serverName,
   const string& commandString) {
   std::ostringstream oss;
@@ -117,12 +118,15 @@ const string genErrUnknownCommand(const string& serverName,
   return oss.str();
 }
 
-const string genErrNeedMoreParams(const string& serverName,
-  const string& nickName) {
+// :ngircd.none.net 461 mv user :Syntax error
+const string genSyntaxError(const string& serverName,
+  const string& nickName, const string& cmd) {
   std::ostringstream oss;
   oss << ':' << serverName 
     << ' ' << ERR_NEEDMOREPARAMS 
     << ' ' << nickName
-    << " :Not enough parameters\r\n";
+    << ' ' << cmd
+    << " :Syntax error\r\n";
   return oss.str();
 }
+

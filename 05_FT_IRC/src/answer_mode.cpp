@@ -4,9 +4,10 @@
 #include "IRCClient.hpp"
 #include "IRCChannel.hpp"
 #include <sstream>
+#include <iostream>
 
 void IRCServ::answer_mode(IRCMessage & msg, int fd) {
-	if (msg.getParametersSize() < 2) {
+	if (msg.getParametersSize() < 1) {
 		// ERR_NEEDMOREPARAMS
 		std::string rpl = ":" + this->getServerName() + " 461 " + clients[fd].getNick() + " MODE :Not enough parameters\r\n";
 		queue_and_send(fd, rpl);
@@ -14,7 +15,9 @@ void IRCServ::answer_mode(IRCMessage & msg, int fd) {
 	}
 
 	std::string target = msg.getParam(0);
-	std::string flags = msg.getParam(1);
+	std::string flags;
+	if (msg.getParametersSize() != 1) 
+		flags = msg.getParam(1);
 
 	if (target[0] == '#' || target[0] == '&' || target[0] == '+' || target[0] == '!') {
 		// ----- MODO CANAL -----
@@ -25,6 +28,32 @@ void IRCServ::answer_mode(IRCMessage & msg, int fd) {
 			return;
 		}
 		IRCChannel& channel = channels[target];
+		if (msg.getParametersSize() == 1)
+		{
+
+			std::string nick = clients[fd].getNick();
+			std::string server = this->getServerName();
+
+			string modes = "";
+			const set<ChannelMode>& modesSet = channel.getChannelModes();
+
+			for (set<ChannelMode>::const_iterator it = modesSet.begin(); it != modesSet.end(); ++it)
+					modes += channelModeToString(*it);
+			std::stringstream rpl324;
+			rpl324 << ":" << server << " 324 " << nick << " " << target << " +" 
+						<< modes << "\r\n";
+
+			queue_and_send(fd, rpl324.str());
+
+			std::stringstream rpl329;
+			rpl329 << ":" << server << " 329 " << nick << " " << target << " " 
+						<< channel.getCreationTime() << "\r\n";
+
+			queue_and_send(fd, rpl329.str());
+
+			std::cout << channel.toString() << std::endl;
+			return;
+		}
 
 		if (!channel.checkUser(clients[fd].getNick())) {
 			// ERR_NOTONCHANNEL

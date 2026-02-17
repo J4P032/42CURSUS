@@ -2,5 +2,6 @@
 -Wall
 -Werror
 -Wunreachable-code
+-pedantic
 -std=c++98
 -I./include

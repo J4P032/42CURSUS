@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:20:21 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/10 17:16:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/17 15:17:24 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static void	to_user(std::vector<std::string>& msg, int fd, std::string & target,
 	//nick is not valid.
 	else{
 			std::string my_nick = sender.getNick();
+			ft_toLower(my_nick);
 			if (my_nick.empty())
 				my_nick = "*";
 			reply << ":" << server.getServerName() << " 401 " << my_nick << " " << target << " :No such nick\r\n";
@@ -76,6 +77,7 @@ static void	to_channel(std::vector<std::string>& msg, int fd, std::string & targ
     return;    
   const IRCClient &sender = it_sender->second;
 	std::string sender_nick = sender.getNick();
+	ft_toLower(sender_nick);
 
 	//1. Search for the channel.
 	std::map<const string, IRCChannel>::const_iterator it_chan = channels.find(target);
@@ -154,6 +156,7 @@ void IRCServ::answer_privmsg(IRCMessage & msg, int fd) {
 	if (clients.count(fd)){
 
 	std::string 							target = msg.getParam(0);
+	ft_toLower(target);
 	std::vector<std::string> 	parameters = msg.getParamsVector();
 	if (!target.empty() && (target[0] == '#' || target[0] == '&' || target[0] == '+' || target[0] == '!'))
 		to_channel(parameters, fd, target, *this);

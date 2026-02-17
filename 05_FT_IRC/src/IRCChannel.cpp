@@ -6,25 +6,33 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 15:12:14 by user1             #+#    #+#             */
-/*   Updated: 2026/02/10 15:57:28 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/11 15:22:03 by mvassall         ###   ########.fr       */
+/*   Updated: 2026/02/11 12:29:10 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRCChannel.hpp"
+#include "IRCServ.hpp"
 #include "utils.hpp"
 #include <cstddef>
 #include <sstream>
 #include <stdexcept>
 
-IRCChannel::IRCChannel(): name("INVALID_NAME"), userLimit(0) {}
+IRCChannel::IRCChannel(): name("INVALID_NAME"), userLimit(0) {
+  creationTime = std::time(NULL);
+}
 
 /** the channel name is stored in lower case */
-IRCChannel::IRCChannel(const std::string& name) {
+IRCChannel::IRCChannel(const string& name, const string& creatorNick) {
   if (!isValidName(name))
     throw std::invalid_argument("invalid channel name");
   this->name = name;
   ft_toLower(this->name);
   userLimit = 0;
+  creationTime = std::time(NULL);
+  string lcCreatorNick = creatorNick;
+  ft_toLower(lcCreatorNick);
+  this->creatorNick = lcCreatorNick;
 }
 
 IRCChannel::IRCChannel(const IRCChannel& other):
@@ -34,7 +42,9 @@ IRCChannel::IRCChannel(const IRCChannel& other):
   channelModes(other.channelModes),
   userLimit(other.userLimit),
   topic(other.topic),
-  invitedNicks(other.invitedNicks) {}
+  invitedNicks(other.invitedNicks),
+  creationTime(other.creationTime),
+  creatorNick(other.creatorNick) {}
 
   IRCChannel& IRCChannel::operator=(const IRCChannel& other) {
   if (this != &other) {
@@ -45,6 +55,8 @@ IRCChannel::IRCChannel(const IRCChannel& other):
     userLimit = other.userLimit;
     topic = other.topic;
     invitedNicks = other.invitedNicks;
+    creationTime = other.creationTime;
+    creatorNick = other.creatorNick;
   }
   return *this;
 }
@@ -95,22 +107,27 @@ const string& IRCChannel::getName() const {
 bool IRCChannel::setName(const std::string& name) {
   if (!isValidName(name))
     return false;
-  this->name = name;
-  ft_toLower(this->name);
+  std::string aux = name;
+  ft_toLower(aux);
+  this->name = aux;
   return true;
 }
 
 bool IRCChannel::checkUser(const string& nick) const {
-  return nicks.find(nick) != nicks.end();
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  return nicks.find(lcNick) != nicks.end();
 }
 
 ChannelMode IRCChannel::addUser(
   const string& nick, 
   UserMode userMode, 
   const string& userKey) {
-  if (checkUser(nick)) return ADD_USER_OK;
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  if (checkUser(lcNick)) return ADD_USER_OK;
   if (nicks.empty()) {
-    nicks[nick] = CHANNEL_OPERATOR;
+    nicks[lcNick] = CHANNEL_OPERATOR;
     return ADD_USER_OK;
   }
   if (checkChannelMode(USER_LIMIT) && nicks.size() >= userLimit)
@@ -118,15 +135,17 @@ ChannelMode IRCChannel::addUser(
   if (checkChannelMode(INVITE_ONLY) && !checkInvitedNick(nick)) {
     return INVITE_ONLY;
   }
-  if (checkChannelMode(KEY) && (key != userKey)) {
+  if (checkChannelMode(KEY) && (userKey != key)) {
     return KEY;
   }
-  nicks[nick] = userMode;
+  nicks[lcNick] = userMode;
   return ADD_USER_OK;
 }
 
 bool IRCChannel::delUser(const string& nick) {
-  return nicks.erase(nick) != 0;
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  return nicks.erase(lcNick) != 0;
 }
 
 void IRCChannel::clearUsers() {
@@ -134,16 +153,18 @@ void IRCChannel::clearUsers() {
 }
 
 bool IRCChannel::setUserMode(const string& nick, UserMode userMode) {
-  if (nicks.count(nick) == 0) return false;
-  nicks[nick] = userMode;
+  if (!checkUser(nick)) return false;
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  nicks[lcNick] = userMode;
   return true;
 }
 
 UserMode IRCChannel::getUserMode(const string& nick) const {
-  if (nicks.count(nick) == 0) return UNDEF;
-	map<string, UserMode>::const_iterator it = nicks.find(nick);
-	if (it == nicks.end())
-		throw std::runtime_error("NO SUCH NICK");
+  string lcNick = nick;
+  ft_toLower(lcNick);
+	map<string, UserMode>::const_iterator it = nicks.find(lcNick);
+	if (it == nicks.end()) return UNDEF;
   return it->second;
 }
 
@@ -183,8 +204,10 @@ const string& IRCChannel::getTopic() const {
 }
 
 bool IRCChannel::setTopic(const string& nick, const string& newTopic) {
-  if ((channelModes.count(TOPIC) == 0)
-    || (nicks.count(nick) != 0 && nicks[nick] == CHANNEL_OPERATOR)) {
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  if ((!checkChannelMode(TOPIC))
+    || (checkUser(lcNick) && nicks[lcNick] == CHANNEL_OPERATOR)) {
     topic = newTopic;
     return true;
   }
@@ -217,7 +240,10 @@ std::string IRCChannel::toString() const {
       << userModeToString(it->second) << ')';
   }
   buf << ']';
-  buf << ", key=\"" << key << "\", userLimit=" << userLimit
+  buf << ", key=\"" << key << "\""
+    << ", userLimit=" << userLimit
+    << ", creationTime=" << creationTime
+    << ", creatorNick=" << creatorNick
     << ", channelModes=[";
   for (set<ChannelMode>::const_iterator it = channelModes.begin();
     it != channelModes.end(); ++it) {
@@ -238,10 +264,14 @@ std::string IRCChannel::toString() const {
 const string& channelModeToString(ChannelMode chMode) {
   static map<ChannelMode,string> m;
   if (m.empty()) {
-    m[INVITE_ONLY] = "INVITE_ONLY";
-    m[TOPIC] = "TOPIC";
-    m[KEY] = "KEY";
-    m[USER_LIMIT] = "USER_LIMIT";
+    m[INVITE_ONLY] = "i";
+    m[TOPIC] = "t";
+    m[KEY] = "k";
+    m[USER_LIMIT] = "l";
+    m[INVITE_ONLY] = "i";
+    m[TOPIC] = "t";
+    m[KEY] = "k";
+    m[USER_LIMIT] = "l";
   }
   return m[chMode];
 }
@@ -257,17 +287,74 @@ const string& userModeToString(UserMode uMode) {
 }
 
 bool IRCChannel::addInvitedNick(const string& nick) {
-  return invitedNicks.insert(nick).second;
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  return invitedNicks.insert(lcNick).second;
 }
 
 bool IRCChannel::checkInvitedNick(const string& nick) const {
-  return invitedNicks.find(nick) != invitedNicks.end();
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  return invitedNicks.find(lcNick) != invitedNicks.end();
 }
 
 bool IRCChannel::delInvitedNick(const string& nick) {
-  return invitedNicks.erase(nick) > 0;
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  return invitedNicks.erase(lcNick) > 0;
 }
 
 void IRCChannel::delAllInvitedNicks() {
   invitedNicks.clear();
 }
+
+const set<ChannelMode>& IRCChannel::getChannelModes() const {
+  return channelModes;
+}
+
+const map<string, UserMode>& IRCChannel::getNicksMap() const {
+  return nicks;
+}
+
+const set<string>& IRCChannel::getInvitedNicks() const {
+  return invitedNicks;
+}
+
+
+size_t IRCChannel::getCreationTime() const {
+  return creationTime;
+}
+
+const string& IRCChannel::getCreatorNick() const {
+  return creatorNick;
+}
+
+void IRCChannel::setCreatorNick(const string& nick) {
+  string lcNick = nick;
+  ft_toLower(lcNick);
+  creatorNick = lcNick;
+}
+
+void partChannel(IRCServ& ircServer, IRCClient& client, IRCChannel& channel, const string& byeMsg) {
+  std::ostringstream buf;
+  buf << ':' << client.getNick() << '!' << client.getUsername() << '@' << client.getHost()
+    << " PART " << channel.getName() << " :"
+    << (byeMsg.empty() ? "client leaving" : byeMsg) 
+    << "\r\n";
+  const string reply = buf.str();
+  std::map<const std::string, int> allNicks2Fd = ircServer.getNicks();
+  for (map<string, UserMode>::const_iterator it = channel.getNicksMap().begin();
+    it != channel.getNicksMap().end(); ++it) {  // go thru all list members
+    string mNick = it->first;   // member nick
+    if (allNicks2Fd.find(mNick) == allNicks2Fd.end()) continue;
+    int mFD = allNicks2Fd[mNick];
+    if (ircServer.getClients().find(mFD) == ircServer.getClients().end()) continue;
+    ircServer.queue_and_send(mFD, reply);
+  }
+  channel.delUser(client.getNick());
+  client.delChannel(channel.getName());
+  if (channel.getNumberOfUsers() == 0) {
+    ircServer.delEmptyChannel(channel.getName());
+  }
+}
+

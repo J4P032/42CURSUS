@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CXX := c++
-CXXFLAGS := -Wall -Werror -Wextra -std=c++98 -pedantic #-g3 -fsanitize=address
+CXXFLAGS := -Wall -Werror -Wextra -std=c++98 -pedantic -g3 -fsanitize=address
 #CXXFLAGS := -Wall -Werror -Wextra -std=c++98
 SRC_DIR := ./src
 INCLUDE_DIR := ./include
