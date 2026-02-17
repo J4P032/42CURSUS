@@ -13,12 +13,12 @@
 #include "IRCChannel.hpp"
 #include "IRCClient.hpp"
 #include "IRCCommand.hpp"
-#include "IRCServ.hpp"
 #include "IRCMessage.hpp"
+#include "IRCServ.hpp"
 #include "utils.hpp"
 #include <sstream>
 
-/* 
+/*
 ####### nick aaa:
 join #tst
 :aaa!~AAA@lenovo-i5 JOIN :#tst
@@ -36,33 +36,34 @@ part #tst :Bye bye
 :bbb!~BBB@lenovo-i5 PART #tst :Bye bye
 */
 
-void 	IRCServ::answer_part(IRCMessage & msg, int fd) {
-  if (msg.getCommand() != CMD_PART || clients.find(fd) == clients.end())
-    return;
-  IRCClient& client = clients[fd];
-  size_t nParams = msg.getParametersSize();
-  const string syntaxError = genSyntaxError(server_name, client.getNick(), "PART");
-  if (nParams == 0 || nParams > 2) { // not enough parameters
-    queue_and_send(fd, syntaxError);
-    return;
-  }
-  vector<string> channelNames = split(msg.getParam(0),",");
-  if (channelNames.empty()) {
-    queue_and_send(fd, syntaxError);
-    return;    
-  }
-  string byeMsg = (nParams == 2) ? msg.getParam(1) : "user leaving"; 
-  for (size_t iChannel=0; iChannel < channelNames.size(); ++iChannel) {
-    string chName = channelNames[iChannel];
-    ft_toLower(chName);
-    if (this->channels.find(chName) == this->channels.end()) {
-      // :ngircd.none.net 403 aaa #lalala :No such channel
-      std::ostringstream buf;
-      buf << ':' << server_name << " 403 " << client.getNick() 
-        << ' ' << channelNames[iChannel] << " :No such channel\r\n";
-      queue_and_send(client.getFd(), buf.str());
-      continue;
+void IRCServ::answer_part(IRCMessage& msg, int fd)
+{
+    if (msg.getCommand() != CMD_PART || clients.find(fd) == clients.end())
+        return;
+    IRCClient& client = clients[fd];
+    size_t nParams = msg.getParametersSize();
+    const string syntaxError = genSyntaxError(server_name, client.getNick(), "PART");
+    if (nParams == 0 || nParams > 2) { // not enough parameters
+        queue_and_send(fd, syntaxError);
+        return;
     }
-    partChannel(*this, client, channels[chName], byeMsg);
-  }
+    vector<string> channelNames = split(msg.getParam(0), ",");
+    if (channelNames.empty()) {
+        queue_and_send(fd, syntaxError);
+        return;
+    }
+    string byeMsg = (nParams == 2) ? msg.getParam(1) : "user leaving";
+    for (size_t iChannel = 0; iChannel < channelNames.size(); ++iChannel) {
+        string chName = channelNames[iChannel];
+        ft_toLower(chName);
+        if (this->channels.find(chName) == this->channels.end()) {
+            // :ngircd.none.net 403 aaa #lalala :No such channel
+            std::ostringstream buf;
+            buf << ':' << server_name << " 403 " << client.getNick()
+                << ' ' << channelNames[iChannel] << " :No such channel\r\n";
+            queue_and_send(client.getFd(), buf.str());
+            continue;
+        }
+        partChannel(*this, client, channels[chName], byeMsg);
+    }
 }

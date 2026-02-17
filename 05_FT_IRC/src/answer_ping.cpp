@@ -14,21 +14,22 @@
 #include "IRCServ.hpp"
 #include <sstream>
 
-void IRCServ::answer_ping(IRCMessage & msg, int fd) {
+void IRCServ::answer_ping(IRCMessage& msg, int fd)
+{
 
-	std::ostringstream ans;
+    std::ostringstream ans;
 
-	vectorIteratorPairType params = msg.getParameters();
-	if (params.first == params.second){ //no hay parametros
-		if (clients.count(fd)){
-			std::string nick = clients[fd].getNick();
-			if (nick.empty())
-				nick = "*"; //se usa como placeholder cuando no hay nick asociado
-			ans << ":" << server_name << IRCCommandtoString(ERR_NEEDMOREPARAMS) << nick << " PING :Not enough parameters\r\n";
-			queue_and_send(fd, ans.str());
-		}
-		return ;	
-	}
-	ans << ":" << server_name << " PONG " << " :" << server_name << " :" + *(params.first) + "\r\n"; 
-	queue_and_send(fd, ans.str());
+    vectorIteratorPairType params = msg.getParameters();
+    if (params.first == params.second) { // no hay parametros
+        if (clients.count(fd)) {
+            std::string nick = clients[fd].getNick();
+            if (nick.empty())
+                nick = "*"; // se usa como placeholder cuando no hay nick asociado
+            ans << ":" << server_name << IRCCommandtoString(ERR_NEEDMOREPARAMS) << nick << " PING :Not enough parameters\r\n";
+            queue_and_send(fd, ans.str());
+        }
+        return;
+    }
+    ans << ":" << server_name << " PONG " << " :" << server_name << " :" + *(params.first) + "\r\n";
+    queue_and_send(fd, ans.str());
 }

@@ -1,181 +1,110 @@
-#include <cstdlib>
-#include "IRCServ.hpp"
-#include "IRCMessage.hpp"
-#include "IRCClient.hpp"
 #include "IRCChannel.hpp"
-#include <sstream>
+#include "IRCMessage.hpp"
+#include "IRCServ.hpp"
+#include "utils.hpp"
+#include <cstdlib>
 #include <iostream>
+#include <sstream>
 
 void IRCServ::answer_mode(IRCMessage & msg, int fd) {
-	if (msg.getParametersSize() < 1) {
-		// ERR_NEEDMOREPARAMS
-		std::string rpl = ":" + this->getServerName() + " 461 " + clients[fd].getNick() + " MODE :Not enough parameters\r\n";
-		queue_and_send(fd, rpl);
-		return;
-	}
+    IRCClient &client = clients[fd];
+    std::string nick = client.getNick();
+    std::string server = getServerName();
 
-	std::string target = msg.getParam(0);
-	std::string flags;
-	if (msg.getParametersSize() != 1) 
-		flags = msg.getParam(1);
+    if (msg.getParametersSize() < 1) {
+        queue_and_send(fd, ":" + server + " 461 " + nick + " MODE :Not enough parameters\r\n");
+        return;
+    }
 
-	if (target[0] == '#' || target[0] == '&' || target[0] == '+' || target[0] == '!') {
-		// ----- MODO CANAL -----
-		if (channels.find(target) == channels.end()) {
-			// ERR_NOSUCHCHANNEL
-			std::string rpl = ":" + this->getServerName() + " 403 " + clients[fd].getNick() + " " + target + " :No such channel\r\n";
-			queue_and_send(fd, rpl);
-			return;
-		}
-		IRCChannel& channel = channels[target];
-		if (msg.getParametersSize() == 1)
-		{
+    std::string target = msg.getParam(0);
+    // ----- MODO USUARIO -----
+    if (target[0] != '#' && target[0] != '&' && target[0] != '+' && target[0] != '!') {
+        if (target != nick)
+            queue_and_send(fd, ":" + server + " 502 " + nick + " :Cant change mode for other users\r\n");
+        return;
+    }
 
-			std::string nick = clients[fd].getNick();
-			std::string server = this->getServerName();
+    // ----- MODO CANAL -----
+    if (channels.find(target) == channels.end()) {
+        queue_and_send(fd, ":" + server + " 403 " + nick + " " + target + " :No such channel\r\n");
+        return;
+    }
 
-			string modes = "";
-			const set<ChannelMode>& modesSet = channel.getChannelModes();
+    IRCChannel& channel = channels[target];
 
-			for (set<ChannelMode>::const_iterator it = modesSet.begin(); it != modesSet.end(); ++it)
-					modes += channelModeToString(*it);
-			std::stringstream rpl324;
-			rpl324 << ":" << server << " 324 " << nick << " " << target << " +" 
-						<< modes << "\r\n";
+    // CASO: Consulta de modos (Solo 1 parámetro)
+    if (msg.getParametersSize() == 1) {
+        std::string modes = "";
+        const std::set<ChannelMode>& modesSet = channel.getChannelModes();
+        for (std::set<ChannelMode>::const_iterator it = modesSet.begin(); it != modesSet.end(); ++it)
+            modes += channelModeToString(*it);
+        
+        // El 324 está bien porque son todo strings
+        queue_and_send(fd, ":" + server + " 324 " + nick + " " + target + " +" + modes + "\r\n");
+        
+        // CORRECCIÓN PARA EL 329 (Creation Time es un número)
+        std::stringstream ss;
+        ss << ":" << server << " 329 " << nick << " " << target << " " << channel.getCreationTime() << "\r\n";
+        queue_and_send(fd, ss.str());
+        return;
+    }
 
-			queue_and_send(fd, rpl324.str());
+    // Verificaciones de permisos
+    if (!channel.checkUser(nick)) {
+        queue_and_send(fd, ":" + server + " 442 " + nick + " " + target + " :You're not on that channel\r\n");
+        return;
+    }
+    if (channel.getUserMode(nick) != CHANNEL_OPERATOR) {
+        queue_and_send(fd, ":" + server + " 482 " + nick + " " + target + " :You're not channel operator\r\n");
+        return;
+    }
 
-			std::stringstream rpl329;
-			rpl329 << ":" << server << " 329 " << nick << " " << target << " " 
-						<< channel.getCreationTime() << "\r\n";
+    std::string flags = msg.getParam(1);
+    std::string prefix = ":" + nick + "!" + client.getUsername() + "@" + client.getHost();
+    bool is_neg = false;
+    unsigned int arg_idx = 2;
 
-			queue_and_send(fd, rpl329.str());
+    for (size_t i = 0; i < flags.length(); ++i) {
+        char flag = flags[i];
+        if (flag == '+') { is_neg = false; continue; }
+        if (flag == '-') { is_neg = true; continue; }
 
-			std::cout << channel.toString() << std::endl;
-			return;
-		}
+        std::string param = "";
+        std::string rpl_flag = (is_neg ? "-" : "+");
+        rpl_flag += flag;
 
-		if (!channel.checkUser(clients[fd].getNick())) {
-			// ERR_NOTONCHANNEL
-			std::string rpl = ":" + this->getServerName() + " 442 " + clients[fd].getNick() + " " + target + " :You're not on that channel\r\n";
-			queue_and_send(fd, rpl);
-			return;
-		}
-
-		if (channel.getUserMode(clients[fd].getNick()) != CHANNEL_OPERATOR) {
-			// ERR_CHANOPRIVSNEEDED
-			std::string rpl = ":" + this->getServerName() + " 482 " + clients[fd].getNick() + " " + target + " :You're not channel operator\r\n";
-			queue_and_send(fd, rpl);
-			return;
-		}
-
-		bool is_flag_neg;
-		unsigned int arg_idx = 2;
-
-		for (size_t i = 0; i < flags.length(); ++i) {
-			char flag = flags[i];
-			if (flag == '+') {
-				is_flag_neg = false;
-				continue;
-			}
-			if (flag == '-') {
-				is_flag_neg = true;
-				continue;
-			}
-
-			switch(flag) {
-				case 'i':
-					if (is_flag_neg)
-						channel.unsetChannelMode(INVITE_ONLY);
-					else
-						channel.setChannelMode(INVITE_ONLY);
-					break;
-				case 't':
-					if (is_flag_neg)
-					{
-						channel.unsetChannelMode(TOPIC);
-						channel.setTopic(clients[fd].getNick(), "");
-					}
-					else
-					{
-						if (msg.getParametersSize() <= arg_idx) {
-							// ERR_NEEDMOREPARAMS
-							std::string rpl = ":" + this->getServerName() + " 461 " + clients[fd].getNick() + " MODE :Not enough parameters for +k\r\n";
-							queue_and_send(fd, rpl);
-							break; 
-						}
-						channel.setChannelMode(TOPIC);
-						channel.setTopic(clients[fd].getNick(), msg.getParam(arg_idx));
-					}
-					break;
-				case 'k':
-					if (is_flag_neg) {
-						channel.unsetChannelMode(KEY);
-						channel.setKey("");
-					} else {
-						if (msg.getParametersSize() <= arg_idx) {
-							// ERR_NEEDMOREPARAMS
-							std::string rpl = ":" + this->getServerName() + " 461 " + clients[fd].getNick() + " MODE :Not enough parameters for +k\r\n";
-							queue_and_send(fd, rpl);
-							break; 
-						}
-						channel.setChannelMode(KEY);
-						channel.setKey(msg.getParam(arg_idx));
-						arg_idx++;
-					}
-					break;
-				case 'o': {
-					if (msg.getParametersSize() <= arg_idx) {
-						// ERR_NEEDMOREPARAMS
-						std::string rpl = ":" + this->getServerName() + " 461 " + clients[fd].getNick() + " MODE :Not enough parameters for +/-o\r\n";
-						queue_and_send(fd, rpl);
-						break; 
-					}
-					std::string user_nick = msg.getParam(arg_idx);
-					if (!channel.checkUser(user_nick)) {
-						// ERR_USERNOTINCHANNEL
-						std::string rpl = ":" + this->getServerName() + " 441 " + clients[fd].getNick() + " " + user_nick + " " + target + " :They aren't on that channel\r\n";
-						queue_and_send(fd, rpl);
-						break;
-					}
-					channel.setUserMode(user_nick, is_flag_neg ? USER_ONLY : CHANNEL_OPERATOR);
-					arg_idx++;
-					break;
-				}
-				case 'l':
-					if (is_flag_neg) {
-						channel.unsetChannelMode(USER_LIMIT);
-					} else {
-						if (msg.getParametersSize() <= arg_idx) {
-							// ERR_NEEDMOREPARAMS
-							std::string rpl = ":" + this->getServerName() + " 461 " + clients[fd].getNick() + " MODE :Not enough parameters for +l\r\n";
-							queue_and_send(fd, rpl);
-							break;
-						}
-						channel.setChannelMode(USER_LIMIT);
-						channel.setUserLimit(std::atoi(msg.getParam(arg_idx).c_str()));
-						arg_idx++;
-					}
-					break;
-				default: {
-					// ERR_UNKNOWNMODE
-					std::ostringstream char_to_str;
-					char_to_str << flag;
-					std::string rpl = ":" + this->getServerName() + " 472 " + clients[fd].getNick() + " " + char_to_str.str() + " :is unknown mode char to me for " + target + "\r\n";
-					queue_and_send(fd, rpl);
-					break;
-				}
-			}
-		}
-	} else {
-		// ----- MODO USUARIO -----
-		// Aquí solo gestionamos si el target es el propio usuario que ejecuta el comando.
-		if (target != clients[fd].getNick()) {
-			// ERR_USERSDONTMATCH
-			std::string rpl = ":" + this->getServerName() + " 502 " + clients[fd].getNick() + " :Cant change mode for other users\r\n";
-			queue_and_send(fd, rpl);
-			return;
-		}
-	}
+        switch(flag) {
+            case 'i': is_neg ? channel.unsetChannelMode(INVITE_ONLY) : channel.setChannelMode(INVITE_ONLY); break;
+            case 't': is_neg ? channel.unsetChannelMode(TOPIC) : channel.setChannelMode(TOPIC); break;
+            case 'k':
+                if (is_neg) { channel.unsetChannelMode(KEY); channel.setKey(""); }
+                else if (msg.getParametersSize() > arg_idx) {
+                    param = msg.getParam(arg_idx++);
+                    channel.setChannelMode(KEY); channel.setKey(param);
+                } else { queue_and_send(fd, ":" + server + " 461 " + nick + " MODE :+k needs param\r\n"); continue; }
+                break;
+            case 'l':
+                if (is_neg) { channel.unsetChannelMode(USER_LIMIT); }
+                else if (msg.getParametersSize() > arg_idx) {
+                    param = msg.getParam(arg_idx++);
+                    channel.setChannelMode(USER_LIMIT); channel.setUserLimit(std::atoi(param.c_str()));
+                } else { queue_and_send(fd, ":" + server + " 461 " + nick + " MODE :+l needs param\r\n"); continue; }
+                break;
+            case 'o':
+                if (msg.getParametersSize() > arg_idx) {
+                    param = msg.getParam(arg_idx++);
+                    if (!channel.checkUser(param)) {
+                        queue_and_send(fd, ":" + server + " 441 " + nick + " " + param + " " + target + " :Not on channel\r\n");
+                        continue;
+                    }
+                    channel.setUserMode(param, is_neg ? USER_ONLY : CHANNEL_OPERATOR);
+                } else { queue_and_send(fd, ":" + server + " 461 " + nick + " MODE :+/-o needs param\r\n"); continue; }
+                break;
+            default:
+                queue_and_send(fd, ":" + server + " 472 " + nick + " " + flag + " :is unknown mode char\r\n");
+                continue;
+        }
+        // Broadcast de la acción exitosa
+        broadcastToChannel(channel, prefix + " MODE " + target + " " + rpl_flag + (param.empty() ? "" : " " + param) + "\r\n");
+    }
 }
-

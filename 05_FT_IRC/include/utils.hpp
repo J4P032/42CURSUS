@@ -34,11 +34,10 @@ void ft_toLower(string& str);
 const string& getLocalHostname();
 
 const string genSyntaxError(const string& serverName,
-  const string& nickName, const string& cmd);
+    const string& nickName, const string& cmd);
 
 const string genErrUnknownCommand(const string& serverName,
-  const string& commandString);
+    const string& commandString);
 
-std::vector<string> split(string s, const string& delimiter);  
+std::vector<string> split(string s, const string& delimiter);
 #endif
-

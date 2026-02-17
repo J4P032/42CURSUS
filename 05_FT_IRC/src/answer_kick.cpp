@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 15:17:10 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/17 14:44:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/17 16:36:04 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void IRCServ::answer_kick(IRCMessage & msg, int fd) {
 			queue_and_send(fd, reply.str());
 		}	
 	}
+
 	
 	//if empty of users because autokick then remove it from server.
 	if (kick_channel.getNumberOfUsers() == 0)

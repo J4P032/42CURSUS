@@ -6,125 +6,139 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/17 12:48:03 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/17 16:37:57 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
 
 #include "IRCServ.hpp"
 #include "utils.hpp"
 #include <cerrno>
 #include <cstring>
-#include <stdexcept>
 #include <iostream>
-#include <sstream>
 #include <map>
+#include <sstream>
+#include <stdexcept>
 
 using std::strerror;
 
-IRCServ::IRCServ() : listening_socket(0), epoll_fd(0), server_name(SERVER_NAME) {}
+IRCServ::IRCServ()
+    : listening_socket(0)
+    , epoll_fd(0)
+    , server_name(SERVER_NAME)
+{
+}
 
 IRCServ::~IRCServ()
 {
-	close(epoll_fd);
-	close(listening_socket);
+    close(epoll_fd);
+    close(listening_socket);
 }
 
-IRCServ::IRCServ(int listening_port, std::string password) : listening_socket(0), clientPassword(password), epoll_fd(0)
+IRCServ::IRCServ(int listening_port, std::string password)
+    : listening_socket(0)
+    , clientPassword(password)
+    , epoll_fd(0)
 {
-	server_name = SERVER_NAME;
-		listening_socket = socket(AF_INET, SOCK_STREAM, 0);
-	if (listening_socket == -1)
-		throw std::runtime_error(std::string("socket: ")
-		+ strerror(errno));
+    server_name = SERVER_NAME;
+    listening_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (listening_socket == -1)
+        throw std::runtime_error(std::string("socket: ")
+            + strerror(errno));
 
-	int opt = 1;
-	if (setsockopt(listening_socket, SOL_SOCKET, SO_REUSEADDR,
-		&opt, sizeof(opt)) == -1)
-		throw std::runtime_error(std::string("Server constructor: ")
-		+ strerror(errno));
+    int opt = 1;
+    if (setsockopt(listening_socket, SOL_SOCKET, SO_REUSEADDR,
+            &opt, sizeof(opt))
+        == -1)
+        throw std::runtime_error(std::string("Server constructor: ")
+            + strerror(errno));
 
-	struct sockaddr_in server_addr;
-	std::memset(&server_addr, 0, sizeof(server_addr));
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_addr.s_addr = INADDR_ANY;
-	server_addr.sin_port = htons(listening_port);
+    struct sockaddr_in server_addr;
+    std::memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(listening_port);
 
-	if (bind(listening_socket, (struct sockaddr *)&server_addr,
-		sizeof(server_addr)) == -1)
-		throw std::runtime_error(std::string("Bind: ")
-		+ std::strerror(errno));
+    if (bind(listening_socket, (struct sockaddr*)&server_addr,
+            sizeof(server_addr))
+        == -1)
+        throw std::runtime_error(std::string("Bind: ")
+            + std::strerror(errno));
 
-	if (listen(listening_socket, 10) == -1)
-		throw std::runtime_error(std::string("Listen: ")
-		+ strerror(errno));
+    if (listen(listening_socket, 10) == -1)
+        throw std::runtime_error(std::string("Listen: ")
+            + strerror(errno));
 
-	if (fcntl(listening_socket, F_SETFL, O_NONBLOCK) == -1)
-		throw std::runtime_error(std::string("Fcntl: ")
-		+ strerror(errno));
+    if (fcntl(listening_socket, F_SETFL, O_NONBLOCK) == -1)
+        throw std::runtime_error(std::string("Fcntl: ")
+            + strerror(errno));
 
-	setEpollFd(epoll_create1(EPOLL_CLOEXEC));
-	if (epoll_fd == -1)
-		throw std::runtime_error(std::string("Epoll_create1: ")
-		+ strerror(errno));
+    setEpollFd(epoll_create1(EPOLL_CLOEXEC));
+    if (epoll_fd == -1)
+        throw std::runtime_error(std::string("Epoll_create1: ")
+            + strerror(errno));
 
-	struct epoll_event ev;
-	ev.events = EPOLLIN;
-	ev.data.fd = listening_socket;
-	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listening_socket, &ev) == -1)
-		close(epoll_fd);
+    struct epoll_event ev;
+    ev.events = EPOLLIN;
+    ev.data.fd = listening_socket;
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listening_socket, &ev) == -1)
+        close(epoll_fd);
 
-	std::cout << "🎧 Servidor escuchando en puerto " << listening_port
-	<< "..." << std::endl;
-	return;
+    std::cout << "🎧 Servidor escuchando en puerto " << listening_port
+              << "..." << std::endl;
+    return;
 }
 
-
-
-
-
-
-int IRCServ::getListeningSocket() const{
-	return listening_socket;
+int IRCServ::getListeningSocket() const
+{
+    return listening_socket;
 }
-void IRCServ::setListeningSocket(int socket) {
-	listening_socket = socket;
+void IRCServ::setListeningSocket(int socket)
+{
+    listening_socket = socket;
 }
-void IRCServ::setClientPassword(std::string& password) {
-	clientPassword = password;
+void IRCServ::setClientPassword(std::string& password)
+{
+    clientPassword = password;
 }
-bool IRCServ::checkClientPassword(std::string& password) const {
-	return password == clientPassword;
+bool IRCServ::checkClientPassword(std::string& password) const
+{
+    return password == clientPassword;
 }
-int IRCServ::getEpollFd() const{
-	return epoll_fd;
+int IRCServ::getEpollFd() const
+{
+    return epoll_fd;
 }
-void IRCServ::setEpollFd(int fd) {
-	epoll_fd = fd;
+void IRCServ::setEpollFd(int fd)
+{
+    epoll_fd = fd;
 }
-const std::map<int, IRCClient>& IRCServ::getClients() const {
-return clients;
+const std::map<int, IRCClient>& IRCServ::getClients() const
+{
+    return clients;
 }
-std::map<int, IRCClient>& IRCServ::getClients() {
-	return clients;
+std::map<int, IRCClient>& IRCServ::getClients()
+{
+    return clients;
 }
-void IRCServ::setClients(const std::map<int, IRCClient>& newClients) {
-	clients = newClients;
+void IRCServ::setClients(const std::map<int, IRCClient>& newClients)
+{
+    clients = newClients;
 }
-struct epoll_event* IRCServ::getEvents() {
-	return events;
+struct epoll_event* IRCServ::getEvents()
+{
+    return events;
 }
-const struct epoll_event* IRCServ::getEvents() const {
-	return events;
+const struct epoll_event* IRCServ::getEvents() const
+{
+    return events;
 }
-void IRCServ::setEvent(int fd, epoll_event event) {
-	events[fd] = event;
+void IRCServ::setEvent(int fd, epoll_event event)
+{
+    events[fd] = event;
 }
 void IRCServ::addToNicks(const std::string& n, int fd)
 {
-		nicks[n] = fd;
+    nicks[n] = fd;
 }
 void IRCServ::rmFromNicks(const std::string& n)
 {
@@ -135,22 +149,16 @@ bool IRCServ::nickIsUnique(const std::string& n)
     return (nicks.find(n) == nicks.end());
 }
 
-
-
-
-
 void IRCServ::run()
 {
-	while (true)
-	{
-		int ready = epoll_wait(epoll_fd, events, 16, -1);
-		if (ready == -1)
-		{
-			if (errno == EINTR)
-				continue;
-			throw std::runtime_error(std::string("Epoll_wait: ")
-			+ strerror(errno));
-		}
+    while (true) {
+        int ready = epoll_wait(epoll_fd, events, 16, -1);
+        if (ready == -1) {
+            if (errno == EINTR)
+                continue;
+            throw std::runtime_error(std::string("Epoll_wait: ")
+                + strerror(errno));
+        }
 
 		for (int i = 0; i < ready; ++i)
 		{
@@ -169,9 +177,41 @@ void IRCServ::run()
 				process_client_buffer(fd);
 			}
 		}
+		std::set<int>& to_remove = get_clientsToBeRemoved();
+		std::set<int>::iterator it_fd = to_remove.begin();
+		
+		while (it_fd != to_remove.end())
+		{
+			int fd = *it_fd;
+			std::map<int, IRCClient>::iterator it_client = clients.find(fd);
+			
+
+			if (it_client == clients.end())
+			{
+				to_remove.erase(it_fd++);
+				continue;
+			}
+			
+
+			if (it_client->second.getObuffer().empty())
+			{
+				close_client(fd);
+				to_remove.erase(it_fd++);
+			} 
+			else
+				++it_fd;
+		}		
 	}
 }
  
+
+void printNicks(std::map<const std::string, int> & set)
+{
+    for (std::map<const std::string, int>::const_iterator it = set.begin(); it != set.end(); ++it)
+        std::cout << "Nick: " << it->first << ", Valor: " << it->second << std::endl;
+}
+
+
 void IRCServ::close_client(int fd)
 {
     // 1. Eliminar del epoll
@@ -179,26 +219,23 @@ void IRCServ::close_client(int fd)
         std::cerr << "Error eliminando fd de epoll: " << strerror(errno) << std::endl;
 
     std::map<int, IRCClient>::iterator client_it = clients.find(fd);
-    if (client_it != clients.end())
-    {
+    if (client_it != clients.end()) {
         std::string nick = client_it->second.getNick();
         // 3. Bucle que itera por los canales y borra el usuario de todos ellos
         std::map<const std::string, IRCChannel>::iterator ch_it = channels.begin();
-        while (ch_it != channels.end())
-        {
+        while (ch_it != channels.end()) {
             ch_it->second.delUser(nick);
             // Lógica estándar de IRC: Si el canal no tiene más usuarios, se borra el canal
-            if (ch_it->second.getNumberOfUsers() == 0)
-            {
+            if (ch_it->second.getNumberOfUsers() == 0) {
                 std::map<const std::string, IRCChannel>::iterator to_erase = ch_it;
                 ++ch_it;
                 channels.erase(to_erase);
-            }
-            else
+            } else
                 ++ch_it;
         }
         // 4. Limpieza de los mapas globales del servidor
         nicks.erase(nick);
+
         clients.erase(client_it);
     }
     // 5. Cierre físico del socket
@@ -213,49 +250,48 @@ void IRCServ::close_client(int fd)
 // Devuelve 0 en éxito, -1 en error (y no registra el cliente).
 void IRCServ::accept_new_connection()
 {
-		struct sockaddr_in client_addr;
-		socklen_t addr_len = sizeof(client_addr);
+    struct sockaddr_in client_addr;
+    socklen_t addr_len = sizeof(client_addr);
 
-		int fd = accept(listening_socket, (struct sockaddr *)&client_addr, &addr_len);
-		if (fd == -1)
-				throw std::runtime_error(std::string("accept: ") + strerror(errno));
+    int fd = accept(listening_socket, (struct sockaddr*)&client_addr, &addr_len);
+    if (fd == -1)
+        throw std::runtime_error(std::string("accept: ") + strerror(errno));
 
-		unsigned char *ip = (unsigned char *)&client_addr.sin_addr.s_addr;
-		std::ostringstream oss;
-		oss << (int)ip[0] << "." << (int)ip[1] << "." << (int)ip[2] << "." << (int)ip[3];
-		std::string host = oss.str();
+    unsigned char* ip = (unsigned char*)&client_addr.sin_addr.s_addr;
+    std::ostringstream oss;
+    oss << (int)ip[0] << "." << (int)ip[1] << "." << (int)ip[2] << "." << (int)ip[3];
+    std::string host = oss.str();
 
-		if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1) {
-				close(fd);
-				throw std::runtime_error(std::string("set nonblocking client: ") + strerror(errno));
-		}
+    if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1) {
+        close(fd);
+        throw std::runtime_error(std::string("set nonblocking client: ") + strerror(errno));
+    }
 
-		struct epoll_event client_ev;
-		client_ev.events = EPOLLIN | EPOLLET;
-		client_ev.data.fd = fd;
-		if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &client_ev) == -1){
-				close(fd);
-				throw std::runtime_error(std::string("epoll_ctl add client: ") + strerror(errno));
-		}
+    struct epoll_event client_ev;
+    client_ev.events = EPOLLIN | EPOLLET;
+    client_ev.data.fd = fd;
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &client_ev) == -1) {
+        close(fd);
+        throw std::runtime_error(std::string("epoll_ctl add client: ") + strerror(errno));
+    }
 
-		clients[fd] = IRCClient(fd);
-		clients[fd].setHost(host);
+    clients[fd] = IRCClient(fd);
+    clients[fd].setHost(host);
 
-		std::cout << "Nueva conexión: fd=" << fd << " host=" << host << std::endl;
+    std::cout << "Nueva conexión: fd=" << fd << " host=" << host << std::endl;
 }
 
 // Lee todo lo disponible en modo non-blocking (EPOLLET) desde fd.
 // - Añade los bytes leídos al buffer del cliente en client_buffers.
 // - Si no está cerrado devuelve false.
-bool IRCServ::read_from_client(IRCClient & client)
+bool IRCServ::read_from_client(IRCClient& client)
 {
-	char tmp[4096];
+    char tmp[4096];
 
-	while (true)
-	{
-		ssize_t n = recv(client.getFd(), tmp, sizeof(tmp), 0);
-		if (n > 0)
-			client.addToIbuffer(tmp, n);
+    while (true) {
+        ssize_t n = recv(client.getFd(), tmp, sizeof(tmp), 0);
+        if (n > 0)
+            client.addToIbuffer(tmp, n);
 
 		else if (client.getIbuffer().size() > 4000) {
 			std::cerr << "Client flooding, disconnecting..." << std::endl;
@@ -280,67 +316,69 @@ bool IRCServ::read_from_client(IRCClient & client)
 
 void IRCServ::process_client_buffer(int fd)
 {
-		std::string &buf = clients[fd].getIbuffer();
-		while (true)
-		{
-				if (clients.find(fd) == clients.end())
-					return;
-				size_t pos = buf.find("\r\n");
-				size_t terminator_len = 2;
-				if (pos == std::string::npos) {
-						pos = buf.find('\n');
-						terminator_len = 1;
-				}
-				if (pos == std::string::npos) {
-						if (buf.size() > 512)
-								throw std::runtime_error("Line too long");
-						break; 
-				}
-				std::string raw_line = buf.substr(0, pos);
-				buf.erase(0, pos + terminator_len);
-				if (raw_line.size() > 510)
-						raw_line = raw_line.substr(0, 510);
+    std::string& buf = clients[fd].getIbuffer();
+    while (true) {
+        if (clients.find(fd) == clients.end())
+            return;
+        size_t pos = buf.find("\r\n");
+        size_t terminator_len = 2;
+        if (pos == std::string::npos) {
+            pos = buf.find('\n');
+            terminator_len = 1;
+        }
+        if (pos == std::string::npos) {
+            if (buf.size() > 512)
+                throw std::runtime_error("Line too long");
+            break;
+        }
+        std::string raw_line = buf.substr(0, pos);
+        buf.erase(0, pos + terminator_len);
+        if (raw_line.size() > 510)
+            raw_line = raw_line.substr(0, 510);
 
-				IRCMessage ircMsg;
-				try {
-						ircMsg = IRCMessage::parse(raw_line);
-						std::cout << fd << ": " << ircMsg.toString() << std::endl;
-				} catch (...) {
-						std::cerr << fd << ": Error parsing => " << raw_line << std::endl;
-				}
-				answer_command(ircMsg, fd);
-		}
+        IRCMessage ircMsg;
+        try {
+            ircMsg = IRCMessage::parse(raw_line);
+            std::cout << fd << ": " << ircMsg.toString() << std::endl;
+        } catch (...) {
+            std::cerr << fd << ": Error parsing => " << raw_line << std::endl;
+        }
+        answer_command(ircMsg, fd);
+    }
 }
 
-std::string IRCServ::getServerName(void) const{
-	return (server_name);
+std::string IRCServ::getServerName(void) const
+{
+    return (server_name);
 }
 
-void	IRCServ::send_ping_to_client(int fd){
-	std::ostringstream msg;
-	
-	if (clients.count(fd)){
-		msg << "PING :" << server_name << "\r\n";
-		queue_and_send(fd, msg.str());
-	}
+void IRCServ::send_ping_to_client(int fd)
+{
+    std::ostringstream msg;
+
+    if (clients.count(fd)) {
+        msg << "PING :" << server_name << "\r\n";
+        queue_and_send(fd, msg.str());
+    }
 }
 
-void	IRCServ::check_clients_timeout(void){
-	time_t	now  = std::time(NULL);
-	
-	for (std::map<int, IRCClient>::iterator it = clients.begin(); it != clients.end();){ //note* below because of not ++it here.
-		int 			fd = it->first;
-		IRCClient &client = it->second;
-		time_t		last = client.getLastActivity();
-		bool			ping_sent = client.get_server_ping_sent();
-		
-		/*If client is TIMEOUT seconds without saying anything server send a PING
-		only should send it once because with epoll can saturate it during those extra 60 sec.*/
-		if (now - last > TIMEOUT && now - last <= TIMEOUT + 60 && !ping_sent){
-			IRCServ::send_ping_to_client(fd);
-			client.set_server_ping_sent(); //set to true
-			++it;
-		}
+void IRCServ::check_clients_timeout(void)
+{
+    time_t now = std::time(NULL);
+
+    for (std::map<int, IRCClient>::iterator it = clients.begin(); it != clients.end();) { // note* below because of not ++it here.
+        int fd = it->first;
+        IRCClient& client = it->second;
+        time_t last = client.getLastActivity();
+        bool ping_sent = client.get_server_ping_sent();
+
+        /*If client is TIMEOUT seconds without saying anything server send a PING
+        only should send it once because with epoll can saturate it during those extra 60 sec.*/
+        if (now - last > TIMEOUT && now - last <= TIMEOUT + 60 && !ping_sent) {
+            IRCServ::send_ping_to_client(fd);
+            client.set_server_ping_sent(); // set to true
+            ++it;
+        }
 
 		//If it didnt reply to PING with PONG in 60 seconds more we kick it
 		/*note*: If the ++it would be only in the for and not in each 'if' as it is now,
@@ -354,21 +392,23 @@ void	IRCServ::check_clients_timeout(void){
 			<< (TIMEOUT + 60) << "seconds\r\n";
 			queue_and_send(fd, msg.str());
 			++it; //note* above
-			close_client(fd); //hay que eliminar el nick y canales en la funcion
+			set_clientsToBeRemoved(fd); //hay que eliminar el nick y canales en la funcion
 		}
 		else
 			++it;
 	}
 }
 
-//privmsg
-const std::map<const std::string, int>&	IRCServ::getNicks(void) const{
-	return (nicks);
+// privmsg
+const std::map<const std::string, int>& IRCServ::getNicks(void) const
+{
+    return (nicks);
 }
 
-//privmsg
-const std::map<const string, IRCChannel>& IRCServ::getChannels(void) const{
-	return (channels);
+// privmsg
+const std::map<const string, IRCChannel>& IRCServ::getChannels(void) const
+{
+    return (channels);
 }
 
 //kick
@@ -387,22 +427,25 @@ void					IRCServ::set_clientsToBeRemoved(int fd){
 }
 
 /** Deletes an empty channel (number of users == 0) */
-void			IRCServ::delEmptyChannel(const string channelName) {
-	string lcChannelName = channelName;
-	ft_toLower(lcChannelName);
-	if (channels.find(lcChannelName) == channels.end()) return;
-	if (channels[lcChannelName].getNumberOfUsers() != 0) return;
-	channels.erase(lcChannelName);
+void IRCServ::delEmptyChannel(const string channelName)
+{
+    string lcChannelName = channelName;
+    ft_toLower(lcChannelName);
+    if (channels.find(lcChannelName) == channels.end())
+        return;
+    if (channels[lcChannelName].getNumberOfUsers() != 0)
+        return;
+    channels.erase(lcChannelName);
 }
 
-void IRCServ::answer_command(IRCMessage &msg, int fd)
+void IRCServ::answer_command(IRCMessage& msg, int fd)
 {
 		std::string rpl = ":" + getServerName() + " CAP * LS :\r\n";
     switch (msg.getCommand())
     {
         // === OBLIGATORIOS por subject ===
         case CMD_KICK:     answer_kick(msg, fd);     break;
-        // case CMD_INVITE:   answer_invite(msg, fd);   break;
+        case CMD_INVITE:   answer_invite(msg, fd);   break;
         case CMD_MODE:     answer_mode(msg, fd);     break;
         case CMD_PASS:     answer_pass(msg, fd);     break;
         case CMD_NICK:     answer_nick(msg, fd);     break;
@@ -421,11 +464,8 @@ void IRCServ::answer_command(IRCMessage &msg, int fd)
         case CMD_PONG:     answer_pong(msg, fd);     break;
 				case CMD_CAP:       queue_and_send(fd, rpl); break;
 
-        default:
-            // (???) Enviar error ERR_UNKNOWNCOMMAND (421) al cliente
-            break;
+    default:
+        // (???) Enviar error ERR_UNKNOWNCOMMAND (421) al cliente
+        break;
     }
 }
-
-
-
