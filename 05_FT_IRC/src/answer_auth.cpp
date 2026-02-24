@@ -6,7 +6,7 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 15:34:32 by mvassall          #+#    #+#             */
-/*   Updated: 2026/02/16 17:35:36 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/17 19:15:56 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,7 @@ void IRCServ::answer_nick(IRCMessage& msg, int fd)
 		sendWelcome(fd);
 }
 
-/*
-Command: USER
-Parameters: <user> <mode> <unused> <realname>
-             0      1      2        3
-*/
+
 void IRCServ::answer_user(IRCMessage& msg, int fd)
 {
     if (!clients[fd].getUsername().empty()) {

@@ -226,7 +226,9 @@ typedef enum {
     CMD_WALLOPS,
     CMD_USERHOST,
     CMD_ISON,
-    CMD_CAP
+    CMD_CAP,
+    // EXTENSION COMMANDS
+    EXT_SHOW
 } IRCCommand;
 IRCCommand stringToIRCCommand(const std::string& str);
 const std::string& IRCCommandtoString(IRCCommand cmd);

@@ -130,10 +130,13 @@ void IRCServ::answer_join(IRCMessage& msg, int fd)
         const std::set<std::string>& channelNames = jClient.getChannelNames();
         for (std::set<std::string>::const_iterator chNameIt = channelNames.begin();
             chNameIt != channelNames.end(); ++chNameIt) {
-            if (channels.find(*chNameIt) == channels.end())
+            const string channelName = *chNameIt;
+            if (channels.find(channelName) == channels.end())
                 continue;
-            IRCChannel ircChannel = channels[*chNameIt];
+            IRCChannel ircChannel = channels[channelName];
             partChannel(*this, jClient, ircChannel, "");
+            channels[channelName] = ircChannel;
+            delEmptyChannel(channelName);
         }
         return;
     }
@@ -169,6 +172,8 @@ void IRCServ::answer_join(IRCMessage& msg, int fd)
         ChannelMode result = ircChannel.addUser(jClient.getNick(), USER_ONLY, key);
         if (result == ADD_USER_OK) {
             channels[channelName] = ircChannel;
+            jClient.addChannel(channelName);
+            clients[jClient.getFd()] = jClient;
             // :n01!~user1@lenovo-i5 JOIN :#test
             queue_and_send(jClient.getFd(), joinRequest); // ack join command
             // :ngircd.none.net 332 n02 #test :Channel usage # RPL_TOPIC

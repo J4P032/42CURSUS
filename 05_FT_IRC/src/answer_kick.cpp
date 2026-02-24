@@ -134,3 +134,4 @@ void IRCServ::answer_kick(IRCMessage & msg, int fd) {
 	if (kick_channel.getNumberOfUsers() == 0)
 		delEmptyChannel(kick_channel_name);
 }
+

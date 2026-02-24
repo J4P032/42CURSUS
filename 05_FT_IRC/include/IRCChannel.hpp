@@ -218,6 +218,7 @@ private:
     string creatorNick;
 };
 
-/** Delete a client from a channel notifying all members of its exit */
-void partChannel(IRCServ& ircServer, IRCClient& client, IRCChannel& channel, const string& byeMsg);
+/** Delete a client from a channel notifying all members of its exit,
+@returns true if channel is deleted else otherwise*/
+bool partChannel(IRCServ& ircServer, IRCClient& client, IRCChannel& channel, const string& byeMsg);
 #endif

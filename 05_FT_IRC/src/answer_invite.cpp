@@ -6,7 +6,7 @@
 /*   By: marcoga2 <marcoga2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/08 12:42:05 by mvassall          #+#    #+#             */
-/*   Updated: 2026/02/17 14:19:55 by marcoga2         ###   ########.fr       */
+/*   Updated: 2026/02/17 19:16:22 by marcoga2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ invite aaa #tst
 */
 
 static string noSuchNickOrChannel(const string& serverName, const string& invitingNickName, const string& channelName) {
-  // :ngircd.none.net 401 bbb ddd :No such nick or channel name
   std::ostringstream buf;
   buf << ':' << serverName << " 401 " << invitingNickName << ' ' << channelName
     << " :No such nick or channel name\r\n";
@@ -59,7 +58,6 @@ static string noSuchNickOrChannel(const string& serverName, const string& inviti
 
 static string notInChannel(const string& serverName, const string& invitingNickName, const string& channelName) {
   std::ostringstream buf;
-  // :ngircd.none.net 442 ccc #tst :You are not on that channel
   buf << ':' << serverName << " 442 " << invitingNickName << ' ' << channelName
     << " :You are not on that channel\r\n";
   return buf.str();
@@ -69,7 +67,6 @@ static string alreadInChannel(const string& serverName,
   const string& invitingNickName,
   const string& invitedNickName,
   const string& invitedChannelName) {
-  // :ngircd.none.net 443 aaa bbb #tst :is already on channel
   std::ostringstream buf;
   buf << ':' << serverName
     << " 443 " << invitingNickName
@@ -80,7 +77,6 @@ static string alreadInChannel(const string& serverName,
 
 static string notChannelOperator(const string& serverName, const string& invitingNick, const string& channelName) {
   std::ostringstream buf;
-  // :ngircd.none.net 482 bbb #tst :You are not channel operator
   buf << ':' << serverName << " 482 " << invitingNick << ' ' << channelName
     << " :You are not channel operator\r\n";
   return buf.str();
@@ -90,8 +86,7 @@ void			IRCServ::answer_invite(IRCMessage& msg, int invitingFd) {
   if (msg.getCommand() != CMD_INVITE || clients.find(invitingFd) == clients.end())
       return;
   IRCClient invitingClient = clients[invitingFd];
-  if (msg.getParametersSize() != 2) { // invite <nick> <channel>
-    // :ngircd.none.net 461 ccc invite :Syntax error
+  if (msg.getParametersSize() != 2) {
     queue_and_send(invitingFd, genSyntaxError(server_name, invitingClient.getNick(), "invite"));
     return ;
   }
@@ -125,12 +120,10 @@ void			IRCServ::answer_invite(IRCMessage& msg, int invitingFd) {
     return;
   }
   invitedChannel.addInvitedNick(invitedNickName);
-  channels[invitedChannelName] = invitedChannel; // <== should be in IRCServ...
-  // inviting <= ':ngircd.none.net 341 aaa bbb #tst'
+  channels[invitedChannelName] = invitedChannel;
   string invitingReply = ":" + server_name + " 341 " + invitingClient.getNick()
     + ' ' + invitedNickName + ' ' + invitedChannelName + "\r\n";
   queue_and_send(invitingFd, invitingReply);
-  // invited <= ':aaa!~AAA@lenovo-i5 INVITE bbb #tst'
   string invitedMsg = ":" + invitingClient.getNick() 
     + '!' + invitingClient.getUsername() + '@' + invitingClient.getHost()
     + " INVITE " + invitedNickName + ' ' + invitedChannelName + "\r\n";

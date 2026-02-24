@@ -392,7 +392,7 @@ void IRCChannel::setCreatorNick(const string& nick)
     creatorNick = lcNick;
 }
 
-void partChannel(IRCServ& ircServer, IRCClient& client, IRCChannel& channel, const string& byeMsg)
+bool partChannel(IRCServ& ircServer, IRCClient& client, IRCChannel& channel, const string& byeMsg)
 {
     std::ostringstream buf;
     buf << ':' << client.getNick() << '!' << client.getUsername() << '@' << client.getHost()
@@ -415,5 +415,7 @@ void partChannel(IRCServ& ircServer, IRCClient& client, IRCChannel& channel, con
     client.delChannel(channel.getName());
     if (channel.getNumberOfUsers() == 0) {
         ircServer.delEmptyChannel(channel.getName());
+        return true;
     }
+    return false;
 }

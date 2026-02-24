@@ -223,6 +223,7 @@ static void initMapStringToIRCCommand(std::map<std::string, IRCCommand>& m)
     m["WALLOPS"] = CMD_WALLOPS;
     m["USERHOST"] = CMD_USERHOST;
     m["ISON"] = CMD_ISON;
+    m["SHOW"] = EXT_SHOW;
 }
 
 IRCCommand stringToIRCCommand(const std::string& str)
@@ -446,6 +447,7 @@ static void initMapIRCCommand2String(std::map<IRCCommand, std::string>& m)
     m[CMD_WALLOPS] = "WALLOPS";
     m[CMD_USERHOST] = "USERHOST";
     m[CMD_ISON] = "ISON";
+    m[EXT_SHOW] = "SHOW";
 }
 
 const std::string& IRCCommandtoString(IRCCommand cmd)

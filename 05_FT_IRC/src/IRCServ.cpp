@@ -6,11 +6,12 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2026/02/17 16:37:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/19 13:47:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRCServ.hpp"
+#include "IRCCommand.hpp"
 #include "utils.hpp"
 #include <cerrno>
 #include <cstring>
@@ -18,6 +19,9 @@
 #include <map>
 #include <sstream>
 #include <stdexcept>
+#include <csignal>
+
+extern volatile sig_atomic_t g_stop; //signal ControlC
 
 using std::strerror;
 
@@ -83,7 +87,7 @@ IRCServ::IRCServ(int listening_port, std::string password)
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listening_socket, &ev) == -1)
         close(epoll_fd);
 
-    std::cout << "🎧 Servidor escuchando en puerto " << listening_port
+    std::cout << "ft_irc is listening at " << listening_port
               << "..." << std::endl;
     return;
 }
@@ -151,10 +155,10 @@ bool IRCServ::nickIsUnique(const std::string& n)
 
 void IRCServ::run()
 {
-    while (true) {
+    while (!g_stop) {
         int ready = epoll_wait(epoll_fd, events, 16, -1);
         if (ready == -1) {
-            if (errno == EINTR)
+            if (errno == EINTR) //when pressing ControlC no ERROR. This is vital.
                 continue;
             throw std::runtime_error(std::string("Epoll_wait: ")
                 + strerror(errno));
@@ -170,10 +174,7 @@ void IRCServ::run()
 				if (events[i].events & EPOLLOUT)
 					this->queue_and_send(fd, ""); 
 				if (read_from_client(clients[fd]))
-				{
-					close_client(fd);
 					continue ;
-				}
 				process_client_buffer(fd);
 			}
 		}
@@ -208,39 +209,90 @@ void IRCServ::run()
 void printNicks(std::map<const std::string, int> & set)
 {
     for (std::map<const std::string, int>::const_iterator it = set.begin(); it != set.end(); ++it)
-        std::cout << "Nick: " << it->first << ", Valor: " << it->second << std::endl;
+        std::cout << "Nick: " << it->first << ", Value: " << it->second << std::endl;
 }
 
 
 void IRCServ::close_client(int fd)
 {
-    // 1. Eliminar del epoll
+    std::map<int, IRCClient>::iterator client_it = clients.find(fd);
+    if (client_it == clients.end()) {
+        epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+        close(fd);
+        return;
+    }
+
+    std::string nick = client_it->second.getNick();
+    std::string user = client_it->second.getUsername();
+    std::string host = client_it->second.getHost();
+
+    // Si el nick está vacío, usar "*" según RFC
+    if (nick.empty())
+        nick = "*";
+
+    // Razón hardcodeada
+    std::string quit_reason = "Client Quit";
+
+    // 1. Componer el mensaje QUIT según RFC 2812: :nick!user@host QUIT :reason
+    std::ostringstream quit_msg;
+    quit_msg << ":" << nick << "!" << user << "@" << host << " QUIT :" << quit_reason << "\r\n";
+    std::string quit_message = quit_msg.str();
+
+    // 2. Notificar a todos los usuarios que comparten canales con el emisor
+    std::set<int> fd_sent;
+    pairIterators it_chan = client_it->second.getChannelIterators();
+
+    while (it_chan.first != it_chan.second) {
+        std::string channel_name = *it_chan.first;
+        std::map<const std::string, IRCChannel>::iterator it_found_chan = channels.find(channel_name);
+
+        if (it_found_chan != channels.end()) {
+            PairUserMapIterators it_chann_users = it_found_chan->second.getUsersIterators();
+            for (; it_chann_users.first != it_chann_users.second; ++it_chann_users.first) {
+                const std::string& t_nick = it_chann_users.first->first;
+                std::map<const std::string, int>::const_iterator it_n = nicks.find(t_nick);
+
+                if (it_n != nicks.end()) {
+                    int t_fd = it_n->second;
+                    if (t_fd != fd && fd_sent.find(t_fd) == fd_sent.end()) {
+                        queue_and_send(t_fd, quit_message);
+                        fd_sent.insert(t_fd);
+                    }
+                }
+            }
+        }
+        ++it_chan.first;
+    }
+
+    // 3. Enviar ERROR al cliente según RFC 2812
+    std::ostringstream error_msg;
+    error_msg << "ERROR :Closing Link: " << host << " (Quit: " << quit_reason << ")\r\n";
+    queue_and_send(fd, error_msg.str());
+
+    // 4. Eliminar del epoll
     if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
         std::cerr << "Error eliminando fd de epoll: " << strerror(errno) << std::endl;
 
-    std::map<int, IRCClient>::iterator client_it = clients.find(fd);
-    if (client_it != clients.end()) {
-        std::string nick = client_it->second.getNick();
-        // 3. Bucle que itera por los canales y borra el usuario de todos ellos
-        std::map<const std::string, IRCChannel>::iterator ch_it = channels.begin();
-        while (ch_it != channels.end()) {
-            ch_it->second.delUser(nick);
-            // Lógica estándar de IRC: Si el canal no tiene más usuarios, se borra el canal
-            if (ch_it->second.getNumberOfUsers() == 0) {
-                std::map<const std::string, IRCChannel>::iterator to_erase = ch_it;
-                ++ch_it;
-                channels.erase(to_erase);
-            } else
-                ++ch_it;
+    // 5. Eliminar usuario de todos los canales
+    std::map<const std::string, IRCChannel>::iterator ch_it = channels.begin();
+    while (ch_it != channels.end()) {
+        ch_it->second.delUser(nick);
+        if (ch_it->second.getNumberOfUsers() == 0) {
+            std::map<const std::string, IRCChannel>::iterator to_erase = ch_it;
+            ++ch_it;
+            channels.erase(to_erase);
+        } else {
+            ++ch_it;
         }
-        // 4. Limpieza de los mapas globales del servidor
-        nicks.erase(nick);
-
-        clients.erase(client_it);
     }
-    // 5. Cierre físico del socket
+
+    // 6. Limpieza de los mapas globales
+    nicks.erase(nick);
+    clients.erase(client_it);
+
+    // 7. Cierre físico del socket
     close(fd);
-    std::cout << "Cliente [" << fd << "] desconectado" << std::endl;
+    std::cout << "Client [" << fd << "] disconected" << std::endl;
 }
 
 // Acepta una nueva conexión entrante en listening_socket.
@@ -278,7 +330,7 @@ void IRCServ::accept_new_connection()
     clients[fd] = IRCClient(fd);
     clients[fd].setHost(host);
 
-    std::cout << "Nueva conexión: fd=" << fd << " host=" << host << std::endl;
+    std::cout << "New conexion: fd=" << fd << " host=" << host << std::endl;
 }
 
 // Lee todo lo disponible en modo non-blocking (EPOLLET) desde fd.
@@ -295,7 +347,7 @@ bool IRCServ::read_from_client(IRCClient& client)
 
 		else if (client.getIbuffer().size() > 4000) {
 			std::cerr << "Client flooding, disconnecting..." << std::endl;
-			close_client(client.getFd());
+			set_clientsToBeRemoved(client.getFd());
 			return true;
 		}
 		else if (n == 0)
@@ -341,7 +393,7 @@ void IRCServ::process_client_buffer(int fd)
             ircMsg = IRCMessage::parse(raw_line);
             std::cout << fd << ": " << ircMsg.toString() << std::endl;
         } catch (...) {
-            std::cerr << fd << ": Error parsing => " << raw_line << std::endl;
+            std::cerr << fd << "-> this input: " << raw_line << " wont trigger anything" << std::endl;
         }
         answer_command(ircMsg, fd);
     }
@@ -443,7 +495,7 @@ void IRCServ::answer_command(IRCMessage& msg, int fd)
 		std::string rpl = ":" + getServerName() + " CAP * LS :\r\n";
     switch (msg.getCommand())
     {
-        // === OBLIGATORIOS por subject ===
+        // === Mandatory by subject ===
         case CMD_KICK:     answer_kick(msg, fd);     break;
         case CMD_INVITE:   answer_invite(msg, fd);   break;
         case CMD_MODE:     answer_mode(msg, fd);     break;
@@ -452,7 +504,7 @@ void IRCServ::answer_command(IRCMessage& msg, int fd)
         case CMD_USER:     answer_user(msg, fd);     break;
         case CMD_QUIT:     answer_quit(msg, fd);     break;
 
-        // // === extras ===
+        // === Bonus ===
         case CMD_JOIN:     answer_join(msg, fd);     break;
         case CMD_PART:     answer_part(msg, fd);     break;
         case CMD_PRIVMSG:  answer_privmsg(msg, fd);  break;
@@ -464,8 +516,17 @@ void IRCServ::answer_command(IRCMessage& msg, int fd)
         case CMD_PONG:     answer_pong(msg, fd);     break;
 				case CMD_CAP:       queue_and_send(fd, rpl); break;
 
+        // === Internal extensions ===
+        case EXT_SHOW:      answer_show(msg, fd);     break;
+
     default:
-        // (???) Enviar error ERR_UNKNOWNCOMMAND (421) al cliente
+        queue_and_send(fd, genErrUnknownCommand(server_name, IRCCommandtoString(msg.getCommand())));
         break;
     }
 }
+
+
+
+
+
+

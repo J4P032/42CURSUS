@@ -47,9 +47,9 @@ The server accepts connections from any standard IRC client (such as **irssi**, 
 | `NAMES` | List users in a channel |
 | `WHO` | Query information about channel members |
 | `MODE` | Query or change channel/user modes |
-| `PING` | Client-initiated keepalive |
-| `PONG` | Server response to PING |
 | `CAP` | Capability negotiation (minimal support) |
+| `PING` | Client initiated keep alive |
+| `PONG` | Server response to keep alive |
 
 ### Supported Channel Modes
 
@@ -93,16 +93,23 @@ irc-server/
 │   ├── IRCMessage.cpp       # Message parsing (prefix, command, params)
 │   ├── answer_auth.cpp      # PASS, NICK, USER, QUIT handlers
 │   ├── answer_join.cpp      # JOIN command handler
+│   ├── answer_invite.cpp    # INVITE command handler
+│   ├── answer_kick.cpp      # KICK command handler
 │   ├── answer_part.cpp      # PART command handler
 │   ├── answer_mode.cpp      # MODE command handler
+│   ├── answer_notice.cpp    # NOTICE command handler
 │   ├── answer_topic.cpp     # TOPIC command handler + broadcastToChannel
 │   ├── answer_names.cpp     # NAMES command handler
 │   ├── answer_who.cpp       # WHO command handler
+│   ├── answer_ping.cpp      # PING command handler
+│   ├── answer_pong.cpp      # PONG command handler
+│   ├── answer_privmsg.cpp   # PRIVMSG command handler
+│   ├── answer_quit.cpp      # QUIT command handler
+│   ├── konfu.cpp            # Konfucius BOT
 │   └── utils.cpp            # Utility function implementations
 ├── Documentacion/           # Internal documentation & references
 │   ├── answer_table.md      # Command behavior reference table
 │   └── RFC 2812.html        # Redirect to RFC 2812
-├── pcap-files/              # Packet capture files for debugging
 ├── Makefile                 # Build system
 └── README.md                # This file
 ```
@@ -163,6 +170,7 @@ This compiles the project with the following flags:
 | `make clean` | Remove object files |
 | `make fclean` | Remove object files and the binary |
 | `make re` | Full rebuild (fclean + all) |
+| `make konfu` | Compiles the Konfucius bot |
 
 ### Execution
 
@@ -183,14 +191,6 @@ This compiles the project with the following flags:
 
 ### Connecting with an IRC Client
 
-#### Using irssi
-
-```bash
-irssi
-/connect 127.0.0.1 6667 mypassword
-/nick MyNick
-```
-
 #### Using netcat (for testing)
 
 ```bash
@@ -202,19 +202,11 @@ JOIN #general
 PRIVMSG #general :Hello, world!
 ```
 
-#### Using WeeChat
-
-```bash
-weechat
-/server add local 127.0.0.1/6667 -password=mypassword
-/connect local
-```
-
 ---
 
 ## 💡 Usage Examples
 
-### Creating and Joining a Channel
+### Creating and Joining a Channel using netcat
 
 ```
 PASS mypassword
@@ -285,7 +277,7 @@ TOPIC #wonderland               # Query current topic
 ### Tools Used for Development & Testing
 
 - **Wireshark / tcpdump** — Network packet analysis (pcap files included in the repository for reference).
-- **irssi / WeeChat / HexChat** — IRC clients used for integration testing.
+- **HexChat** — IRC clients used for integration testing.
 - **netcat (`nc`)** — Raw TCP client used for manual protocol testing.
 - **ngircd** — Reference IRC server used to compare expected behavior and responses.
 
@@ -306,9 +298,9 @@ All core logic — including the server architecture, epoll event loop, message 
 
 | 42 Login | GitHub | Role |
 |----------|--------|------|
-| **mvassall** | [@mvg001](https://github.com/mvg001) | Developer |
 | **marcoga2** | [@marcogmurciano](https://github.com/marcogmurciano) | Developer |
 | **jrollon-** | [@JRM32](https://github.com/J4P032) | Developer |
+| **mvassall** | [@mvg001](https://github.com/mvg001) | Developer |
 
 ---
 
