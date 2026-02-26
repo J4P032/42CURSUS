@@ -1,5 +1,9 @@
 *Este proyecto ha sido realizado como parte del currículo de 42 por marcoga2 y jrollon-.*
 
+
+https://github.com/user-attachments/assets/8f99ddc9-7a3f-4bfc-82e1-77f3313709a6
+
+
 # 🎮 cub3D — Motor de Raycasting
 
 Un motor gráfico en primera persona implementado en **C**, inspirado en el mítico **Wolfenstein 3D**. El proyecto utiliza la técnica de **raycasting** para renderizar un entorno 3D a partir de un mapa bidimensional, gestionando texturas, eventos de teclado y ratón mediante la librería **MiniLibX**.
