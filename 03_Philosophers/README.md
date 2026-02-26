@@ -1,4 +1,5 @@
 *Este proyecto ha sido realizado como parte del currículo de 42 por jrollon-.*
+<img width="731" height="427" alt="e093e61ce06dbc37a4eea72c73a84b1b" src="https://github.com/user-attachments/assets/4a9d88b5-5ff0-4d54-b485-6d9e4cbd55e7" />
 
 # 🍝 Philosophers — I think, therefore I eat
 
