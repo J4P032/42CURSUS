@@ -1,8 +1,6 @@
 *Este proyecto ha sido realizado como parte del currículo de 42 por jrollon-.*
 
-<div align="center">
 https://github.com/user-attachments/assets/98d3ef63-2e34-46f5-a36e-e0073af09c60
-</div>
 
 # 🍒 so_long — Pac-Man Edition
 
