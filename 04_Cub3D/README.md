@@ -10,19 +10,7 @@ Un motor gráfico en primera persona implementado en **C**, inspirado en el mít
 
 **cub3D** es un proyecto de la escuela 42 que tiene como objetivo profundizar en los conceptos de matemáticas aplicadas a la computación gráfica y el manejo de ventanas/eventos. El motor permite al usuario navegar por un laberinto con una perspectiva realista, calculando la distancia a las paredes en tiempo real para proyectar su altura en pantalla.
 
-El programa interpreta archivos de configuración con extensión **.cub** que definen:
-
-- **Texturas específicas** para cada orientación de muro (Norte, Sur, Este y Oeste).
-- **Colores personalizados** para el suelo y el techo en formato RGB.
-- **Diseño del mapa**, validando que el espacio esté completamente cerrado por muros y contenga una posición de inicio válida.
-
-### Aspectos Técnicos
-
-- Implementación del algoritmo **DDA (Digital Differential Analyzer)** para un raycasting eficiente.
-- Gestión de ventanas y renderizado de frames utilizando un **buffer de imagen** para evitar el parpadeo.
-- Manejo de eventos de entrada (teclado y ratón) para el movimiento y la rotación de la cámara.
-- Parsing robusto de archivos de configuración y gestión de errores detallada.
-- Gestión de memoria optimizada para evitar *leaks* en el cierre del programa.
+El programa interpreta archivos de configuración con extensión **.cub** que definen texturas específicas para cada muro, colores para suelo/techo y el diseño del mapa.
 
 ---
 
@@ -40,13 +28,11 @@ El programa interpreta archivos de configuración con extensión **.cub** que de
 
 ### Funcionalidades Extra (Bonus)
 
-El proyecto incluye mejoras significativas respecto a la versión base:
-
-- **Minimapa**: Una representación 2D en tiempo real de la posición del jugador.
-- **Sprites**: Objetos y enemigos renderizados en el entorno 3D.
-- **Puertas**: Elementos interactivos que se pueden abrir y cerrar.
-- **Animaciones**: Ciclos de movimiento para sprites y elementos del entorno.
-- **Rotación con ratón**: Control fluido de la cámara mediante el movimiento del puntero.
+- **Minimapa**: Representación 2D en tiempo real.
+- **Sprites**: Objetos y enemigos renderizados en 3D.
+- **Puertas**: Elementos interactivos.
+- **Animaciones**: Ciclos de movimiento.
+- **Rotación con ratón**: Control fluido de la cámara.
 
 ---
 
@@ -54,29 +40,36 @@ El proyecto incluye mejoras significativas respecto a la versión base:
 
 ### Requisitos previos
 
-- Sistema operativo Linux (o macOS con los ajustes correspondientes de MLX).
-- Compilador `cc` (o `gcc`) y `make`.
-- Librerías de X11 instaladas (`libx11-dev`, `libxext-dev`).
-
-### Compilación
-
-Clona el repositorio y compila el proyecto:
-
+Asegúrate de tener instaladas las dependencias de X11 en tu sistema Linux:
 ```bash
-git clone https://github.com/tu-usuario/42CURSUS.git
-cd 42CURSUS/04_Cub3D
-make
+sudo apt-get install libx11-dev libxext-dev libbsd-dev
 ```
 
-Para incluir los bonus:
+### 🛠️ Compilación de la MiniLibX
+
+Antes de compilar el proyecto principal, es necesario preparar y compilar la librería gráfica **minilibx-linux**. Sigue estos pasos:
+
+1.  Dale permisos de ejecución al script de configuración:
+    ```bash
+    chmod +x minilibx-linux/configure
+    ```
+2.  Compila la librería:
+    ```bash
+    make -C minilibx-linux
+    ```
+
+### Compilación del Proyecto
+
+Una vez lista la MiniLibX, puedes compilar el juego:
 
 ```bash
-make bonus
+make          # Compila la versión base
+make bonus    # Compila la versión con extras
 ```
 
 ### Ejecución
 
-Lanza el programa pasando como argumento una ruta a un archivo de mapa válido:
+Lanza el programa pasando un archivo de mapa válido:
 
 ```bash
 ./cub3D maps/map4.cub
@@ -86,7 +79,7 @@ Lanza el programa pasando como argumento una ruta a un archivo de mapa válido:
 
 ## 🗺️ Formato del Mapa (.cub)
 
-Un ejemplo de configuración válida incluye las rutas a los archivos `.xpm` y la definición del mapa:
+Ejemplo de configuración de texturas y colores:
 
 ```text
 NO ./textures/NO_256.xpm
