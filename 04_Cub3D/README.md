@@ -1,8 +1,8 @@
 *Este proyecto ha sido realizado como parte del currículo de 42 por marcoga2 y jrollon-.*
 
-<p align="center">
+
 https://github.com/user-attachments/assets/8f99ddc9-7a3f-4bfc-82e1-77f3313709a6
-</p>
+
 
 # 🎮 cub3D — Motor de Raycasting
 
