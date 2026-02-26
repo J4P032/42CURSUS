@@ -15,7 +15,7 @@ Un juego de plataformas en 2D desarrollado en **C** utilizando la librería grá
 - **El Jugador**: Controlas a Pac-Man (`P`). Tu objetivo es comer todos los puntos (`C`).
 - **Coleccionables**: Debes recolectar todos los objetos (`C`) para desbloquear la salida.
 - **La Salida**: Una vez recolectado todo, debes llegar a la salida (`E`) para ganar.
-- **Enemigos (Bonus)**: Los fantasmas (`G`) patrullan el mapa. Tocar uno significa el fin de la partida.
+- **Enemigos (Exclusivo Bonus)**: Los fantasmas (`G`) patrullan el mapa. Aparecen únicamente al ejecutar la versión **bonus** del juego.
 - **Contador de Pasos**: Cada movimiento se contabiliza y se muestra en la terminal (o en la ventana en la versión bonus).
 
 ---
@@ -42,43 +42,40 @@ sudo apt-get install libx11-dev libxext-dev
 
 Es común que la carpeta de la MiniLibX venga sin los permisos adecuados o necesite una pre-configuración. Sigue estos pasos para compilarla correctamente dentro de tu proyecto:
 
-1.  Navega al directorio de la librería:
+1.  Dale **permisos de ejecución** al script de configuración:
     ```bash
-    cd minilibx-linux
+    chmod +x minilibx-linux/configure
     ```
-2.  **Dar permisos de ejecución** al script de configuración:
+2.  **Ejecuta el script** de configuración:
     ```bash
-    chmod +x configure
+    ./minilibx-linux/configure
     ```
-3.  **Ejecutar el script** de configuración (esto genera el `Makefile.gen` necesario):
+3.  Compila la librería:
     ```bash
-    ./configure
-    ```
-4.  Compilar la librería:
-    ```bash
-    make
+    make -C minilibx-linux
     ```
 
 ### Compilación del Juego
 
-Una vez compilada la MiniLibX, vuelve a la raíz del proyecto y compila el juego:
+Una vez compilada la MiniLibX, puedes compilar el juego:
 
 ```bash
-# Versión base
-make
-
-# Versión con bonus (fantasmas, animaciones y contador en pantalla)
-make bonus
+make          # Genera el ejecutable 'so_long' (versión base)
+make bonus    # Genera el ejecutable 'so_long_bonus' (incluye enemigos y animaciones)
 ```
 
 ---
 
 ## 🎮 Cómo Jugar
 
-Ejecuta el programa pasando un mapa válido como argumento:
+Ejecuta el programa pasando un mapa válido como argumento. Nota la diferencia entre las versiones:
 
 ```bash
+# Versión estándar (sin enemigos)
 ./so_long maps/map1.ber
+
+# Versión completa (los fantasmas aparecen aquí)
+./so_long_bonus maps/map1.ber
 ```
 
 ### Controles
@@ -95,7 +92,7 @@ Ejecuta el programa pasando un mapa válido como argumento:
 
 ## 🗺️ Formato del Mapa (.ber)
 
-El mapa debe ser rectangular, estar rodeado de muros (`1`) y contener al menos una salida (`E`), un coleccionable (`C`) y una posición inicial (`P`).
+El mapa debe ser rectangular y estar rodeado de muros (`1`). Los fantasmas se representan con la letra `G` (solo activos en el bonus).
 
 ```text
 1111111111111
