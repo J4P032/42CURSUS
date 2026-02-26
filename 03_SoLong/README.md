@@ -1,5 +1,9 @@
 *Este proyecto ha sido realizado como parte del currículo de 42 por jrollon-.*
 
+
+https://github.com/user-attachments/assets/98d3ef63-2e34-46f5-a36e-e0073af09c60
+
+
 # 🍒 so_long — Pac-Man Edition
 
 Un juego de plataformas en 2D desarrollado en **C** utilizando la librería gráfica **MiniLibX**. En esta versión, el proyecto recrea la estética y mecánicas del clásico **Pac-Man**, donde el jugador debe recolectar todos los objetos del mapa mientras evita a los enemigos para poder escapar.
