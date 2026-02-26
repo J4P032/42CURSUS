@@ -6,21 +6,23 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:11:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/25 16:45:14 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/26 14:31:25 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bigint.hpp"
 
 int	main(void){
-	bigint a(9);
-	bigint b(999);
+	bigint a(999);
+	bigint b(9);
 	bigint c;
 
-	c = a + b;
+	a = a + b;
 	
-	std::cout << c << std::endl;
+	std::cout << a << std::endl;
+	
+	
+	
+	
 	return 0;
-
-	
 }

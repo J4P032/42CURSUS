@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 10:33:03 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/25 16:45:48 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/26 14:31:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,93 +14,129 @@
 # define BIGINT_HPP
 
 # include <iostream>
+# include <algorithm> //std::reverse
 # include <vector>
+
+bool	is_digit(char c){
+	return (c >= '0' && c <= '9');
+}
+
+int	ft_atoi(char c){
+	return (c - '0');
+}
 
 class bigint{
 public:
-	bigint() {}
+	bigint(){}
 	
-	template <typename T>
+	template<typename T>
 	bigint(T n){
 		if (n == 0)
-			_BN.insert(_BN.begin(), 0);
+			_BI.insert(_BI.begin(), 0);
 		while (n > 0){
-			int aux = n % 10;
-			_BN.insert(_BN.begin(), aux);
-			n /= 10;
+			_BI.insert(_BI.begin(), n%10);
+			n /=10;
 		}
+		if (_BI.empty())
+			_BI.push_back(0);
 	}
 	
-	bigint(const bigint& other) : _BN(other.getBN()){}
+	bigint(const std::string& n){
+		std::string::const_iterator it = n.begin();
+		bool	inicial = true;
+		while (it != n.end() && is_digit(*it)){
+			if (inicial){
+				if (ft_atoi(*it) != 0){
+					_BI.push_back(ft_atoi(*it));
+					inicial = false;
+				}
+			}
+			else
+				_BI.push_back(ft_atoi(*it));
+			it++;
+		}
+		if (_BI.empty())
+			_BI.push_back(0);
+	}
+	
+	bigint(const char* s){ //se le puede pasar como literal (bigint("123") y se iria al template.)
+		*this = bigint(std::string(s));
+	}
+
+	bigint(const bigint& other) : _BI(other._BI){}
 
 	bigint& operator=(const bigint& other){
-		_BN = other.getBN();
+		if (this != &other)
+			_BI = other._BI;
 		return (*this);
 	}
 
+	
 	bigint operator+(const bigint& other) const{
-		bigint	aux;
-		int		suma = 0;
+		std::vector<int>::const_reverse_iterator it_first = _BI.rbegin();
+		std::vector<int>::const_reverse_iterator it_second = other._BI.rbegin();
+		bigint	suma;
+		int		rest = 0;
 		int		add = 0;
-		std::vector<int>::const_reverse_iterator it_first = _BN.rbegin();
-		std::vector<int>::const_reverse_iterator it_second = other._BN.rbegin();
+
+		while  (it_first != _BI.rend() && it_second != other._BI.rend()){
+			add = *it_first + *it_second + rest;
+			rest = 0; //reset
+			if (add > 9){
+				suma._BI.push_back(add%10); //lo montamos al reves, por O(1). Luego lo invertimos "reverse"
+				rest = 1;
+			}
+			else
+				suma._BI.push_back(add);
+			it_first++;
+			it_second++;
+		}
 		
-		while (it_first != _BN.rend() && it_second != other._BN.rend()){
-			suma = *it_first + *it_second + add;
-			add = 0; //resetearlo
-			if (suma > 9){
-				suma %= 10;
-				add = 1;
+		while  (it_first != _BI.rend()){
+			add = *it_first + rest;
+			rest = 0; //reset
+			if (add > 9){
+				suma._BI.push_back(add%10);
+				rest = 1;
 			}
-			it_second++;
-			it_first++;
-			aux._BN.insert(aux._BN.begin(), suma);
+			else
+				suma._BI.push_back(add);
+			it_first++;	
 		}
-		while (it_first != _BN.rend()){
-			suma = *it_first + add;
-			add = 0; //resetearlo
-			if (suma > 9){
-				suma %= 10;
-				add = 1;
+
+		while  (it_second != other._BI.rend()){
+			add = *it_second + rest;
+			rest = 0; //reset
+			if (add > 9){
+				suma._BI.push_back(add%10);
+				rest = 1;
 			}
-			it_first++;
-			aux._BN.insert(aux._BN.begin(), suma);
+			else
+				suma._BI.push_back(add);
+			it_second++;	
 		}
-		while (it_second != other._BN.rend()){
-			suma = *it_second + add;
-			add = 0; //resetearlo
-			if (suma > 9){
-				suma %= 10;
-				add = 1;
-			}
-			it_second++;
-			aux._BN.insert(aux._BN.begin(), suma);
-		}
-		if (add) //el resto final añade uno.
-			aux._BN.insert(aux._BN.begin(), 1);
-		return (aux);
+		if (rest)
+			suma._BI.push_back(1);
+		std::reverse(suma._BI.begin(), suma._BI.end()); //lo hemos montado al reves asi que lo invertimos. Podria haber hecho insert front, pero eso seria O(n2)
+		return (suma);
 	}
 	
-	std::vector<int> getBN(void) const{
-		return (_BN);
-	}
+	const std::vector<int>&	getBI(void) const{
+		return (_BI);
+	}	
 	
 private:
-	std::vector<int> _BN;
-
+	std::vector<int> _BI;
 };
 
-std::ostream& operator<<(std::ostream& out, const bigint& obj){
-	std::vector<int>	aux_vec;
-	aux_vec = obj.getBN();
-	std::vector<int>::const_iterator it = aux_vec.begin();
-	if (it != aux_vec.end()){
-		for (;it != aux_vec.end(); ++it){
-			std::cout << *it;
-		}
+std::ostream& operator<<(std::ostream& out, const bigint& num){
+	const std::vector<int>& bi_vector = num.getBI();
+	std::vector<int>::const_iterator it = bi_vector.begin();
+	while (it != bi_vector.end()){
+		out << *it;
+		it++;
 	}
 	return (out);
 }
-
 
 #endif
