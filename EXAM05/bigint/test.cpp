@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:11:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/26 14:31:25 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/26 14:49:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ int	main(void){
 	
 	std::cout << a << std::endl;
 	
+	bigint d(999);
+	if (d == a)
+		std::cout << "son iguales" << std::endl;
+	else
+		std::cout << "son distintos" << std::endl;
 	
 	
 	

@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 10:33:03 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/26 14:31:07 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/26 14:53:41 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,30 @@ public:
 		std::reverse(suma._BI.begin(), suma._BI.end()); //lo hemos montado al reves asi que lo invertimos. Podria haber hecho insert front, pero eso seria O(n2)
 		return (suma);
 	}
+
+/* 	bool	operator==(const bigint& other) const{
+		if (_BI.size() != other._BI.size())
+			return (false);
+		
+		std::vector<int>::const_iterator it_first = _BI.begin();
+		std::vector<int>::const_iterator it_second = other._BI.begin();
+		while (it_first != _BI.end() && it_second != other._BI.end()){
+			if (*it_first != *it_second)
+				return (false);
+			it_first++;
+			it_second++;
+		}
+		return (true);
+	} */
 	
+	bool	operator==(const bigint& other) const{
+		return (_BI == other._BI); //por que en vector ya está el operador== implementado. Dejo lo de arriba comentado para ver como se haría.
+	}
+
+	bool	operator!=(const bigint& other)const{
+		return !(*this == other); //ya que esta definido el operator== para la clase, puedo implemtar el != que no lo piden pero es fácil.
+	}
+
 	const std::vector<int>&	getBI(void) const{
 		return (_BI);
 	}	
