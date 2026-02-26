@@ -1,5 +1,9 @@
 *Este proyecto ha sido realizado como parte del currículo de 42 por mpico-bu y jrollon-.*
 
+<p align="center">
+<img width="809" height="393" alt="8552ce661de13bb78434bed06fb6bbcb" src="https://github.com/user-attachments/assets/d689961b-2916-49cc-9c38-d814b9f0b7aa" />
+</p>
+
 # 🐚 minishell — As beautiful as a shell
 
 Un intérprete de comandos (shell) minimalista implementado en **C**, basado en el funcionamiento de **Bash**. El proyecto abarca desde el parsing de la entrada del usuario hasta la ejecución de procesos, gestión de señales y redirecciones de archivos.
