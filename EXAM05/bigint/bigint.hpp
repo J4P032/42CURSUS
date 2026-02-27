@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 10:33:03 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/27 14:11:37 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/27 16:53:29 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 /*
 Regla mnemotécnica para el examen:
 
-Si el operador tiene un = (como +=, -=, <<=, >>=), NUNCA pongas const al final y SIEMPRE usa return *this;.
+Si el operador tiene un = (como +=, -=, <<=, >>=), NUNCA pongas const al final y SIEMPRE usa return *this; No lleva &
 Si el operador NO tiene un = (como +, -, <<, >>, ==, <), SIEMPRE pon const al final y devuelve una copia nueva.
 
 
