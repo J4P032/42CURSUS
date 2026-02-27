@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:11:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/26 14:49:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/27 12:47:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	main(void){
 	else
 		std::cout << "son distintos" << std::endl;
 	
+	d = d << 5;
+	std::cout << d << std::endl; 
 	
 	
 	return 0;

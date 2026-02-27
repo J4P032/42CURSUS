@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 10:33:03 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/26 14:53:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/02/27 14:11:37 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 # include <iostream>
 # include <algorithm> //std::reverse
 # include <vector>
+
+/*
+Regla mnemotécnica para el examen:
+
+Si el operador tiene un = (como +=, -=, <<=, >>=), NUNCA pongas const al final y SIEMPRE usa return *this;.
+Si el operador NO tiene un = (como +, -, <<, >>, ==, <), SIEMPRE pon const al final y devuelve una copia nueva.
+
+
+*/
+
 
 bool	is_digit(char c){
 	return (c >= '0' && c <= '9');
@@ -121,6 +131,11 @@ public:
 		return (suma);
 	}
 
+	bigint& operator+=(const bigint& other){
+		*this = *this + other;
+		return (*this);
+	}
+	
 /* 	bool	operator==(const bigint& other) const{
 		if (_BI.size() != other._BI.size())
 			return (false);
@@ -141,7 +156,72 @@ public:
 	}
 
 	bool	operator!=(const bigint& other)const{
-		return !(*this == other); //ya que esta definido el operator== para la clase, puedo implemtar el != que no lo piden pero es fácil.
+		return !(*this == other); //ya que esta definido el operator== para la clase, puedo implemtar el != 
+	}
+
+	bool	operator<(const bigint& other) const{
+		if (_BI.size() != other._BI.size())
+			return (_BI.size() < other._BI.size());
+		return (_BI < other._BI);
+	}
+	
+	bool	operator<=(const bigint& other) const{
+		return (*this < other || *this == other);
+	}
+	
+	bool	operator>(const bigint& other) const{
+		return (other < *this);
+	}
+
+	bool	operator>=(const bigint& other) const{
+		return !(*this < other);
+	}
+
+	
+
+	bigint	operator<<(int n) const{
+		if (n <= 0)
+			return (*this) ;
+		bigint result(*this);
+		if (result._BI.empty()){
+			result._BI.push_back(0);
+			return (result);
+		}
+		if (result._BI.size() == 1 && result._BI[0] == 0)
+			return (result);
+		for (int i = 0; i < n; i++){
+			result._BI.push_back(0);
+		}
+		return (result);
+	}
+
+	bigint&	operator<<=(int n){
+		*this = *this << n;
+		return (*this);
+	}
+
+	bigint&	operator>>=(int n){
+		*this = *this >> n;
+		return (*this);
+	}
+
+
+	bigint	operator>>(int n) const{
+		if (n <= 0)
+			return (*this);
+		bigint res(*this);
+		if (res._BI.empty()){
+			res._BI.push_back(0);
+			return (res);
+		}
+		if (_BI.size() == 1 && _BI[0] == 0)
+			return (*this);
+		for (int i = 0; i < n && !res._BI.empty(); i++){
+			res._BI.pop_back();
+		}
+		if (res._BI.empty())
+			res._BI.push_back(0);
+		return (res);
 	}
 
 	const std::vector<int>&	getBI(void) const{
