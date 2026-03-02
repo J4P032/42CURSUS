@@ -6,7 +6,8 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:03:57 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/02 12:03:58 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/02 12:21:07 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "searchable_array_bag.hpp"
