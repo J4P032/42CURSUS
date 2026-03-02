@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 10:33:03 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/02 15:44:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/03 00:44:19 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,149 +14,77 @@
 # define BIGINT_HPP
 
 # include <iostream>
-# include <algorithm> //std::reverse
+# include <algorithm>
 # include <vector>
 
-/*
-Regla mnemotécnica para el examen:
-
-Si el operador tiene un = (como +=, -=, <<=, >>=), NUNCA pongas const al final y SIEMPRE usa return *this; lleva &
-Si el operador NO tiene un = (como +, -, <<, >>, ==, <), SIEMPRE pon const al final y devuelve una copia nueva.
-
-*/
-
-
-bool	is_digit(char c){
-	return (c >= '0' && c <= '9');
+inline bool is_digit(char c){
+    return (c >= '0' && c <= '9');
 }
 
-int	ft_atoi(char c){
-	return (c - '0');
+inline int  ft_atoi(char c){
+    return (c - '0');
 }
 
 class bigint{
 public:
-	bigint(){}
-	
-	template<typename T>
-	bigint(T n){
-		if (n == 0)
-			_BI.insert(_BI.begin(), 0);
-		while (n > 0){
-			_BI.insert(_BI.begin(), n%10);
-			n /=10;
-		}
-		if (_BI.empty())
+
+//CONSTRUCTORES
+	bigint(void){}
+    
+    bigint(long num){
+        if (num == 0)
+            _BI.push_back(0);
+        while (num > 0){
+            _BI.push_back(num%10);
+            num /= 10;
+        }
+        if (_BI.empty())
+            _BI.push_back(0);
+        std::reverse(_BI.begin(), _BI.end());
+    }
+
+	 bigint(int num){ //se necesita por que bigint(0) podria ser como bigint(NULL) que es un bigint(char *) y no sabe cual pillar
+		*this = bigint((long)num);
+	}
+
+    bigint(const std::string& str){
+        std::string::const_iterator it = str.begin();
+        while (it != str.end() && *it == '0')
+            it++;
+		if (it == str.end()){
 			_BI.push_back(0);
-	}
-	
-	bigint(const std::string& n){
-		std::string::const_iterator it = n.begin();
-		bool	inicial = true;
-		while (it != n.end() && is_digit(*it)){
-			if (inicial){
-				if (ft_atoi(*it) != 0){
-					_BI.push_back(ft_atoi(*it));
-					inicial = false;
-				}
-			}
-			else
-				_BI.push_back(ft_atoi(*it));
-			it++;
+			return ;
 		}
-		if (_BI.empty())
-			_BI.push_back(0);
+        while (it != str.end() && is_digit(*it)){
+            _BI.push_back(ft_atoi(*it));
+            it++;
+        }
+    }
+
+	bigint(const char* str){
+		*this = bigint(std::string(str));
 	}
-	
-	bigint(const char* s){ //se le puede pasar como literal (bigint("123") y se iria al template.)
-		*this = bigint(std::string(s));
-	}
+
+//COPIA
 
 	bigint(const bigint& other) : _BI(other._BI){}
 
-	bigint& operator=(const bigint& other){
+	bigint&	operator=(const bigint& other){
 		if (this != &other)
 			_BI = other._BI;
 		return (*this);
 	}
 
-	~bigint(void){}
-	
-	bigint operator+(const bigint& other) const{
-		std::vector<int>::const_reverse_iterator it_first = _BI.rbegin();
-		std::vector<int>::const_reverse_iterator it_second = other._BI.rbegin();
-		bigint	suma;
-		int		rest = 0;
-		int		add = 0;
+//DESTRUCTOR
+	~bigint(){}
 
-		while  (it_first != _BI.rend() && it_second != other._BI.rend()){
-			add = *it_first + *it_second + rest;
-			rest = 0; //reset
-			if (add > 9){
-				suma._BI.push_back(add%10); //lo montamos al reves, por O(1). Luego lo invertimos "reverse"
-				rest = 1;
-			}
-			else
-				suma._BI.push_back(add);
-			it_first++;
-			it_second++;
-		}
-		
-		while  (it_first != _BI.rend()){
-			add = *it_first + rest;
-			rest = 0; //reset
-			if (add > 9){
-				suma._BI.push_back(add%10);
-				rest = 1;
-			}
-			else
-				suma._BI.push_back(add);
-			it_first++;	
-		}
-
-		while  (it_second != other._BI.rend()){
-			add = *it_second + rest;
-			rest = 0; //reset
-			if (add > 9){
-				suma._BI.push_back(add%10);
-				rest = 1;
-			}
-			else
-				suma._BI.push_back(add);
-			it_second++;	
-		}
-		if (rest)
-			suma._BI.push_back(1);
-		std::reverse(suma._BI.begin(), suma._BI.end()); //lo hemos montado al reves asi que lo invertimos. Podria haber hecho insert front, pero eso seria O(n2)
-		return (suma);
-	}
-
-	bigint& operator+=(const bigint& other){
-		*this = *this + other;
-		return (*this);
-	}
-	
-/* 	bool	operator==(const bigint& other) const{
-		if (_BI.size() != other._BI.size())
-			return (false);
-		
-		std::vector<int>::const_iterator it_first = _BI.begin();
-		std::vector<int>::const_iterator it_second = other._BI.begin();
-		while (it_first != _BI.end() && it_second != other._BI.end()){
-			if (*it_first != *it_second)
-				return (false);
-			it_first++;
-			it_second++;
-		}
-		return (true);
-	} */
-	
+//COMPARACIONES
 	bool	operator==(const bigint& other) const{
-		return (_BI == other._BI); //por que en vector ya está el operador== implementado. Dejo lo de arriba comentado para ver como se haría.
+		return (_BI == other._BI);
 	}
 
-	bool	operator!=(const bigint& other)const{
-		return !(*this == other); //ya que esta definido el operator== para la clase, puedo implemtar el != 
+	bool	operator!=(const bigint& other) const{
+		return !(_BI == other._BI);
 	}
 
 	bool	operator<(const bigint& other) const{
@@ -164,82 +92,199 @@ public:
 			return (_BI.size() < other._BI.size());
 		return (_BI < other._BI);
 	}
-	
+
 	bool	operator<=(const bigint& other) const{
-		return (*this < other || *this == other);
+		if (*this < other)
+			return (true);
+		if (*this == other)
+			return (true);
+		return (false);
 	}
-	
+
 	bool	operator>(const bigint& other) const{
 		return (other < *this);
 	}
 
 	bool	operator>=(const bigint& other) const{
-		return !(*this < other);
+		if (*this > other)
+			return (true);
+		if (*this == other)
+			return (true);
+		return (false);
 	}
 
+//shift
+bigint operator<<(int n) const{
+	bigint aux(*this);
+
+	if (n <= 0)
+		return (aux);
+	if (aux._BI.size() == 1 && aux._BI.at(0) == 0)
+		return (aux);
+	if (aux._BI.empty()){
+		aux._BI.push_back(0);
+		return (aux);
+	}
+	for (int i = 0; i < n; i++){
+		aux._BI.push_back(0);
+	}
+	return (aux);
+}
+
+bigint& operator<<=(int n){
+	*this = *this << n;
+	return (*this);
+}
+
+bigint operator>>(int n) const{
+	bigint aux(*this);
+	if (n <= 0)
+		return (aux);
+	if (!aux._BI.empty() && aux._BI.at(0) == 0)
+		return (aux);
+	for (int i = 0; i < n && !aux._BI.empty(); i++)
+		aux._BI.pop_back();
 	
+	if (aux._BI.empty())
+		aux._BI.push_back(0);
+	return (aux);
+}
 
-	bigint	operator<<(int n) const{
-		if (n <= 0)
-			return (*this) ;
-		bigint result(*this);
-		if (result._BI.empty()){
-			result._BI.push_back(0);
-			return (result);
+bigint& operator>>=(int n){
+	*this = *this >> n;
+	return (*this);
+}
+
+bigint operator<<(const bigint& other) const{
+	bigint aux(*this);
+	if (other._BI.empty()){
+		aux._BI.push_back(0);
+		return (aux);
+	}
+	if (other == 0)
+		return (aux);
+	for (bigint i(0); i < other; ++i){
+		aux._BI.push_back(0);
+	}
+	return (aux);
+}
+
+bigint& operator<<=(const bigint& other){
+	*this = *this << other;
+	return (*this);
+}
+
+bigint operator>>(const bigint& other) const{
+	bigint aux(*this);
+	if (other._BI.empty()){
+		aux._BI.push_back(0);
+		return (aux);
+	}
+	if (other == 0)
+		return (aux);
+	for (bigint i(0); i < other && !aux._BI.empty(); ++i){
+		aux._BI.pop_back();
+	}
+	if (aux._BI.empty())
+		aux._BI.push_back(0);
+	return (aux);
+}
+
+bigint& operator>>=(const bigint& other){
+	*this = *this >> other;
+	return (*this);
+}
+
+
+
+
+//OPERATOR ADD
+	bigint	operator+(const bigint& other) const{
+		std::vector<int>::const_reverse_iterator itl = _BI.rbegin();
+		std::vector<int>::const_reverse_iterator itr = other._BI.rbegin();
+		int		resto = 0;
+		int 	aux = 0;
+		bigint	suma;
+
+		while (itl != _BI.rend() && itr != other._BI.rend()){
+			aux = *itl + *itr + resto;
+			resto = 0; //reset de resto
+			if (aux > 9){
+				suma._BI.push_back(aux%10);
+				resto = 1;
+			}
+			else
+				suma._BI.push_back(aux);
+			itl++;
+			itr++;
 		}
-		if (result._BI.size() == 1 && result._BI[0] == 0)
-			return (result);
-		for (int i = 0; i < n; i++){
-			result._BI.push_back(0);
+		while (itl != _BI.rend()){
+			aux = *itl + resto;
+			resto = 0;
+			if (aux > 9){
+				suma._BI.push_back(aux%10);
+				resto = 1;
+			}
+			else
+				suma._BI.push_back(aux);
+			itl++;
 		}
-		return (result);
+		while (itr != other._BI.rend()){
+			aux = *itr + resto;
+			resto = 0;
+			if (aux > 9){
+				suma._BI.push_back(aux%10);
+				resto = 1;
+			}
+			else
+				suma._BI.push_back(aux);
+			itr++;
+		}
+		if (resto)
+			suma._BI.push_back(1);
+		std::reverse(suma._BI.begin(), suma._BI.end());
+
+		return (suma);
 	}
 
-	bigint&	operator<<=(int n){
-		*this = *this << n;
+	bigint&	operator+=(const bigint& other){
+		*this = *this + other;
 		return (*this);
 	}
 
-	bigint&	operator>>=(int n){
-		*this = *this >> n;
+	bigint&	operator++(){
+		*this += 1;
 		return (*this);
 	}
 
-
-	bigint	operator>>(int n) const{
-		if (n <= 0)
-			return (*this);
-		bigint res(*this);
-		if (res._BI.empty()){
-			res._BI.push_back(0);
-			return (res);
-		}
-		if (_BI.size() == 1 && _BI[0] == 0)
-			return (*this);
-		for (int i = 0; i < n && !res._BI.empty(); i++){
-			res._BI.pop_back();
-		}
-		if (res._BI.empty())
-			res._BI.push_back(0);
-		return (res);
+	bigint	operator++(int){
+		bigint unidad(1);
+		bigint aux(*this);
+		*this = *this + unidad;
+		return (aux);
 	}
 
-	const std::vector<int>&	getBI(void) const{
-		return (_BI);
-	}	
-	
+
+//GETTERS
+
+	const std::vector<int>& get_BI() const{
+    	return (_BI);
+}
+
 private:
-	std::vector<int> _BI;
+    std::vector<int> _BI;
+
 };
 
-std::ostream& operator<<(std::ostream& out, const bigint& num){
-	const std::vector<int>& bi_vector = num.getBI();
-	std::vector<int>::const_iterator it = bi_vector.begin();
-	while (it != bi_vector.end()){
-		out << *it;
-		it++;
-	}
-	return (out);
+inline  std::ostream& operator<<(std::ostream& out, const bigint& obj){
+    const std::vector<int>&    aux = obj.get_BI();
+    std::vector<int>::const_iterator it = aux.begin();
+    while (it != aux.end()){
+        out << *it;
+        it++;
+    }
+    return (out);
 }
+
 
 #endif
