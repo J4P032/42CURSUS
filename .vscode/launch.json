@@ -8,7 +8,7 @@
 			"name": "(gdb) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/03_Minishell/minishell",
+			"program": "${workspaceFolder}/05_CPP/CPP08/ex00/EasyFind",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
