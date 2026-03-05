@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 13:00:29 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/05 14:42:18 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/05 15:13:43 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,21 @@ int	main(void){
 	
 	try{
 		std::cout << std::endl << "//Search in Vector" << std::endl;
-		easyfind(c_vector, 2);
+		std::vector<int>::iterator it_v = easyfind(c_vector, 2);
+		*it_v = 42; //no protejo con un if (it_v != c_vector.end()) por que me protege la excepción que lo parará
+		print_container(c_vector);
+		
 		std::cout << std::endl << "//Search in List" << std::endl;
-		easyfind(c_list, 41);
+		std::list<int>::iterator it_l = easyfind(c_list, 41);
+		*it_l = 42;
+		print_container(c_list);
+				
 		std::cout << std::endl << "//Search in Deque" << std::endl;
-		easyfind(c_deque, 9);
-
+		std::deque<float>::iterator it_d = easyfind(c_deque, 9);
+		*it_d = 42.5;
+		print_container(c_deque);
+		
+		//no puedo alterarlos ya que no tiene iteradores
 		std::cout << std::endl << "//Search in Stack" << std::endl;
 		easyfind(c_stack, 34);
 		

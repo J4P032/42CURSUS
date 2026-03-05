@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 13:04:35 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/05 14:41:05 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/05 15:19:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,25 +124,26 @@ void	print_container(std::queue<T> c){
 	std::cout << std::endl;
 }
 
+
 template <typename T>
-void	easyfind(const T& container, int n){
+typename T::iterator	easyfind(T& container, int n){
 	/*necesita "typename" por que si no no sabe si se le manda un tipo (int, vector, etc)
 	variable o función incluida en T.*/
-	typename T::const_iterator it = std::find(container.begin(), container.end(), n);
+	typename T::iterator it = std::find(container.begin(), container.end(), n);
 	if (it == container.end())
 		throw NotFoundException();
-	else
-		std::cout << "Number " << n << " found in containter." << std::endl;
+	std::cout << "Number " << n << " found in containter." << std::endl;
+	return (it);
 }
 
 //overload de easyfind para stack y queue donde hay que destruir el contenedor para encontrarlo
-//pero destruimos una copia.
+//pero destruimos una copia. No se puede usar std::find por que depende de métodos que no tiene
 template <typename T>
 void	easyfind(std::stack<T> container, int n){
 	while (!container.empty()){
 		if (n == container.top()){
 			std::cout << "Number " << n << " found in containter." << std::endl;
-			break ; 
+			return ; 
 		}
 		container.pop();
 	}
@@ -155,7 +156,7 @@ void	easyfind(std::queue<T> container, int n){
 	while (!container.empty()){
 		if (n == container.front()){
 			std::cout << "Number " << n << " found in containter." << std::endl;
-			break ; 
+			return ; 
 		}
 		container.pop();
 	}
