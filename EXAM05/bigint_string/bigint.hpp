@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bigint.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 16:41:00 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/05 21:08:06 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/05 23:26:28 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,6 @@ public:
 
 	bigint	operator>>(int n) const{
 		bigint aux(*this);
-		int len = aux._BI.length();
 		
 		if (n <= 0)
 			return (aux);
@@ -239,19 +238,13 @@ public:
 		if (aux._BI == "0"){
 			return (aux);	
 		}
-
-		int	remove = len - n;
-		if (remove <= 0){
+	
+		for (int i = 0; i < n && !aux._BI.empty(); ++i){
+			aux._BI.erase(aux._BI.length() - 1, 1);
+		}
+		if (aux._BI.empty())
 			aux._BI = "0";
-			return (aux);
-		}
-		
-		bigint aux2;
-		aux2._BI.clear();
-		for (int i = 0; i < remove; ++i){
-			aux2._BI += aux._BI[i];
-		}
-		return (aux2);
+		return (aux);
 	}
 
 	bigint& operator>>=(int n){
@@ -259,9 +252,8 @@ public:
 		return (*this);
 	}
 
-	bigint	operator>>=(const bigint& other){
+	bigint	operator>>(const bigint& other) const{
 		bigint aux(*this);
-		int len = aux._BI.length();
 		
 		if (other._BI == "0")
 			return (aux);
@@ -272,27 +264,30 @@ public:
 		if (aux._BI == "0"){
 			return (aux);	
 		}
-
-		/////////
-		
-		bigint	remove = bigint(len) - other;
-		if (remove <= bigint(0)){
+	
+		for (bigint i(0); i < other && !aux._BI.empty(); ++i){
+			aux._BI.erase(aux._BI.length() - 1, 1);
+		}
+		if (aux._BI.empty())
 			aux._BI = "0";
-			return (aux);
-		}
-		
-		bigint aux2;
-		aux2._BI.clear();
-		for (bigint i(0); i < remove; ++i){
-			aux2._BI += aux._BI[i];
-		}
-		return (aux2);
+		return (aux);
 	}
+	
+	bigint operator>>=(const bigint& other){
+		*this = *this >> other;
+		return (*this);
+	}
+	
+	
 	
 
 //COMPARACION
 	bool	operator==(const bigint& other) const{
 		return (_BI == other._BI);
+	}
+
+	bool	operator!=(const bigint& other) const{
+		return !(_BI == other._BI);
 	}
 
 	bool	operator<(const bigint& other) const{
@@ -305,6 +300,27 @@ public:
 		}
 		return (_BI.length() < other._BI.length());
 	}
+
+	bool operator<=(const bigint& other) const{
+		if (*this == other)
+			return (true);
+		if (*this < other)
+			return (true);
+		return (false);
+	}
+	
+	bool operator>(const bigint& other) const{
+		return (other < *this);
+	}
+
+	bool operator>=(const bigint& other) const{
+		if (*this == other)
+			return (true);
+		if (*this > other)
+			return (true);
+		return (false);
+	}
+	
 
 
 //GETTERS
