@@ -2,7 +2,7 @@ CXX = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -g
 
 NAME = ex01
-SRC = 	main.cpp
+SRC = 	main.cpp Span.cpp
 OBJDIR = obj
 OBJS = $(SRC:%.cpp=$(OBJDIR)/%.o)
 RM	= rm -rf

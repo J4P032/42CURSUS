@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 14:43:19 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/10 15:20:41 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/12 14:45:02 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <vector>
 # include <iostream>
-
 class	Span{
 public:
 	Span(void);
@@ -24,15 +23,21 @@ public:
 	Span& operator=(const Span&);
 	~Span(void);
 	
-	void	addNumber(int);
-	int		shortestSpan(void) const;
-	int		longestSpan(void) const;
+	void			addNumber(int);
+	void			addNumber(std::vector<int>::const_iterator, std::vector<int>::const_iterator);
+	unsigned long	shortestSpan(void) const;
+	unsigned long	longestSpan(void) const;
+
+	Span	operator+(const Span& other) const;
+
+	//getter
+	const std::vector<int>&	getVector() const;
 
 private:
 	std::vector<int>	_span;
 	unsigned int		_maxSize;
 };
 
-
+std::ostream& operator<<(std::ostream& out, const Span& other);
 
 #endif
