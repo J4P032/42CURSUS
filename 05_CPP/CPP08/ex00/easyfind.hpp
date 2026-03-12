@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 13:04:35 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/05 15:19:42 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/12 10:13:15 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,18 @@
        
        3. SOLUCIÓN: Al definir el método dentro de la clase en el .hpp, se vuelve 
           'inline'. Esto permite que el código esté disponible en cualquier archivo 
-          que incluya este header, evitando fallos al compilar.*/
+          que incluya este header, evitando fallos al compilar.
+		  
+	Nota: la hago canónica por el qué diran en 42, pero que no debería serlo ya que viene
+	de std::exception que ya es canónica de por si, y además NotFoundException es una
+	clase de apoyo para lanzar una excepción particular. No principal  */
+
 class NotFoundException : public std::exception{
-public:	
+public:
+	NotFoundException() throw() {}
+	NotFoundException(const NotFoundException&) throw(){}
+	NotFoundException& operator=(const NotFoundException&) throw(){return *this;}
+	virtual ~NotFoundException() throw() {}	
 	virtual const char* what() const throw(){ //throw() para no lanzar excepcion ella misma.
 		return "Element not found in container. Program interrupt!!";
 	}
