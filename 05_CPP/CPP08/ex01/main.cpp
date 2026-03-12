@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 10:40:33 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/12 15:18:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/12 15:37:27 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,12 @@ int	main(void){
 		std::cout << "Longest Span of e(25000): " << e.longestSpan() << std::endl;
 		std::cout << "Shortest Span of e(25000): " << e.shortestSpan() << std::endl;
 	
-	
+		//fallo de suma con reserva mayor a la permitida
+		std::cout << std::endl << "----- TEST exceed of operator+ ----" << std::endl;
+		Span uno(3000000000U);
+        Span otro(2000000000U);
+		Span masotro = uno + otro;
+		std::cout << "END OF PROGRAM" << std::endl;
 	}
 	catch (std::exception& ex){
 		std::cout << "Error(exception): " << ex.what() << std::endl;

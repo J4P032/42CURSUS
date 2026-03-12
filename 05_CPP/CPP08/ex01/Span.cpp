@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 14:58:26 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/12 15:11:55 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/12 15:34:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ void 	Span::addNumber(std::vector<int>::const_iterator begin, std::vector<int>::
 }
 
 Span	Span::operator+(const Span& other) const{
-	unsigned long totalSize = static_cast<unsigned long>(_maxSize + other._maxSize);
+	//ha de ser casteado uno solo por que si casteo cast<unsigned long>(_maxSize + other._maxSize)
+	// hará primero la suma siendo overflow y pasado a numero menor y no saltará
+	unsigned long totalSize = static_cast<unsigned long>(_maxSize) + other._maxSize; 
 	if (totalSize > 4294967295UL)
 		throw std::runtime_error("Combined Span size exceeds unsigned int limit");
 		
