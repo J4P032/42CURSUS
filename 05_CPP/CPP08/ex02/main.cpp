@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 09:38:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/13 12:56:26 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/13 13:36:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,15 @@ int	main_mytests(){
 	std::cout << "MutantStack<char> composed but reverse order:" << std::endl;
 	MutantStack<char> d(aux2.rbegin(), aux2.rend());
 	std::cout << d << std::endl;
+	std::cout << "Insert a '?' char and see it with .top()" << std::endl;
+	d.push('?');
+	std::cout << d << std::endl;
+	std::cout << "top must be last pushed. .top() = " << d.top() << std::endl;
+	std::cout << "removed with pop now top should be last included so final of the container = a" << std::endl;
+	d.pop();
+	std::cout << ".top() = " << d.top() << std::endl;
+	std::cout << d << std::endl;
+	std::cout << "size of d<char>: " << d.size() << std::endl;
 	
 	return 0;
 }
