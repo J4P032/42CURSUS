@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 09:38:28 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/13 13:36:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:14:11 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	main_mytests(){
 
 int main(){
 	int r;
-	int ret;
+	int ret = 0;
 	
 	std::cout << "TESTS -----" << std::endl;
 	std::cout << "1. Subject test\n2. Subject test with std::list\n3. My own tests" << std::endl;
