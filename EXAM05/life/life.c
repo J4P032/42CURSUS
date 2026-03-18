@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 12:37:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/17 17:06:00 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/18 11:39:13 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init_game(t_g* g, char** v){
 		g->tablero[i] = (char*)malloc(x);
 	for (size_t i = 0; i < y; i++){
 		for(size_t j = 0; j < x; j++)
-			g->tablero[j][i] = '.';
+			g->tablero[j][i] = ' ';
 	}	
 }
 
@@ -61,7 +61,7 @@ void	start_it(t_g* g){
 				break ;
 		}
 		if (writting)
-			g->tablero[x][y] = '0';
+			g->tablero[x][y] = 'O';
 	}
 }
 
@@ -73,6 +73,14 @@ void	print(t_g* g){
 	}	
 }
 
+void	print_matrix(char** m, int x, int y){
+	for(size_t i = 0; i < y; i++){
+		for(size_t j = 0; j < x; j++)
+			putchar(m[j][i]);
+		putchar('\n');
+	}
+}
+
 int	is_inside(t_g* g, int x, int y){
 	if (x >= 0 && x <= g->w - 1 && y >= 0 && y <= g->h - 1) 
 		return 1;
@@ -82,26 +90,24 @@ int	is_inside(t_g* g, int x, int y){
 
 
 void	modify_it(t_g* g, char** copia, size_t i, size_t j){
-	int x = j;
-	int y = i;
 	int vivo = 0;
 	int	vecinos = 0;
 
-	if (g->tablero[j][i] == 'O')
+	if (copia[j][i] == 'O')
 		vivo = 1;
 	
-	x--;
-	y--;
-	
-	for (size_t i = 0; i < 3; i++){	
-		for (size_t j = 0; j < 3; j++){
-			if (is_inside(g, x, y)){
-				if (copia[x][y] == 'O' && x != j && y != i)
+	 for (int f = -1; f <= 1; f++){	
+		for (int c = -1; c <= 1; c++){
+			if (f == 0 && c == 0)
+				continue;
+
+			int	check_x = j + c;
+			int check_y = i + f;
+			if (is_inside(g, check_x, check_y)){
+				if (copia[check_x][check_y] == 'O')
 					vecinos++;
 			}
-			x++;
 		}
-		y++;
 	}
 	if (vivo){
 		if (vecinos < 2 || vecinos > 3)
@@ -125,12 +131,13 @@ void game_of_life(t_g* g){
 			for (size_t j = 0; j < x; j++)
 				copia[j][i] = g->tablero[j][i];
 		}
-		
+		//printf("copia\n");
+		//putchar('\n');
+		//print_matrix(copia, x, y);
 		for (size_t i = 0; i < y; i++){
 			for (size_t j = 0; j < x; j++)
 				modify_it(g, copia, i, j);
 		}
-		
 }
 
 
@@ -152,7 +159,7 @@ int main(int ac, char** av){
 	
 	init_game(&g, av);
 	start_it(&g);
-	print(&g);
+	//print(&g);
 	for (size_t i = 0; i < g.loops; i++)
 		game_of_life(&g);
 	
