@@ -6,13 +6,18 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 12:37:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/18 11:39:13 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/19 11:35:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "life.h"
 
-void	init_game(t_g* g, char** v){
+
+/*en el subject se come en la salida los espacios al principio y si hay dos espacios
+seguido o más solo pone uno. Eso sería alterar el print, pero como en una de las
+pruebas aparece un 42 precioso, pues prefiero dejarlo como está ya que supongo
+que al final no será quitando dichos espacios.*/
+int	init_game(t_g* g, char** v){
 	int x;
 	int y;
 	g->w = atoi(v[1]);
@@ -21,18 +26,28 @@ void	init_game(t_g* g, char** v){
 	y = g->h;
 	g->loops = atoi(v[3]);
 	g->tablero = (char**)malloc(y * sizeof(char*));
-	for (size_t i = 0; i < y; i++)
+	if (!g->tablero)
+		return (0);
+	for (size_t i = 0; i < y; i++){
 		g->tablero[i] = (char*)malloc(x);
+		if (!g->tablero[i]){
+			for (int j = i - 1; j > -1; j--)
+				free(g->tablero[j]);
+			free(g->tablero);
+			return (0);
+		}
+	}
 	for (size_t i = 0; i < y; i++){
 		for(size_t j = 0; j < x; j++)
-			g->tablero[j][i] = ' ';
-	}	
+			g->tablero[i][j] = ' ';
+	}
+	return (1);	
 }
 
 void	start_it(t_g* g){
 	char	c;
-	size_t	x = 0;
-	size_t	y = 0;
+	size_t	columna = 0;
+	size_t	fila = 0;
 	size_t	alto = g->h;
 	size_t	ancho = g->w;
 	int		writting = 0;
@@ -40,20 +55,20 @@ void	start_it(t_g* g){
 	while (read(0, &c, 1) > 0){
 		switch (c){
 			case 'w' :
-				if (y > 0)
-					y--;
+				if (fila > 0)
+					fila--;
 				break ;
 			case 's' :
-				if (y < alto - 1)
-					y++;
+				if (fila < alto - 1)
+					fila++;
 				break ;
 			case 'd' :
-				if (x < ancho - 1)
-					x++;
+				if (columna < ancho - 1)
+					columna++;
 				break ;
 			case 'a' :
-				if (x > 0)
-					x--;
+				if (columna > 0)
+					columna--;
 				break ;
 			case 'x' :
 				writting = !writting;
@@ -61,14 +76,14 @@ void	start_it(t_g* g){
 				break ;
 		}
 		if (writting)
-			g->tablero[x][y] = 'O';
+			g->tablero[fila][columna] = 'O';
 	}
 }
 
 void	print(t_g* g){
-	for (size_t i = 0; i < g->h; i++){
-		for(size_t j = 0; j < g->w; j++)
-			putchar(g->tablero[j][i]);
+	for (size_t f = 0; f < g->h; f++){
+		for(size_t co = 0; co < g->w; co++)
+			putchar(g->tablero[f][co]);
 		putchar('\n');
 	}	
 }
@@ -86,8 +101,6 @@ int	is_inside(t_g* g, int x, int y){
 		return 1;
 	return 0; 
 }
-
-
 
 void	modify_it(t_g* g, char** copia, size_t i, size_t j){
 	int vivo = 0;
@@ -115,57 +128,54 @@ void	modify_it(t_g* g, char** copia, size_t i, size_t j){
 	}
 	else if (vecinos == 3)
 		g->tablero[j][i] = 'O';
-		
 }	
 
+void	free_matrix(char** matrix, int filas){
+	for (int f = 0; f < filas; f++ ){
+		if (matrix[f]){
+			free(matrix[f]);
+			matrix[f] = NULL;
+		}
+	}
+	if (matrix){
+		free(matrix);
+		matrix = NULL;
+	}
+}
 
 void game_of_life(t_g* g){
-		int	x = g->w;
-		int	y = g->h;
+		int	columna = g->w;
+		int	fila = g->h;
 		char **copia;
-		copia = (char**)malloc(y * sizeof(char*));
-		for (size_t i = 0; i < y; i++)
-			copia[i] = (char*)malloc(x);
+		copia = (char**)malloc(fila * sizeof(char*));
+		for (size_t i = 0; i < fila; i++)
+			copia[i] = (char*)malloc(columna);
 		
-		for (size_t i = 0; i < y; i++){
-			for (size_t j = 0; j < x; j++)
+		for (size_t i = 0; i < fila; i++){
+			for (size_t j = 0; j < columna; j++)
 				copia[j][i] = g->tablero[j][i];
 		}
-		//printf("copia\n");
-		//putchar('\n');
-		//print_matrix(copia, x, y);
-		for (size_t i = 0; i < y; i++){
-			for (size_t j = 0; j < x; j++)
+		for (size_t i = 0; i < fila; i++){
+			for (size_t j = 0; j < columna; j++)
 				modify_it(g, copia, i, j);
 		}
+		free_matrix(copia, fila);
 }
-
-
-
-void	free_all(t_g* g){
-	for (size_t i = 0; i < g->h; i++)
-		free(g->tablero[i]);
-	free(g->tablero);
-}
-
 
 int main(int ac, char** av){
 		
 	if (ac != 4)
 		return 1;
+	if (atoi(av[1]) == 0 || atoi(av[2]) == 0)
+		return 0; //si es cero reservaria memoria y no sería liberada.
 	t_g	g;
 
-	
-	
-	init_game(&g, av);
+	if (!init_game(&g, av))
+		return 1;
 	start_it(&g);
-	//print(&g);
 	for (size_t i = 0; i < g.loops; i++)
 		game_of_life(&g);
-	
-	
 	print(&g);
-
-	free_all(&g);
+	free_matrix(g.tablero, g.h);
 	return 0;
 }
