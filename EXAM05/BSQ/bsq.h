@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 12:44:13 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/19 13:42:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/19 19:24:21 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,12 @@
 
 typedef	struct s_g{
 	int		lines;
-	char	empty;
-	char	obstacle;
-	char	full;
+	char	e;
+	char	o;
+	char	f;
+	int		columns;
+	char**	map;
+	int		error;
 } t_g;
 
 
