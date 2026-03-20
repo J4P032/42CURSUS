@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 12:44:13 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/19 19:24:21 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/20 11:24:05 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ typedef	struct s_g{
 	int		columns;
 	char**	map;
 	int		error;
+	int		x_sol;
+	int		y_sol;
+	int		size_sol;
 } t_g;
 
 
