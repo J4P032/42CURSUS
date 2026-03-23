@@ -1,0 +1,83 @@
+echo 'movimientos' | PROGRAMA filas columnas iteraciones
+
+
+
+Inicializamos_Variables(*estructura, parametros){
+	metemos filas y columnas y loops con atoi
+
+	Reservamos memoria de la matriz de filas y columnas con malloc
+
+	damos valor a cada elemento de la matriz como char ESPACIO
+
+	exito devolvemos 1 fracaso 0.
+}
+
+Init_Matriz(*Estructura){
+	char c
+	int writting = 0
+	while (read(0, &c, 1) > 0){
+		caso de wasd recorrer fila o columna si no estamos en bordes
+
+		Caso de x hacer writting = !writting
+	}
+
+	si (writting == 1)
+		hacer esa casilla como un 'O'
+}
+
+modify_it(*estructura, char**, fila, columna){
+	Miramos si la casilla que estamos (fila, columna) == '0' (esta vivo)
+
+	vecinos = 0;
+
+	for (fila -1 hasta 1 (3 numeros))
+		for (columna -1 hasta 1)
+			si f == 0 y c == 0 (estamos en la casilla central)
+				pasar (continue)
+			check_x = columna + c
+			check_y = fila + f
+			si (check_x, check_y están dentro de la matriz)
+				si(copia[check_y][check_x] == 'O')
+					vecinos++
+
+	si está vivo y vecinos < 2 o >3 (tienen que ser 2 o 3)
+		lo matamos
+
+	si no esta vivo y vecinos == 3
+		lo hacemos vivo
+
+}
+
+
+game_of_life(*estructura){
+	hacemos una copia de la matriz localmente (char** copia) reservando memoria
+
+	por cada fila
+		por cada columna
+			modify_it(&estructura, copia, fila, columna)
+
+	free_matrix(copia); 
+}
+
+
+
+main(){
+	Si no recibe 3(4) parámetros nos salimos
+
+	Si las filas o las columnas son cero nos salimos
+
+	SI !Inicializamos_Variables(&estructura, parametros) //variables y malloc matrix asignando ' '
+		nos salimos	
+
+	Init_Matriz(&estructura) //con movimientos construimos matrix inicial
+
+	un for (i < loops)
+		game_of_life(&estructura) //hacemos el game of life (vivo -> muerto si no son 2 o 3 vecinos, vivo si son 3. CON UNA COPIA)
+	
+	lo imprimimos
+
+	liberamos
+
+	return 0
+}
+

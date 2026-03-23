@@ -1,0 +1,110 @@
+Recibe un mapa con primera linea numeros de filas y chars de juego
+
+cabe_horizontal(....){
+	contador = 0;
+	while (contador < size){
+		if (mapa[l][c + contador] == mapa->char vacio)
+			contador++
+		else
+			break
+	}
+	if (contador == size)
+		si que cabe.
+	else
+		no cabe.
+}
+
+
+cabe(*estruct, size, l, c){
+	ver si cabe size veces pasadas a cabe() contándolo
+	contador = 0
+
+	while (contador < size)
+		if (cabe_horizontal (size, l + contador, c))
+			contador++
+			continue
+		else
+			break
+
+	si (contador = size)
+		devolver que cabe
+}
+
+bsq_it(*estructura){
+	estructura.x_sol = -1
+	estructura.y_sol = -1
+	estructura.size_sol = -1
+
+	Buscamos el numero menor de filas y columnas y ese será el tamaño máximo de la posible solución
+
+	for filas
+		for columnas
+			if (cabe())
+				guardamos x_sol y_sol y size_sol y hacemos return para no continuar.
+
+}
+
+
+
+
+main(argc, argv){
+
+	//copiamos de MAN getline pero lo metemos en un while arg < argc
+
+	FILE *stream
+	while (arg < argc){
+
+		fila = 0;
+		stream = (argc == 1) ? stdin : fopen(av[arg], "r")
+		if stream == NULL
+			error
+
+		while (nread = getline != -1){
+			Si estamos en la fila 0 (store data en estructura)
+
+			si estamos en la fila 1
+				guardamos la longitud de la primera fila para comparar
+
+			si no podemos copiar el mapa a la estructura
+				error
+
+			fila++;
+		}
+
+		si (fila - 1) es distinto del numero de lineas que marca la primera
+			error
+		
+		si (!map error)
+			bsq_it
+
+		si (!map_error && la solución es mayor que cero)
+			Altera el mapa con el char de llenado
+		else
+			mapa_error = 1;
+
+		si (!map_error)
+			print mapa
+		else
+			print error en stderr
+		
+		libera todo
+
+		cierra el stream
+
+		arg++;
+
+
+
+	}
+
+}
+
+MEGA RESUMEN
+
+dos while el padre recorre todos los argc y el hijo lee cada mapa
+
+Guardamos datos en estructura que reiniciamos por cada arg del while
+
+si pasamos los errores lo bsq
+
+si tiene solucion lo alteramos e imprimimos si no pasamos al siguiente arg
