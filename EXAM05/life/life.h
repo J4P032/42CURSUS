@@ -5,24 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/17 12:33:47 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/17 15:31:22 by jrollon-         ###   ########.fr       */
+/*   Created: 2026/03/24 17:14:15 by jrollon-          #+#    #+#             */
+/*   Updated: 2026/03/24 17:14:17 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIFE_H
 # define LIFE_H
 
-# include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <stdlib.h>
 
 typedef struct s_g{
-	int		w;
-	int		h;
+	int 	filas;
+    int 	columnas;
 	int		loops;
-	char**	tablero; 
-	
-} t_g;
+	char**	map;
+	char**	copia;
+} t_g; 
+
 
 #endif

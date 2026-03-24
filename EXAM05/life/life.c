@@ -5,177 +5,215 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/17 12:37:11 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/19 11:35:49 by jrollon-         ###   ########.fr       */
+/*   Created: 2026/03/24 17:14:05 by jrollon-          #+#    #+#             */
+/*   Updated: 2026/03/24 17:14:09 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "life.h"
 
-
-/*en el subject se come en la salida los espacios al principio y si hay dos espacios
-seguido o más solo pone uno. Eso sería alterar el print, pero como en una de las
-pruebas aparece un 42 precioso, pues prefiero dejarlo como está ya que supongo
-que al final no será quitando dichos espacios.*/
-int	init_game(t_g* g, char** v){
-	int x;
-	int y;
-	g->w = atoi(v[1]);
-	g->h = atoi(v[2]);
-	x = g->w;
-	y = g->h;
-	g->loops = atoi(v[3]);
-	g->tablero = (char**)malloc(y * sizeof(char*));
-	if (!g->tablero)
-		return (0);
-	for (size_t i = 0; i < y; i++){
-		g->tablero[i] = (char*)malloc(x);
-		if (!g->tablero[i]){
-			for (int j = i - 1; j > -1; j--)
-				free(g->tablero[j]);
-			free(g->tablero);
-			return (0);
+void free_it(char** m, int filas){
+	for (int f = 0; f < filas; f++){
+		if (m && m[f]){
+			free(m[f]);
+			m[f] = NULL;
 		}
 	}
-	for (size_t i = 0; i < y; i++){
-		for(size_t j = 0; j < x; j++)
-			g->tablero[i][j] = ' ';
+	if (m){
+		free(m);
+		m = NULL;
 	}
-	return (1);	
 }
 
-void	start_it(t_g* g){
-	char	c;
-	size_t	columna = 0;
-	size_t	fila = 0;
-	size_t	alto = g->h;
-	size_t	ancho = g->w;
-	int		writting = 0;
+
+
+int	print_it(char** m, int	filas, int columnas){
+	if (!m)
+		return 0;
 	
+	for (int f = 0; f < filas; f++){
+		for (int c = 0; c < columnas; c++){
+			putchar(m[f][c]);
+		}
+		putchar('\n');
+	}
+
+	return 1;
+}
+
+
+//./life width height iterations
+int	store_data(t_g* g, int ac, char** av){
+	(void)ac;
+	g->filas = atoi(av[2]);
+    g->columnas = atoi(av[1]);
+	g->loops = atoi(av[3]);
+	g->map = NULL;
+
+	g->map = (char**)calloc(g->filas, sizeof(char*));
+	if (!g->map){
+		return 0;
+	}
+	for (int i = 0; i < g->filas; i++){
+		g->map[i] = (char*)calloc(g->columnas, sizeof(char));
+		if (!g->map[i]){
+			for (int j = i - 1; j > -1; j--){
+				if (g->map[j]){
+					free(g->map[j]);
+					g->map[j] = NULL;
+				}
+			}
+			if (g->map){
+				free(g->map);
+				g->map = NULL;
+			}
+			return 0;
+		}
+	}
+
+
+	g->copia = (char**)calloc(g->filas, sizeof(char*));
+	if (!g->copia){
+		free_it(g->map, g->filas);
+		return 0;
+	}
+	for (int i = 0; i < g->filas; i++){
+		g->copia[i] = (char*)calloc(g->columnas, sizeof(char));
+		if (!g->copia[i]){
+			for (int j = i - 1; j > -1; j--){
+				if (g->copia[j]){
+					free(g->copia[j]);
+					g->copia[j] = NULL;
+				}
+			}
+			if (g->copia){
+				free(g->copia);
+				g->copia = NULL;
+			}
+			free_it(g->map, g->filas);
+			return 0;
+		}
+	}
+
+
+	for (int f = 0; f < g->filas; f++){
+		for (int c = 0; c < g->columnas; c++){
+			g->map[f][c] = ' ';
+		}
+	}
+	return 1;
+}
+
+
+void	init_matrix(t_g* g){
+	char	c;
+	int		fi = 0;
+	int		co = 0;
+	int		filas = g->filas;
+	int		columnas = g->columnas;
+	int		writting = 0;
 	while (read(0, &c, 1) > 0){
 		switch (c){
 			case 'w' :
-				if (fila > 0)
-					fila--;
-				break ;
-			case 's' :
-				if (fila < alto - 1)
-					fila++;
-				break ;
+				if (fi > 0)
+					fi--;
+				break;
 			case 'd' :
-				if (columna < ancho - 1)
-					columna++;
-				break ;
+				if (co < columnas - 1)
+					co++;
+				break;
+			case 's' :
+				if (fi < filas - 1)
+					fi++;
+				break;
 			case 'a' :
-				if (columna > 0)
-					columna--;
-				break ;
+				if (co > 0)
+					co--;
+				break;
 			case 'x' :
 				writting = !writting;
+				break;
 			default :
-				break ;
+				break;
 		}
 		if (writting)
-			g->tablero[fila][columna] = 'O';
+			g->map[fi][co] = 'O';
+	}
+
+	for (int fil = 0; fil < g->filas; fil++){
+		for (int col = 0; c < g->columnas; col++){
+			g->copia[fil][col] = g->map[fil][col];
+		}
 	}
 }
 
-void	print(t_g* g){
-	for (size_t f = 0; f < g->h; f++){
-		for(size_t co = 0; co < g->w; co++)
-			putchar(g->tablero[f][co]);
-		putchar('\n');
-	}	
-}
-
-void	print_matrix(char** m, int x, int y){
-	for(size_t i = 0; i < y; i++){
-		for(size_t j = 0; j < x; j++)
-			putchar(m[j][i]);
-		putchar('\n');
-	}
-}
-
-int	is_inside(t_g* g, int x, int y){
-	if (x >= 0 && x <= g->w - 1 && y >= 0 && y <= g->h - 1) 
+int is_inside(t_g* g, int fila, int columna){
+	if ((fila >= 0 && fila <= g->filas -1) && (columna >= 0 && columna <= g->columnas - 1))
 		return 1;
-	return 0; 
+	return 0;
 }
 
-void	modify_it(t_g* g, char** copia, size_t i, size_t j){
-	int vivo = 0;
-	int	vecinos = 0;
 
-	if (copia[j][i] == 'O')
-		vivo = 1;
-	
-	 for (int f = -1; f <= 1; f++){	
-		for (int c = -1; c <= 1; c++){
+void	modify_it(t_g* g, char** copia, int fila, int columna){
+	int	vecinos = 0;
+	int vivo = (copia[fila][columna] == 'O') ? 1 : 0;
+
+	for (int f = -1; f < 2; f++){
+		for (int c = -1; c < 2; c++){
 			if (f == 0 && c == 0)
 				continue;
-
-			int	check_x = j + c;
-			int check_y = i + f;
-			if (is_inside(g, check_x, check_y)){
-				if (copia[check_x][check_y] == 'O')
+			if (is_inside(g, fila + f, columna + c)){
+				if (copia[fila + f][columna + c] == 'O')
 					vecinos++;
 			}
 		}
 	}
-	if (vivo){
-		if (vecinos < 2 || vecinos > 3)
-			g->tablero[j][i] = ' ';
-	}
-	else if (vecinos == 3)
-		g->tablero[j][i] = 'O';
-}	
 
-void	free_matrix(char** matrix, int filas){
-	for (int f = 0; f < filas; f++ ){
-		if (matrix[f]){
-			free(matrix[f]);
-			matrix[f] = NULL;
+	if (vivo && (vecinos < 2 || vecinos > 3))
+		g->map[fila][columna] = ' ';
+	else if (!vivo && vecinos == 3)
+		g->map[fila][columna] = 'O';
+}
+
+
+void gol(t_g* g){
+	for (int f = 0; f < g->filas; f++){
+		for (int c = 0; c < g->columnas; c++){
+			g->copia[f][c] = g->map[f][c];
 		}
 	}
-	if (matrix){
-		free(matrix);
-		matrix = NULL;
+
+	for (int f = 0; f < g->filas; f++){
+		for (int c = 0; c < g->columnas; c++){
+			modify_it(g, g->copia, f, c);
+		}
 	}
 }
 
-void game_of_life(t_g* g){
-		int	columna = g->w;
-		int	fila = g->h;
-		char **copia;
-		copia = (char**)malloc(fila * sizeof(char*));
-		for (size_t i = 0; i < fila; i++)
-			copia[i] = (char*)malloc(columna);
-		
-		for (size_t i = 0; i < fila; i++){
-			for (size_t j = 0; j < columna; j++)
-				copia[j][i] = g->tablero[j][i];
-		}
-		for (size_t i = 0; i < fila; i++){
-			for (size_t j = 0; j < columna; j++)
-				modify_it(g, copia, i, j);
-		}
-		free_matrix(copia, fila);
-}
 
-int main(int ac, char** av){
-		
+
+int	main(int ac, char** av){
 	if (ac != 4)
 		return 1;
-	if (atoi(av[1]) == 0 || atoi(av[2]) == 0)
-		return 0; //si es cero reservaria memoria y no sería liberada.
-	t_g	g;
 
-	if (!init_game(&g, av))
+	if (atoi(av[1]) <= 0 || atoi(av[2]) <= 0)
 		return 1;
-	start_it(&g);
-	for (size_t i = 0; i < g.loops; i++)
-		game_of_life(&g);
-	print(&g);
-	free_matrix(g.tablero, g.h);
+
+	t_g g;
+
+	if (!store_data(&g, ac, av))
+		return 1;
+	
+	init_matrix(&g);
+
+	for (int i = 0; i < g.loops; i++)
+		gol(&g);
+		
+	print_it(g.map, g.filas, g.columnas);
+	
+	free_it(g.map, g.filas);
+	free_it(g.copia, g.filas);
+
+
 	return 0;
 }
