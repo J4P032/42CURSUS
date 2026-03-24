@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bsq.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 12:48:48 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/20 12:10:31 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/24 17:22:49 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ int	store_data(t_g* m, char* str){
 }
 
 int copy_map(t_g* m, char* line, int fila){
-	int	len;
 	int	size;
 
 	if ((fila + 1) > m->lines)
@@ -90,7 +89,7 @@ int copy_map(t_g* m, char* line, int fila){
 	if (size > 0 && line[size - 1] != '\n')
 		return 0;
 	
-	for (size_t i = 0; i < size; i++){
+	for (int i = 0; i < size; i++){
 		char _c = line[i];
 		if (_c == m->e || _c == m->f || _c == m->o || _c == '\n' || _c == '\0')
 			continue;
@@ -113,7 +112,7 @@ int copy_map(t_g* m, char* line, int fila){
 		free_all(m);
 		return 0;
 	}
-	for (size_t index = 0; index < (size + 2); index++)
+	for (int index = 0; index < (size + 2); index++)
 		m->map[fila][index] = line[index];
 	
 	return (1);
@@ -122,7 +121,7 @@ int copy_map(t_g* m, char* line, int fila){
 void	print_map(t_g* m){
 	if (!m || !m->map)
 		return;
-	for (size_t f = 0; f < m->lines; f++){
+	for (int f = 0; f < m->lines; f++){
 		if (m->map[f])
 			fprintf(stdout, "%s", m->map[f]);
 	}
