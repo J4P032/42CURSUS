@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:26:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/30 19:06:52 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/30 19:09:39 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	is_valid_day(int year, int month, int day){
 	if (month == 2){
 		if (day > 29)
 			return (false);
-		bool	bisiesto = (year % 4 == 0 &&(year % 100 != 0 || year % 400 == 0));
+		bool	bisiesto = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
 		if (day == 29 && !bisiesto)
 			return (false);
 		return (true);
