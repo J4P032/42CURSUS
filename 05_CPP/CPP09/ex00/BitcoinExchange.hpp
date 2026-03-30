@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:20:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/30 18:51:53 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/30 19:27:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <map>
 
 class	BitcoinExchange{
-public:
+private:
 	std::map<std::string, float> _data;
 
 public:

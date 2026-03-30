@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:10:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/30 18:59:29 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/30 19:27:26 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@ int	main(int ac, char** av){
 	try{
 		BitcoinExchange be("data.csv");
 		(void)av;
-		std::map<std::string, float>::const_iterator it = be._data.begin();
-		for (;it != be._data.end(); it++){
-			std::cout << it->first << " " << it->second << std::endl;
-		}
-			
 	}
 	catch (const std::exception& ex){
 		std::cerr << ex.what() << std::endl;
