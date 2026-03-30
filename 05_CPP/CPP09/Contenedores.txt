@@ -1,0 +1,6 @@
+En este ejercicio no se pueden repetir los contenedores a usar, por lo tanto usaré:
+
+ex00: std::map
+ex01: std::stack (aunque por detrás sea un deque, es considerado un contenedor diferente con sus métodos diferentes)
+ex02: std::vector + std::deque
+

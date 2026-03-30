@@ -1,0 +1,133 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/30 13:26:34 by jrollon-          #+#    #+#             */
+/*   Updated: 2026/03/30 18:25:38 by jrollon-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "BitcoinExchange.hpp"
+#include <fstream>
+#include <string>
+#include <stdexcept>
+#include <sstream>
+#include <cctype>
+#include <cstdlib>
+
+
+
+bool	is_valid_year(int year){
+	return (year > 2008);
+}
+
+bool	is_valid_month(int month){
+	return (month > 0 && month < 13);
+}
+
+bool	is_valid_day(int year, int month, int day){
+	if (day < 1 || day > 31)
+		return (false);
+	if (year == 2009 && month == 1 && day < 3)
+		return (false);
+	if (month == 2){
+		if (day > 29)
+			return (false);
+		bool	bisiesto = (year % 4 == 0 &&(year % 100 != 0 || year % 400 == 0));
+		if (day == 29 && !bisiesto)
+			return (false);
+		return (true);
+	}
+	
+	if (day == 31 && (month == 4 || month == 6 || month == 9 || month == 11))
+		return (false);
+	
+	return (true);
+}
+
+//fecha inicial de bitcoin 2009-01-03
+bool	is_valid_date(int year, int month, int day){
+	return (is_valid_year(year) && is_valid_month(month) && is_valid_day(year, month, day));	
+}
+
+BitcoinExchange::BitcoinExchange(void){}
+
+BitcoinExchange::BitcoinExchange(const std::string& datafile){
+	std::ifstream file(datafile.c_str());  //no puede un std::string en C++98. En 11 sí. 
+	if (!file.is_open())
+		throw std::runtime_error("Error: could not open database");
+	std::string	line;
+	while (std::getline(file, line)){
+		//date,exchange_rate
+		//2009-01-02,0
+		std::string::const_iterator cit = line.begin();
+				
+		std::ostringstream	oss;
+		std::string			year = "";
+		std::string			month = "";
+		std::string			day = "";
+		std::string			date;
+		int					num_decimals = 0;
+		float				bit_value = 0.0f;
+		oss.str("");
+		oss.clear();
+		
+		while (cit != line.end() && (isdigit(*cit) || *cit == '-')){
+			if (!isdigit(*cit)) //each '-' or ',' I will advance it once. if not a number I jump over that line and continue to next.
+				break ;
+			if (!day.empty()) //in case there is no ',' at the end of the day but another '-'
+				break ;
+			oss << *cit;		
+			cit++;
+			if (cit != line.end() && *cit == '-'){
+				if (year.empty())
+					year = oss.str();
+				else if (month.empty())
+					month = oss.str();
+				cit++;
+				oss.str("");
+				oss.clear();
+			}
+			else if (cit != line.end() && *cit == ','){
+				day = oss.str();
+				oss.str("");
+				oss.clear();
+			}
+		}
+
+		if (!is_valid_date(atoi(year.c_str()), atoi(month.c_str()), atoi(day.c_str())))
+			continue ; //next line
+		oss << year << "-" << month << "-" << day;
+		date = oss.str();
+		oss.str("");
+		oss.clear();
+		if (cit != line.end() && *cit == ',')
+			cit++;
+		else
+			continue ;
+		while (cit != line.end() && (isdigit(*cit) || *cit == '.')){
+			if (*cit == '.')
+				num_decimals++;
+			oss << *cit;
+			cit++;
+		}
+		if (cit != line.end() || num_decimals > 1) //there is another nonDigit after the numbers or after the ','
+			continue ; 
+		bit_value = atof(oss.str().c_str());
+		
+		_data[date] = bit_value;
+	}
+}
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& other) : _data(other._data){}
+
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other){
+	if (this != &other)
+		_data = other._data;
+	return *this;
+}
+
+BitcoinExchange::~BitcoinExchange(void){}
