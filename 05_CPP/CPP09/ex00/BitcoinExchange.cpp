@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:26:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/30 18:25:38 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/30 19:06:52 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 
 
 bool	is_valid_year(int year){
-	return (year > 2008);
+	//return (year > 2008);
+	return (year > 0);
 }
 
 bool	is_valid_month(int month){
@@ -31,8 +32,8 @@ bool	is_valid_month(int month){
 bool	is_valid_day(int year, int month, int day){
 	if (day < 1 || day > 31)
 		return (false);
-	if (year == 2009 && month == 1 && day < 3)
-		return (false);
+	/* if (year == 2009 && month == 1 && day < 3)
+		return (false); */
 	if (month == 2){
 		if (day > 29)
 			return (false);
@@ -61,10 +62,6 @@ BitcoinExchange::BitcoinExchange(const std::string& datafile){
 		throw std::runtime_error("Error: could not open database");
 	std::string	line;
 	while (std::getline(file, line)){
-		//date,exchange_rate
-		//2009-01-02,0
-		std::string::const_iterator cit = line.begin();
-				
 		std::ostringstream	oss;
 		std::string			year = "";
 		std::string			month = "";
@@ -75,6 +72,7 @@ BitcoinExchange::BitcoinExchange(const std::string& datafile){
 		oss.str("");
 		oss.clear();
 		
+		std::string::const_iterator cit = line.begin();
 		while (cit != line.end() && (isdigit(*cit) || *cit == '-')){
 			if (!isdigit(*cit)) //each '-' or ',' I will advance it once. if not a number I jump over that line and continue to next.
 				break ;

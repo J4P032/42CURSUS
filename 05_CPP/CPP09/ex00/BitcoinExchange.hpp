@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:20:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/30 16:21:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/30 18:51:53 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,8 @@
 # include <iostream>
 # include <map>
 
-bool	is_valid_date(int, int, int);
-bool	is_valid_year(int);
-bool	is_valid_month(int);
-bool	is_valid_day(int, int, int);
-
 class	BitcoinExchange{
-private:
+public:
 	std::map<std::string, float> _data;
 
 public:
@@ -32,5 +27,13 @@ public:
 	BitcoinExchange& operator=(const BitcoinExchange&);
 	~BitcoinExchange(void);
 };
+
+
+bool	is_valid_date(int, int, int);
+bool	is_valid_year(int);
+bool	is_valid_month(int);
+bool	is_valid_day(int, int, int);
+
+
 
 #endif
