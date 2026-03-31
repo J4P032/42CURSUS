@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:26:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/30 19:09:39 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/31 12:01:34 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ BitcoinExchange::BitcoinExchange(const std::string& datafile){
 		std::string			month = "";
 		std::string			day = "";
 		std::string			date;
-		int					num_decimals = 0;
+		int					num_decimals;
 		float				bit_value = 0.0f;
 		oss.str("");
 		oss.clear();
@@ -106,6 +106,7 @@ BitcoinExchange::BitcoinExchange(const std::string& datafile){
 			cit++;
 		else
 			continue ;
+		num_decimals = 0;
 		while (cit != line.end() && (isdigit(*cit) || *cit == '.')){
 			if (*cit == '.')
 				num_decimals++;
@@ -129,3 +130,12 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other){
 }
 
 BitcoinExchange::~BitcoinExchange(void){}
+
+void	BitcoinExchange::process_data(const std::ifstream& file) const{
+	(void)file;
+	
+}
+
+const std::map<std::string, float>&	BitcoinExchange::get_data(void) const{
+	return (this->_data);
+}
