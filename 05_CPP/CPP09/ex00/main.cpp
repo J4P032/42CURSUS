@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:10:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/31 12:13:04 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:20:58 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ void	check_csv(const BitcoinExchange& obj){
 
 int	main(int ac, char** av){
 	if (ac != 2){
-		std::cerr << "Error: could not open file" << std::endl;
+		std::cerr << "Error: could not open file." << std::endl;
 		return (1);
 	}
 	try{
+		//abrirlo antes para si no lo abre no hacer el objeto BitcoinExchange por excepcion lanzada
 		std::ifstream	inputFile(av[1]);
-		//mejor tratar de abrirlo antes para si no lo abre no hacer el objeto BitcoinExchange por excepcion lanzada
 		if (!inputFile.is_open()) 
-			throw std::runtime_error("Error: could not open input file");
+			throw std::runtime_error("Error: could not open input file.");
 		BitcoinExchange be("data.csv");
 		//check_csv(be); //just to test the csv is correctly saved.
 		be.process_data(inputFile);

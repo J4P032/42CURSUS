@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:20:49 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/31 11:58:15 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:15:42 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ public:
 	BitcoinExchange& operator=(const BitcoinExchange&);
 	~BitcoinExchange(void);
 
-	void								process_data(const std::ifstream&) const;
+	void								process_data(std::ifstream&) const;
 	const std::map<std::string, float>&	get_data(void) const;
 };
 

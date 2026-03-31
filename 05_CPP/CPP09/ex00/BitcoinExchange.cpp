@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:26:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/31 12:01:34 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:03:12 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ BitcoinExchange::BitcoinExchange(void){}
 BitcoinExchange::BitcoinExchange(const std::string& datafile){
 	std::ifstream file(datafile.c_str());  //no puede un std::string en C++98. En 11 sí. 
 	if (!file.is_open())
-		throw std::runtime_error("Error: could not open database");
+		throw std::runtime_error("Error: could not open database.");
 	std::string	line;
 	while (std::getline(file, line)){
 		std::ostringstream	oss;
@@ -131,10 +131,119 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other){
 
 BitcoinExchange::~BitcoinExchange(void){}
 
-void	BitcoinExchange::process_data(const std::ifstream& file) const{
-	(void)file;
-	
-}
+void	BitcoinExchange::process_data(std::ifstream& file) const{
+	std::string	line;
+	std::getline(file, line);
+	if (line != "date | value"){
+		std::cerr << "Error: bad input => File has to start with line: 'date | value'." << std::endl;
+	}
+	while (std::getline(file, line)){
+		std::ostringstream	oss;
+		std::string			year = "";
+		std::string			month = "";
+		std::string			day = "";
+		std::string			date;
+		int					num_decimals;
+		float				value = 0.0f;
+		bool				negative;
+		oss.str("");
+		oss.clear();
+		
+		std::string::const_iterator cit = line.begin();
+		while (cit != line.end() && (isdigit(*cit) || *cit == '-')){
+			if (!isdigit(*cit)) //each '-' or ' ' I will advance it once. if not a number I jump over that line and continue to next.
+				break ;
+			if (!day.empty()) //in case there is no ' ' at the end of the day but another char non digit
+				break ;
+			oss << *cit;		
+			cit++;
+			if (cit != line.end() && *cit == '-'){
+				if (year.empty())
+					year = oss.str();
+				else if (month.empty())
+					month = oss.str();
+				cit++;
+				oss.str("");
+				oss.clear();
+			}
+			else if (*cit == ' ' || cit == line.end()){
+				day = oss.str();
+				oss.str("");
+				oss.clear();
+			}
+		}
+
+		if (year.empty() || month.empty() || day.empty()){
+			std::cerr << "Error: bad input => " << line << "." << std::endl;
+			continue ;
+		}
+
+		if (!is_valid_date(atoi(year.c_str()), atoi(month.c_str()), atoi(day.c_str()))){
+			std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl;
+			continue ; //next line
+		}
+		oss << year << "-" << month << "-" << day;
+		date = oss.str();
+		oss.str("");
+		oss.clear();
+		if (cit != line.end() && *cit == ' '){
+			cit++;
+			if (cit != line.end() && *cit == '|'){
+				cit++;
+				if (cit != line.end() && *cit == ' ')
+					cit++;
+				else{
+					std::cerr << "Error: bad input => Has to be 'date | value'. Need space after '|'." << std::endl;
+					continue ;
+				}
+			}
+			else{
+				std::cerr << "Error: bad input => Has to be 'date | value'. After first space has to have an '|'." << std::endl;
+				continue ;
+			}
+		}
+		else{
+			std::cerr << "Error: bad input => Has to be 'date | value'. Need to have an space after the date." << std::endl;
+			continue ;
+		}
+		num_decimals = 0;
+		negative = false;
+		if (*cit == '-')
+			negative = true;
+		while (cit != line.end() && (isdigit(*cit) || *cit == '.')){
+			if (*cit == '.')
+				num_decimals++;
+			oss << *cit;
+			cit++;
+		}
+		if (negative){
+			std::cerr << "Error: not a positive number." << std::endl;
+			continue ;
+		}
+		if (cit != line.end() || num_decimals > 1){ //there is another nonDigit after the numbers or after the ' | '
+			std::cerr << "Error: bad value => Value has to be only a float number." << std::endl;
+			continue ;
+		}
+		
+		value = atof(oss.str().c_str());
+		if (value > 1000){
+			std::cerr << "Error: too large a number." << std::endl;
+			continue ;
+		}
+
+		std::map<std::string, float>::const_iterator mit = _data.lower_bound(date);
+		if (mit->first == date){
+			std::cout << date << " => " << value << " = " << (value * mit->second) << std::endl;
+		}
+		else if (mit != _data.begin()){
+				mit--;
+				std::cout << date << " => " << value << " = " << (value * mit->second) << std::endl;
+		}
+		else if (mit == _data.begin()){
+			std::cerr << "Error: date before all data.csv dates => " << date << "." << std::endl;
+		}
+	}
+}	
 
 const std::map<std::string, float>&	BitcoinExchange::get_data(void) const{
 	return (this->_data);
