@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:26:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/31 17:03:12 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:14:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 	std::getline(file, line);
 	if (line != "date | value"){
 		std::cerr << "Error: bad input => File has to start with line: 'date | value'." << std::endl;
+		return ;
 	}
 	while (std::getline(file, line)){
 		std::ostringstream	oss;
@@ -193,17 +194,17 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 				if (cit != line.end() && *cit == ' ')
 					cit++;
 				else{
-					std::cerr << "Error: bad input => Has to be 'date | value'. Need space after '|'." << std::endl;
+					std::cerr << "Error: bad input => Need space after '|'." << std::endl;
 					continue ;
 				}
 			}
 			else{
-				std::cerr << "Error: bad input => Has to be 'date | value'. After first space has to have an '|'." << std::endl;
+				std::cerr << "Error: bad input => After first space has to have an '|'." << std::endl;
 				continue ;
 			}
 		}
 		else{
-			std::cerr << "Error: bad input => Has to be 'date | value'. Need to have an space after the date." << std::endl;
+			std::cerr << "Error: bad input => Need to have an space after the date." << std::endl;
 			continue ;
 		}
 		num_decimals = 0;
@@ -232,14 +233,14 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 		}
 
 		std::map<std::string, float>::const_iterator mit = _data.lower_bound(date);
-		if (mit->first == date){
+		if (mit != _data.end() && mit->first == date){
 			std::cout << date << " => " << value << " = " << (value * mit->second) << std::endl;
 		}
 		else if (mit != _data.begin()){
-				mit--;
+				--mit;
 				std::cout << date << " => " << value << " = " << (value * mit->second) << std::endl;
 		}
-		else if (mit == _data.begin()){
+		else{
 			std::cerr << "Error: date before all data.csv dates => " << date << "." << std::endl;
 		}
 	}
