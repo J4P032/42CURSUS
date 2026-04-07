@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 12:26:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/04/07 18:59:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/07 19:20:47 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,25 @@ std::vector<int>	PmergeMe::fJSort(std::vector<int> c){
 		rest = -1;
 
 	//metemos los pares primeros en otro contenedor ya ordenándolo.
+	std::vector<int>	winners;
 	for (size_t i = 0; i < pairs.size(); i++)
-		final.push_back(pairs[i].first);
+		winners.push_back(pairs[i].first);
 		
-	final = fJSort(final);
-	cit = final.begin();
-	for (; cit != final.end(); cit++){
-		for (size_t i = 0; i < pairs.size(); i++){
-			if (pairs[i].first == *cit){
+	final = fJSort(winners);
+
+	//componer vector de segundos ordenado
+	std::vector<bool> used(pairs.size(), false); //para numeros repetidos
+	for (size_t j = 0; j < final.size(); j++) {
+		for (size_t i = 0; i < pairs.size(); i++) {
+			if (!used[i] && pairs[i].first == final[j]) {
 				sorted_seconds.push_back(pairs[i].second);
+				used[i] = true;
 				break;
-			}
-		}
+        	}
+    	}
 	}
 
 	
-	//El primero de los segundos será menor SEGURO que el menor de los MAYORES.
-	final.insert(final.begin(), sorted_seconds[0]);
 	/*insertamos los segundos de pairs pero  siguiendo el indice de la serie Jacobsthal
 	0,1,1,3,5,11,21,43,85... por que parece que es mejor rendimiento.
 	
@@ -92,8 +94,8 @@ std::vector<int>	PmergeMe::fJSort(std::vector<int> c){
 	el insert lo desplazará a la derecha dicho 30 quedando [10, 20, 25, 30, 40] y así con todos
 	los restantes numeros sorted_seconds[i--]*/
 	
-	int	jacob = 1; //el primero (index 0 de sorted_seconds) ya ha sido insertado (index = jacob - 1). Este es el indice 1 (el segundo)
-	int	next_jacob_index = 3; //indice del siguiente. el '3' era el cuarto (index = 3) (0,1,1,3...)
+	int	jacob = 1; //el primero (index = jacob - 1) 
+	int	next_jacob_index = 3; //indice del siguiente. el segundo '1' era el 2 (index = 2) (0,1,1,3...)
 	int	index_done = -1;
 	int	sorted_seconds_size = sorted_seconds.size();
 	
@@ -147,6 +149,9 @@ void	PmergeMe::printVector(void) const{
 	}
 	std::cout << std::endl;
 }
+
+
+
 
 
 	

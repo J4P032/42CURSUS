@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 12:20:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/04/07 18:39:01 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/07 19:20:30 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ private:
 	std::vector<int>	_vector;
 	std::deque<int>		_deque;
 	std::vector<int>	fJSort(std::vector<int>);
+	std::deque<int>		fJSort(std::deque<int>);
 
 public:
 	PmergeMe(void);
@@ -35,6 +36,7 @@ public:
 	void	setPmergeMe(int);
 	void	printVector(void) const;
 	double	vector_FJ(void);
+	double	deque_FJ(void);
 	size_t	vectorSize(void);
 	
 };
