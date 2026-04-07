@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 12:31:06 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/04/07 14:41:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/07 18:43:20 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,15 @@ int	main(int ac, char** av){
 	if (!insertSeq(ac, av, a))
 		return 1;
 	
-	std::cout << std::fixed << std::setprecision(5) << a.vector_FJ() << std::endl;
-	//a.printMe();
+	double	time;
+	std::cout << "Before:\t";
+	a.printVector();
+	time = a.vector_FJ();
+	std::cout << "After:\t";
+	a.printVector();	
+	std::cout << "Time to process a range of\t" << a.vectorSize() << " elements with std::vector : ";
+	std::cout << std::fixed << std::setprecision(5) << time << " us" << std::endl;
+	
 
 	return 0;
 }

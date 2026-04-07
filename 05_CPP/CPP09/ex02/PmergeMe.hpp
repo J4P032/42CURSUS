@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 12:20:56 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/04/07 15:45:44 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/07 18:39:01 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 # include <vector>
 # include <deque>
 # include <iostream>
-# include <sys/time.h>
+
+
+int	jacobsthal(int);
 
 class	PmergeMe{
 private:
@@ -31,8 +33,9 @@ public:
 	~PmergeMe(void);
 
 	void	setPmergeMe(int);
-	void	printMe(void) const;
+	void	printVector(void) const;
 	double	vector_FJ(void);
+	size_t	vectorSize(void);
 	
 };
 
