@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 12:26:08 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/04/07 19:20:47 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/07 19:58:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,16 +122,16 @@ std::vector<int>	PmergeMe::fJSort(std::vector<int> c){
 
 
 double	PmergeMe::vector_FJ(void){
-	double								time;
 	struct timeval						start;
 	struct timeval						end;
 	
 	gettimeofday(&start, NULL);
 	_vector = fJSort(_vector); //recursividad
 	gettimeofday(&end, NULL);
-	time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0;
+	double start_us = (static_cast<double>(start.tv_sec) * 1000000.0) + static_cast<double>(start.tv_usec);
+	double end_us = (static_cast<double>(end.tv_sec) * 1000000.0) + static_cast<double>(end.tv_usec);
 	
-	return time;
+	return (end_us - start_us);
 }
 
 size_t	PmergeMe::vectorSize(void){
@@ -151,7 +151,106 @@ void	PmergeMe::printVector(void) const{
 }
 
 
+//En el ejercicio me piden implementar el FJ para cada contenedor de manera separada. Por eso no pongo un Template
+std::deque<int>	PmergeMe::fJSort(std::deque<int> c){
+	std::deque<std::pair<int, int> >	pairs;
+	std::deque<int>						final;
+	std::deque<int>						sorted_seconds;
+	int									rest;
+	
+	if (c.size() <= 1)
+		return c;
+	
+	//hacer parejas y poner el numero mayor primero.
+	std::deque<int>::const_iterator cit = c.begin();
+	while (cit != c.end() && (cit + 1) != c.end()){
+		if (*cit >= *(cit + 1))
+			pairs.push_back(std::make_pair(*cit, *(cit + 1)));
+		else
+			pairs.push_back(std::make_pair(*(cit + 1), *cit));
+		cit += 2;
+	}
 
+	//si son impares almacenar el ultimo numero si no -1 para no considerarlo
+	if (c.size() % 2) 
+		rest = *cit;
+	else
+		rest = -1;
+
+	//metemos los pares primeros en otro contenedor ya ordenándolo.
+	std::deque<int>	winners;
+	for (size_t i = 0; i < pairs.size(); i++)
+		winners.push_back(pairs[i].first);
+		
+	final = fJSort(winners);
+
+	//componer vector de segundos ordenado
+	std::deque<bool> used(pairs.size(), false); //para numeros repetidos
+	for (size_t j = 0; j < final.size(); j++) {
+		for (size_t i = 0; i < pairs.size(); i++) {
+			if (!used[i] && pairs[i].first == final[j]) {
+				sorted_seconds.push_back(pairs[i].second);
+				used[i] = true;
+				break;
+        	}
+    	}
+	}
+
+	int	jacob = 1; //el primero (index = jacob - 1) 
+	int	next_jacob_index = 3; //indice del siguiente. el segundo '1' era el 2 (index = 2) (0,1,1,3...)
+	int	index_done = -1;
+	int	sorted_seconds_size = sorted_seconds.size();
+	
+	while (index_done < sorted_seconds_size - 1){
+		int limit = jacob - 1;
+		if (limit >= sorted_seconds_size)
+			limit = sorted_seconds_size - 1; //Proteccion segfault
+		for (int i = limit; i > index_done; i--){
+			//Busca el primer elemento mayor que el que se le pasa(std::upper_bound)
+        	std::deque<int>::iterator it = std::upper_bound(final.begin(), final.end(), sorted_seconds[i]);
+        	final.insert(it, sorted_seconds[i]); 
+		}
+		index_done = limit;
+		jacob = jacobsthal(next_jacob_index++);
+	}
+	//nos falta el resto, si existía.
+	if (rest != -1){
+		std::deque<int>::iterator it = std::upper_bound(final.begin(), final.end(), rest);
+    	final.insert(it, rest);
+	}
+		
+	return final;
+}
+
+
+double	PmergeMe::deque_FJ(void){
+	struct timeval						start;
+	struct timeval						end;
+	
+	gettimeofday(&start, NULL);
+	_deque = fJSort(_deque); //recursividad
+	gettimeofday(&end, NULL);
+	double start_us = (static_cast<double>(start.tv_sec) * 1000000.0) + static_cast<double>(start.tv_usec);
+	double end_us = (static_cast<double>(end.tv_sec) * 1000000.0) + static_cast<double>(end.tv_usec);
+	
+	return (end_us - start_us);	
+}
+
+size_t	PmergeMe::dequeSize(void){
+	return (_deque.size());
+}
+
+
+void	PmergeMe::printDeque(void) const{
+	std::deque<int>::const_iterator it = _deque.begin();
+	while (it != _deque.end()){
+		std::cout << *it;
+		if (it + 1 != _deque.end())
+			std::cout << " ";
+		it++;
+	}
+	std::cout << std::endl;
+}
 
 
 	
