@@ -6,14 +6,14 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 12:31:06 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/04/07 13:19:22 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/07 14:41:32 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-#include <iostream>
 #include <climits>
 #include <cstdlib>
+#include <iomanip>
 
 bool	checkDigit(char c){
 	if (!isdigit(c)){
@@ -47,7 +47,6 @@ bool	insertSeq(int ac, char** av, PmergeMe& obj){
 	return true;
 }
 
-
 int	main(int ac, char** av){
 	if (ac == 1){
 		std::cerr << "Error" << std::endl;
@@ -56,7 +55,9 @@ int	main(int ac, char** av){
 	PmergeMe a;
 	if (!insertSeq(ac, av, a))
 		return 1;
-		
+	
+	std::cout << std::fixed << std::setprecision(5) << a.vector_FJ() << std::endl;
+	//a.printMe();
 
 	return 0;
 }
