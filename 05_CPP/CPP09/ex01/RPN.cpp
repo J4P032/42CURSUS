@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:45:42 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/04/01 16:35:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/13 17:23:38 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	RPN::process(const char* str){
 			chars = 0;
 			continue ;
 		}
-		if (isdigit(str[i]) && chars == 0){
+		if (std::isdigit(static_cast<unsigned char>(str[i])) && chars == 0){
 			_nums.push(str[i] - '0');
 			chars++;
 			i++;

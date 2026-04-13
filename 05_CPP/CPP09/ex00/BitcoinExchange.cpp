@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:26:34 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/31 17:14:32 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/13 16:43:22 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,9 @@
 #include <sstream>
 #include <cctype>
 #include <cstdlib>
+#include <iomanip>
 
 
-
-bool	is_valid_year(int year){
-	//return (year > 2008);
-	return (year > 0);
-}
 
 bool	is_valid_month(int month){
 	return (month > 0 && month < 13);
@@ -32,8 +28,6 @@ bool	is_valid_month(int month){
 bool	is_valid_day(int year, int month, int day){
 	if (day < 1 || day > 31)
 		return (false);
-	/* if (year == 2009 && month == 1 && day < 3)
-		return (false); */
 	if (month == 2){
 		if (day > 29)
 			return (false);
@@ -51,7 +45,7 @@ bool	is_valid_day(int year, int month, int day){
 
 //fecha inicial de bitcoin 2009-01-03
 bool	is_valid_date(int year, int month, int day){
-	return (is_valid_year(year) && is_valid_month(month) && is_valid_day(year, month, day));	
+	return (is_valid_month(month) && is_valid_day(year, month, day));	
 }
 
 BitcoinExchange::BitcoinExchange(void){}
@@ -68,13 +62,15 @@ BitcoinExchange::BitcoinExchange(const std::string& datafile){
 		std::string			day = "";
 		std::string			date;
 		int					num_decimals;
-		float				bit_value = 0.0f;
+		double				bit_value = 0.0;
 		oss.str("");
 		oss.clear();
 		
 		std::string::const_iterator cit = line.begin();
-		while (cit != line.end() && (isdigit(*cit) || *cit == '-')){
-			if (!isdigit(*cit)) //each '-' or ',' I will advance it once. if not a number I jump over that line and continue to next.
+		while (cit != line.end() && (std::isdigit(static_cast<unsigned char>(*cit)) || *cit == '-')){
+			if (cit == line.begin() && *cit == '-')
+				throw std::runtime_error("Error: negative year in database");
+			if (!std::isdigit(static_cast<unsigned char>(*cit))) //each '-' or ',' I will advance it once. if not a number I jump over that line and continue to next.
 				break ;
 			if (!day.empty()) //in case there is no ',' at the end of the day but another '-'
 				break ;
@@ -107,15 +103,17 @@ BitcoinExchange::BitcoinExchange(const std::string& datafile){
 		else
 			continue ;
 		num_decimals = 0;
-		while (cit != line.end() && (isdigit(*cit) || *cit == '.')){
+		while (cit != line.end() && (std::isdigit(static_cast<unsigned char>(*cit)) || *cit == '.')){
 			if (*cit == '.')
 				num_decimals++;
 			oss << *cit;
 			cit++;
 		}
 		if (cit != line.end() || num_decimals > 1) //there is another nonDigit after the numbers or after the ','
-			continue ; 
-		bit_value = atof(oss.str().c_str());
+			continue ;
+		if (oss.str() == "")
+			continue ;
+		bit_value = std::strtod(oss.str().c_str(), NULL);
 		
 		_data[date] = bit_value;
 	}
@@ -135,7 +133,7 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 	std::string	line;
 	std::getline(file, line);
 	if (line != "date | value"){
-		std::cerr << "Error: bad input => File has to start with line: 'date | value'." << std::endl;
+		std::cerr << "Error: bad input => File has to start with line: 'date | value'" << std::endl;
 		return ;
 	}
 	while (std::getline(file, line)){
@@ -145,37 +143,50 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 		std::string			day = "";
 		std::string			date;
 		int					num_decimals;
-		float				value = 0.0f;
+		double				value = 0.0;
 		bool				negative;
 		oss.str("");
 		oss.clear();
 		
 		std::string::const_iterator cit = line.begin();
-		while (cit != line.end() && (isdigit(*cit) || *cit == '-')){
-			if (!isdigit(*cit)) //each '-' or ' ' I will advance it once. if not a number I jump over that line and continue to next.
+		while (cit != line.end() && (std::isdigit(static_cast<unsigned char>(*cit)) || *cit == '-')){
+			if (cit == line.begin() && *cit == '-')
+				break ;
+			if (!std::isdigit(static_cast<unsigned char>(*cit))) //each '-' or ' ' I will advance it once. if not a number I jump over that line and continue to next.
 				break ;
 			if (!day.empty()) //in case there is no ' ' at the end of the day but another char non digit
 				break ;
 			oss << *cit;		
 			cit++;
 			if (cit != line.end() && *cit == '-'){
-				if (year.empty())
-					year = oss.str();
-				else if (month.empty())
-					month = oss.str();
+				if (year.empty()){
+					if (oss.str().size() == 4)
+						year = oss.str();
+					else
+						break ;
+				}
+				else if (month.empty()){
+					if (oss.str().size() == 2)
+						month = oss.str();
+					else
+						break ;
+				}
 				cit++;
 				oss.str("");
 				oss.clear();
 			}
 			else if (*cit == ' ' || cit == line.end()){
-				day = oss.str();
+				if (oss.str().size() == 2) 
+					day = oss.str();
+				else
+					break ;
 				oss.str("");
 				oss.clear();
 			}
 		}
 
 		if (year.empty() || month.empty() || day.empty()){
-			std::cerr << "Error: bad input => " << line << "." << std::endl;
+			std::cerr << "Error: bad input => " << line << std::endl;
 			continue ;
 		}
 
@@ -194,24 +205,24 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 				if (cit != line.end() && *cit == ' ')
 					cit++;
 				else{
-					std::cerr << "Error: bad input => Need space after '|'." << std::endl;
+					std::cerr << "Error: bad input => Need space after '|'" << std::endl;
 					continue ;
 				}
 			}
 			else{
-				std::cerr << "Error: bad input => After first space has to have an '|'." << std::endl;
+				std::cerr << "Error: bad input => After first space has to have an '|'" << std::endl;
 				continue ;
 			}
 		}
 		else{
-			std::cerr << "Error: bad input => Need to have an space after the date." << std::endl;
+			std::cerr << "Error: bad input => Need to have an space after the date" << std::endl;
 			continue ;
 		}
 		num_decimals = 0;
 		negative = false;
 		if (*cit == '-')
 			negative = true;
-		while (cit != line.end() && (isdigit(*cit) || *cit == '.')){
+		while (cit != line.end() && (std::isdigit(static_cast<unsigned char>(*cit)) || *cit == '.')){
 			if (*cit == '.')
 				num_decimals++;
 			oss << *cit;
@@ -225,19 +236,41 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 			std::cerr << "Error: bad value => Value has to be only a float number." << std::endl;
 			continue ;
 		}
+		if (oss.str() == ""){
+			std::cerr << "Error: no value introduced after date => " << date << std::endl;
+			continue ;
+		}
 		
-		value = atof(oss.str().c_str());
+		value = std::strtod(oss.str().c_str(), NULL);
+		if (value == 1000){
+			std::string s = oss.str();
+			std::string::const_iterator its = s.begin();
+			
+			while (its != s.end() && *its != '.')
+				its++;
+			if (its != s.end() && *its == '.'){
+				its++;
+				while (its != s.end() && *its == '0')
+					its++;
+				if (its != s.end()){
+					std::cerr << "Error: too large a number." << std::endl;
+					continue ;
+				}	
+			}	
+		}
 		if (value > 1000){
 			std::cerr << "Error: too large a number." << std::endl;
 			continue ;
 		}
 
-		std::map<std::string, float>::const_iterator mit = _data.lower_bound(date);
+		std::map<std::string, double>::const_iterator mit = _data.lower_bound(date);
 		if (mit != _data.end() && mit->first == date){
+			std::cout << std::fixed << std::setprecision(2);
 			std::cout << date << " => " << value << " = " << (value * mit->second) << std::endl;
 		}
 		else if (mit != _data.begin()){
 				--mit;
+				std::cout << std::fixed << std::setprecision(2);
 				std::cout << date << " => " << value << " = " << (value * mit->second) << std::endl;
 		}
 		else{
@@ -246,6 +279,6 @@ void	BitcoinExchange::process_data(std::ifstream& file) const{
 	}
 }	
 
-const std::map<std::string, float>&	BitcoinExchange::get_data(void) const{
+const std::map<std::string, double>&	BitcoinExchange::get_data(void) const{
 	return (this->_data);
 }

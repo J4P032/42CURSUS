@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrollon- <jrollon-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 13:10:40 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/03/31 17:12:17 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/04/13 14:54:36 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 #include <fstream> //para abrir el archivo con std::ifstream.
 
 void	check_csv(const BitcoinExchange& obj){
-	std::map<std::string, float>	aux = obj.get_data();
-	std::map<std::string, float>::const_iterator it = aux.begin();
+	std::map<std::string, double>	aux = obj.get_data();
+	std::map<std::string, double>::const_iterator it = aux.begin();
 	for (;it != aux.end(); it++)
 		std::cout << it->first << " | " << std::fixed << std::setprecision(2) << it->second << std::endl;
-
 }
 
 int	main(int ac, char** av){
