@@ -1,0 +1,19 @@
+# Dominio
+DOMAIN_NAME=jrollon-.42.fr
+
+# MariaDB
+SQL_DATABASE=wordpress
+SQL_USER=jrollon-
+SQL_PASSWORD=M_1234
+SQL_ROOT_PASSWORD=MR_1234
+
+# WordPress - Administrador
+SITE_TITLE=Inception_Project
+ADMIN_USER=W_Root
+WP_ADMIN_PASSWORD=W_1234
+WP_ADMIN_EMAIL=jrollon-@student.42madrid.com
+
+# WordPress - Segundo Usuario
+USER_LOGIN=jrollon-guest
+USER_PASSWORD=U_1234
+USER_EMAIL=invitado@42.fr
