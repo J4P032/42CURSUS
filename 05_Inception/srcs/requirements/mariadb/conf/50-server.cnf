@@ -1,0 +1,9 @@
+[mysqld]
+datadir = /var/lib/mysql
+socket  = /run/mysqld/mysqld.sock
+bind-address = 0.0.0.0
+port = 3306
+user = mysql
+# borrar logs despues de un dia
+expire_logs_days = 1
+max_binlog_size = 100M

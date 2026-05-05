@@ -1,0 +1,122 @@
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    # si no ponemos image el buscaria la imagen como mariadb y si esta subida en dockerhub la descargaria.
+    # de esta manera con image el nombre y el tag (:) garantizo que sea mi imagen.
+    image: mariadb:jrollon-
+    container_name: mariadb
+    restart: always
+    env_file: .env
+    # el '-' indica que pertenece a una lista de datos.
+    # volumes es los discos duros que tendran los contenedores
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    # networks es la red que comparten. Al ser los 3 la misma se pueden llamar...
+    # ...con sus nombres (wordpress, nginx, etc..) y no con sus IPs que serian cambiantes.
+    networks:
+      - inception
+    # Comprueba si MariaDB acepta conexiones
+    # test CMD suele estar delante y es decirle que vamos a meter un comando...
+    # ...lo demas va en linea y la instruccion seria como ponerla sin comas:
+    # mysqladmin ping -h localhost -u root -p(password de root). $$ para poner una $ y busca en 'env'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${SQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # en docker moderno no hace falta, pero se hace por claridad. El expose es el puerto
+    # ...interno que solo es accesible dentro de la misma red (network=inception). Los puertos
+    # ...son accesibles desde dentro. Los expose, solo desde la misma red. Mariadb necesita
+    # ...comunicarse con wordpress internamente no externo y por eso se 'expone' dicho puerto.
+    expose:
+      - "3306"
+    # Limpieza de Logs que pueden relantizar el sistema.
+    # para ver los logs poner 'docker logs nombre_contenedor'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress:jrollon-
+    container_name: wordpress
+    restart: always
+    # NO arranca hasta que MariaDB este operativo
+    # 'service_healthy' es instruccion reservada por docker
+    # tambien 'service_started' y 'service_completed_successfully'    
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    env_file: .env
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - inception
+    # Comprueba si el puerto 9000 esta escuchando
+    healthcheck:
+      test: ["CMD", "sh", "-c", "netstat -an | grep :9000"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    expose:
+      - "9000"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  nginx:
+    build: ./requirements/nginx
+    image: nginx:jrollon-
+    container_name: nginx
+    restart: always
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# el driver de bridge es el driver por defecto. Crea una red privada interna
+# en donde todos los contenedores pueden hablar entre ellos usando sus nombres pero
+# ...estan aislados del exterior a menos que se abra un puerto con 'ports'
+# Otras opciones de driver son 'host'(no tiene red propia. Usa la misma IP del ordenador)
+# ...'none' (el contenedor no tiene red)
+networks:
+  inception:
+    name: inception_network
+    driver: bridge
+
+# driver indica con local que se use el disco duro de la maquina
+# driver_opts type none hay que ponerlo con ruta a mano.
+# bind vincula le dice pilla la direccion y clonala dentro del volumen
+# ...pero ese bind si no se pone (esta gris en el subject), no se podria redirigir
+# ...el volumen a un directorio custom como indican que hay que hacer, ya que lo haria
+# ...dentro de sus directorios internos de docker y no podriamos encontrarlo facilmente (para tranporte de datos)
+# ...seria bind prohibido si hiciera arriba: - /home/jrollon-/data:/var/lib/mysql
+# ...para demostrarlo hacer 'docker volume ls' si aparece, correcto.. si no es bind directo.
+# device es la direccion a vincular hecha en makefile. todo se escribe tambien ahi desde las carpetas de mariadb y wordpress
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/jrollon-/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/jrollon-/data/wordpress
