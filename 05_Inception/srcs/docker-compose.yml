@@ -1,5 +1,6 @@
 services:
   mariadb:
+    # al poner build obligo a que busque el dockerfile en el directorio marcado. Si no, trataría de bajarla de DockerHub
     build: ./requirements/mariadb
     # si no ponemos image el buscaria la imagen como mariadb y si esta subida en dockerhub la descargaria.
     # de esta manera con image el nombre y el tag (:) garantizo que sea mi imagen.

@@ -8,17 +8,18 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 
-# Creamos la carpeta para PHP y el directorio raíz de la web
+# Creamos la carpeta para PHP y el directorio raíz de la web. CLI descargará los archivos, pero he de decirle donde
+# /run/php es donde se creará el archivo socket (comunicación rápida), y /var/www/wordpress donde se pondrán los archivos
 RUN mkdir -p /run/php
 RUN mkdir -p /var/www/wordpress
 
-
-
-# Copiamos la configuración de PHP-FPM y nuestro script de setup
+# Copiamos la configuración de PHP-FPM y nuestro script de setup. Ha de ser en dichos directorios.
 COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 COPY tools/setup.sh /usr/local/bin/setup.sh
 RUN chmod +x /usr/local/bin/setup.sh
 
+# hace un cd permanente a dicho directorio. Todos los comandos de dockerfile se ejecutarán ahi.
+# el directorio ha de coincidir con lo que se ponga en la config de Nginx.  root /var/www/wordpress;
 WORKDIR /var/www/wordpress
 
 # Esto es a titulo informativo. Se puede borrar de aqui, pero no en el docker-compose.yml

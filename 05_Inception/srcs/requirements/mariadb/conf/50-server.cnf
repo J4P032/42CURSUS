@@ -1,9 +1,23 @@
+# mariadb busca un archivo cnf en /etc/mysql/mariadb.conf.d/ que es donde lo copiamos este archivo en el dockerfile
+# se puede llamar como se quiera, pero le ponemos un 50 delante para que sus autoconfiguraciones anteriores se carguen antes...
+# ...(va por orden numérico)
 [mysqld]
+# Ruta física donde MariaDB almacena lso datos de forma persistente.
 datadir = /var/lib/mysql
+
+# el socket es un archivo que garantiza más velocidad a la hora de comunicarse con él (en el mismo contenedor)...
+# ... Se usa para instrucciones "mariadb -e" del setup. Sin el habría que conectar localmente con 127.0.0.1 
 socket  = /run/mysqld/mysqld.sock
+
+# la IP 0.0.0.0 es para conexiones desde cualquier IP ya que wordpress conecta desde su contenedor.
 bind-address = 0.0.0.0
+
+# puerto standard de escucha del servicio
 port = 3306
+
+# nombre del usuario
 user = mysql
+
 # borrar logs despues de un dia
 expire_logs_days = 1
 max_binlog_size = 100M

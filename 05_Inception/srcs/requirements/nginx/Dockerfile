@@ -8,7 +8,11 @@ RUN apt-get install -y nginx openssl
 # Creamos la carpeta donde guardaremos los certificados SSL
 RUN mkdir -p /etc/nginx/ssl
 
-# Generamos el certificado auto-firmado (TLS es obligatorio)
+# Generamos el certificado auto-firmado (TLS es obligatorio) que cumpla con standard X509
+# -nodes para que la llave privada no esté protegida por contraseña y asi Nginx arranque automaticamente en el contendor
+# -out lo guarda en dicha direccion. Tiene que ser creada antes con mkdir en este dockerfile. Es pública
+# -keyout es privada.
+# -subj es el sujeto y en comillas va toda la informacion. CN (dominio) debe coincidir con la config de nginx.
 RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=42/CN=jrollon-.42.fr/UID=jrollon-"
 
 # Copiamos el archivo de configuración

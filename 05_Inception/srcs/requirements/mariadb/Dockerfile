@@ -1,5 +1,6 @@
 FROM debian:bookworm
 
+# Necesario en Dockerfile el -y (yes. Desea continuar?) por que no es interativo.
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y mariadb-server
 
