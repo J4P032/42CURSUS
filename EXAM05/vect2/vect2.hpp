@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 16:56:46 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/02/27 18:30:57 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/05/07 11:55:40 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,12 @@ private:
 	int	_y;
 };
 
-std::ostream& operator<<(std::ostream& out, const vect2& v){
-	out << "{" << v[0] << ", " << v[1] << "}" << std::endl;
+inline std::ostream& operator<<(std::ostream& out, const vect2& v){
+	out << "{" << v[0] << ", " << v[1] << "}";
 	return (out); 
 }
 
-vect2 operator*(int n, const vect2& other){
+inline vect2 operator*(int n, const vect2& other){
 	return (other * n);
 }
 

@@ -72,6 +72,5 @@ int main() {
     std::cout << "Comparaisons :\n";
     std::cout << "b == c : " << (g == f) << "\n";
     std::cout << "b != c : " << (g != f) << "\n";
-
     return 0;
 }
