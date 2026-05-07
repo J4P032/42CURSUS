@@ -7,10 +7,10 @@ El main no es el que pasan del examen, pero es más ampliado, por lo que incluye
 
 ## Instructiones
 1. **Prerequisitos**: Tienes que tener instalado el compilador de C++ en Linux
-2. **Compilación**: compilar con:
+2. **Compilación**: si quieres compilar el main del examen poner:
 
 ```bash
-c++ -Wall -Wextra -Werror -std=c++98 *.cpp -o vect2
+c++ -Wall -Wextra -Werror -std=c++98 vect2.cpp main_exam.cpp -o vect2
 ```
 2. **Ejecutar**: 
 ```bash

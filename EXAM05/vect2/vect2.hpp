@@ -6,7 +6,7 @@
 /*   By: jrollon- <jrollon-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 16:56:46 by jrollon-          #+#    #+#             */
-/*   Updated: 2026/05/07 11:55:40 by jrollon-         ###   ########.fr       */
+/*   Updated: 2026/05/07 12:15:14 by jrollon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ public:
 
 	vect2 operator-(const vect2& other) const{
 		return (vect2(_x - other._x, _y - other._y));
+	}
+
+	vect2 operator-(void) const{
+		return (vect2(_x * -1, _y * -1));
 	}
 
 	vect2& operator-=(const vect2& other){
