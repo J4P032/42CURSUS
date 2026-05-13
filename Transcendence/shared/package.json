@@ -1,0 +1,15 @@
+{
+  "name": "@trascendence/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./Achievements": "./Achievements.js",
+    "./Player": "./Player.js",
+    "./Factions": "./Factions.js",
+    "./Territories": "./Territories.js",
+    "./TurnManager": "./TurnManager.js",
+    "./Victory": "./Victory.js",
+    "./validateConnections": "./validateConnections.js"
+  }
+}
