@@ -47,26 +47,4 @@ export default class Player {
   }
 }
 
-/**
- * Generates an array of mock player records for testing or development purposes.
- *
- * @param {number} count - The number of mock player records to generate.
- * @returns {Array<Player>} An array of Player instances, each assigned a faction from FACTIONS.
- */
-export function createMockPlayers(count) {
-  const factionKeys = Object.keys(FACTIONS);
-
-  return Array.from({ length: count }, (_, index) => {
-    const factionKey = factionKeys[index % factionKeys.length];
-    const faction = FACTIONS[factionKey];
-
-    return new Player({
-      id: `mock-player-${index + 1}`,
-      name: faction.name,
-      faction: factionKey,
-      color: faction.color,
-    });
-  });
-}
-
 export const MAX_PLAYERS = 4;

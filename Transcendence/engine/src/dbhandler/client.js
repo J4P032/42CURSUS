@@ -9,36 +9,10 @@
 // serializes over the wire will need to rehydrate Gamestate (e.g. via a
 // `Gamestate.fromSerialized()` factory) before returning the room.
 
-const SEED_PLAYERS = {
-  'player-1': {
-    id: 'player-1',
-    name: 'Player 1',
-    achievements: [],
-    stats: { gamesPlayed: 0, gamesWon: 0, territoriesConquered: 0, totalTurns: 0 },
-    matchHistory: [],
-  },
-  'player-2': {
-    id: 'player-2',
-    name: 'Player 2',
-    achievements: [],
-    stats: { gamesPlayed: 0, gamesWon: 0, territoriesConquered: 0, totalTurns: 0 },
-    matchHistory: [],
-  },
-  'player-3': {
-    id: 'player-3',
-    name: 'Player 3',
-    achievements: [],
-    stats: { gamesPlayed: 0, gamesWon: 0, territoriesConquered: 0, totalTurns: 0 },
-    matchHistory: [],
-  },
-};
-
 export class InMemoryDBHandler {
   constructor() {
     this.rooms = new Map();
-    this.players = new Map(
-      Object.entries(SEED_PLAYERS).map(([id, p]) => [id, structuredClone(p)])
-    );
+    this.players = new Map();
     this.matches = [];
   }
 

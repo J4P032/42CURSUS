@@ -2,12 +2,14 @@ import 'dotenv/config'
 import { Prisma, PrismaClient } from '../prisma/.prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import express from 'express'
+import bcrypt from 'bcrypt'
+import cors from 'cors'
 
 const pool = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter: pool })
 
 const app = express()
-
+app.use(cors())
 app.use(express.json())
 
 app.post(`/signup`, async (req, res) => {
@@ -180,42 +182,11 @@ app.get('/users/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener usuario' })
   }
-})
+});
+
 
 // POST /users - Crear usuario nuevo
-app.post('/users', async (req, res) => {
-  const { username, email, passwordHash, avatarUrl } = req.body
-  
-  if (!username || !email) {
-    return res.status(400).json({ error: 'username y email son requeridos' })
-  }
-
-  try {
-    const user = await prisma.user.create({
-      data: {
-        username,
-        email,
-        passwordHash,
-        avatarUrl,
-        stats: {
-          create: {
-            gamesPlayed: 0,
-            wins: 0,
-            losses: 0,
-            elo: 1000
-          }
-        }
-      },
-      include: { stats: true }
-    })
-    res.status(201).json(user)
-  } catch (error: any) {
-    if (error.code === 'P2002') {
-      return res.status(400).json({ error: 'Username o email ya existe' })
-    }
-    res.status(500).json({ error: 'Error al crear usuario' })
-  }
-})
+//creado en register de bcrypt.
 
 // PUT /users/:id - Actualizar usuario
 app.put('/users/:id', async (req, res) => {
@@ -635,6 +606,43 @@ app.get('/users/:userId/achievements', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener logros' })
   }
 })
+
+//Registro del usuario
+app.post('/auth/register', async (req, res) => {
+  const { email, username, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10); //10 2^10 lo que tarda para evitar Hacks automaticos
+    const user = await prisma.user.create({
+      data: {
+        email,
+        username,
+        passwordHash: hashedPassword, //contraseña cifrada por bcrypt
+        stats: { create: { gamesPlayed: 0, wins: 0, losses: 0, elo: 1000 } }
+      }
+    });
+    res.json({ ok: true, user: { id: user.id, username: user.username } });
+  } catch (error: any) {
+    if (error.code === 'P2002') return res.status(400).json({ ok: false, error: 'Email/User ya existe' });
+    res.status(500).json({ ok: false, error: 'Error en el servidor' });
+  }
+});
+
+//login del usuario
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user || !user.passwordHash) return res.status(401).json({ ok: false, error: 'Usuario no encontrado' });
+
+    const check = await bcrypt.compare(password, user.passwordHash);
+    if (!check) return res.status(401).json({ ok: false, error: 'Contraseña incorrecta' });
+
+    res.json({ ok: true, user: { id: user.id, username: user.username } });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: 'Error en el servidor' });
+  }
+});
+
 
 // Health check endpoint para Docker
 app.get('/health', (req, res) => {

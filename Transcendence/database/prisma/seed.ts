@@ -112,8 +112,15 @@ async function main() {
   console.log(`🚀 Iniciando seeding de la base de datos...`)
 
   try {
+
+    // Comprobar si ya hay usuarios. J4P032 borraba usuarios registrados
+    const userCount = await prisma.user.count()
+    if (userCount > 0) {
+       console.log('✅ Base de datos ya tiene usuarios, saltando seeding para preservar datos.')
+      return
+    }
     // Limpiar datos existentes (en orden inverso por relaciones)
-    console.log('🗑️  Limpiando datos previos...')
+    console.log('🗑️  Base de datos vacía. Iniciando limpieza por seguridad...')
     await prisma.userAchievement.deleteMany()
     await prisma.achievement.deleteMany()
     await prisma.matchPlayer.deleteMany()

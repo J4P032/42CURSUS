@@ -19,6 +19,22 @@ export class RoomRegistry {
     }
     set.add(ws);
     this.meta.set(ws, { roomId, playerId });
+
+    // Notificar a otros que alguien entró
+    this.broadcast(roomId, {
+      type: 'chat',
+      from: 'Server',
+      text: `${playerId} entered the room`,
+      ts: Date.now(),
+    });
+
+    // Enviar el recuento actualizado a todos
+    this.broadcast(roomId, {
+      type: 'chat',
+      from: 'Server',
+      text: `Players connected: ${set.size}`,
+      ts: Date.now(),
+    });
   }
 
   leave(ws: WebSocket): void {
@@ -27,7 +43,26 @@ export class RoomRegistry {
     const set = this.rooms.get(m.roomId);
     if (set) {
       set.delete(ws);
-      if (set.size === 0) this.rooms.delete(m.roomId);
+      const remainingSize = set.size;
+      
+      // Notificar que alguien salió antes de borrar la sala si queda vacía
+      this.broadcast(m.roomId, {
+        type: 'chat',
+        from: 'Server',
+        text: `${m.playerId} left the room`,
+        ts: Date.now(),
+      });
+
+      if (remainingSize > 0) {
+        this.broadcast(m.roomId, {
+          type: 'chat',
+          from: 'Server',
+          text: `Players connected: ${remainingSize}`,
+          ts: Date.now(),
+        });
+      }
+
+      if (remainingSize === 0) this.rooms.delete(m.roomId);
     }
     this.meta.delete(ws);
   }

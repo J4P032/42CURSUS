@@ -1,18 +1,18 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [
-                "_POSIX_C_SOURCE=199309L"
-            ],
-            "compilerPath": "/usr/bin/clang",
-            "cStandard": "c99",
-            "cppStandard": "c++14",
-            "intelliSenseMode": "linux-clang-x64"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "linux-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [
+        "_POSIX_C_SOURCE=199309L"
+      ],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "${default}",
+      "cppStandard": "${default}",
+      "intelliSenseMode": "linux-gcc-x64"
+    }
+  ],
+  "version": 4
 }

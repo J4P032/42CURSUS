@@ -39,7 +39,7 @@ function initializeTroopCount() {
 }
 
 // export default function GameBoard({ players }) {
-export default function GameBoard({ roomId, playerId }) {
+export default function GameBoard({ roomId, playerId, onLogout, onExitGame }) {
 	console.log('GameBoard props:', { roomId, playerId });
 	// ========== GAME SETUP ==========
 	const MAX_TURNS = 100;
@@ -585,6 +585,45 @@ export default function GameBoard({ roomId, playerId }) {
 			>
 				GREAT RISK
 			</h1>
+
+			<div style={{
+				position: 'absolute',
+				top: '20px',
+				left: '20px',
+				display: 'flex',
+				gap: '10px'
+			}}>
+				<button 
+					onClick={onExitGame}
+					style={{
+						background: '#333',
+						border: '1px solid #555',
+						color: '#aaa',
+						padding: '5px 10px',
+						borderRadius: '4px',
+						cursor: 'pointer',
+						fontSize: '11px',
+						fontFamily: 'monospace'
+					}}
+				>
+					&larr; Exit to Lobby
+				</button>
+				<button 
+					onClick={onLogout}
+					style={{
+						background: 'none',
+						border: '1px solid #FF6B6B',
+						color: '#FF6B6B',
+						padding: '5px 10px',
+						borderRadius: '4px',
+						cursor: 'pointer',
+						fontSize: '11px',
+						fontFamily: 'monospace'
+					}}
+				>
+					Logout
+				</button>
+			</div>
 
 			{/* Main container: 80% map, 20% UI */}
 			<div
