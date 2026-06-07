@@ -10,15 +10,20 @@ datasource db {
   provider = "postgresql"
 }
 
+/// Usuario del sistema. El username es la clave primaria semántica.
 model User {
-  id            Int      @id @default(autoincrement())
-  username      String   @unique @db.VarChar(50)
+  /// Nombre de usuario único (clave primaria, usado en URLs y relaciones)
+  username      String   @id @unique @db.VarChar(50)
+  /// Email único del usuario
   email         String   @unique @db.VarChar(100)
-  passwordHash  String?  @db.Text
+  /// Hash de la contraseña (obligatorio)
+  passwordHash  String   @db.Text
+  /// URL del avatar (opcional)
   avatarUrl     String?  @db.Text
+  /// Fecha de creación
   createdAt     DateTime @default(now()) @db.Timestamp(6)
 
-  // Relations
+  // Relaciones
   friendshipsAsUser   Friendship[] @relation("FriendshipUser")
   friendshipsAsFriend Friendship[] @relation("FriendshipFriend")
   matchPlayers        MatchPlayer[]
@@ -28,84 +33,124 @@ model User {
   @@map("users")
 }
 
+/// Relación de amistad entre dos usuarios (no bidireccional).
 model Friendship {
-  userId    Int
-  friendId  Int
-  createdAt DateTime @default(now()) @db.Timestamp(6)
+  /// Username del usuario que inicia la amistad
+  userUsername    String
+  /// Username del amigo
+  friendUsername  String
+  /// Fecha de creación de la amistad
+  createdAt       DateTime @default(now()) @db.Timestamp(6)
 
-  // Relations
-  user   User @relation("FriendshipUser", fields: [userId], references: [id], onDelete: Cascade)
-  friend User @relation("FriendshipFriend", fields: [friendId], references: [id], onDelete: Cascade)
+  // Relaciones
+  user   User @relation("FriendshipUser", fields: [userUsername], references: [username], onDelete: Cascade)
+  friend User @relation("FriendshipFriend", fields: [friendUsername], references: [username], onDelete: Cascade)
 
-  @@id([userId, friendId])
+  @@id([userUsername, friendUsername])
+  @@index([friendUsername])
   @@map("friendships")
 }
 
+/// Partida de juego.
 model Match {
+  /// Identificador único de la partida
   id         Int      @id @default(autoincrement())
+  /// Modo de juego (ej: "Battle Royale")
   gameMode   String   @db.VarChar(50)
+  /// Máximo de jugadores
   maxPlayers Int      @default(4)
+  /// Estado de la partida (waiting, active, completed)
   status     String   @default("waiting") @db.VarChar(20)
+  /// Estado dinámico de la partida (JSON)
+  gameState  Json?
+  /// Fecha de creación
   createdAt  DateTime @default(now()) @db.Timestamp(6)
+  /// Fecha de inicio
   startedAt  DateTime? @db.Timestamp(6)
+  /// Fecha de finalización
   endedAt    DateTime? @db.Timestamp(6)
 
-  // Relations
+  // Relaciones
   matchPlayers MatchPlayer[]
 
   @@map("matches")
 }
 
+/// Relación de un usuario participando en una partida.
 model MatchPlayer {
-  id       Int      @id @default(autoincrement())
-  matchId  Int
-  userId   Int
-  score    Int      @default(0)
-  position Int?
-  joinedAt DateTime @default(now()) @db.Timestamp(6)
+  /// Identificador único de la relación
+  id         Int      @id @default(autoincrement())
+  /// ID de la partida
+  matchId    Int
+  /// Username del jugador
+  username   String   @db.VarChar(50)
+  /// Puntuación del jugador
+  score      Int      @default(0)
+  /// Posición final (si aplica)
+  position   Int?
+  /// Fecha de ingreso a la partida
+  joinedAt   DateTime @default(now()) @db.Timestamp(6)
 
-  // Relations
+  // Relaciones
   match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [username], references: [username], onDelete: Cascade)
 
-  @@unique([matchId, userId])
+  @@unique([matchId, username])
+  @@index([matchId])
+  @@index([username])
   @@map("match_players")
 }
 
+/// Estadísticas acumuladas de un usuario.
 model Stat {
-  userId       Int @id
-  gamesPlayed  Int @default(0)
-  wins         Int @default(0)
-  losses       Int @default(0)
-  elo          Int @default(1000)
+  /// Username del usuario (PK y FK)
+  username     String @id @db.VarChar(50)
+  /// Partidas jugadas
+  gamesPlayed  Int    @default(0)
+  /// Partidas ganadas
+  wins         Int    @default(0)
+  /// Partidas perdidas
+  losses       Int    @default(0)
+  /// ELO actual
+  elo          Int    @default(1000)
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Relaciones
+  user User @relation(fields: [username], references: [username], onDelete: Cascade)
 
   @@map("stats")
 }
 
+/// Logro disponible en el sistema.
 model Achievement {
+  /// Identificador único del logro
   id          Int    @id @default(autoincrement())
-  name_id     String @unique @db.VarChar(50)
+  /// Nombre semántico único del logro (para relaciones)
+  nameId      String @unique @db.VarChar(50)
+  /// Nombre visible del logro
   name        String @db.VarChar(100)
+  /// Descripción del logro
   description String @db.Text
 
-  // Relations
+  // Relaciones
   userAchievements UserAchievement[]
 
   @@map("achievements")
 }
 
+/// Relación de un usuario que ha desbloqueado un logro.
 model UserAchievement {
-  userusername           String
-  achievementName_id String  @db.VarChar(50)
-  unlockedAt        DateTime @default(now()) @db.Timestamp(6)
+  /// Username del usuario
+  username      String  @db.VarChar(50)
+  /// Clave semántica del logro
+  achievementNameId String  @db.VarChar(50)
+  /// Fecha de desbloqueo
+  unlockedAt    DateTime @default(now()) @db.Timestamp(6)
 
-  // Relations
-  user        User        @relation(fields: [userusername], references: [username], onDelete: Cascade)
-  achievement Achievement @relation(fields: [achievementName_id], references: [name_id], onDelete: Cascade)
+  // Relaciones
+  user        User        @relation(fields: [username], references: [username], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementNameId], references: [nameId], onDelete: Cascade)
 
-  @@id([userusername, achievementName_id])
+  @@id([username, achievementNameId])
+  @@index([achievementNameId])
   @@map("user_achievements")
 }

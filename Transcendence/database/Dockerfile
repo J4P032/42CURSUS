@@ -12,7 +12,7 @@ COPY prisma.config.ts ./
 COPY tsconfig.json ./
 
 # Instalar dependencias
-RUN npm install
+RUN npm ci
 
 # Copiar el código fuente
 COPY prisma ./prisma

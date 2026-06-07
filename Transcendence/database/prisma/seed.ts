@@ -1,14 +1,9 @@
 import { Prisma, PrismaClient } from '../prisma/.prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
-import * as crypto from 'crypto'
+import { hashPassword } from '../src/auth'
 
 const pool = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter: pool })
-
-// Función simple para generar un hash (puedes usar bcryptjs si lo instalas)
-function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password).digest('hex')
-}
 
 // Datos base de usuarios de prueba (sin passwordHash aún)
 const usersBase = [
@@ -77,32 +72,32 @@ const usersBase = [
 // Datos de logros
 const achievementData: Prisma.AchievementCreateInput[] = [
   {
-    name_id: 'first_blood',
+    nameId: 'first_blood',
     name: 'First Blood',
     description: 'Win your first match',
   },
   {
-    name_id: 'conqueror',
+    nameId: 'conqueror',
     name: 'Conqueror',
     description: 'Win 10 matches',
   },
   {
-    name_id: 'legend',
+    nameId: 'legend',
     name: 'Legend',
     description: 'Reach ELO 1500',
   },
   {
-    name_id: 'dominator',
+    nameId: 'dominator',
     name: 'Dominator',
     description: 'Win 25 matches',
   },
   {
-    name_id: 'undefeated',
+    nameId: 'undefeated',
     name: 'Undefeated',
     description: 'Win 5 consecutive matches',
   },
   {
-    name_id: 'social_butterfly',
+    nameId: 'social_butterfly',
     name: 'Social Butterfly',
     description: 'Add 5 friends',
   },
@@ -112,24 +107,13 @@ async function main() {
   console.log(`🚀 Iniciando seeding de la base de datos...`)
 
   try {
-
-    // Comprobar si ya hay usuarios. J4P032 borraba usuarios registrados
+    // Solo sembrar si la base de datos está vacía (evita pisar datos reales).
     const userCount = await prisma.user.count()
     if (userCount > 0) {
-       console.log('✅ Base de datos ya tiene usuarios, saltando seeding para preservar datos.')
+      console.log('✨ La base de datos ya tiene datos, saltando seeding base.')
       return
     }
-    // Limpiar datos existentes (en orden inverso por relaciones)
-    console.log('🗑️  Base de datos vacía. Iniciando limpieza por seguridad...')
-    await prisma.userAchievement.deleteMany()
-    await prisma.achievement.deleteMany()
-    await prisma.matchPlayer.deleteMany()
-    await prisma.match.deleteMany()
-    await prisma.friendship.deleteMany()
-    await prisma.stat.deleteMany()
-    await prisma.user.deleteMany()
 
-    // Crear usuarios
     console.log('👥 Creando usuarios...')
     const users: any[] = []
     for (const u of usersBase) {
@@ -137,7 +121,7 @@ async function main() {
         data: {
           username: u.username,
           email: u.email,
-          passwordHash: hashPassword(u.password),
+          passwordHash: await hashPassword(u.password),
           avatarUrl: u.avatarUrl,
           stats: {
             create: u.stats,
@@ -147,7 +131,7 @@ async function main() {
       })
       users.push(user)
       console.log(
-        `   ✓ Usuario creado: ${user.username} (ID: ${user.id}) - ELO: ${user.stats?.elo}`
+        `   ✓ Usuario creado: ${user.username} - ELO: ${user.stats?.elo}`
       )
     }
 
@@ -165,11 +149,11 @@ async function main() {
     // Crear amistades
     console.log('🤝 Creando amistades...')
     const friendships = [
-      { userId: users[0].id, friendId: users[1].id },
-      { userId: users[0].id, friendId: users[2].id },
-      { userId: users[1].id, friendId: users[2].id },
-      { userId: users[2].id, friendId: users[3].id },
-      { userId: users[3].id, friendId: users[4].id },
+      { userUsername: users[0].username, friendUsername: users[1].username },
+      { userUsername: users[0].username, friendUsername: users[2].username },
+      { userUsername: users[1].username, friendUsername: users[2].username },
+      { userUsername: users[2].username, friendUsername: users[3].username },
+      { userUsername: users[3].username, friendUsername: users[4].username },
     ]
 
     for (const friendship of friendships) {
@@ -177,7 +161,7 @@ async function main() {
         data: friendship,
       })
       console.log(
-        `   ✓ Amistad: usuario ${friendship.userId} <-> ${friendship.friendId}`
+        `   ✓ Amistad: ${friendship.userUsername} <-> ${friendship.friendUsername}`
       )
     }
 
@@ -225,45 +209,45 @@ async function main() {
     const matchPlayers = [
       {
         matchId: createdMatches[0].id,
-        userId: users[0].id,
+        username: users[0].username,
         score: 2500,
         position: 1,
       },
       {
         matchId: createdMatches[0].id,
-        userId: users[1].id,
+        username: users[1].username,
         score: 2100,
         position: 2,
       },
       {
         matchId: createdMatches[0].id,
-        userId: users[2].id,
+        username: users[2].username,
         score: 1800,
         position: 3,
       },
       {
         matchId: createdMatches[0].id,
-        userId: users[3].id,
+        username: users[3].username,
         score: 1500,
         position: 4,
       },
       {
         matchId: createdMatches[1].id,
-        userId: users[0].id,
+        username: users[0].username,
         score: 3200,
         position: 1,
       },
       {
         matchId: createdMatches[1].id,
-        userId: users[2].id,
+        username: users[2].username,
         score: 2100,
         position: 2,
       },
-      { matchId: createdMatches[2].id, userId: users[1].id, score: 1200 },
-      { matchId: createdMatches[2].id, userId: users[3].id, score: 950 },
-      { matchId: createdMatches[2].id, userId: users[4].id, score: 800 },
-      { matchId: createdMatches[3].id, userId: users[0].id, score: 0 },
-      { matchId: createdMatches[3].id, userId: users[1].id, score: 0 },
+      { matchId: createdMatches[2].id, username: users[1].username, score: 1200 },
+      { matchId: createdMatches[2].id, username: users[3].username, score: 950 },
+      { matchId: createdMatches[2].id, username: users[4].username, score: 800 },
+      { matchId: createdMatches[3].id, username: users[0].username, score: 0 },
+      { matchId: createdMatches[3].id, username: users[1].username, score: 0 },
     ]
 
     for (const mp of matchPlayers) {
@@ -275,13 +259,14 @@ async function main() {
 
     // Asignar logros a usuarios
     console.log('🎖️  Asignando logros a usuarios...')
+
     const userAchievements = [
-      { userusername: users[0].username, achievementName_id: achievements[0].name_id },
-      { userusername: users[0].username, achievementName_id: achievements[1].name_id },
-      { userusername: users[0].username, achievementName_id: achievements[2].name_id },
-      { userusername: users[1].username, achievementName_id: achievements[0].name_id },
-      { userusername: users[1].username, achievementName_id: achievements[1].name_id },
-      { userusername: users[2].username, achievementName_id: achievements[0].name_id },
+      { username: users[0].username, achievementNameId: achievements[0].nameId },
+      { username: users[0].username, achievementNameId: achievements[1].nameId },
+      { username: users[0].username, achievementNameId: achievements[2].nameId },
+      { username: users[1].username, achievementNameId: achievements[0].nameId },
+      { username: users[1].username, achievementNameId: achievements[1].nameId },
+      { username: users[2].username, achievementNameId: achievements[0].nameId },
     ]
 
     for (const ua of userAchievements) {

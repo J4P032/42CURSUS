@@ -27,32 +27,32 @@ export default function Register({ onLogin, onBack }) {
       
       <form onSubmit={handleSubmit}>
         <label style={labelStyle}>Email</label>
-        <input 
-          name="mail" 
+        <input
+          name="mail"
           type="email"
-          autocomplete="off" 
-          placeholder="...@..." 
-          required 
+          autoComplete="email"
+          placeholder="...@..."
+          required
           style={inputStyle}
         />
 
 		<label style={labelStyle}>Username</label>
-        <input 
-          name="username" 
-          type="text" 
-          autocomplete="Username"
-          placeholder="..." 
-          required 
+        <input
+          name="username"
+          type="text"
+          autoComplete="username"
+          placeholder="..."
+          required
           style={inputStyle}
         />
 
 		<label style={labelStyle}>Password</label>
-        <input 
-          name="password" 
+        <input
+          name="password"
           type="password"
-          autocomplete="Password" 
-          placeholder="..." 
-          required 
+          autoComplete="new-password"
+          placeholder="..."
+          required
           style={inputStyle}
         />
         <button type="submit" style={btnStyle}>JOIN</button>

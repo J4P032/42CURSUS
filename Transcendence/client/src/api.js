@@ -37,11 +37,8 @@ export const api = {
   nextTurn:     (roomId) => request('POST', `/rooms/${roomId}/game/next-turn`),
 
   // Players
-  getPlayer: (userId) => request('GET', `/users/${userId}`, null, true),
-  //saveMatch: (data) => request('POST', '/matches', data, true),
-  saveMatch:          (data) => request('POST', '/matches', data, true),
-  unlockAchievement: (userId, achievementId) => 
-    request('POST', `/users/${userId}/achievements/${achievementId}`, null, true),
- // unlockAchievement:  (playerId, achievementId) => 
- //   request('POST', `/players/${playerId}/achievements`, { achievementId }),
+  getPlayer: (username) => request('GET', `/users/${username}`, null, true),
+  saveMatch: (data) => request('POST', '/matches', data, true),
+  unlockAchievement: (username, achievementId) => 
+    request('POST', `/users/${username}/achievements/${achievementId}`, null, true),
 };

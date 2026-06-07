@@ -1,9 +1,9 @@
 SHELL := /bin/bash
 
-include $(ENV)
-export
-
 ENV		= .env
+
+-include $(ENV)
+export
 
 # descomentar cuando tenga que existir el .env
 #$(ENV):
@@ -21,7 +21,12 @@ build: #$(ENV)
 up: generate-env
 	docker compose -f ./docker-compose.yml up --build -d
 
+# Detiene los contenedores conservando los volúmenes (datos de postgres).
 down:
+	docker compose -f ./docker-compose.yml down
+
+# Elimina los datos persistidos de postgres. Destructivo.
+clean-data:
 	docker compose -f ./docker-compose.yml down -v
 
 ps:
@@ -33,21 +38,21 @@ volumes:
 logs:
 	docker compose logs -f
 
+# Solo limpia imágenes/cache de este proyecto, no toca el resto del sistema.
 clean: down
-	docker system prune -a -f
+	docker compose -f ./docker-compose.yml down --rmi local --remove-orphans
+	docker builder prune -f
 
-fclean: clean
+fclean: clean-data
 	docker compose down --rmi all --volumes --remove-orphans
-
-.PHONY:  up down logs clean fclean build ps volumes
 
 add-volumes:
 	mkdir -p ./data/postgres
 	@echo "Created dir volume for database data."
 
 exec-db:
-	docker exec -it -it transcendence_postgres psql -U $(shell grep '^POSTGRES_USER=' $(ENV) | cut -d'=' -f2)
+	docker exec -it transcendence_postgres psql -U $(shell grep '^POSTGRES_USER=' $(ENV) | cut -d'=' -f2)
 
-make re:
-	$(MAKE) fclean
-	$(MAKE) all
+re: fclean all
+
+.PHONY: all up down clean-data logs clean fclean build ps volumes generate-env add-volumes exec-db re

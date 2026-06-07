@@ -68,7 +68,7 @@ services:
       PORT: ${PRISMA_PORT:-4000}
       DATABASE_URL: postgresql://${POSTGRES_USER:-transcendence}:${POSTGRES_PASSWORD:-transcendence}@postgres:5432/${POSTGRES_DB:-transcendence}
       DB_HOST: postgres
-      DB_PORT: 5432
+      DB_PORT: ${POSTGRES_PORT:-5432}
     depends_on:
       postgres:
         condition: service_healthy

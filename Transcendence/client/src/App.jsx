@@ -56,23 +56,28 @@ export default function App() {
         );
     }
 
+	const handleLogout = () => {
+		setUser(null);
+		setGameInfo(null);
+	};
+
 	//3. Si hay sesión pero no ha empezado la partida(lobby)
 	if (!gameInfo){
 		return (
       			<Lobby
 				onStart={setGameInfo}
 				initialPlayerId={user.username}
-				onLogout={() => setUser(null)}
+				onLogout={handleLogout}
 				/>
     	);
   	}
 
 	//4. Si hay sesión y partida
 	return (
-    <GameBoard 
-      roomId={gameInfo.roomId} 
-      playerId={gameInfo.playerId} 
-      onLogout={() => setUser(null)}
+    <GameBoard
+      roomId={gameInfo.roomId}
+      playerId={gameInfo.playerId}
+      onLogout={handleLogout}
       onExitGame={() => setGameInfo(null)}
     />
   );

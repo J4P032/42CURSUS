@@ -32,8 +32,8 @@ export class InMemoryDBHandler {
     this.rooms.delete(roomId);
   }
 
-  async getPlayer(playerId) {
-    return this.players.get(playerId) ?? null;
+  async getPlayer(username) {
+    return this.players.get(username) ?? null;
   }
 
   async saveMatchResult(matchData) {
@@ -41,12 +41,12 @@ export class InMemoryDBHandler {
     console.log('Match result (in-memory):', matchData);
   }
 
-  async unlockAchievement(playerId, achievementId) {
-    const player = this.players.get(playerId);
+  async unlockAchievement(username, achievementId) {
+    const player = this.players.get(username);
     if (!player) return;
     if (!player.achievements.includes(achievementId)) {
       player.achievements.push(achievementId);
-      console.log(`Achievement unlocked (in-memory): ${achievementId} for ${playerId}`);
+      console.log(`Achievement unlocked (in-memory): ${achievementId} for ${username}`);
     }
   }
 }

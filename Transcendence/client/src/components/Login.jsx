@@ -1,18 +1,20 @@
-import{api} from '../api';
+import { useState } from 'react';
+import { api } from '../api';
 
 export default function Login({ onLogin, onGoToRegister }) {
+  const [error, setError] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const email = formData.get('mail');       // Coincide con name="mail" del input
-    const password = formData.get('password'); // Coincide con name="password"
-    const setError = (msg) => document.getElementById('error-box').innerText = msg;
-    setError(''); // Limpiamos errores previos
+    const email = formData.get('mail');
+    const password = formData.get('password');
+    setError('');
     try {
       const data = await api.login(email, password);
-      
+
       if (data.ok) {
-        onLogin(data.user); // Si todo bien, entramos al juego
+        onLogin(data.user);
       } else {
         setError(data.error || 'Credenciales incorrectas');
       }
@@ -20,33 +22,33 @@ export default function Login({ onLogin, onGoToRegister }) {
       setError('Error de conexión con el servidor');
     }
   }
-  
+
   return (
     <div style={containerStyle}>
       <h1 style={titleStyle}>GREAT RISK</h1>
       <p style={subtitleStyle}>Login for Battle</p>
-      
+
       <form onSubmit={handleSubmit}>
         <label style={labelStyle}>EMAIL</label>
-        <input 
-          name="mail" 
+        <input
+          name="mail"
           type="email"
-          autocomplete="off" 
-          placeholder="...@..." 
-          required 
+          autoComplete="email"
+          placeholder="...@..."
+          required
           style={inputStyle}
         />
 
         <label style={labelStyle}>PASSWORD</label>
-        <input 
-          name="password" 
+        <input
+          name="password"
           type="password"
-          autocomplete="off" 
-          placeholder="..." 
-          required 
+          autoComplete="current-password"
+          placeholder="..."
+          required
           style={inputStyle}
         />
-        <div id="error-box" style={{ color: '#ff4444', fontSize: '12px', marginBottom: '10px', textAlign: 'center', minHeight: '18px' }}></div>
+        <div style={{ color: '#ff4444', fontSize: '12px', marginBottom: '10px', textAlign: 'center', minHeight: '18px' }}>{error}</div>
         <button type="submit" style={btnStyle}>LOGIN</button>
       </form>
       <button onClick={onGoToRegister} style={btnSecondaryStyle}>REGISTER</button>

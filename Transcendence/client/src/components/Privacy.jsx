@@ -23,7 +23,7 @@ export default function Privacy({ onBack }) {
         <p>We only collect the strictly necessary data for the operation of ft_transcendence: your email address, username, and encrypted password. For 42 school evaluation purposes, we also store game statistics and match history.</p>
 
         <h3 style={sectionTitle}>2. DATA SECURITY</h3>
-        <p>Your password is never stored in plain text. We use bcrypt with high-security salt rounds to ensure your credentials are protected against unauthorized access.</p>
+        <p>Your password is never stored in plain text. We use scrypt, a memory-hard key derivation function, with a per-user random salt to ensure your credentials are protected against unauthorized access.</p>
 
         <h3 style={sectionTitle}>3. COOKIES AND LOCAL STORAGE</h3>
         <p>We use local storage only to maintain your session active. We do not use tracking or advertising cookies.</p>

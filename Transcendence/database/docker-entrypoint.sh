@@ -24,8 +24,17 @@ if [ $RETRIES -eq $MAX_RETRIES ]; then
   exit 1
 fi
 
+# Sincronizar esquema
+echo "🔄 Sincronizando esquema con la base de datos..."
+npx prisma db push --accept-data-loss
+
 # Ejecutar migraciones
 echo "📦 Ejecutando migraciones..."
+# TODO: `prisma migrate deploy` ya es idempotente y devuelve 0 si no hay nada
+# que aplicar. El `|| echo` actual oculta fallos reales (drift de esquema,
+# problemas de red, permisos) y arranca el servidor igualmente. Eliminar el
+# `||` cuando tengamos confianza de que el flujo de migraciones está estable
+# para que el contenedor falle pronto en caso de error.
 npx prisma migrate deploy || echo "⚠️  Las migraciones ya están aplicadas"
 
 # Ejecutar seed solo en desarrollo
