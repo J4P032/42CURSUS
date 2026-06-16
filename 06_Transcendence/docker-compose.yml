@@ -1,0 +1,93 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  realtime:
+    build: ./realtime
+    environment:
+      PORT: 42069
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  engine:
+    build:
+      context: .
+      dockerfile: engine/Dockerfile
+    environment:
+      REDIS_URL: redis://redis:6379
+      DBHANDLER_URL: http://database:${PRISMA_PORT:-4000}
+    depends_on:
+      redis:
+        condition: service_started
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    depends_on:
+      - engine
+      - realtime
+    restart: unless-stopped
+
+  postgres:
+    container_name: transcendence_postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-transcendence}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-transcendence}
+      POSTGRES_DB: ${POSTGRES_DB:-transcendence}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-transcendence} -d ${POSTGRES_DB:-transcendence}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  database:
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    container_name: transcendence_database
+    restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${PRISMA_PORT:-4000}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-transcendence}:${POSTGRES_PASSWORD:-transcendence}@${POSTGRES_HOST:-postgres}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-transcendence}
+      DB_HOST: ${POSTGRES_HOST:-postgres}
+      DB_PORT: ${POSTGRES_PORT:-5432}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PRISMA_PORT:-4000}/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+
+  nginx:
+    build: ./nginx
+    container_name: transcendence_nginx
+    environment:
+      PRISMA_PORT: ${PRISMA_PORT:-4000}
+    ports:
+      - "0.0.0.0:6969:443"
+    depends_on:
+      - client
+      - engine
+      - database
+      - realtime
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
