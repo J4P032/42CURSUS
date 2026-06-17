@@ -200,7 +200,7 @@ int	main(int ac, char** av){
 	// Binding newly created socket to given IP and verification 
 	if ((bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr))) == -1)
 		ft_error(fatal);
-	if (listen(sockfd, 10) == -1)
+	if (listen(sockfd, 128) == -1)
 		ft_error(fatal);
 	
 	miniserver();
