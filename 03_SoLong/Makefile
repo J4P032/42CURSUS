@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -std=gnu11
 NAME = so_long
 NAME_BONUS = so_long_bonus
 LIBRARY = ./libft/libft.a
