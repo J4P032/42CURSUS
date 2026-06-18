@@ -57,6 +57,8 @@ Es común que la carpeta de la MiniLibX venga sin los permisos adecuados o neces
     ```bash
     make -C minilibx-linux
     ```
+4.  Si no compila y da errores de too few arguments en llamadas a funciones, es por el nuevo gcc 
+    que es más restrictivo.. En el Makefile.. en flags hay que poner -std=gnu11 (dos unos) e irá a una version más antigua. Esto hay que hacerlo en los makefile de la minilibx y en el makefile de text. PERO tambien en el makefile del proyecto.
 
 ### Compilación del Juego
 
